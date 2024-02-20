@@ -1,0 +1,43 @@
+.auth-container {
+    margin-top: 120px;
+    h1 {
+        text-align: center;
+    }
+}
+
+.auth-form-container {
+    border: 1px solid grey;
+    border-radius: 6px;
+    padding: 20px;
+    height: fit-content;
+    width: 300px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 30px;
+
+    input {
+        margin-top: 10px;
+        height: 30px;
+        border-radius: 6px;
+        border: 1px solid grey;
+        padding: 4px;
+    }
+
+    button {
+        height: 30px;
+        border-radius: 6px;
+        margin-top: 10px;
+        border: 1px solid grey;
+        padding: 4px;
+        &:hover {
+            cursor: pointer;
+            background-color: darkgray;
+        }
+    }
+
+    p {
+        color: red;
+        text-align: center;
+    }
+}

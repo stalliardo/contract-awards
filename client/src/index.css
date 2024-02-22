@@ -11,3 +11,35 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+#awards-table td, #awards-table th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#awards-table {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#awards-table .last-row td {
+  border: none;
+}
+
+#awards-table .last-cell {
+  /* text-align: end; */
+  font-weight: bold;
+}
+
+#awards-table tr:nth-child(even){background-color: #f2f2f2;}
+
+#awards-table tr:hover {background-color: #ddd;}
+
+#awards-table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #aa0a04;
+  color: white;
+}

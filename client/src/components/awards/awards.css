@@ -1,0 +1,20 @@
+.awards-page-container {
+    border: 1px solid red;
+    width: 90%;
+    margin: 40px auto;
+    height: fit-content;
+}
+
+.awards-select-menu-container {
+    border: 1px solid green;
+    width: 200px;
+    height: 30px;
+}
+
+.awards-page-table-container {
+    border: 1px solid blue;
+    width: 100%;
+    /* TODO */
+    height: fit-content; 
+    margin: 20px auto;
+}

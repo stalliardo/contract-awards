@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import AwardsPage from '../components/awards/AwardsPage';
 
 const Root = () => {
 
@@ -10,15 +11,15 @@ const Root = () => {
     useEffect(() => {
         // Check if authenticated, if not transition to the auth page
         if(!isAuthenticated) {
+          // TODO - re-enable
             console.log('not authed called');
-            navigate("/auth")
+            // navigate("/auth")
         }
     }, []);
 
-
   return (
     <div>
-        Root page
+        <AwardsPage />
     </div>
   )
 }

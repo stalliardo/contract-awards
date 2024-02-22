@@ -53,10 +53,14 @@ app.get("/api", (req, res) => {
     res.json({message: "Hello from the node server!"})
 })
 
-app.use(express.static(path.join(__dirname, 'client/build')));
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
-})
+// re-enable below to run the built application
+// app.use(express.static(path.join(__dirname, 'client/build')));
+// app.get("*", (req, res) => {
+//     console.log('star route called');
+//     res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+// })
+
+
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);

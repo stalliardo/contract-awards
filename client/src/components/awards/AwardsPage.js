@@ -6,7 +6,7 @@ const AwardsPage = () => {
     return (
         <div className='awards-page-container'>
             <div className='awards-select-menu-container'>
-                <SelectMenu />
+                <SelectMenu placeholder="Dec-23"/>
             </div>
             <div className='awards-page-table-container'>
                 <h3>Dec-23</h3>

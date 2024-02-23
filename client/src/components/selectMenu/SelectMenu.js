@@ -19,22 +19,20 @@ const SelectMenu = ({ value, label, name, handleChange, menuItems, placeholder }
   const [defaultValue, setDefaultValue] = useState(placeholder);
 
   const toggleIsOpen = () => {
-    console.log('toggle clicked + isopen = ', isOpen);
     setIsOpen((prev) => !prev);
   }
 
   const handleMenuItemSelected = (item) => {
-    console.log('item selected = ', item.value);
     setIsOpen(false);
     setDefaultValue(item.value);
     // TODO update table data based off of selection
+    // TODO update table date / title 
   }
 
   return (
     <div className='select-menu'>
       <div className='placeholder-container' onClick={toggleIsOpen}>
-        <p className='placeholder-p'>{defaultValue}</p>
-        {/* <p><i className={`arrow ${isOpen ? "up" : "down"}`}></i></p> */}
+        <p>{defaultValue}</p>
         <p><i className={`arrow down`}></i></p>
       </div>
       <div className={`select-menu-dropdown-container ${isOpen ? "open" : ""}`}>

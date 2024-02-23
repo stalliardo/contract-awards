@@ -12,7 +12,8 @@ code {
     monospace;
 }
 
-#awards-table td, #awards-table th {
+#awards-table td,
+#awards-table th {
   border: 1px solid #ddd;
   padding: 8px;
 }
@@ -23,18 +24,17 @@ code {
   width: 100%;
 }
 
-#awards-table .last-row td {
-  border: none;
-}
-
 #awards-table .last-cell {
-  /* text-align: end; */
   font-weight: bold;
 }
 
-#awards-table tr:nth-child(even){background-color: #f2f2f2;}
+#awards-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
 
-#awards-table tr:hover {background-color: #ddd;}
+#awards-table tr:hover {
+  background-color: #ddd;
+}
 
 #awards-table th {
   padding-top: 12px;

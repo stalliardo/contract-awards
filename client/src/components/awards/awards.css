@@ -1,20 +1,28 @@
 .awards-page-container {
-    border: 1px solid red;
+    /* border: 1px solid red; */
     width: 90%;
     margin: 40px auto;
     height: fit-content;
+
+    h3 {
+        margin: 0;
+    }
 }
 
 .awards-select-menu-container {
-    border: 1px solid green;
-    width: 200px;
+    /* border: 1px solid green; */
+    width: 300px;
     height: 30px;
 }
 
 .awards-page-table-container {
-    border: 1px solid blue;
+    /* border: 1px solid blue; */
     width: 100%;
     /* TODO */
     height: fit-content; 
     margin: 20px auto;
+
+    table {
+        margin-top: 6px;
+    }
 }

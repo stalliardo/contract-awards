@@ -25,4 +25,8 @@
     table {
         margin-top: 6px;
     }
+
+    .bold-cells {
+        font-weight: bold;
+    }
 }

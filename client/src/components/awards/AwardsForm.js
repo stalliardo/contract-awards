@@ -2,14 +2,14 @@ import React from 'react'
 import './awards.css';
 import SelectMenu from '../selectMenu/SelectMenu';
 
-const AwardsPage = () => {
+const AwardsForm = () => {
     return (
         <div className='awards-page-container'>
             <div className='awards-select-menu-container'>
                 <SelectMenu placeholder="Dec-23"/>
             </div>
             <div className='awards-page-table-container'>
-                <h3>Dec-23</h3>
+                <h3>Basingstoke Dec-23</h3>
 
                 <table id="awards-table">
                     <thead>
@@ -79,4 +79,4 @@ const AwardsPage = () => {
     )
 }
 
-export default AwardsPage
+export default AwardsForm

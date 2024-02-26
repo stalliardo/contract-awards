@@ -11,6 +11,8 @@ import {
 import Root from './routes/root';
 import Auth from './components/auth/Auth';
 import ContractsForm from './components/contracts/contractsForm';
+import AwardsForm from './components/awards/AwardsForm';
+import AwardsTotals from './components/awards/AwardsTotals';
 
 const router = createBrowserRouter([
   {
@@ -22,8 +24,12 @@ const router = createBrowserRouter([
     element: <Auth />
   },
   {
-    path: "/contract-form", // <- TODO
-    element: <ContractsForm />
+    path: "/awards-form", // <- TODO
+    element: <AwardsForm />
+  },
+  {
+    path: "/awards-totals", // <- TODO
+    element: <AwardsTotals />
   }
 ]);
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import AwardsPage from '../components/awards/AwardsPage';
+import AwardsForm from '../components/awards/AwardsForm';
 
 const Root = () => {
 
@@ -19,7 +19,7 @@ const Root = () => {
 
   return (
     <div>
-        <AwardsPage />
+        <AwardsForm />
     </div>
   )
 }

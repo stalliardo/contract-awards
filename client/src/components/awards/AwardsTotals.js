@@ -70,7 +70,6 @@ const AwardsTotals = () => {
                             <td>
                                 £1,200,000
                             </td>
-
                         </tr>
                         <tr>
                             <td>Basingstoke</td>
@@ -87,7 +86,12 @@ const AwardsTotals = () => {
                             <td>0</td>
                             <td>0</td>
                             <td>£29,011</td>
-
+                            <td>
+                                £100,000
+                            </td>
+                            <td>
+                                £1,200,000
+                            </td>
                         </tr>
                         <tr>
                             <td>Feltham (APT)</td>
@@ -104,7 +108,12 @@ const AwardsTotals = () => {
                             <td>0</td>
                             <td>0</td>
                             <td>£29,011</td>
-
+                            <td>
+                                £100,000
+                            </td>
+                            <td>
+                                £1,200,000
+                            </td>
                         </tr>
                         <tr>
                             <td>Eastern</td>
@@ -121,6 +130,12 @@ const AwardsTotals = () => {
                             <td>0</td>
                             <td>0</td>
                             <td>£29,011</td>
+                            <td>
+                                £100,000
+                            </td>
+                            <td>
+                                £1,200,000
+                            </td>                            
                         </tr>
                         <tr>
                             <td>Birmingham</td>
@@ -137,6 +152,12 @@ const AwardsTotals = () => {
                             <td>0</td>
                             <td>0</td>
                             <td>£29,011</td>
+                            <td>
+                                £100,000
+                            </td>
+                            <td>
+                                £1,200,000
+                            </td>
                         </tr>
                         <tr>
                             <td>Glasgow</td>
@@ -153,6 +174,12 @@ const AwardsTotals = () => {
                             <td>0</td>
                             <td>0</td>
                             <td>£29,011</td>
+                            <td>
+                                £100,000
+                            </td>
+                            <td>
+                                £1,200,000
+                            </td>
                         </tr>
                         <tr>
                             <td>London</td>
@@ -169,6 +196,12 @@ const AwardsTotals = () => {
                             <td>0</td>
                             <td>0</td>
                             <td>£29,011</td>
+                            <td>
+                                £100,000
+                            </td>
+                            <td>
+                                £1,200,000
+                            </td>
                         </tr>
                         <tr>
                             <td>Leeds</td>
@@ -185,6 +218,12 @@ const AwardsTotals = () => {
                             <td>0</td>
                             <td>0</td>
                             <td>£29,011</td>
+                            <td>
+                                £100,000
+                            </td>
+                            <td>
+                                £1,200,000
+                            </td>
                         </tr>
                         <tr>
                             <td>Manchester</td>
@@ -201,6 +240,12 @@ const AwardsTotals = () => {
                             <td>0</td>
                             <td>0</td>
                             <td>£29,011</td>
+                            <td>
+                                £100,000
+                            </td>
+                            <td>
+                                £1,200,000
+                            </td>
                         </tr>
                         <tr>
                             <td>Newcastle</td>
@@ -217,6 +262,12 @@ const AwardsTotals = () => {
                             <td>0</td>
                             <td>0</td>
                             <td>£29,011</td>
+                            <td>
+                                £100,000
+                            </td>
+                            <td>
+                                £1,200,000
+                            </td>
                         </tr>
                         <tr>
                             <td>Awe</td>
@@ -233,8 +284,13 @@ const AwardsTotals = () => {
                             <td>0</td>
                             <td>0</td>
                             <td>£29,011</td>
+                            <td>
+                                £100,000
+                            </td>
+                            <td>
+                                £1,200,000
+                            </td>
                         </tr>
-
                         {/* Totals below here */}
                         <tr className='bold-cells'>
                             <td>UK Core Total</td>
@@ -251,6 +307,12 @@ const AwardsTotals = () => {
                             <td>0</td>
                             <td>0</td>
                             <td>£29,011</td>
+                            <td>
+                                £100,000
+                            </td>
+                            <td>
+                                £1,200,000
+                            </td>
                         </tr>
                         <tr className='bold-cells'>
                             <td>Special Projects</td>
@@ -267,6 +329,12 @@ const AwardsTotals = () => {
                             <td>0</td>
                             <td>0</td>
                             <td>£29,011</td>
+                            <td>
+                                £100,000
+                            </td>
+                            <td>
+                                £1,200,000
+                            </td>
                         </tr>
 
                         <tr className='bold-cells'>
@@ -284,6 +352,12 @@ const AwardsTotals = () => {
                             <td>0</td>
                             <td>0</td>
                             <td>£29,011</td>
+                            <td>
+                                £100,000
+                            </td>
+                            <td>
+                                £1,200,000
+                            </td>
                         </tr>
 
                         <tr className='bold-cells'>
@@ -301,6 +375,12 @@ const AwardsTotals = () => {
                             <td>0</td>
                             <td>0</td>
                             <td>£29,011</td>
+                            <td>
+                                £100,000
+                            </td>
+                            <td>
+                                £1,200,000
+                            </td>
                         </tr>
 
                         {/* <tr className='last-row'>

@@ -12,7 +12,8 @@ import Root from './routes/root';
 import Auth from './components/auth/Auth';
 import ContractsForm from './components/contracts/contractsForm';
 import AwardsForm from './components/awards/AwardsForm';
-import AwardsTotals from './components/awards/AwardsTotals';
+import AwardsSummary from './components/awards/AwardsSummary';
+import Navbar from './components/navbar/Navbar';
 
 const router = createBrowserRouter([
   {
@@ -29,13 +30,15 @@ const router = createBrowserRouter([
   },
   {
     path: "/awards-totals", // <- TODO
-    element: <AwardsTotals />
+    element: <AwardsSummary />
   }
 ]);
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
+    {/* Is the below line okay to go here? */}
+    <Navbar />
     <RouterProvider router={router} />
   </React.StrictMode>
 );

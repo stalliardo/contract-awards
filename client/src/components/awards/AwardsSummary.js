@@ -1,6 +1,6 @@
 import React from 'react'
 
-const AwardsTotals = () => {
+const AwardsSummary = () => {
     return (
         <div className='awards-page-container'>
             <div className='awards-select-menu-container'>
@@ -415,4 +415,4 @@ const AwardsTotals = () => {
     )
 }
 
-export default AwardsTotals
+export default AwardsSummary

@@ -20,8 +20,9 @@ code {
 
 #awards-table {
   font-family: Arial, Helvetica, sans-serif;
-  border-collapse: collapse;
+  font-size: 12px;
   width: 100%;
+  border-collapse: collapse;
 }
 
 #awards-table .last-cell {

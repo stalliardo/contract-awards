@@ -7,7 +7,7 @@ const AwardsTotals = () => {
                 {/* <SelectMenu placeholder="Dec-23"/> */}
             </div>
             <div className='awards-page-table-container'>
-                <h3>Title TBC</h3>
+                <h3>Contract Awards Summary (TBC)</h3>
 
                 <table id="awards-table">
                     <thead>
@@ -28,6 +28,7 @@ const AwardsTotals = () => {
 
                             {/* Test positioning below */}
                             <th>Cumalitive Totals</th>
+
                             <th colSpan="2">
                                 <div className='cumulative-totals-container'>
                                     <div>
@@ -43,9 +44,7 @@ const AwardsTotals = () => {
                                     </div>
                                 </div>
                             </th>
-                            {/* <th colSpan="2">
-                                Targets
-                            </th> */}
+                           <th>% T A</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -70,6 +69,7 @@ const AwardsTotals = () => {
                             <td>
                                 £1,200,000
                             </td>
+                            <td>121%</td>
                         </tr>
                         <tr>
                             <td>Basingstoke</td>
@@ -92,6 +92,7 @@ const AwardsTotals = () => {
                             <td>
                                 £1,200,000
                             </td>
+                            <td>121%</td>
                         </tr>
                         <tr>
                             <td>Feltham (APT)</td>
@@ -114,6 +115,7 @@ const AwardsTotals = () => {
                             <td>
                                 £1,200,000
                             </td>
+                            <td>121%</td>
                         </tr>
                         <tr>
                             <td>Eastern</td>
@@ -135,7 +137,8 @@ const AwardsTotals = () => {
                             </td>
                             <td>
                                 £1,200,000
-                            </td>                            
+                            </td>   
+                            <td>121%</td>                         
                         </tr>
                         <tr>
                             <td>Birmingham</td>
@@ -158,6 +161,7 @@ const AwardsTotals = () => {
                             <td>
                                 £1,200,000
                             </td>
+                            <td>121%</td>
                         </tr>
                         <tr>
                             <td>Glasgow</td>
@@ -180,6 +184,7 @@ const AwardsTotals = () => {
                             <td>
                                 £1,200,000
                             </td>
+                            <td>121%</td>
                         </tr>
                         <tr>
                             <td>London</td>
@@ -202,6 +207,7 @@ const AwardsTotals = () => {
                             <td>
                                 £1,200,000
                             </td>
+                            <td>121%</td>
                         </tr>
                         <tr>
                             <td>Leeds</td>
@@ -224,6 +230,7 @@ const AwardsTotals = () => {
                             <td>
                                 £1,200,000
                             </td>
+                            <td>121%</td>
                         </tr>
                         <tr>
                             <td>Manchester</td>
@@ -246,6 +253,7 @@ const AwardsTotals = () => {
                             <td>
                                 £1,200,000
                             </td>
+                            <td>121%</td>
                         </tr>
                         <tr>
                             <td>Newcastle</td>
@@ -268,6 +276,7 @@ const AwardsTotals = () => {
                             <td>
                                 £1,200,000
                             </td>
+                            <td>121%</td>
                         </tr>
                         <tr>
                             <td>Awe</td>
@@ -290,6 +299,7 @@ const AwardsTotals = () => {
                             <td>
                                 £1,200,000
                             </td>
+                            <td>121%</td>
                         </tr>
                         {/* Totals below here */}
                         <tr className='bold-cells'>
@@ -313,6 +323,7 @@ const AwardsTotals = () => {
                             <td>
                                 £1,200,000
                             </td>
+                            <td>121%</td>
                         </tr>
                         <tr className='bold-cells'>
                             <td>Special Projects</td>
@@ -335,6 +346,7 @@ const AwardsTotals = () => {
                             <td>
                                 £1,200,000
                             </td>
+                            <td>121%</td>
                         </tr>
 
                         <tr className='bold-cells'>
@@ -358,6 +370,7 @@ const AwardsTotals = () => {
                             <td>
                                 £1,200,000
                             </td>
+                            <td>121%</td>
                         </tr>
 
                         <tr className='bold-cells'>
@@ -381,6 +394,7 @@ const AwardsTotals = () => {
                             <td>
                                 £1,200,000
                             </td>
+                            <td>121%</td>
                         </tr>
 
                         {/* <tr className='last-row'>
@@ -394,6 +408,8 @@ const AwardsTotals = () => {
                     </tbody>
 
                 </table>
+
+                <p>% T A = Percentage of Target Achieved (TBC)</p>
             </div>
         </div>
     )

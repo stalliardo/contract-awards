@@ -65,6 +65,14 @@ code {
       }
     }
   }
+
+  .conditional-row {
+
+  }
+
+  .contracts-column {
+    width: 200px;
+  }
 }
 
 #awards-table .last-cell {
@@ -86,6 +94,8 @@ code {
   background-color: #666666;
   color: white;
 }
+
+
 
 .arrow {
   border: solid black;

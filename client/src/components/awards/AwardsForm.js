@@ -23,6 +23,7 @@ const AwardsForm = () => {
                             <th>Contractor</th>
                             <th>Region</th>
                             <th>Core</th>
+                            <th colSpan="2" style={{textAlign: "center"}}>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -33,6 +34,12 @@ const AwardsForm = () => {
                             <td>FK Group</td>
                             <td>BAS</td>
                             <td>£22,999</td>
+                            <td className='table-actions-cell'>
+                                <button className='table-actions-cell edit'>Edit</button>
+                            </td>
+                            <td className='table-actions-cell'>
+                                <button className='table-actions-cell delete'>Delete</button>
+                            </td>
                         </tr>
                         <tr>
                             <td>83921</td>
@@ -41,6 +48,12 @@ const AwardsForm = () => {
                             <td>Careys</td>
                             <td>BAS</td>
                             <td>£232,999</td>
+                            <td className='table-actions-cell'>
+                                <button className='table-actions-cell edit'>Edit</button>
+                            </td>
+                            <td className='table-actions-cell'>
+                                <button className='table-actions-cell delete'>Delete</button>
+                            </td>
                         </tr>
                         <tr>
                             <td>53921</td>
@@ -49,6 +62,12 @@ const AwardsForm = () => {
                             <td>Lendlease</td>
                             <td>BAS</td>
                             <td>£19,999</td>
+                            <td className='table-actions-cell'>
+                                <button className='table-actions-cell edit'>Edit</button>
+                            </td>
+                            <td className='table-actions-cell'>
+                                <button className='table-actions-cell delete'>Delete</button>
+                            </td>
                         </tr>
                         <tr>
                             <td>06321</td>
@@ -57,6 +76,12 @@ const AwardsForm = () => {
                             <td>FK Group</td>
                             <td>BAS</td>
                             <td>£87,500</td>
+                            <td className='table-actions-cell'>
+                                <button className='table-actions-cell edit'>Edit</button>
+                            </td>
+                            <td className='table-actions-cell'>
+                                <button className='table-actions-cell delete'>Delete</button>
+                            </td>
                         </tr>
                         <tr>
                             <td>06421</td>
@@ -65,8 +90,16 @@ const AwardsForm = () => {
                             <td>Lendlease</td>
                             <td>BAS</td>
                             <td>£22,999</td>
+                            <td className='table-actions-cell'>
+                                <button className='table-actions-cell edit'>Edit</button>
+                            </td>
+                            <td className='table-actions-cell'>
+                                <button className='table-actions-cell delete'>Delete</button>
+                            </td>
                         </tr>
                         <tr className='last-row'>
+                            <td></td>
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>

@@ -32,6 +32,36 @@ code {
   font-size: 12px;
   width: 100%;
   border-collapse: collapse;
+
+  .table-actions-cell {
+    text-align: center;
+    width: 130px;
+
+    button {
+      border-radius: 3px;
+      padding: 4px 8px;
+      border: none;
+      width: 70%;
+    }
+
+    button:hover {
+      cursor: pointer;
+    }
+
+    .edit {
+      background-color: rgb(69, 187, 255);
+      &:hover {
+        background-color: rgb(155, 218, 255);
+      }
+    }
+
+    .delete {
+      background-color: rgb(255, 85, 85);
+      &:hover {
+        background-color: rgb(255, 154, 154);
+      }
+    }
+  }
 }
 
 #awards-table .last-cell {

@@ -100,3 +100,16 @@ code {
   transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
 }
+
+button {
+  border-radius: 3px;
+  padding: 4px 8px;
+  border: none;
+  background-color: #bebebe;
+  /* width: 70%; */
+  background-color: rgb(69, 187, 255);
+      &:hover {
+        background-color: rgb(155, 218, 255);
+      }
+
+}

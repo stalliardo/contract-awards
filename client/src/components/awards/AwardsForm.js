@@ -8,11 +8,17 @@ const AwardsForm = () => {
     return (
         <div className='awards-page-container'>
             <div className='awards-select-menu-container'>
-                <SelectMenu placeholder="Dec-23"/>
+                <SelectMenu placeholder="Dec-23" />
             </div>
             <div className='awards-page-table-container'>
-                <h3>Basingstoke Dec-23</h3>
+                <div className='awards-page-title-and-button'>
+                    <h3>Basingstoke Dec-23</h3>
 
+                    <button>
+                        Add Row
+                    </button>
+
+                </div>
                 <table id="awards-table">
                     <thead>
 
@@ -23,7 +29,7 @@ const AwardsForm = () => {
                             <th>Contractor</th>
                             <th>Region</th>
                             <th>Core</th>
-                            <th colSpan="2" style={{textAlign: "center"}}>Actions</th>
+                            <th colSpan="2" style={{ textAlign: "center" }}>Actions</th>
                         </tr>
                     </thead>
                     <tbody>

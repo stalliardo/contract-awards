@@ -6,6 +6,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
+  /* Remove the caret from non input elements */
   -webkit-user-select: none;
   /* Chrome all / Safari all */
   -moz-user-select: none;
@@ -32,25 +33,12 @@ code {
   width: 100%;
   border-collapse: collapse;
 
- 
-
   .table-actions-cell {
     text-align: center;
-    width: 130px;
-
-    button {
-      border-radius: 3px;
-      padding: 4px 8px;
-      border: none;
-      width: 70%;
-    }
-
-    button:hover {
-      cursor: pointer;
-    }
+    width: 80px;
 
     .edit {
-      background-color: rgb(69, 187, 255);
+      background-color: rgb(0, 132, 255);
 
       &:hover {
         background-color: rgb(155, 218, 255);
@@ -65,10 +53,6 @@ code {
       }
     }
   }
-
-  .conditional-row {
-
-  }
 }
 
 #awards-table .last-cell {
@@ -80,7 +64,7 @@ code {
 }
 
 #awards-table tr:hover {
-  background-color: #ddd;
+  /* background-color: #f7f7f7; */
 }
 
 #awards-table th {
@@ -91,7 +75,19 @@ code {
   color: white;
 }
 
-.awards-form-table td{width: 12%}
+.awards-form-table {
+  input {
+    width: 90%;
+  }
+}
+
+.awards-form-table td {
+  width: 12%
+}
+
+.awards-form-table td:nth-child(7), td:nth-child(8) {
+  width: 8%;
+}
 
 .arrow {
   border: solid black;
@@ -116,11 +112,17 @@ button {
   border: none;
   background-color: #666666;
   color: white;
+  letter-spacing: 1px;
 
-
-  /* background-color: rgb(69, 187, 255); */
   &:hover {
+    cursor: pointer;
     background-color: #aaaaaa;
   }
+}
 
+input {
+  height: 18px;
+  border-radius: 6px;
+  border: 1px solid grey;
+  padding: 4px 6px;
 }

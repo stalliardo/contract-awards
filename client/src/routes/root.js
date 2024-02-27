@@ -13,7 +13,7 @@ const Root = () => {
         if(!isAuthenticated) {
           // TODO - re-enable
             console.log('not authed called');
-            // navigate("/auth")
+            navigate("/auth")
         }
     }, []);
 

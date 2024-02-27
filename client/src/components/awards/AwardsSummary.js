@@ -3,9 +3,7 @@ import React from 'react'
 const AwardsSummary = () => {
     return (
         <div className='awards-page-container'>
-            <div className='awards-select-menu-container'>
-                {/* <SelectMenu placeholder="Dec-23"/> */}
-            </div>
+           
             <div className='awards-page-table-container'>
                 <h3>Contract Awards Summary (TBC)</h3>
 
@@ -25,7 +23,6 @@ const AwardsSummary = () => {
                             <th>Jul-24</th>
                             <th>Aug-24</th>
                             <th>Sep-24</th>
-
                             {/* Test positioning below */}
                             <th>Cumalitive Totals</th>
 
@@ -417,7 +414,7 @@ const AwardsSummary = () => {
 
             {/* Temporay tables for demo purposes only TO BE REMOVED */}
             <div className='awards-page-table-container'>
-                <h3>Contract Awards Summary (TBC)</h3>
+                <h3>Company Performance</h3>
                 <table id="awards-table">
                     <thead>
                         <tr>
@@ -454,7 +451,46 @@ const AwardsSummary = () => {
                         </tr>
                     </tbody>
                 </table>
-                <p>% T A = Percentage of Target Achieved (TBC)</p>
+            </div>
+
+            <div className='awards-page-table-container'>
+                
+                <table id="awards-table">
+                    <thead>
+                        <tr>
+                            <th>Cumalitive</th>
+                            <th>Oct-23</th>
+                            <th>Nov-23</th>
+                            <th>Dec-23</th>
+                            <th>Jan-24</th>
+                            <th>Feb-24</th>
+                            <th>Mar-24</th>
+                            <th>Apr-24</th>
+                            <th>May-24</th>
+                            <th>Jun-24</th>
+                            <th>Jul-24</th>
+                            <th>Aug-24</th>
+                            <th>Sep-24</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Plus/Minus</td>
+                            <td>£300,000</td>
+                            <td>£300,000</td>
+                            <td>£300,000</td>
+                            <td>£300,000</td>
+                            <td>£300,000</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     )

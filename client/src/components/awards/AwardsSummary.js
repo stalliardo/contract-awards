@@ -44,7 +44,7 @@ const AwardsSummary = () => {
                                     </div>
                                 </div>
                             </th>
-                           <th>% T A</th>
+                            <th>% T A</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -137,8 +137,8 @@ const AwardsSummary = () => {
                             </td>
                             <td>
                                 £1,200,000
-                            </td>   
-                            <td>121%</td>                         
+                            </td>
+                            <td>121%</td>
                         </tr>
                         <tr>
                             <td>Birmingham</td>
@@ -409,6 +409,51 @@ const AwardsSummary = () => {
 
                 </table>
 
+                <p>% T A = Percentage of Target Achieved (TBC)</p>
+            </div>
+
+
+
+
+            {/* Temporay tables for demo purposes only TO BE REMOVED */}
+            <div className='awards-page-table-container'>
+                <h3>Contract Awards Summary (TBC)</h3>
+                <table id="awards-table">
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Oct-23</th>
+                            <th>Nov-23</th>
+                            <th>Dec-23</th>
+                            <th>Jan-24</th>
+                            <th>Feb-24</th>
+                            <th>Mar-24</th>
+                            <th>Apr-24</th>
+                            <th>May-24</th>
+                            <th>Jun-24</th>
+                            <th>Jul-24</th>
+                            <th>Aug-24</th>
+                            <th>Sep-24</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Plus/Minus</td>
+                            <td>£300,000</td>
+                            <td>£300,000</td>
+                            <td>£300,000</td>
+                            <td>£300,000</td>
+                            <td>£300,000</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
                 <p>% T A = Percentage of Target Achieved (TBC)</p>
             </div>
         </div>

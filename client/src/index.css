@@ -91,6 +91,12 @@ code {
   color: white;
 }
 
+.awards-form-table {
+  input {
+    width: 90%;
+  }
+}
+
 .awards-form-table td{width: 12%}
 
 .arrow {

@@ -2,6 +2,7 @@
 const express = require("express");
 const ActiveDirectory = require("activedirectory");
 const bodyParser = require("body-parser");
+const path = require("path");
 
 require('dotenv').config()
 
@@ -49,9 +50,17 @@ app.post("/login", (req, res) => {
     })
 })
 app.get("/api", (req, res) => {
-    console.log('api route called + testing env = ', process.env.DOMAIN_PASSWORD);
     res.json({message: "Hello from the node server!"})
 })
+
+// re-enable below to run the built application
+// app.use(express.static(path.join(__dirname, 'client/build')));
+// app.get("*", (req, res) => {
+//     console.log('star route called');
+//     res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+// })
+
+
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);

@@ -21,6 +21,7 @@ function App() {
 
   return (
     <div className="App">
+      <div>am i on every page</div>
       {/* <Auth data={data}/> */}
     </div>
   );

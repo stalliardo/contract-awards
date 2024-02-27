@@ -4,15 +4,9 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const Auth = () => {
-
-
   useEffect(() => {
     console.log('getting env var = ', process.env.REACT_APP_TEST);
-
-
-
     axios.get("/api");
-
   }, [])
 
   const initialFormData = {username: "", password: ""};
@@ -22,8 +16,9 @@ const Auth = () => {
   const navigate = useNavigate();
 
   const login = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
+    // TODO add disabled state to buttons
     console.log('login called + formdata = ', formData);
 
     axios.post("/login", {
@@ -55,8 +50,8 @@ const Auth = () => {
 
         <form className='auth-form-container' onSubmit={login}>
           <input type='text' name="username" placeholder='John.Smith' onChange={handleChange}/> 
-          <input type='password' name="password" placeholder='password' onChange={handleChange}/> 
-          <button>Submit</button>
+          <input type='password' name="password" placeholder='Password' onChange={handleChange}/> 
+          <button>Log In</button>
           {errorText ? <p>{errorText}</p> : null}
         </form>
     </div>

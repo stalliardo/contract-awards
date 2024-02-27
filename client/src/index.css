@@ -20,8 +20,6 @@ code {
     monospace;
 }
 
-.disableCaret {}
-
 #awards-table td,
 #awards-table th {
   border: 1px solid #ddd;
@@ -33,6 +31,8 @@ code {
   font-size: 12px;
   width: 100%;
   border-collapse: collapse;
+
+ 
 
   .table-actions-cell {
     text-align: center;
@@ -69,10 +69,6 @@ code {
   .conditional-row {
 
   }
-
-  .contracts-column {
-    width: 200px;
-  }
 }
 
 #awards-table .last-cell {
@@ -95,7 +91,7 @@ code {
   color: white;
 }
 
-
+.awards-form-table td{width: 12%}
 
 .arrow {
   border: solid black;

@@ -26,7 +26,7 @@ const AwardsForm = () => {
                     </button>
 
                 </div>
-                <table id="awards-table">
+                <table id="awards-table" className='awards-form-table'>
                     <thead>
 
                         <tr>

@@ -2,6 +2,8 @@ import React from 'react'
 import './awards.css';
 import SelectMenu from '../selectMenu/SelectMenu';
 
+// TODO - refactor so that the table rows an be edited and deleted
+
 const AwardsForm = () => {
     return (
         <div className='awards-page-container'>
@@ -13,6 +15,7 @@ const AwardsForm = () => {
 
                 <table id="awards-table">
                     <thead>
+
                         <tr>
                             <th>Contract No.</th>
                             <th>Project</th>

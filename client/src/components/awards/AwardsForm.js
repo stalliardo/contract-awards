@@ -4,6 +4,15 @@ import SelectMenu from '../selectMenu/SelectMenu';
 
 // TODO - refactor so that the table rows an be edited and deleted
 
+const dateOptions = [
+    { value: "Oct-23" },
+    { value: "Nov-23" },
+    { value: "Dec-23" },
+    { value: "Jan-24" },
+    { value: "Feb-24" },
+    { value: "Mar-24" },
+]
+
 const AwardsForm = () => {
 
     const [showAddRow, setShowAddRow] = useState(false);
@@ -15,7 +24,7 @@ const AwardsForm = () => {
     return (
         <div className='awards-page-container'>
             <div className='awards-select-menu-container'>
-                <SelectMenu placeholder="Dec-23" />
+                <SelectMenu placeholder="Dec-23" menuItems={dateOptions}/>
             </div>
             <div className='awards-page-table-container'>
                 <div className='awards-page-title-and-button'>

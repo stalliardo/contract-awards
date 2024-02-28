@@ -6,19 +6,19 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  -webkit-user-select: none;  /* Chrome all / Safari all */
-  -moz-user-select: none;     /* Firefox all */
-  -ms-user-select: none;      /* IE 10+ */
-   user-select: none;    
+  /* Remove the caret from non input elements */
+  -webkit-user-select: none;
+  /* Chrome all / Safari all */
+  -moz-user-select: none;
+  /* Firefox all */
+  -ms-user-select: none;
+  /* IE 10+ */
+  user-select: none;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
-
-.disableCaret{
-     
 }
 
 #awards-table td,
@@ -32,6 +32,27 @@ code {
   font-size: 12px;
   width: 100%;
   border-collapse: collapse;
+
+  .table-actions-cell {
+    text-align: center;
+    width: 80px;
+
+    .edit {
+      background-color: rgb(0, 132, 255);
+
+      &:hover {
+        background-color: rgb(155, 218, 255);
+      }
+    }
+
+    .delete {
+      background-color: rgb(255, 85, 85);
+
+      &:hover {
+        background-color: rgb(255, 154, 154);
+      }
+    }
+  }
 }
 
 #awards-table .last-cell {
@@ -43,7 +64,7 @@ code {
 }
 
 #awards-table tr:hover {
-  background-color: #ddd;
+  /* background-color: #f7f7f7; */
 }
 
 #awards-table th {
@@ -52,6 +73,20 @@ code {
   text-align: left;
   background-color: #666666;
   color: white;
+}
+
+.awards-form-table {
+  input {
+    width: 90%;
+  }
+}
+
+.awards-form-table td {
+  width: 12%
+}
+
+.awards-form-table td:nth-child(7), td:nth-child(8) {
+  width: 8%;
 }
 
 .arrow {
@@ -69,4 +104,25 @@ code {
 .down {
   transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
+}
+
+button {
+  border-radius: 3px;
+  padding: 4px 8px;
+  border: none;
+  background-color: #666666;
+  color: white;
+  letter-spacing: 1px;
+
+  &:hover {
+    cursor: pointer;
+    background-color: #aaaaaa;
+  }
+}
+
+input {
+  height: 18px;
+  border-radius: 6px;
+  border: 1px solid grey;
+  padding: 4px 6px;
 }

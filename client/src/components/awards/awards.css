@@ -9,10 +9,22 @@
     }
 }
 
-.awards-select-menu-container {
+.awards-page-title-and-button {
     /* border: 1px solid green; */
-    width: 300px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.awards-page-location-select-container {
+    width: 20%;
+    margin: 60px auto 0;
     height: 30px;
+}
+
+.awards-select-menu-container {
+    width: 20%;
+    height: 30px;
+    margin-top: 40px;
 }
 
 .awards-page-table-container {
@@ -20,7 +32,7 @@
     width: 100%;
     /* TODO */
     height: fit-content; 
-    margin: 20px auto;
+    margin: 10px auto;
 
     table {
         margin-top: 6px;

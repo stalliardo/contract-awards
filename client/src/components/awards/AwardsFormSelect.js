@@ -2,8 +2,7 @@ import React, { useState } from 'react'
 import './awards.css';
 import SelectMenu from '../selectMenu/SelectMenu';
 
-// TODO - refactor so that the table rows an be edited and deleted
-
+// In this version of the form the table to be viewed is manually selected
 const dateOptions = [
     { value: "Oct-23" },
     { value: "Nov-23" },
@@ -13,22 +12,45 @@ const dateOptions = [
     { value: "Mar-24" },
 ]
 
-const AwardsForm = () => {
+const locationOptions = [
+    { value: "Avonmouth" },
+    { value: "Basingstoke" },
+    { value: "Feltham" },
+    { value: "Eastern" },
+    { value: "Birmingham" },
+    { value: "Glasgow" },
+    { value: "London" },
+    { value: "Leeds" },
+    { value: "Manchester" },
+    { value: "Newcastle" },
+    { value: "Awe" },
+]
+
+const AwardsFormSelect = () => {
 
     const [showAddRow, setShowAddRow] = useState(false);
+    const [location, setLocation] = useState("Avonmouth");
 
     const handleChange = (e) => {
         // TODO
     }
 
+    const handleLocationSelected = (item) => {
+        setLocation(item.value);
+    }
+
+
     return (
         <div className='awards-page-container'>
+            <div className='awards-page-location-select-container'>
+                <SelectMenu placeholder="Avonmouth" menuItems={locationOptions} handleItemSelection={handleLocationSelected}/>
+            </div>
             <div className='awards-select-menu-container'>
                 <SelectMenu placeholder="Dec-23" menuItems={dateOptions} handleItemSelection={() => {}}/>
             </div>
             <div className='awards-page-table-container'>
                 <div className='awards-page-title-and-button'>
-                    <h3>Basingstoke Dec-23</h3>
+                    <h3>{location} Dec-23</h3>
 
                     <button onClick={() => setShowAddRow(true)}>
                         Add Row
@@ -168,4 +190,4 @@ const AwardsForm = () => {
     )
 }
 
-export default AwardsForm
+export default AwardsFormSelect

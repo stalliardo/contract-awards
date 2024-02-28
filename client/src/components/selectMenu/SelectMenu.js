@@ -14,7 +14,7 @@ const MenuItem = ({ value, handleClick }) => {
   return <div className="item" onClick={handleClick}>{value}</div>
 }
 
-const SelectMenu = ({ value, label, name, handleChange, menuItems, placeholder }) => {
+const SelectMenu = ({ value, label, name, handleItemSelection, menuItems, placeholder }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [defaultValue, setDefaultValue] = useState(placeholder);
 
@@ -25,6 +25,8 @@ const SelectMenu = ({ value, label, name, handleChange, menuItems, placeholder }
   const handleMenuItemSelected = (item) => {
     setIsOpen(false);
     setDefaultValue(item.value);
+
+    handleItemSelection(item);
     // TODO update table data based off of selection
     // TODO update table date / title 
   }
@@ -37,7 +39,7 @@ const SelectMenu = ({ value, label, name, handleChange, menuItems, placeholder }
       </div>
       <div className={`select-menu-dropdown-container ${isOpen ? "open" : ""}`}>
         {
-          menuOptions.map((item, index) => (
+          menuItems.map((item, index) => (
             <MenuItem  value={item.value} key={index} handleClick={() => handleMenuItemSelected(item)}/>
           ))
         }

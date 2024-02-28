@@ -15,6 +15,7 @@ import AwardsForm from './components/awards/AwardsForm';
 import AwardsSummary from './components/awards/AwardsSummary';
 import Navbar from './components/navbar/Navbar';
 import AwardsFormMulti from './components/awards/AwardsFormMulti';
+import AwardsFormSelect from './components/awards/AwardsFormSelect';
 
 const router = createBrowserRouter([
   {
@@ -25,7 +26,6 @@ const router = createBrowserRouter([
     path: "/auth",
     element: <Auth />
   },
-  // Duplicate
   {
     path: "/awards-form", // <- TODO
     element: <AwardsForm />
@@ -33,6 +33,10 @@ const router = createBrowserRouter([
   {
     path: "/awards-form-multi", // <- TODO
     element: <AwardsFormMulti />
+  },
+  {
+    path: "/awards-form-select", // <- TODO
+    element: <AwardsFormSelect />
   },
   {
     path: "/awards-totals", // <- TODO

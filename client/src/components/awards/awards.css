@@ -9,14 +9,23 @@
     }
 }
 
+
+
 .awards-page-title-and-button {
     /* border: 1px solid green; */
     display: flex;
     justify-content: space-between;
 }
 
+.awards-page-location-select-container {
+    /* border: 1px solid red; */
+    width: 20%;
+    margin: 60px auto 0;
+    height: 30px;
+}
+
 .awards-select-menu-container {
-    width: 300px;
+    width: 20%;
     height: 30px;
     margin-top: 40px;
 }

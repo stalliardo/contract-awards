@@ -8,6 +8,7 @@ const Navbar = () => {
             <a href='/awards-totals'>Awards Summary</a>
             <a href='/awards-form'>Awards Form - Single</a>
             <a href='/awards-form-multi'>Awards Form - Mutli</a>
+            <a href='/awards-form-select'>Awards Form - Select</a>
         </div>
     </nav>
   )

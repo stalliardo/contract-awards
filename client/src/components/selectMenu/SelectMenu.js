@@ -37,7 +37,7 @@ const SelectMenu = ({ value, label, name, handleChange, menuItems, placeholder }
       </div>
       <div className={`select-menu-dropdown-container ${isOpen ? "open" : ""}`}>
         {
-          menuOptions.map((item, index) => (
+          menuItems.map((item, index) => (
             <MenuItem  value={item.value} key={index} handleClick={() => handleMenuItemSelected(item)}/>
           ))
         }

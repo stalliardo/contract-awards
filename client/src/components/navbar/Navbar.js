@@ -6,7 +6,8 @@ const Navbar = () => {
     <nav className='navbar-container'>
         <div className='nav-end-container'>
             <a href='/awards-totals'>Awards Summary</a>
-            <a href='/awards-form'>Awards Form</a>
+            <a href='/awards-form'>Awards Form - Single</a>
+            <a href='/awards-form-multi'>Awards Form - Mutli</a>
         </div>
     </nav>
   )

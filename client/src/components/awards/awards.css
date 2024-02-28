@@ -18,6 +18,7 @@
 .awards-select-menu-container {
     width: 300px;
     height: 30px;
+    margin-top: 40px;
 }
 
 .awards-page-table-container {
@@ -25,7 +26,7 @@
     width: 100%;
     /* TODO */
     height: fit-content; 
-    margin: 20px auto;
+    margin: 10px auto;
 
     table {
         margin-top: 6px;

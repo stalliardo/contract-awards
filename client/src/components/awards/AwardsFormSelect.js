@@ -29,23 +29,28 @@ const locationOptions = [
 const AwardsFormSelect = () => {
 
     const [showAddRow, setShowAddRow] = useState(false);
+    const [location, setLocation] = useState("Avonmouth");
 
     const handleChange = (e) => {
         // TODO
+    }
+
+    const handleLocationSelected = (item) => {
+        setLocation(item.value);
     }
 
 
     return (
         <div className='awards-page-container'>
             <div className='awards-page-location-select-container'>
-                <SelectMenu placeholder="Avonmouth" menuItems={locationOptions} />
+                <SelectMenu placeholder="Avonmouth" menuItems={locationOptions} handleItemSelection={handleLocationSelected}/>
             </div>
             <div className='awards-select-menu-container'>
-                <SelectMenu placeholder="Dec-23" menuItems={dateOptions} />
+                <SelectMenu placeholder="Dec-23" menuItems={dateOptions} handleItemSelection={() => {}}/>
             </div>
             <div className='awards-page-table-container'>
                 <div className='awards-page-title-and-button'>
-                    <h3>Avonmouth Dec-23</h3>
+                    <h3>{location} Dec-23</h3>
 
                     <button onClick={() => setShowAddRow(true)}>
                         Add Row

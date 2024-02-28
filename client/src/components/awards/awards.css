@@ -9,8 +9,6 @@
     }
 }
 
-
-
 .awards-page-title-and-button {
     /* border: 1px solid green; */
     display: flex;
@@ -18,7 +16,6 @@
 }
 
 .awards-page-location-select-container {
-    /* border: 1px solid red; */
     width: 20%;
     margin: 60px auto 0;
     height: 30px;

@@ -24,7 +24,7 @@ const AwardsFormMulti = () => {
         <div>
             <div className='awards-page-container'>
                 <div className='awards-select-menu-container'>
-                <SelectMenu placeholder="Dec-23" menuItems={dateOptions}/>
+                <SelectMenu placeholder="Dec-23" menuItems={dateOptions} handleItemSelection={() => {}}/>
                 </div>
                 <div className='awards-page-table-container'>
                     <div className='awards-page-title-and-button'>
@@ -167,7 +167,7 @@ const AwardsFormMulti = () => {
             </div>
             <div className='awards-page-container'>
                 <div className='awards-select-menu-container'>
-                <SelectMenu placeholder="Dec-23" menuItems={dateOptions}/>
+                <SelectMenu placeholder="Dec-23" menuItems={dateOptions} handleItemSelection={() => {}}/>
                 </div>
                 <div className='awards-page-table-container'>
                     <div className='awards-page-title-and-button'>
@@ -310,7 +310,7 @@ const AwardsFormMulti = () => {
             </div>
             <div className='awards-page-container'>
                 <div className='awards-select-menu-container'>
-                <SelectMenu placeholder="Dec-23" menuItems={dateOptions}/>
+                <SelectMenu placeholder="Dec-23" menuItems={dateOptions} handleItemSelection={() => {}}/>
                 </div>
                 <div className='awards-page-table-container'>
                     <div className='awards-page-title-and-button'>
@@ -453,7 +453,7 @@ const AwardsFormMulti = () => {
             </div>
             <div className='awards-page-container'>
                 <div className='awards-select-menu-container'>
-                    <SelectMenu placeholder="Dec-23" menuItems={dateOptions}/>
+                    <SelectMenu placeholder="Dec-23" menuItems={dateOptions} handleItemSelection={() => {}}/>
                 </div>
                 <div className='awards-page-table-container'>
                     <div className='awards-page-title-and-button'>

@@ -4,6 +4,11 @@ const ActiveDirectory = require("activedirectory");
 const bodyParser = require("body-parser");
 const path = require("path");
 
+const db = require("./server/database/db"); // Import the database connection utility
+
+
+const { generateTableForYear } = require("./server/utils/AwardsDiaryUtils")
+
 require('dotenv').config()
 
 const app = express();
@@ -64,4 +69,5 @@ app.get("/api", (req, res) => {
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
+    generateTableForYear()
 })

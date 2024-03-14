@@ -1,16 +1,27 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import AwardsTableRow from './AwardsTableRow';
 import { getCurrentMonth } from '../../../utils/DateUtils';
 import axios from 'axios';
 
 const AwardsTable = ({ location }) => {
 
+    const [filteredData, setFilteredData] = useState({});
 
     useEffect(() => {
         const currentMonth = getCurrentMonth();
 
         axios.get(`/api/awards-diary/location?location=${location}`).then((response) => {
             console.log('location response: ', response);
+
+            // Got the data for the given location, now need to filter based on current month.
+            // Is this where state would come in handy becuase now gonna have to make anetwirk request for every time an option is selected??????
+            
+            const filteredLocationData = response.data.find((item) => item.month === currentMonth);
+
+            setFilteredData(filteredLocationData);
+
+            console.log('filteredData = ', filteredData.items);
+
         })
 
         
@@ -44,13 +55,14 @@ const AwardsTable = ({ location }) => {
 
                     <tbody>
 
-                        {/* {
-                            data.length ?
-                                data.map((rData) => (
-                                    <AwardsTableRow data={rData} key={rData._id} />
+                        {
+                            filteredData.items.length ?
+                                filteredData.items.map((data) => (
+                                    
+                                    <AwardsTableRow data={data} key={data._id} />
                                 ))
                                 : null
-                        } */}
+                        }
 
 
                         <tr className='last-row'>

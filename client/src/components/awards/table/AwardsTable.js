@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react'
 import AwardsTableRow from './AwardsTableRow';
 import { getCurrentMonth } from '../../../utils/DateUtils';
 import axios from 'axios';
+import './awardsTable.css';
+import AwardsTableAddRow from './AwardsTableAddRow';
+import FirstAwardsEntry from '../../forms/FirstAwardsEntry';
 
 const AwardsTable = ({ location }) => {
 
-    const [filteredData, setFilteredData] = useState({});
+    const [filteredData, setFilteredData] = useState({items: []});
 
     useEffect(() => {
         const currentMonth = getCurrentMonth();
@@ -15,7 +18,7 @@ const AwardsTable = ({ location }) => {
 
             // Got the data for the given location, now need to filter based on current month.
             // Is this where state would come in handy becuase now gonna have to make anetwirk request for every time an option is selected??????
-            
+
             const filteredLocationData = response.data.find((item) => item.month === currentMonth);
 
             setFilteredData(filteredLocationData);
@@ -24,7 +27,7 @@ const AwardsTable = ({ location }) => {
 
         })
 
-        
+
         // Use the currentMonth to filter the array
 
     }, []);
@@ -40,44 +43,49 @@ const AwardsTable = ({ location }) => {
                     </button> */}
 
                 </div>
-                <table id="awards-table" className='awards-form-table'>
-                    <thead>
-                        <tr>
-                            <th className='contracts-column'>Contract No.</th>
-                            <th>Project</th>
-                            <th>Programme</th>
-                            <th>Contractor</th>
-                            <th>Region</th>
-                            <th>Core</th>
-                            <th colSpan="2" style={{ textAlign: "center" }}>Actions</th>
-                        </tr>
-                    </thead>
+                {
+                    filteredData.items.length ?
+                        <table id="awards-table" className='awards-form-table'>
+                            <thead>
+                                <tr>
+                                    <th className='contracts-column'>Contract No.</th>
+                                    <th>Project</th>
+                                    <th>Programme</th>
+                                    <th>Contractor</th>
+                                    <th>Region</th>
+                                    <th>Core</th>
+                                    <th colSpan="2" style={{ textAlign: "center" }}>Actions</th>
+                                </tr>
+                            </thead>
 
-                    <tbody>
+                            <tbody>
 
-                        {
-                            filteredData.items.length ?
-                                filteredData.items.map((data) => (
-                                    
-                                    <AwardsTableRow data={data} key={data._id} />
-                                ))
-                                : null
-                        }
+                                {
+                                    filteredData.items && filteredData.items.length ?
+                                        filteredData.items.map((data) => (
+
+                                            <AwardsTableRow data={data} key={data._id} />
+                                        ))
+                                        : null
+                                }
 
 
-                        <tr className='last-row'>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td className='last-cell'>Total: £100,000</td>
-                            <td></td>
-                            <td></td>
-                        </tr>
+                                <tr className='last-row'>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td className='last-cell'>Total: £100,000</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
 
-                        {/* {
+                                {/* {
                                 showAddRow &&
+                                    // the below line will be used to replace the below code for adding data in the table
+                                     <AwardsTableAddRow /> 
+
                                 <tr className='conditional-row'>
                                     <td>
                                         <input type='text' name='contractNumber' placeholder='Contract No' onChange={handleChange} />
@@ -106,9 +114,15 @@ const AwardsTable = ({ location }) => {
 
                                 </tr>
                             } */}
-                    </tbody>
+                            </tbody>
 
-                </table>
+                        </table>
+                        : <div className='awards-table-no-data-container'>
+                           <h3>No entries located</h3>
+                           {/* Now how to dispay the add row? */}
+                        <FirstAwardsEntry />
+                        </div>
+                }
             </div>
         </div>
     )

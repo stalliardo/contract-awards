@@ -1,0 +1,9 @@
+.awards-table-no-data-container {
+    border: 1px solid red;
+    /* width: 90%;
+    margin: auto; */
+
+    h3 {
+        text-align: center;
+    }
+}

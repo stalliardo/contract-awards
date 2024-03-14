@@ -16,6 +16,7 @@ import AwardsSummary from './components/awards/AwardsSummary';
 import Navbar from './components/navbar/Navbar';
 import AwardsFormMulti from './components/awards/AwardsFormMulti';
 import AwardsFormSelect from './components/awards/AwardsFormSelect';
+import DevPage from './components/developer/DevPage';
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
   {
     path: "/awards-totals", // <- TODO
     element: <AwardsSummary />
+  },
+  {
+    path: "/dev", // <- TODO
+    element: <DevPage />
   }
 ]);
 

@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
-const AwardsTableRow = (data) => {
+const AwardsTableRow = ({data}) => {
 
-    console.log('data = ', data);
+    useEffect(() => {
+        console.log('data from useEffect = ', data.location);
+    }, [])
 
     return (
         <tr>

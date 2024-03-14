@@ -67,9 +67,14 @@ exports.createAwardsDiariesForYear = async (req, res) => {
 
 // Return all record for current year based on location
 exports.getAwardsForLocation = async (req, res) => {
+
+  // need to get the location from the query param
+
+  const {location} = req.query;
+
   try {
     console.log('get location data called');
-    const awardsForLocation = await AwardsDiary.find({location: "Basingstoke"}).sort({month: "desc"}).exec();
+    const awardsForLocation = await AwardsDiary.find({location}).exec();
     res.status(201).send(awardsForLocation);
   } catch (error) {
     res.status(400);

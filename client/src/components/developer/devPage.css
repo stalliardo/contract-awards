@@ -1,0 +1,13 @@
+.dev-page-container {
+    padding: 50px;
+}
+
+.dev-page-container-buttons {
+    display: flex;
+    width: 20%;
+    flex-direction: column;
+
+    button {
+        margin-top: 10px;
+    }
+}

@@ -57,6 +57,7 @@ app.post("/login", (req, res) => {
         }
     })
 })
+
 app.get("/api", (req, res) => {
     res.json({ message: "Hello from the node server!" })
 })
@@ -69,8 +70,6 @@ app.get("/api", (req, res) => {
 // })
 
 // how do i trigger the crud operations from the frontend? and how will they be received in the backend?
-
-
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);

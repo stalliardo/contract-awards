@@ -7,4 +7,4 @@ const awardsDiarySchema = new mongoose.Schema({
     items: [{ type: mongoose.Schema.Types.ObjectId, ref: 'AwardsDiaryItem' }]
 });
 
-const awardsDiary = mongoose.model("AwardsDiary", awardsDiarySchema);
+module.exports = mongoose.model("AwardsDiary", awardsDiarySchema);

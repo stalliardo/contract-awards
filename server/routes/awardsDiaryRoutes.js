@@ -8,6 +8,11 @@ router.post('/awards-diary', awardsDiaryController.createAwardsDiary);
 // GET request to fetch all awards diary entries
 router.get('/awards-diary', awardsDiaryController.getAllAwardsDiary);
 
+// GET all records for location
+router.get('/awards-diary/location', awardsDiaryController.getAwardsForLocation);
+
+router.post('/awards-diary/add-year', awardsDiaryController.createAwardsDiariesForYear);
+
 // // GET request to fetch a single awards diary entry by ID
 // router.get('/awards-diary/:id', awardsDiaryController.getAwardsDiaryById);
 

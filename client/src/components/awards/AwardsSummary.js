@@ -3,7 +3,6 @@ import React from 'react'
 const AwardsSummary = () => {
     return (
         <div className='awards-page-container'>
-           
             <div className='awards-page-table-container'>
                 <h3>Contract Awards Summary (TBC)</h3>
 

@@ -129,6 +129,14 @@ button.blue {
   }
 }
 
+button:disabled {
+  background-color: #666666;
+  &:hover {
+    background-color: #a0a0a0;
+    cursor: not-allowed;
+  }
+}
+
 input {
   height: 18px;
   border-radius: 6px;

@@ -1,10 +1,31 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './forms.css';
 
 const FirstAwardsEntry = () => {
 
-    const handleChange = (e) => {
+    const [data, setData] = useState({contractNumber: "", project: "", programme: "", contractor: "", region: "", core: ""})
+    const [saveButtonEnabled, setSaveButtonEnabled] = useState(false);
 
+
+    useEffect(() => {
+        setSaveButtonEnabled(isFormValid());
+    }, [data])
+
+    const handleChange = (e) => {
+        setData({...data, [e.target.name]: e.target.value});
+    }
+
+    const onSaveClicked = () => {
+        console.log('data = ', data);
+    }
+
+    const isFormValid = () => {
+           return data.contractNumber.length > 0 &&
+            data.project.length > 0 && 
+            data.programme.length > 0 && 
+            data.contractor.length > 0 && 
+            data.region.length > 0 && 
+            data.core.length > 0
     }
 
     return (
@@ -30,7 +51,7 @@ const FirstAwardsEntry = () => {
             <input type='text' name='core' onChange={handleChange} />
 
             <div className='first-awards-entry-form-button'>
-                <button className='blue'>Save</button>
+                <button className='blue' disabled={!saveButtonEnabled} onClick={onSaveClicked}>Save</button>
             </div>
         </div>
     )

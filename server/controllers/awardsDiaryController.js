@@ -72,7 +72,6 @@ exports.getAwardsForLocation = async (req, res) => {
   const {location} = req.query;
 
   try {
-    console.log('get location data called');
     // Find all AwardsDiary records for the given location
     const awardsForLocation = await AwardsDiary.find({location}).exec();
 

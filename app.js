@@ -7,6 +7,7 @@ const path = require("path");
 const db = require("./server/database/db"); // Import the database connection utility
 
 const awardsDiaryRoutes = require("./server/routes/awardsDiaryRoutes");
+const awardsDiaryItemRoutes = require("./server/routes/awardsDiaryItemRoutes");
 const { generateTableForYear } = require("./server/utils/AwardsDiaryUtils");
 
 require('dotenv').config()
@@ -19,6 +20,7 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
     extended: true
 }));
 app.use("/api", awardsDiaryRoutes); // Will this cause issue with the "/api" call down the bottom
+app.use("/api", awardsDiaryItemRoutes);
 
 // initialize active directory connection:
 var config = {

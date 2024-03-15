@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import axios from 'axios';
 
 const AwardsTableRow = ({data}) => {
 
@@ -6,7 +7,19 @@ const AwardsTableRow = ({data}) => {
         console.log('data from useEffect = ', data);
     }, [])
 
+    const onDeleteClicked = () => {
+        console.log('clicked');
 
+       const confirmation = window.confirm("Are you sure you want to delete this item?");
+
+       if(confirmation){
+        axios.delete(`/api/awards-diary/${data.awardsDiary}/items/${data._id}`).then((response) => {
+            console.log('Item deeleted');
+        }).catch((error) => {
+            console.log('Error deleting Item. Error: ', error);
+        })
+       }
+    }
 
     return (
         <tr>
@@ -22,7 +35,7 @@ const AwardsTableRow = ({data}) => {
                 <button className='table-actions-cell edit'>Edit</button>
             </td>
             <td className='table-actions-cell'>
-                <button className='table-actions-cell delete'>Delete</button>
+                <button className='table-actions-cell delete' onClick={onDeleteClicked}>Delete</button>
             </td>
         </tr>
     )

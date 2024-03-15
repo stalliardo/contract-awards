@@ -45,3 +45,34 @@ exports.addAwardsDiaryItem = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+exports.deleteAwardsDiaryItem = async (req, res) => {
+  try {
+    const { awardsDiaryId, awardsDiaryItemId } = req.params;
+
+    console.log('delete called+ data = ', awardsDiaryId, " ", awardsDiaryItemId);
+
+    // Find the AwardsDiary record
+    const awardsDiary = await AwardsDiary.findById(awardsDiaryId);
+    if (!awardsDiary) {
+      return res.status(404).json({ error: 'AwardsDiary not found' });
+    }
+
+    // Remove the specified AwardsDiaryItem from the items array
+    const indexToRemove = awardsDiary.items.indexOf(awardsDiaryItemId);
+    if (indexToRemove === -1) {
+      return res.status(404).json({ error: 'AwardsDiaryItem not found in AwardsDiary' });
+    }
+    awardsDiary.items.splice(indexToRemove, 1);
+
+    // Save the updated AwardsDiary record
+    await awardsDiary.save();
+
+    // Send response
+    res.status(200).json({ message: 'AwardsDiaryItem deleted successfully' });
+
+  } catch (error) {
+    console.error('Error deleting AwardsDiaryItem:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}

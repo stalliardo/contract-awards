@@ -8,7 +8,7 @@ import FirstAwardsEntry from '../../forms/FirstAwardsEntry';
 
 const AwardsTable = ({ location }) => {
 
-    const [filteredData, setFilteredData] = useState({items: []});
+    const [filteredData, setFilteredData] = useState({ items: [] });
     const [showAddRow, setShowAddRow] = useState(false);
 
     useEffect(() => {
@@ -21,29 +21,25 @@ const AwardsTable = ({ location }) => {
             const filteredLocationData = response.data.find((item) => item.month === currentMonth);
             setFilteredData(filteredLocationData);
         })
-
-
-        // Use the currentMonth to filter the array
-
     }, []);
 
     const itemAdded = (data) => {
-        console.log('item added data = ', data);
-
         const updatedFilteredData = [...filteredData.items, data];
         setFilteredData(prevState => ({
             ...prevState,
             items: updatedFilteredData
         }));
+
+        // if the add row is open, close it
+        if(showAddRow) {
+            setShowAddRow(false);
+        }
     }
 
     const itemDeleted = (awardsDiaryItemId) => {
-        console.log('item delete data = ', awardsDiaryItemId);
-
         const updatedFilteredData = filteredData.items.filter(item => item._id !== awardsDiaryItemId);
 
         // Update the state with the filteredArray
-
         setFilteredData(prevState => ({
             ...prevState,
             items: updatedFilteredData
@@ -75,19 +71,20 @@ const AwardsTable = ({ location }) => {
                                     <th colSpan="2" style={{ textAlign: "center" }}>Actions</th>
                                 </tr>
                             </thead>
-
                             <tbody>
-
                                 {
                                     filteredData.items && filteredData.items.length ?
                                         filteredData.items.map((data) => (
 
-                                            <AwardsTableRow data={data} key={data._id} onItemDeleted={itemDeleted}/>
+                                            <AwardsTableRow data={data} key={data._id} onItemDeleted={itemDeleted} />
                                         ))
                                         : null
                                 }
-
-
+                                {
+                                    showAddRow &&
+                                    // the below line will be used to replace the below code for adding data in the table
+                                    <AwardsTableAddRow awardsTableId={filteredData._id} onCancelClicked={() => setShowAddRow(false)} onItemAdded={itemAdded}/>
+                                }
                                 <tr className='last-row'>
                                     <td></td>
                                     <td></td>
@@ -98,47 +95,14 @@ const AwardsTable = ({ location }) => {
                                     <td></td>
                                     <td></td>
                                 </tr>
-
-                                {
-                                showAddRow &&
-                                    // the below line will be used to replace the below code for adding data in the table
-                                     <AwardsTableAddRow /> 
-
-                                // <tr className='conditional-row'>
-                                //     <td>
-                                //         <input type='text' name='contractNumber' placeholder='Contract No' onChange={handleChange} />
-                                //     </td>
-                                //     <td>
-                                //         <input type='text' name='contractNumber' placeholder='Project' onChange={handleChange} />
-                                //     </td>
-                                //     <td>
-                                //         <input type='text' name='contractNumber' placeholder='Programme' onChange={handleChange} />
-                                //     </td>
-                                //     <td>
-                                //         <input type='text' name='contractNumber' placeholder='Contractor' onChange={handleChange} />
-                                //     </td>
-                                //     <td>
-                                //         <input type='text' name='contractNumber' placeholder='Region' onChange={handleChange} />
-                                //     </td>
-                                //     <td>
-                                //         <input type='text' name='contractNumber' placeholder='Core' onChange={handleChange} />
-                                //     </td>
-                                //     <td className='table-actions-cell' onClick={() => setShowAddRow(false)}>
-                                //     <button className='table-actions-cell edit'>Cancel</button>
-                                // </td>
-                                // <td className='table-actions-cell'>
-                                //     <button className='table-actions-cell edit'>Save</button>
-                                // </td>
-
-                                // </tr>
-                            }
+                                
                             </tbody>
 
                         </table>
                         : <div className='awards-table-no-data-container'>
-                           <h3>No entries located</h3>
-                           {/* Now how to dispay the add row? */}
-                        <FirstAwardsEntry awardsTableId={filteredData._id} location={filteredData.location} onItemAdded={itemAdded}/>
+                            <h3>No entries located</h3>
+                            {/* Now how to dispay the add row? */}
+                            <FirstAwardsEntry awardsTableId={filteredData._id} location={filteredData.location} onItemAdded={itemAdded} />
                         </div>
                 }
             </div>

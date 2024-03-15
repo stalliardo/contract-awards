@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const AwardsTableAddRow = ({ awardsTableId, location, onItemAdded }) => {
+const AwardsTableAddRow = ({ awardsTableId, location, onItemAdded, onCancelClicked }) => {
     const [data, setData] = useState({ contractNumber: "", project: "", programme: "", contractor: "", region: "", core: "" })
     const [saveButtonEnabled, setSaveButtonEnabled] = useState(false);
 
@@ -13,17 +13,11 @@ const AwardsTableAddRow = ({ awardsTableId, location, onItemAdded }) => {
         setData({ ...data, [e.target.name]: e.target.value });
     }
 
-    const setShowAddRow = () => {
-
-    }
-
     const onSaveClicked = () => {
         data.awardsDiaryId = awardsTableId;
-        data.location = location;
+        data.location = location; // TODO <- needed?
 
         axios.post("/api/awards-diary/add-item", data).then((response) => {
-            console.log('response from adding item = ', response);
-
             onItemAdded(response.data);
         }).catch((error) => {
             console.log('Error adding item: ', error);
@@ -59,13 +53,12 @@ const AwardsTableAddRow = ({ awardsTableId, location, onItemAdded }) => {
             <td>
                 <input type='text' name='core' onChange={handleChange} />
             </td>
-            <td className='table-actions-cell' onClick={() => setShowAddRow(false)}>
-                <button className='table-actions-cell blue'>Cancel</button>
+            <td className='table-actions-cell'>
+                <button className='table-actions-cell blue' onClick={onCancelClicked}>Cancel</button>
             </td>
             <td className='table-actions-cell'>
                 <button className='table-actions-cell green' disabled={!saveButtonEnabled} onClick={onSaveClicked}>Save</button>
             </td>
-
         </tr>
     )
 }

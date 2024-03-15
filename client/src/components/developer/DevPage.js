@@ -15,7 +15,6 @@ const DevPage = () => {
         }
 
         axios.post("/api/awards-diary", awardsdata).then((response) => {
-            console.log('response from backend: ', response);
         }).catch((error) => console.log('Error from frontend = ', error));
     }
 
@@ -25,13 +24,11 @@ const DevPage = () => {
         }
 
         axios.post("/api/awards-diary/add-year", data).then((response) => {
-            console.log('response from backend: ', response);
         }).catch((error) => console.log('Error from frontend = ', error));
     }
 
     const onGetRecordsVialocationClicked = () => {
         axios.get("/api/awards-diary/location").then((response) => {
-            console.log('response from get: ', response);
             setRowData(response.data);
         }).catch((error) => console.log('Error getting location data - ', error))
     }
@@ -45,7 +42,7 @@ const DevPage = () => {
                 <button onClick={onGetRecordsVialocationClicked}>Get records via location</button>
             </div>
 
-            {/* below location needs to be dynamic */}
+            {/* TODO below location needs to be dynamic */}
            <AwardsTable location="Basingstoke"/>
         </div>
     )

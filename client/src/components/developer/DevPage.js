@@ -5,12 +5,7 @@ import AwardsTableRow from '../awards/table/AwardsTableRow';
 import AwardsTable from '../awards/table/AwardsTable';
 
 const DevPage = () => {
-
-
-
     const [rowData, setRowData] = useState([]);
-
-
     const onAddAwardsClicked = () => {
         // pass some data as an object via axios
         const awardsdata = {
@@ -41,10 +36,6 @@ const DevPage = () => {
         }).catch((error) => console.log('Error getting location data - ', error))
     }
 
-
-
-
-
     return (
         <div className='dev-page-container'>
             <h2>Test Page</h2>
@@ -54,7 +45,7 @@ const DevPage = () => {
                 <button onClick={onGetRecordsVialocationClicked}>Get records via location</button>
             </div>
 
-
+            {/* below location needs to be dynamic */}
            <AwardsTable location="Basingstoke"/>
         </div>
     )

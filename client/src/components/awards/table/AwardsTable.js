@@ -14,25 +14,29 @@ const AwardsTable = ({ location }) => {
         const currentMonth = getCurrentMonth();
 
         axios.get(`/api/awards-diary/location?location=${location}`).then((response) => {
-            console.log('location response: ', response);
-
             // Got the data for the given location, now need to filter based on current month.
             // Is this where state would come in handy becuase now gonna have to make anetwirk request for every time an option is selected??????
 
             const filteredLocationData = response.data.find((item) => item.month === currentMonth);
-
             setFilteredData(filteredLocationData);
-
-            console.log('filteredData = ', filteredData.items);
-
-            console.log('filtred data id: ', filteredData);
-
         })
 
 
         // Use the currentMonth to filter the array
 
     }, []);
+
+    const itemAdded = (data) => {
+        console.log('item added data = ', data);
+
+        const updatedFilteredData = [...filteredData.items, data];
+        setFilteredData(prevState => ({
+            ...prevState,
+            items: updatedFilteredData
+        }));
+
+        // Will need the whole object to push into the filteredData array
+    }
 
     return (
         <div>
@@ -122,7 +126,7 @@ const AwardsTable = ({ location }) => {
                         : <div className='awards-table-no-data-container'>
                            <h3>No entries located</h3>
                            {/* Now how to dispay the add row? */}
-                        <FirstAwardsEntry awardsTableId={filteredData._id} location={filteredData.location}/>
+                        <FirstAwardsEntry awardsTableId={filteredData._id} location={filteredData.location} onItemAdded={itemAdded}/>
                         </div>
                 }
             </div>

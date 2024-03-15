@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import './forms.css';
+import axios from 'axios';
 
-const FirstAwardsEntry = () => {
+const FirstAwardsEntry = ({awardsTableId, location}) => {
 
     const [data, setData] = useState({contractNumber: "", project: "", programme: "", contractor: "", region: "", core: ""})
     const [saveButtonEnabled, setSaveButtonEnabled] = useState(false);
@@ -16,7 +17,18 @@ const FirstAwardsEntry = () => {
     }
 
     const onSaveClicked = () => {
+
+        data.awardsDiaryId = awardsTableId;
+        data.location = location;
+
         console.log('data = ', data);
+
+
+        axios.post("/api/awards-diary/add-item", data).then((response) => {
+            console.log('response from adding item = ', response);
+        }).catch((error) => {
+            console.log('Error adding item: ', error);
+        })
     }
 
     const isFormValid = () => {

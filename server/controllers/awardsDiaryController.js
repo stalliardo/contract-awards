@@ -32,6 +32,8 @@ exports.createAwardsDiary = async (req, res) => {
   }
 };
 
+
+
 exports.createAwardsDiariesForYear = async (req, res) => {
   console.log('create all for year called + data: ', req.body.location);
 

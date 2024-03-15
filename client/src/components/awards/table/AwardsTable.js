@@ -25,6 +25,8 @@ const AwardsTable = ({ location }) => {
 
             console.log('filteredData = ', filteredData.items);
 
+            console.log('filtred data id: ', filteredData);
+
         })
 
 
@@ -120,7 +122,7 @@ const AwardsTable = ({ location }) => {
                         : <div className='awards-table-no-data-container'>
                            <h3>No entries located</h3>
                            {/* Now how to dispay the add row? */}
-                        <FirstAwardsEntry />
+                        <FirstAwardsEntry awardsTableId={filteredData._id} location={filteredData.location}/>
                         </div>
                 }
             </div>

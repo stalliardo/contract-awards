@@ -34,8 +34,19 @@ const AwardsTable = ({ location }) => {
             ...prevState,
             items: updatedFilteredData
         }));
+    }
 
-        // Will need the whole object to push into the filteredData array
+    const itemDeleted = (awardsDiaryItemId) => {
+        console.log('item delete data = ', awardsDiaryItemId);
+
+        const updatedFilteredData = filteredData.items.filter(item => item._id !== awardsDiaryItemId);
+
+        // Update the state with the filteredArray
+
+        setFilteredData(prevState => ({
+            ...prevState,
+            items: updatedFilteredData
+        }));
     }
 
     return (
@@ -70,7 +81,7 @@ const AwardsTable = ({ location }) => {
                                     filteredData.items && filteredData.items.length ?
                                         filteredData.items.map((data) => (
 
-                                            <AwardsTableRow data={data} key={data._id} />
+                                            <AwardsTableRow data={data} key={data._id} onItemDeleted={itemDeleted}/>
                                         ))
                                         : null
                                 }

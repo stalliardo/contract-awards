@@ -2,27 +2,21 @@ import React, { useEffect, useState } from 'react'
 import './forms.css';
 import axios from 'axios';
 
-const FirstAwardsEntry = ({awardsTableId, location}) => {
-
-    const [data, setData] = useState({contractNumber: "", project: "", programme: "", contractor: "", region: "", core: ""})
+const FirstAwardsEntry = ({ awardsTableId, location }) => {
+    const [data, setData] = useState({ contractNumber: "", project: "", programme: "", contractor: "", region: "", core: "" })
     const [saveButtonEnabled, setSaveButtonEnabled] = useState(false);
-
 
     useEffect(() => {
         setSaveButtonEnabled(isFormValid());
     }, [data])
 
     const handleChange = (e) => {
-        setData({...data, [e.target.name]: e.target.value});
+        setData({ ...data, [e.target.name]: e.target.value });
     }
 
     const onSaveClicked = () => {
-
         data.awardsDiaryId = awardsTableId;
         data.location = location;
-
-        console.log('data = ', data);
-
 
         axios.post("/api/awards-diary/add-item", data).then((response) => {
             console.log('response from adding item = ', response);
@@ -32,11 +26,11 @@ const FirstAwardsEntry = ({awardsTableId, location}) => {
     }
 
     const isFormValid = () => {
-           return data.contractNumber.length > 0 &&
-            data.project.length > 0 && 
-            data.programme.length > 0 && 
-            data.contractor.length > 0 && 
-            data.region.length > 0 && 
+        return data.contractNumber.length > 0 &&
+            data.project.length > 0 &&
+            data.programme.length > 0 &&
+            data.contractor.length > 0 &&
+            data.region.length > 0 &&
             data.core.length > 0
     }
 

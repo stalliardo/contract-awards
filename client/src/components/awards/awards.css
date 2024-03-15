@@ -10,9 +10,9 @@
 }
 
 .awards-page-title-and-button {
-    /* border: 1px solid green; */
     display: flex;
     justify-content: space-between;
+    align-items: flex-end;
 }
 
 .awards-page-location-select-container {

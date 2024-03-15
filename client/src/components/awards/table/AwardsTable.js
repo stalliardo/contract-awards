@@ -9,6 +9,7 @@ import FirstAwardsEntry from '../../forms/FirstAwardsEntry';
 const AwardsTable = ({ location }) => {
 
     const [filteredData, setFilteredData] = useState({items: []});
+    const [showAddRow, setShowAddRow] = useState(false);
 
     useEffect(() => {
         const currentMonth = getCurrentMonth();
@@ -55,9 +56,9 @@ const AwardsTable = ({ location }) => {
                 <div className='awards-page-title-and-button'>
                     <h3>{location} Dec-23</h3>
 
-                    {/* <button onClick={() => setShowAddRow(true)}>
+                    <button onClick={() => setShowAddRow(true)}>
                         Add Row
-                    </button> */}
+                    </button>
 
                 </div>
                 {
@@ -98,39 +99,39 @@ const AwardsTable = ({ location }) => {
                                     <td></td>
                                 </tr>
 
-                                {/* {
+                                {
                                 showAddRow &&
                                     // the below line will be used to replace the below code for adding data in the table
                                      <AwardsTableAddRow /> 
 
-                                <tr className='conditional-row'>
-                                    <td>
-                                        <input type='text' name='contractNumber' placeholder='Contract No' onChange={handleChange} />
-                                    </td>
-                                    <td>
-                                        <input type='text' name='contractNumber' placeholder='Project' onChange={handleChange} />
-                                    </td>
-                                    <td>
-                                        <input type='text' name='contractNumber' placeholder='Programme' onChange={handleChange} />
-                                    </td>
-                                    <td>
-                                        <input type='text' name='contractNumber' placeholder='Contractor' onChange={handleChange} />
-                                    </td>
-                                    <td>
-                                        <input type='text' name='contractNumber' placeholder='Region' onChange={handleChange} />
-                                    </td>
-                                    <td>
-                                        <input type='text' name='contractNumber' placeholder='Core' onChange={handleChange} />
-                                    </td>
-                                    <td className='table-actions-cell' onClick={() => setShowAddRow(false)}>
-                                    <button className='table-actions-cell edit'>Cancel</button>
-                                </td>
-                                <td className='table-actions-cell'>
-                                    <button className='table-actions-cell edit'>Save</button>
-                                </td>
+                                // <tr className='conditional-row'>
+                                //     <td>
+                                //         <input type='text' name='contractNumber' placeholder='Contract No' onChange={handleChange} />
+                                //     </td>
+                                //     <td>
+                                //         <input type='text' name='contractNumber' placeholder='Project' onChange={handleChange} />
+                                //     </td>
+                                //     <td>
+                                //         <input type='text' name='contractNumber' placeholder='Programme' onChange={handleChange} />
+                                //     </td>
+                                //     <td>
+                                //         <input type='text' name='contractNumber' placeholder='Contractor' onChange={handleChange} />
+                                //     </td>
+                                //     <td>
+                                //         <input type='text' name='contractNumber' placeholder='Region' onChange={handleChange} />
+                                //     </td>
+                                //     <td>
+                                //         <input type='text' name='contractNumber' placeholder='Core' onChange={handleChange} />
+                                //     </td>
+                                //     <td className='table-actions-cell' onClick={() => setShowAddRow(false)}>
+                                //     <button className='table-actions-cell edit'>Cancel</button>
+                                // </td>
+                                // <td className='table-actions-cell'>
+                                //     <button className='table-actions-cell edit'>Save</button>
+                                // </td>
 
-                                </tr>
-                            } */}
+                                // </tr>
+                            }
                             </tbody>
 
                         </table>

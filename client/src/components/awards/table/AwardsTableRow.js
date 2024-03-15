@@ -3,17 +3,19 @@ import React, { useEffect } from 'react'
 const AwardsTableRow = ({data}) => {
 
     useEffect(() => {
-        console.log('data from useEffect = ', data.location);
+        console.log('data from useEffect = ', data);
     }, [])
+
+
 
     return (
         <tr>
-            <td>83211</td>
-            <td>Twickenham</td>
-            <td>38 Weeks</td>
-            <td>FK Group</td>
-            <td>BAS</td>
-            <td>£22,999</td>
+            <td>{data.contractNumber}</td>
+            <td>{data.project}</td>
+            <td>{data.programme}</td>
+            <td>{data.contractor}</td>
+            <td>{data.region}</td>
+            <td>{data.core}</td>
 
 
             <td className='table-actions-cell'>

@@ -13,9 +13,9 @@ import './awardsTable.css';
 const locationOptions = generateLocationOptionsForSelectMenu();
 
 // Get the cuurent month to display that information by default
-const currentMonth = getCurrentMonth();
 
 const AwardsTable = () => {
+    const currentMonth = getCurrentMonth();
     const [filteredData, setFilteredData] = useState({ items: [] });
     const [showAddRow, setShowAddRow] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
@@ -28,22 +28,25 @@ const AwardsTable = () => {
     const [month, setMonth] = useState(currentMonth);
 
     useEffect(() => {
-        setIsLoading(true);
+        if (!isLoading) {
+            setIsLoading(true);
+        }
         axios.get(`/api/awards-diary/location?location=${location}`).then((response) => {
             // Got the data for the given location, now need to filter based on current month.
             // Is this where state would come in handy becuase now gonna have to make anetwirk request for every time an option is selected??????
             const filteredLocationData = response.data.find((item) => item.month === month);
             setFilteredData(filteredLocationData);
         }).catch((error) => {
-            console.log('Error getting filterd data. Error: ', error );
+            console.log('Error getting filterd data. Error: ', error);
         }).finally(() => {
-            setIsLoading(false);
+            
         })
     }, [location, month]);
 
     // This useEffect hook will be used to load the year from the selected diary
     useEffect(() => {
         setDateOptions(generateDateOptionsForSelectMenu(filteredData.year));
+        setIsLoading(false);
     }, [filteredData]);
 
     const itemAdded = (data) => {
@@ -76,19 +79,21 @@ const AwardsTable = () => {
     }
 
     const onMonthSelected = ({ value }) => {
-        console.log('data = ', value);
         setMonth(extractMonthFromString(value));
     }
 
-    return (
-        isLoading ? <div className='spinner-container'><Spinner classes="page"/></div> :
+    if (isLoading) {
+        return <div className='spinner-container'><Spinner classes="page" /></div>
+    } else {
+        return (
+
             <div className='awards-table-container'>
                 <div className='awards-table-container-select-menus'>
                     <div className='awards-table-select'>
                         <SelectMenu placeholder={location} menuItems={locationOptions} handleItemSelection={onLocationSelected} />
                     </div>
                     <div className='awards-table-select'>
-                        <SelectMenu placeholder={currentMonth} menuItems={dateOptions} handleItemSelection={onMonthSelected} />
+                        <SelectMenu placeholder={month} menuItems={dateOptions} handleItemSelection={onMonthSelected} allSettingPlaceholder={false}/>
                     </div>
                 </div>
 
@@ -148,7 +153,10 @@ const AwardsTable = () => {
                     }
                 </div>
             </div>
-    )
+        )
+    }
+
+
 }
 
 export default AwardsTable;

@@ -14,7 +14,7 @@ const MenuItem = ({ value, handleClick }) => {
   return <div className="item" onClick={handleClick}>{value}</div>
 }
 
-const SelectMenu = ({ value, label, name, handleItemSelection, menuItems, placeholder }) => {
+const SelectMenu = ({ value, label, name, handleItemSelection, menuItems, placeholder, allSettingPlaceholder = true }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [defaultValue, setDefaultValue] = useState(placeholder);
 
@@ -24,7 +24,9 @@ const SelectMenu = ({ value, label, name, handleItemSelection, menuItems, placeh
 
   const handleMenuItemSelected = (item) => {
     setIsOpen(false);
-    setDefaultValue(item.value);
+    if(allSettingPlaceholder){
+      setDefaultValue(item.value);
+    }
 
     handleItemSelection(item);
     // TODO update table data based off of selection

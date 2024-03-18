@@ -1,10 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import AwardsTableRow from './AwardsTableRow';
 import { getCurrentMonth } from '../../../utils/DateUtils';
+import { LOCATIONS, getLocations } from '../../../utils/constants';
 import axios from 'axios';
-import './awardsTable.css';
 import AwardsTableAddRow from './AwardsTableAddRow';
 import FirstAwardsEntry from '../../forms/FirstAwardsEntry';
+import SelectMenu from '../../selectMenu/SelectMenu';
+
+
+import './awardsTable.css';
+
+// TODO - refactor so that the table rows an be edited and deleted
+const dateOptions = [
+    { value: "Oct-23" },
+    { value: "Nov-23" },
+    { value: "Dec-23" },
+    { value: "Jan-24" },
+    { value: "Feb-24" },
+    { value: "Mar-24" },
+]
 
 const AwardsTable = ({ location }) => {
 
@@ -19,7 +33,13 @@ const AwardsTable = ({ location }) => {
             // Is this where state would come in handy becuase now gonna have to make anetwirk request for every time an option is selected??????
             const filteredLocationData = response.data.find((item) => item.month === currentMonth);
             setFilteredData(filteredLocationData);
-        })
+        });
+
+
+        // Remoove
+       const locations = getLocations()
+       console.log('locations = ', locations);
+
     }, []);
 
     const itemAdded = (data) => {
@@ -30,7 +50,7 @@ const AwardsTable = ({ location }) => {
         }));
 
         // if the add row is open, close it
-        if(showAddRow) {
+        if (showAddRow) {
             setShowAddRow(false);
         }
     }
@@ -46,7 +66,16 @@ const AwardsTable = ({ location }) => {
     }
 
     return (
-        <div>
+        <div className='awards-table-container'>
+            <div className='awards-table-container-select-menus'>
+                <div className='awards-table-select'>
+                    <SelectMenu placeholder="Dec-23" menuItems={dateOptions} handleItemSelection={() => { }} />
+                </div>
+                <div className='awards-table-select'>
+                    <SelectMenu placeholder="Dec-23" menuItems={dateOptions} handleItemSelection={() => { }} />
+                </div>
+            </div>
+
             <div className='awards-page-table-container'>
                 <div className='awards-page-title-and-button'>
                     <h3>{location} Dec-23</h3>
@@ -82,7 +111,7 @@ const AwardsTable = ({ location }) => {
                                 {
                                     showAddRow &&
                                     // the below line will be used to replace the below code for adding data in the table
-                                    <AwardsTableAddRow awardsTableId={filteredData._id} onCancelClicked={() => setShowAddRow(false)} onItemAdded={itemAdded}/>
+                                    <AwardsTableAddRow awardsTableId={filteredData._id} onCancelClicked={() => setShowAddRow(false)} onItemAdded={itemAdded} />
                                 }
                                 <tr className='last-row'>
                                     <td></td>
@@ -94,7 +123,7 @@ const AwardsTable = ({ location }) => {
                                     <td></td>
                                     <td></td>
                                 </tr>
-                                
+
                             </tbody>
 
                         </table>

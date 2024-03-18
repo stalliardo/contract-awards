@@ -68,7 +68,7 @@ exports.deleteAwardsDiaryItem = async (req, res) => {
     // Save the updated AwardsDiary record
     await awardsDiary.save();
 
-    // Then actually delete the record????
+    // Then delete the actual awardsDiaryItem
     await AwardsDiaryItem.findByIdAndDelete(awardsDiaryItemId);
 
     // Send response

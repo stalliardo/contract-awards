@@ -10,9 +10,9 @@
 }
 
 .awards-page-title-and-button {
-    /* border: 1px solid green; */
     display: flex;
     justify-content: space-between;
+    align-items: flex-end;
 }
 
 .awards-page-location-select-container {
@@ -33,6 +33,11 @@
     /* TODO */
     height: fit-content; 
     margin: 10px auto;
+
+    h3 {
+        
+        margin: 40px 0 0;
+    }
 
     table {
         margin-top: 6px;

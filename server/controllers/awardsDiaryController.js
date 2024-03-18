@@ -32,6 +32,8 @@ exports.createAwardsDiary = async (req, res) => {
   }
 };
 
+
+
 exports.createAwardsDiariesForYear = async (req, res) => {
   console.log('create all for year called + data: ', req.body.location);
 
@@ -67,9 +69,15 @@ exports.createAwardsDiariesForYear = async (req, res) => {
 
 // Return all record for current year based on location
 exports.getAwardsForLocation = async (req, res) => {
+  const {location} = req.query;
+
   try {
-    console.log('get location data called');
-    const awardsForLocation = await AwardsDiary.find({location: "Basingstoke"}).sort({month: "desc"}).exec();
+    // Find all AwardsDiary records for the given location
+    const awardsForLocation = await AwardsDiary.find({location}).exec();
+
+    // Populate the 'items' field for each AwardsDiary record
+    await AwardsDiary.populate(awardsForLocation, { path: 'items' });
+
     res.status(201).send(awardsForLocation);
   } catch (error) {
     res.status(400);

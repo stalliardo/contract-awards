@@ -1,36 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import AwardsTableRow from './AwardsTableRow';
-import { generateDateOptionsForSelectMenu, getCurrentMonth } from '../../../utils/DateUtils';
-import { LOCATIONS } from '../../../utils/constants';
+import { extractMonthFromString, generateDateOptionsForSelectMenu, getCurrentMonth } from '../../../utils/DateUtils';
 import { getLocations, generateLocationOptionsForSelectMenu } from '../../../utils/locationUtils';
 import axios from 'axios';
 import AwardsTableAddRow from './AwardsTableAddRow';
 import FirstAwardsEntry from '../../forms/FirstAwardsEntry';
 import SelectMenu from '../../selectMenu/SelectMenu';
 
-
 import './awardsTable.css';
 
-// TODO - refactor so that the table rows an be edited and deleted
-const dateOptions = [
-    { value: "Oct-23" },
-    { value: "Nov-23" },
-    { value: "Dec-23" },
-    { value: "Jan-24" },
-    { value: "Feb-24" },
-    { value: "Mar-24" },
-]
-
 const locationOptions = generateLocationOptionsForSelectMenu();
-console.log('location options = ', locationOptions);
 
-const dateOptionsNew = generateDateOptionsForSelectMenu(); // year from diary <-
-console.log('dataoptions = ', dateOptionsNew);
-
+// Get the cuurent month to display that information by default
 const currentMonth = getCurrentMonth();
 
 const AwardsTable = () => {
-
     const [filteredData, setFilteredData] = useState({ items: [] });
     const [showAddRow, setShowAddRow] = useState(false);
 
@@ -39,28 +23,19 @@ const AwardsTable = () => {
     const [location, setLocation] = useState(locations[2]); // TODO change and handle "Cannot read properties of undefined (reading 'items')" error
     const [dateOptions, setDateOptions] = useState([])
 
+    const [month, setMonth] = useState(currentMonth);
 
     useEffect(() => {
-
-        console.log('%c use effect to get and filter location data called', "color: yellow");
-
-
         axios.get(`/api/awards-diary/location?location=${location}`).then((response) => {
             // Got the data for the given location, now need to filter based on current month.
             // Is this where state would come in handy becuase now gonna have to make anetwirk request for every time an option is selected??????
-            const filteredLocationData = response.data.find((item) => item.month === currentMonth);
+            const filteredLocationData = response.data.find((item) => item.month === month);
             setFilteredData(filteredLocationData);
         });
-
-
-        // Remoove
-        // setting the location via the selectmenu callbacjk should reload the data
-    }, [location]);
+    }, [location, month]);
 
     // This useEffect hook will be used to load the year from the selected diary
     useEffect(() => {
-        console.log('FilteredData useeffect caleld');
-
         setDateOptions(generateDateOptionsForSelectMenu(filteredData.year));
     }, [filteredData]);
 
@@ -87,14 +62,25 @@ const AwardsTable = () => {
         }));
     }
 
+    const onLocationSelected = ({ value }) => {
+        console.log('data = ', value);
+        // TODO breaks the app as there are no months for any other branches yetd
+        // setLocation(value);
+    }
+
+    const onMonthSelected = ({ value }) => {
+        console.log('data = ', value);
+        setMonth(extractMonthFromString(value));
+    }
+
     return (
         <div className='awards-table-container'>
             <div className='awards-table-container-select-menus'>
                 <div className='awards-table-select'>
-                    <SelectMenu placeholder={location} menuItems={locationOptions} handleItemSelection={() => { }} />
+                    <SelectMenu placeholder={location} menuItems={locationOptions} handleItemSelection={onLocationSelected} />
                 </div>
                 <div className='awards-table-select'>
-                    <SelectMenu placeholder={currentMonth} menuItems={dateOptions} handleItemSelection={() => { }} />
+                    <SelectMenu placeholder={currentMonth} menuItems={dateOptions} handleItemSelection={onMonthSelected} />
                 </div>
             </div>
 
@@ -105,7 +91,6 @@ const AwardsTable = () => {
                     <button onClick={() => setShowAddRow(true)}>
                         Add Row
                     </button>
-
                 </div>
                 {
                     filteredData.items.length ?
@@ -145,12 +130,10 @@ const AwardsTable = () => {
                                     <td></td>
                                     <td></td>
                                 </tr>
-
                             </tbody>
-
                         </table>
                         : <div className='awards-table-no-data-container'>
-                            <h3>No entries located</h3>
+                            <h3>No entries found for {month}</h3>
                             {/* Now how to dispay the add row? */}
                             <FirstAwardsEntry awardsTableId={filteredData._id} location={filteredData.location} onItemAdded={itemAdded} />
                         </div>

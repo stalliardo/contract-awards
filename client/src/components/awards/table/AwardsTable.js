@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import AwardsTableRow from './AwardsTableRow';
-import { getCurrentMonth } from '../../../utils/DateUtils';
+import { generateDateOptionsForSelectMenu, getCurrentMonth } from '../../../utils/DateUtils';
 import { LOCATIONS } from '../../../utils/constants';
 import { getLocations, generateLocationOptionsForSelectMenu } from '../../../utils/locationUtils';
 import axios from 'axios';
@@ -24,23 +24,27 @@ const dateOptions = [
 const locationOptions = generateLocationOptionsForSelectMenu();
 console.log('location options = ', locationOptions);
 
+const dateOptionsNew = generateDateOptionsForSelectMenu(); // year from diary <-
+console.log('dataoptions = ', dateOptionsNew);
+
+const currentMonth = getCurrentMonth();
+
 const AwardsTable = () => {
 
     const [filteredData, setFilteredData] = useState({ items: [] });
     const [showAddRow, setShowAddRow] = useState(false);
-    
-    const locations = getLocations()
-    
-    const [location, setLocation] = useState(locations[2]); // TODO change and handle "Cannot read properties of undefined (reading 'items')" error
 
+    const locations = getLocations()
+
+    const [location, setLocation] = useState(locations[2]); // TODO change and handle "Cannot read properties of undefined (reading 'items')" error
+    const [dateOptions, setDateOptions] = useState([])
 
 
     useEffect(() => {
-        const currentMonth = getCurrentMonth();
 
         console.log('%c use effect to get and filter location data called', "color: yellow");
 
-       
+
         axios.get(`/api/awards-diary/location?location=${location}`).then((response) => {
             // Got the data for the given location, now need to filter based on current month.
             // Is this where state would come in handy becuase now gonna have to make anetwirk request for every time an option is selected??????
@@ -50,9 +54,15 @@ const AwardsTable = () => {
 
 
         // Remoove
-       
-
+        // setting the location via the selectmenu callbacjk should reload the data
     }, [location]);
+
+    // This useEffect hook will be used to load the year from the selected diary
+    useEffect(() => {
+        console.log('FilteredData useeffect caleld');
+
+        setDateOptions(generateDateOptionsForSelectMenu(filteredData.year));
+    }, [filteredData]);
 
     const itemAdded = (data) => {
         const updatedFilteredData = [...filteredData.items, data];
@@ -81,16 +91,16 @@ const AwardsTable = () => {
         <div className='awards-table-container'>
             <div className='awards-table-container-select-menus'>
                 <div className='awards-table-select'>
-                    <SelectMenu placeholder="Location" menuItems={locationOptions} handleItemSelection={() => { }} />
+                    <SelectMenu placeholder={location} menuItems={locationOptions} handleItemSelection={() => { }} />
                 </div>
                 <div className='awards-table-select'>
-                    <SelectMenu placeholder="Month" menuItems={dateOptions} handleItemSelection={() => { }} />
+                    <SelectMenu placeholder={currentMonth} menuItems={dateOptions} handleItemSelection={() => { }} />
                 </div>
             </div>
 
             <div className='awards-page-table-container'>
                 <div className='awards-page-title-and-button'>
-                    <h3>{location} Dec-23</h3>
+                    <h3>{location} {filteredData.month}-{filteredData.year}</h3>
 
                     <button onClick={() => setShowAddRow(true)}>
                         Add Row

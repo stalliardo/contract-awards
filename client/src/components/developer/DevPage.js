@@ -43,7 +43,7 @@ const DevPage = () => {
             </div>
 
             {/* TODO below location needs to be dynamic */}
-           <AwardsTable location="Basingstoke"/>
+           <AwardsTable/>
         </div>
     )
 }

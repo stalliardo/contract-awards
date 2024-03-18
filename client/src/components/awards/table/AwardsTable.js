@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import AwardsTableRow from './AwardsTableRow';
 import { getCurrentMonth } from '../../../utils/DateUtils';
-import { LOCATIONS, getLocations } from '../../../utils/constants';
+import { LOCATIONS } from '../../../utils/constants';
+import { getLocations, generateLocationOptionsForSelectMenu } from '../../../utils/locationUtils';
 import axios from 'axios';
 import AwardsTableAddRow from './AwardsTableAddRow';
 import FirstAwardsEntry from '../../forms/FirstAwardsEntry';
@@ -20,14 +21,26 @@ const dateOptions = [
     { value: "Mar-24" },
 ]
 
-const AwardsTable = ({ location }) => {
+const locationOptions = generateLocationOptionsForSelectMenu();
+console.log('location options = ', locationOptions);
+
+const AwardsTable = () => {
 
     const [filteredData, setFilteredData] = useState({ items: [] });
     const [showAddRow, setShowAddRow] = useState(false);
+    
+    const locations = getLocations()
+    
+    const [location, setLocation] = useState(locations[2]); // TODO change and handle "Cannot read properties of undefined (reading 'items')" error
+
+
 
     useEffect(() => {
         const currentMonth = getCurrentMonth();
 
+        console.log('%c use effect to get and filter location data called', "color: yellow");
+
+       
         axios.get(`/api/awards-diary/location?location=${location}`).then((response) => {
             // Got the data for the given location, now need to filter based on current month.
             // Is this where state would come in handy becuase now gonna have to make anetwirk request for every time an option is selected??????
@@ -37,10 +50,9 @@ const AwardsTable = ({ location }) => {
 
 
         // Remoove
-       const locations = getLocations()
-       console.log('locations = ', locations);
+       
 
-    }, []);
+    }, [location]);
 
     const itemAdded = (data) => {
         const updatedFilteredData = [...filteredData.items, data];
@@ -69,10 +81,10 @@ const AwardsTable = ({ location }) => {
         <div className='awards-table-container'>
             <div className='awards-table-container-select-menus'>
                 <div className='awards-table-select'>
-                    <SelectMenu placeholder="Dec-23" menuItems={dateOptions} handleItemSelection={() => { }} />
+                    <SelectMenu placeholder="Location" menuItems={locationOptions} handleItemSelection={() => { }} />
                 </div>
                 <div className='awards-table-select'>
-                    <SelectMenu placeholder="Dec-23" menuItems={dateOptions} handleItemSelection={() => { }} />
+                    <SelectMenu placeholder="Month" menuItems={dateOptions} handleItemSelection={() => { }} />
                 </div>
             </div>
 

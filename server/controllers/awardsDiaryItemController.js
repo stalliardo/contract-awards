@@ -68,6 +68,9 @@ exports.deleteAwardsDiaryItem = async (req, res) => {
     // Save the updated AwardsDiary record
     await awardsDiary.save();
 
+    // Then actually delete the record????
+    await AwardsDiaryItem.findByIdAndDelete(awardsDiaryItemId);
+
     // Send response
     res.status(200).json({ message: 'AwardsDiaryItem deleted successfully' });
 

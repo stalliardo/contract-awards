@@ -3,6 +3,7 @@ import axios from 'axios';
 import "./devPage.css";
 import AwardsTableRow from '../awards/table/AwardsTableRow';
 import AwardsTable from '../awards/table/AwardsTable';
+import Spinner from '../spinner/Spinner';
 
 const DevPage = () => {
     const [rowData, setRowData] = useState([]);
@@ -40,6 +41,12 @@ const DevPage = () => {
                 <button onClick={onAddAwardsClicked}>create awards diary</button>
                 <button onClick={onCreateYearlyClicked}>create yearly location records</button>
                 <button onClick={onGetRecordsVialocationClicked}>Get records via location</button>
+            </div>
+
+            <div>
+                {/* <Spinner />
+                <Spinner styles={{height: "30px", width: "30px"}}/>
+                <Spinner classes="small"/> */}
             </div>
 
             {/* TODO below location needs to be dynamic */}

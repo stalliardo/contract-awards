@@ -148,3 +148,8 @@ input {
   border: 1px solid grey;
   padding: 4px 6px;
 }
+
+.spinner-container {
+  margin: auto;
+  width: fit-content;
+}

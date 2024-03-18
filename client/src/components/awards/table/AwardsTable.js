@@ -17,7 +17,6 @@ const AwardsTable = ({ location }) => {
         axios.get(`/api/awards-diary/location?location=${location}`).then((response) => {
             // Got the data for the given location, now need to filter based on current month.
             // Is this where state would come in handy becuase now gonna have to make anetwirk request for every time an option is selected??????
-
             const filteredLocationData = response.data.find((item) => item.month === currentMonth);
             setFilteredData(filteredLocationData);
         })

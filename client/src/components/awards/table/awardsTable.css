@@ -1,8 +1,11 @@
 .awards-table-container {
     width: 100%;
-    border: 1px solid rgb(204, 0, 255);
+    border: 1px solid rgb(0, 255, 64);
     position: relative;
 
+    .spinner-container {
+        margin: auto;
+    }
 }
 
 .awards-table-container-select-menus {

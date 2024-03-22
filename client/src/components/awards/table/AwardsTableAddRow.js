@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Spinner from '../../spinner/Spinner';
 
 const AwardsTableAddRow = ({ awardsTableId, location, onItemAdded, onCancelClicked }) => {
     const [data, setData] = useState({ contractNumber: "", project: "", programme: "", contractor: "", region: "", core: "" })
     const [saveButtonEnabled, setSaveButtonEnabled] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         setSaveButtonEnabled(isFormValid());
@@ -14,6 +16,7 @@ const AwardsTableAddRow = ({ awardsTableId, location, onItemAdded, onCancelClick
     }
 
     const onSaveClicked = () => {
+        setIsLoading(true);
         data.awardsDiaryId = awardsTableId;
         data.location = location; // TODO <- needed?
 
@@ -21,6 +24,8 @@ const AwardsTableAddRow = ({ awardsTableId, location, onItemAdded, onCancelClick
             onItemAdded(response.data);
         }).catch((error) => {
             console.log('Error adding item: ', error);
+        }).finally(() => {
+            setIsLoading(false);
         })
     }
 
@@ -57,7 +62,9 @@ const AwardsTableAddRow = ({ awardsTableId, location, onItemAdded, onCancelClick
                 <button className='table-actions-cell blue' onClick={onCancelClicked}>Cancel</button>
             </td>
             <td className='table-actions-cell'>
-                <button className='table-actions-cell green' disabled={!saveButtonEnabled} onClick={onSaveClicked}>Save</button>
+                <button className='table-actions-cell green' disabled={!saveButtonEnabled} onClick={onSaveClicked}>
+                    {isLoading ? <div className='spinner-button'><Spinner classes="button"/></div> : "Save"}
+                </button>
             </td>
         </tr>
     )

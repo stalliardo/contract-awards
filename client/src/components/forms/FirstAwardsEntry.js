@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import './forms.css';
 import axios from 'axios';
+import Spinner from '../spinner/Spinner';
 
 const FirstAwardsEntry = ({ awardsTableId, location, onItemAdded }) => {
     const [data, setData] = useState({ contractNumber: "", project: "", programme: "", contractor: "", region: "", core: "" })
     const [saveButtonEnabled, setSaveButtonEnabled] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         setSaveButtonEnabled(isFormValid());
@@ -15,6 +17,8 @@ const FirstAwardsEntry = ({ awardsTableId, location, onItemAdded }) => {
     }
 
     const onSaveClicked = () => {
+        setIsLoading(true);
+
         data.awardsDiaryId = awardsTableId;
         data.location = location;
 
@@ -24,6 +28,8 @@ const FirstAwardsEntry = ({ awardsTableId, location, onItemAdded }) => {
             onItemAdded(response.data);
         }).catch((error) => {
             console.log('Error adding item: ', error);
+        }).finally(() => {
+            setIsLoading(false);
         })
     }
 
@@ -59,7 +65,9 @@ const FirstAwardsEntry = ({ awardsTableId, location, onItemAdded }) => {
             <input type='text' name='core' onChange={handleChange} />
 
             <div className='first-awards-entry-form-button'>
-                <button className='blue' disabled={!saveButtonEnabled} onClick={onSaveClicked}>Save</button>
+                <button className='blue' disabled={!saveButtonEnabled} onClick={onSaveClicked}>
+                {isLoading ? <div className='spinner-button'><Spinner classes="button"/></div> : "Save"}
+                </button>
             </div>
         </div>
     )

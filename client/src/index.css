@@ -95,6 +95,12 @@ td:nth-child(8) {
   -webkit-transform: rotate(45deg);
 }
 
+.spinner-button {
+  width: fit-content;
+  margin: auto;
+  height: inherit;
+}
+
 button {
   border-radius: 3px;
   padding: 4px 8px;
@@ -102,7 +108,7 @@ button {
   background-color: #666666;
   color: white;
   letter-spacing: 1px;
-  height: 26px;
+  height: 31px;
 
   &:hover {
     cursor: pointer;
@@ -147,4 +153,9 @@ input {
   border-radius: 6px;
   border: 1px solid grey;
   padding: 4px 6px;
+}
+
+.spinner-container {
+  margin: auto;
+  width: fit-content;
 }

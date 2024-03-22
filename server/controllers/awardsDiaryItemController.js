@@ -46,6 +46,27 @@ exports.addAwardsDiaryItem = async (req, res) => {
   }
 };
 
+exports.editAwardsDiaryItem = async (req, res) => {
+  try {
+    const id = req.body._id;
+    let data = req.body;
+    
+    // Remove unrequired fields...
+    delete data._id;
+    delete data.awardsDiary;
+    
+    const updatedItem = await AwardsDiaryItem.findByIdAndUpdate(id, { $set: data }, { new: true });
+
+    if (!updatedItem) {
+      return res.status(404).json({ error: 'Item not found' });
+    }
+
+    res.status(200).json({message: "Item Suucessfully updated"});
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
 exports.deleteAwardsDiaryItem = async (req, res) => {
   try {
     const { awardsDiaryId, awardsDiaryItemId } = req.params;

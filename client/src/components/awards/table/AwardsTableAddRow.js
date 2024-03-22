@@ -19,16 +19,28 @@ const AwardsTableAddRow = ({ awardsTableId, location, onItemAdded, onCancelClick
 
     const onSaveClicked = () => {
         setIsLoading(true);
-        data.awardsDiaryId = awardsTableId;
+        if(!dataFromEdit) {data.awardsDiaryId = awardsTableId;}
         data.location = location; // TODO <- needed?
 
-        axios.post("/api/awards-diary/add-item", data).then((response) => {
-            onItemAdded(response.data);
-        }).catch((error) => {
-            console.log('Error adding item: ', error);
-        }).finally(() => {
-            setIsLoading(false);
-        })
+        // Use the dataFromEdit as flag to determine whether adding or editing a document.
+
+        if(!dataFromEdit) { // Add
+            axios.post("/api/awards-diary/add-item", data).then((response) => {
+                onItemAdded(response.data);
+            }).catch((error) => {
+                console.log('Error adding item: ', error);
+            }).finally(() => {
+                setIsLoading(false);
+            })
+        } else { // Edit
+            axios.patch(`/api/awards-diary/edit-item`, data).then((response) => {
+                // onItemAdded(response.data);
+            }).catch((error) => {
+                console.log('Error adding item: ', error);
+            }).finally(() => {
+                setIsLoading(false);
+            })
+        }
     }
 
     const isFormValid = () => {
@@ -76,3 +88,4 @@ export default AwardsTableAddRow;
 
 
 // This creates a new record however this is not desired behaviour when editing....
+// Easy fix, use the isEditing flag todetermine whether editing or adding a doc

@@ -8,7 +8,7 @@ const AwardsTableRow = ({data, onItemDeleted}) => {
     const [isEditing, setIsEditing] = useState(false);
 
     useEffect(() => {
-        console.log('data from useEffect row = ', data);
+        // console.log('data from useEffect row = ', data);
     }, [])
 
     const onDeleteClicked = () => {

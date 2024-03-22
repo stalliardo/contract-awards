@@ -1,15 +1,6 @@
 import React, { useState } from 'react'
 import './select-menu.css';
 
-const menuOptions = [
-  {value: "Oct-23"},
-  {value: "Nov-23"},
-  {value: "Dec-23"},
-  {value: "Jan-24"},
-  {value: "Feb-24"},
-  {value: "Mar-24"},
-]
-
 const MenuItem = ({ value, handleClick }) => {
   return <div className="item" onClick={handleClick}>{value}</div>
 }
@@ -29,8 +20,6 @@ const SelectMenu = ({ value, label, name, handleItemSelection, menuItems, placeh
     }
 
     handleItemSelection(item);
-    // TODO update table data based off of selection
-    // TODO update table date / title 
   }
 
   return (

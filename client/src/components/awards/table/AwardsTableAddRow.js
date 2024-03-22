@@ -31,7 +31,9 @@ const AwardsTableAddRow = ({ awardsTableId, location, onItemAdded, onCancelClick
                 setIsLoading(false);
             })
         } else { // Edit
-            axios.patch(`/api/awards-diary/edit-item`, data).then().catch((error) => {
+            axios.patch(`/api/awards-diary/edit-item`, data).then(() => {
+                onItemAdded();
+            }).catch((error) => {
                 console.log('Error adding item: ', error);
             }).finally(() => {
                 setIsLoading(false);

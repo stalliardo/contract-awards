@@ -24,20 +24,11 @@ const AwardsTableRow = ({data, onItemDeleted}) => {
     }
 
     const onEditClicked = () => {
-        // TODO
-        // Do i handle this here or bubble up?
-        // The parent will need to know this has been edited so it can update the item in the array, so will need to return the new data
-        // What about display? Shoow the edit / add row
-
-        // For the addrowComp will need the id of the awardsDiary ie id for the basingstoke branch
-        // And handlers for the funcitons
-        // also need to pass the values in to the comp
-
         setIsEditing(true);
     }
 
     const itemEdited = () => {
-        console.log('item edited called');
+        setIsEditing(false);
     }
 
     if(isEditing) {

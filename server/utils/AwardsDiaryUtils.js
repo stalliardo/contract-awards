@@ -11,7 +11,7 @@ const locations = [
     "Leeds",
     "Manchester",
     "Newcastle",
-    "Awe",
+    "AWE",
 ]
 
 const months = [

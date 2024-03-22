@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Spinner from '../../spinner/Spinner';
 
-const AwardsTableAddRow = ({ awardsTableId, location, onItemAdded, onCancelClicked }) => {
-    const [data, setData] = useState({ contractNumber: "", project: "", programme: "", contractor: "", region: "", core: "" })
+const AwardsTableAddRow = ({ awardsTableId, location, onItemAdded, onCancelClicked, dataFromEdit }) => {
+    const [data, setData] = useState(dataFromEdit ?? { contractNumber: "", project: "", programme: "", contractor: "", region: "", core: "" }); // Use data passed in or defaults
+
     const [saveButtonEnabled, setSaveButtonEnabled] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         setSaveButtonEnabled(isFormValid());
+        console.log('data from dataFromEdit = ', data);
     }, [data])
 
     const handleChange = (e) => {
@@ -41,22 +43,22 @@ const AwardsTableAddRow = ({ awardsTableId, location, onItemAdded, onCancelClick
     return (
         <tr className='conditional-row'>
             <td>
-                <input type='text' name='contractNumber' onChange={handleChange} />
+                <input type='text' name='contractNumber' value={data.contractNumber} onChange={handleChange} />
             </td>
             <td>
-                <input type='text' name='project' onChange={handleChange} />
+                <input type='text' name='project' value={data.project} onChange={handleChange} />
             </td>
             <td>
-                <input type='text' name='programme' onChange={handleChange} />
+                <input type='text' name='programme' value={data.programme} onChange={handleChange} />
             </td>
             <td>
-                <input type='text' name='contractor' onChange={handleChange} />
+                <input type='text' name='contractor' value={data.contractor} onChange={handleChange} />
             </td>
             <td>
-                <input type='text' name='region' onChange={handleChange} />
+                <input type='text' name='region' value={data.region} onChange={handleChange} />
             </td>
             <td>
-                <input type='text' name='core' onChange={handleChange} />
+                <input type='text' name='core' value={data.core} onChange={handleChange} />
             </td>
             <td className='table-actions-cell'>
                 <button className='table-actions-cell blue' onClick={onCancelClicked}>Cancel</button>
@@ -70,4 +72,7 @@ const AwardsTableAddRow = ({ awardsTableId, location, onItemAdded, onCancelClick
     )
 }
 
-export default AwardsTableAddRow
+export default AwardsTableAddRow;
+
+
+// This creates a new record however this is not desired behaviour when editing....

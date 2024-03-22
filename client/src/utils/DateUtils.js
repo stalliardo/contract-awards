@@ -17,8 +17,7 @@ export const generateDateOptionsForSelectMenu = (financialYearFromDiary) => {
     let counter = 0;
     let monthString = "";
     const num = 2022
-
-    console.log('fyfd = ', financialYearFromDiary + " " + num);
+    // TODO TESTS
     //the firts part of the year will always be an odd number so can use that to determine which part of theyear was passed in
     const isYearEven = parseInt(financialYearFromDiary) % 2 === 0; // if year is even its the second part of the year
 

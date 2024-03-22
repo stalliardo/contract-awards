@@ -10,7 +10,6 @@ const AwardsTableAddRow = ({ awardsTableId, location, onItemAdded, onCancelClick
 
     useEffect(() => {
         setSaveButtonEnabled(isFormValid());
-        console.log('data from dataFromEdit = ', data);
     }, [data])
 
     const handleChange = (e) => {
@@ -23,7 +22,6 @@ const AwardsTableAddRow = ({ awardsTableId, location, onItemAdded, onCancelClick
         data.location = location; // TODO <- needed?
 
         // Use the dataFromEdit as flag to determine whether adding or editing a document.
-
         if(!dataFromEdit) { // Add
             axios.post("/api/awards-diary/add-item", data).then((response) => {
                 onItemAdded(response.data);
@@ -33,9 +31,7 @@ const AwardsTableAddRow = ({ awardsTableId, location, onItemAdded, onCancelClick
                 setIsLoading(false);
             })
         } else { // Edit
-            axios.patch(`/api/awards-diary/edit-item`, data).then((response) => {
-                // onItemAdded(response.data);
-            }).catch((error) => {
+            axios.patch(`/api/awards-diary/edit-item`, data).then().catch((error) => {
                 console.log('Error adding item: ', error);
             }).finally(() => {
                 setIsLoading(false);
@@ -86,6 +82,4 @@ const AwardsTableAddRow = ({ awardsTableId, location, onItemAdded, onCancelClick
 
 export default AwardsTableAddRow;
 
-
-// This creates a new record however this is not desired behaviour when editing....
-// Easy fix, use the isEditing flag todetermine whether editing or adding a doc
+// another consideration: the fields that are supposed to be numbers will have to be validated otherwise will mess up the calcualtions further down the road

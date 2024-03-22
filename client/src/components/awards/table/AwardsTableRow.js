@@ -12,15 +12,10 @@ const AwardsTableRow = ({data, onItemDeleted}) => {
     }, [])
 
     const onDeleteClicked = () => {
-        console.log('clicked');
-
        const confirmation = window.confirm("Are you sure you want to delete this item?");
 
        if(confirmation){
         axios.delete(`/api/awards-diary/${data.awardsDiary}/items/${data._id}`).then((response) => {
-            // update the filtereddata.items array on success
-            console.log('Item deeleted');
-
             onItemDeleted(data._id);
         }).catch((error) => {
             console.log('Error deleting Item. Error: ', error);

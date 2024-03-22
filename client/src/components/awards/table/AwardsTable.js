@@ -73,9 +73,8 @@ const AwardsTable = () => {
     }
 
     const onLocationSelected = ({ value }) => {
-        console.log('data = ', value);
         // TODO breaks the app as there are no months for any other branches yetd
-        // setLocation(value);
+        setLocation(value);
     }
 
     const onMonthSelected = ({ value }) => {

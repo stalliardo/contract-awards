@@ -23,7 +23,7 @@ const locationOptions = [
     { value: "Leeds" },
     { value: "Manchester" },
     { value: "Newcastle" },
-    { value: "Awe" },
+    { value: "AWE" },
 ]
 
 const AwardsFormSelect = () => {

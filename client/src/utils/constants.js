@@ -1,6 +1,6 @@
 export const LOCATIONS = {
     AVONMOUTH: "Avonmouth",
-    AWE: "Awe",
+    AWE: "AWE",
     BASINGSTOKE: "Basingstoke",
     BIRMINGHAM: "Birmingham",
     EASTERN: "Eastern",

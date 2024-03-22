@@ -1,19 +1,5 @@
 const AwardsDiary = require('../models/AwardsDiary');
 
-const locations = [
-  "Avonmouth",
-  "Basingstoke",
-  "Feltham",
-  "Eastern",
-  "Birmingham",
-  "Glasgow",
-  "London",
-  "Leeds",
-  "Manchester",
-  "Newcastle",
-  "Awe",
-];
-
 const months = [
   'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September'
 ];

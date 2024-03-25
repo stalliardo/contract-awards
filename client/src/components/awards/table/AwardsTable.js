@@ -10,6 +10,7 @@ import Spinner from '../../spinner/Spinner';
 
 import './awardsTable.css';
 import '../../awards/awards.css';
+import { getCoreTotal } from '../../../utils/financialTotals';
 
 const locationOptions = generateLocationOptionsForSelectMenu();
 
@@ -27,6 +28,7 @@ const AwardsTable = () => {
     const [dateOptions, setDateOptions] = useState([])
 
     const [month, setMonth] = useState(currentMonth);
+    const [coreSum, setCoreSum] = useState(0);
 
     useEffect(() => {
         if (!isLoading) {
@@ -49,6 +51,10 @@ const AwardsTable = () => {
         setDateOptions(generateDateOptionsForSelectMenu(filteredData.year));
         setIsLoading(false);
     }, [filteredData]);
+
+    useEffect(() => {
+       setCoreSum(getCoreTotal(filteredData.items));
+    }, [filteredData.items]) // observe the items array for changes
 
     const itemAdded = (data) => {
         const updatedFilteredData = [...filteredData.items, data];
@@ -124,7 +130,7 @@ const AwardsTable = () => {
                                         filteredData.items && filteredData.items.length ?
                                             filteredData.items.map((data) => (
 
-                                                <AwardsTableRow data={data} key={data._id} onItemDeleted={itemDeleted} />
+                                                <AwardsTableRow data={data} key={data._id} onItemDeleted={itemDeleted}/>
                                             ))
                                             : null
                                     }
@@ -139,7 +145,7 @@ const AwardsTable = () => {
                                         <td></td>
                                         <td></td>
                                         <td></td>
-                                        <td className='last-cell'>Total: £100,000</td>
+                                        <td className='last-cell'>Total: £{coreSum.toFixed(2)}</td>
                                         <td></td>
                                         <td></td>
                                     </tr>

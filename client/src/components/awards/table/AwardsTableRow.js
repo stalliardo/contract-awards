@@ -3,7 +3,7 @@ import AwardsTableAddRow from './AwardsTableAddRow';
 
 import axios from 'axios';
 
-const AwardsTableRow = ({data, onItemDeleted}) => {
+const AwardsTableRow = ({data, onItemDeleted, onItemEdited}) => {
 
     const [isEditing, setIsEditing] = useState(false);
 
@@ -27,7 +27,9 @@ const AwardsTableRow = ({data, onItemDeleted}) => {
         setIsEditing(true);
     }
 
-    const itemEdited = () => {
+    const itemEdited = (data) => {
+        console.log('edited clicked + data = ', data);
+        onItemEdited(data)
         setIsEditing(false);
     }
 

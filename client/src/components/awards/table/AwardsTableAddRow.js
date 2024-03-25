@@ -32,12 +32,15 @@ const AwardsTableAddRow = ({ awardsTableId, location, onItemAdded, onCancelClick
             })
         } else { // Edit
             axios.patch(`/api/awards-diary/edit-item`, data).then(() => {
-                onItemAdded();
+                console.log('patch called + data = ', data);
+                onItemAdded(data);
             }).catch((error) => {
                 console.log('Error adding item: ', error);
             }).finally(() => {
                 setIsLoading(false);
             })
+
+            console.log('data = ', data);
         }
     }
 

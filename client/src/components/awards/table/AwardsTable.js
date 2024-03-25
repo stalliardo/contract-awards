@@ -57,11 +57,45 @@ const AwardsTable = () => {
     }, [filteredData.items]) // observe the items array for changes
 
     const itemAdded = (data) => {
+
+        console.log('data from parent = ', data);
         const updatedFilteredData = [...filteredData.items, data];
         setFilteredData(prevState => ({
             ...prevState,
             items: updatedFilteredData
         }));
+
+        // if the add row is open, close it
+        if (showAddRow) {
+            setShowAddRow(false);
+        }
+    }
+
+    const onItemEdited = (data) => {
+
+        // TODO TOMORROW MORNING......................
+        // need to update / replace the item in the items array not add an extra one
+        console.log('data from edit parent = ', data);
+        const itemId = data._id;
+
+        const itemIndex = filteredData.items.findIndex(item => item._id === itemId);
+
+        if(itemIndex !== -1) {
+            console.log('item found');
+            const updatedItems = [...filteredData.items];
+
+            updatedItems[itemIndex] = data;
+
+            setFilteredData(prevState => ({
+                ...prevState,
+                items: updatedItems
+            }));
+
+        }
+
+
+
+       
 
         // if the add row is open, close it
         if (showAddRow) {
@@ -130,7 +164,7 @@ const AwardsTable = () => {
                                         filteredData.items && filteredData.items.length ?
                                             filteredData.items.map((data) => (
 
-                                                <AwardsTableRow data={data} key={data._id} onItemDeleted={itemDeleted}/>
+                                                <AwardsTableRow data={data} key={data._id} onItemDeleted={itemDeleted} onItemEdited={onItemEdited}/>
                                             ))
                                             : null
                                     }

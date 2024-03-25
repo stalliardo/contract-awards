@@ -45,7 +45,11 @@ exports.createAwardsDiariesForYear = async (req, res) => {
     });
 
     // Now call promise.all to save the data asynchronously
-    await Promise.all(promises);
+    await Promise.all(promises).then(() => {
+      res.status(201).send({message: "Yearly records created successfully"})
+    }).catch((error) => {
+      res.status(500).send(error);
+    })
 
     console.log('data added = ', data);
   } catch (error) {

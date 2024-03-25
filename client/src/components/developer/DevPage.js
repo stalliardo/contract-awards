@@ -21,7 +21,7 @@ const DevPage = () => {
 
     const onCreateYearlyClicked = () => {
         const data = {
-            location: "AWE"
+            location: "Avonmouth"
         }
 
         axios.post("/api/awards-diary/add-year", data).then((response) => {

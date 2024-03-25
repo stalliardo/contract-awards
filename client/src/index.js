@@ -10,13 +10,11 @@ import {
 } from "react-router-dom";
 import Root from './routes/root';
 import Auth from './components/auth/Auth';
-import ContractsForm from './components/contracts/contractsForm';
-import AwardsForm from './components/awards/AwardsForm';
 import AwardsSummary from './components/awards/AwardsSummary';
 import Navbar from './components/navbar/Navbar';
-import AwardsFormMulti from './components/awards/AwardsFormMulti';
-import AwardsFormSelect from './components/awards/AwardsFormSelect';
 import DevPage from './components/developer/DevPage';
+import TendersSubmitted from './routes/TendersSubmitted';
+import Admin from './routes/Admin';
 
 const router = createBrowserRouter([
   {
@@ -29,15 +27,15 @@ const router = createBrowserRouter([
   },
   {
     path: "/awards-form", // <- TODO
-    element: <AwardsForm />
+    element: <Root />
   },
   {
-    path: "/awards-form-multi", // <- TODO
-    element: <AwardsFormMulti />
+    path: "/tenders-submitted", // <- TODO
+    element: <TendersSubmitted />
   },
   {
-    path: "/awards-form-select", // <- TODO
-    element: <AwardsFormSelect />
+    path: "/admin", // <- TODO
+    element: <Admin />
   },
   {
     path: "/awards-totals", // <- TODO

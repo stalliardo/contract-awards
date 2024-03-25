@@ -2,16 +2,23 @@ import React from 'react';
 import './navbar.css';
 
 const Navbar = () => {
+
+  const handleLogOut = () => {
+    // TODO
+    console.log('log out clicked');
+  }
+   
   return (
     <nav className='navbar-container'>
-        <div className='nav-end-container'>
-            <a href='/awards-form'>Awards Form - Single</a>
-            <a href='/awards-form-multi'>Awards Form - Mutli</a>
-            <a href='/awards-form-select'>Awards Form - Select</a>
-            <a href='/awards-totals'>Awards Summary</a>
-        </div>
+      <div className='nav-end-container'>
+        <a href='/' onClick={handleLogOut}>Sign Out</a>
+        <a href='/admin'>Admin</a>
+        <a href='/awards-form'>Awards</a>
+        <a href='/awards-totals'>Awards Summary</a>
+        <a href='/tenders-submitted'>Tenders Submitted</a>
+      </div>
     </nav>
   )
 }
 
-export default Navbar
+export default Navbar;

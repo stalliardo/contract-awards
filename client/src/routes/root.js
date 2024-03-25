@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import AwardsForm from '../components/awards/AwardsForm';
+import AwardsTable from '../components/awards/table/AwardsTable';
 
 const Root = () => {
 
@@ -13,13 +13,13 @@ const Root = () => {
         if(!isAuthenticated) {
           // TODO - re-enable
             console.log('not authed called');
-            navigate("/auth")
+            // navigate("/auth"); // TODO
         }
     }, []);
 
   return (
-    <div>
-        <AwardsForm />
+    <div className='root-page-awards-table'>
+      <AwardsTable />
     </div>
   )
 }

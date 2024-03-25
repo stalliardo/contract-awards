@@ -68,7 +68,7 @@ const AwardsTableAddRow = ({ awardsTableId, location, onItemAdded, onCancelClick
                 <input type='text' name='region' value={data.region} onChange={handleChange} />
             </td>
             <td>
-                <input type='text' name='core' value={data.core} onChange={handleChange} />
+                <input type='number' name='core' value={data.core} onChange={handleChange} />
             </td>
             <td className='table-actions-cell'>
                 <button className='table-actions-cell blue' onClick={onCancelClicked}>Cancel</button>

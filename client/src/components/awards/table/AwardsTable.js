@@ -158,3 +158,7 @@ const AwardsTable = () => {
 }
 
 export default AwardsTable;
+
+// The total value will be calculated on the frontent
+// Need to ensure that only numbers can be enterered into the core cell
+// Will then convert to string and save in db

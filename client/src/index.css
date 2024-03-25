@@ -35,11 +35,7 @@ code {
 
   .table-actions-cell {
     text-align: center;
-    width: 80px;
-
-   
-
-   
+    width: 80px;   
   }
 }
 
@@ -52,7 +48,6 @@ code {
 }
 
 #awards-table tr:hover {
-  /* background-color: #f7f7f7; */
 }
 
 #awards-table th {
@@ -61,6 +56,11 @@ code {
   text-align: left;
   background-color: #666666;
   color: white;
+}
+
+.root-page-awards-table {
+  width: 90%;
+  margin: 60px auto;
 }
 
 .awards-form-table {

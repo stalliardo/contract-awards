@@ -9,12 +9,13 @@ import SelectMenu from '../../selectMenu/SelectMenu';
 import Spinner from '../../spinner/Spinner';
 
 import './awardsTable.css';
+import '../../awards/awards.css';
 
 const locationOptions = generateLocationOptionsForSelectMenu();
 
-// Get the cuurent month to display that information by default
 
 const AwardsTable = () => {
+    // Get the cuurent month to display that information by default
     const currentMonth = getCurrentMonth();
     const [filteredData, setFilteredData] = useState({ items: [] });
     const [showAddRow, setShowAddRow] = useState(false);
@@ -154,22 +155,6 @@ const AwardsTable = () => {
             </div>
         )
     }
-
-
 }
 
 export default AwardsTable;
-
-
-// This will be the component that displays informaiton for a location and month ie "Basingstoke January 2024"
-// When instantiated will load the data via location and month -> this will either default to the current month or be selected
-// The location returned by default will be sorted alphabetically?
-// Locations retrieved Will need to based off the USER MATRIX
-// useEffect will be used to get the default for the current Month axios.get(/api/awards-diary/current?location=Basingstoke)...
-
-
-// useEffect....
-
-// location will be passed in
-// Get the data based on that value ie "Basingstoke"
-// Get the current Month using Date Utils, use that value to filter the table

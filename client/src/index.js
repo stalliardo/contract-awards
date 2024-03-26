@@ -16,6 +16,10 @@ import DevPage from './components/developer/DevPage';
 import TendersSubmitted from './routes/TendersSubmitted';
 import Admin from './routes/Admin';
 
+import { configureStore } from '@reduxjs/toolkit';
+import rootReducer from './redux/reducers/';
+import { Provider } from 'react-redux';
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -47,12 +51,18 @@ const router = createBrowserRouter([
   }
 ]);
 
+const store = configureStore({
+  reducer: rootReducer
+})
+
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     {/* Is the below line okay to go here? */}
-    <Navbar />
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <Navbar />
+      <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>
 );
 

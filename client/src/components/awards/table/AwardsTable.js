@@ -10,9 +10,9 @@ import Spinner from '../../spinner/Spinner';
 
 import './awardsTable.css';
 import '../../awards/awards.css';
+import { getCoreTotal } from '../../../utils/financialTotals';
 
 const locationOptions = generateLocationOptionsForSelectMenu();
-
 
 const AwardsTable = () => {
     // Get the cuurent month to display that information by default
@@ -20,13 +20,11 @@ const AwardsTable = () => {
     const [filteredData, setFilteredData] = useState({ items: [] });
     const [showAddRow, setShowAddRow] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-
     const locations = getLocations()
-
     const [location, setLocation] = useState(locations[2]); // TODO change and handle "Cannot read properties of undefined (reading 'items')" error
     const [dateOptions, setDateOptions] = useState([])
-
     const [month, setMonth] = useState(currentMonth);
+    const [coreSum, setCoreSum] = useState(0);
 
     useEffect(() => {
         if (!isLoading) {
@@ -40,7 +38,7 @@ const AwardsTable = () => {
         }).catch((error) => {
             console.log('Error getting filterd data. Error: ', error);
         }).finally(() => {
-            
+
         })
     }, [location, month]);
 
@@ -49,6 +47,10 @@ const AwardsTable = () => {
         setDateOptions(generateDateOptionsForSelectMenu(filteredData.year));
         setIsLoading(false);
     }, [filteredData]);
+
+    useEffect(() => {
+        setCoreSum(getCoreTotal(filteredData.items));
+    }, [filteredData.items]) // observe the items array for changes
 
     const itemAdded = (data) => {
         const updatedFilteredData = [...filteredData.items, data];
@@ -63,6 +65,24 @@ const AwardsTable = () => {
         }
     }
 
+    const onItemEdited = (data) => {
+        const itemId = data._id;
+        const itemIndex = filteredData.items.findIndex(item => item._id === itemId);
+
+        if (itemIndex !== -1) {
+            const updatedItems = [...filteredData.items];
+
+            updatedItems[itemIndex] = data;
+
+            setFilteredData(prevState => ({
+                ...prevState,
+                items: updatedItems
+            }));
+        }
+
+        if (showAddRow) setShowAddRow(false); 
+    }
+
     const itemDeleted = (awardsDiaryItemId) => {
         const updatedFilteredData = filteredData.items.filter(item => item._id !== awardsDiaryItemId);
 
@@ -74,7 +94,6 @@ const AwardsTable = () => {
     }
 
     const onLocationSelected = ({ value }) => {
-        // TODO breaks the app as there are no months for any other branches yetd
         setLocation(value);
     }
 
@@ -86,14 +105,13 @@ const AwardsTable = () => {
         return <div className='spinner-container'><Spinner classes="page" /></div>
     } else {
         return (
-
             <div className='awards-table-container'>
                 <div className='awards-table-container-select-menus'>
                     <div className='awards-table-select'>
                         <SelectMenu placeholder={location} menuItems={locationOptions} handleItemSelection={onLocationSelected} />
                     </div>
                     <div className='awards-table-select'>
-                        <SelectMenu placeholder={month} menuItems={dateOptions} handleItemSelection={onMonthSelected} allSettingPlaceholder={false}/>
+                        <SelectMenu placeholder={month} menuItems={dateOptions} handleItemSelection={onMonthSelected} allSettingPlaceholder={false} />
                     </div>
                 </div>
 
@@ -124,7 +142,7 @@ const AwardsTable = () => {
                                         filteredData.items && filteredData.items.length ?
                                             filteredData.items.map((data) => (
 
-                                                <AwardsTableRow data={data} key={data._id} onItemDeleted={itemDeleted} />
+                                                <AwardsTableRow data={data} key={data._id} onItemDeleted={itemDeleted} onItemEdited={onItemEdited} />
                                             ))
                                             : null
                                     }
@@ -139,7 +157,7 @@ const AwardsTable = () => {
                                         <td></td>
                                         <td></td>
                                         <td></td>
-                                        <td className='last-cell'>Total: £100,000</td>
+                                        <td className='last-cell'>Total: £{coreSum.toFixed(2)}</td>
                                         <td></td>
                                         <td></td>
                                     </tr>
@@ -156,5 +174,4 @@ const AwardsTable = () => {
         )
     }
 }
-
 export default AwardsTable;

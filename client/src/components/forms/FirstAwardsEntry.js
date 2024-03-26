@@ -62,7 +62,7 @@ const FirstAwardsEntry = ({ awardsTableId, location, onItemAdded }) => {
             <input type='text' name='region' onChange={handleChange} />
 
             <label>Core</label>
-            <input type='text' name='core' onChange={handleChange} />
+            <input type='number' name='core' onChange={handleChange} />
 
             <div className='first-awards-entry-form-button'>
                 <button className='blue' disabled={!saveButtonEnabled} onClick={onSaveClicked}>

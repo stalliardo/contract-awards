@@ -14,15 +14,6 @@ router.get('/awards-diary/location', awardsDiaryController.getAwardsForLocation)
 
 router.post('/awards-diary/add-year', awardsDiaryController.createAwardsDiariesForYear);
 
-// router.post("/awards-diary/add-item", awardsDiaryItemController.addAwardsDiaryItem);
-
-// // GET request to fetch a single awards diary entry by ID
-// router.get('/awards-diary/:id', awardsDiaryController.getAwardsDiaryById);
-
-// // PUT request to update an existing awards diary entry by ID
-// router.put('/awards-diary/:id', awardsDiaryController.updateAwardsDiaryById);
-
-// // DELETE request to delete an awards diary entry by ID
-// router.delete('/awards-diary/:id', awardsDiaryController.deleteAwardsDiaryById);
+router.get('/awards-diary/getAllAwards', awardsDiaryController.getAllAwards);
 
 module.exports = router;

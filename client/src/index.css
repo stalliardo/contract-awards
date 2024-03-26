@@ -95,6 +95,11 @@ td:nth-child(8) {
   -webkit-transform: rotate(45deg);
 }
 
+.spinner-container-page {
+  width: fit-content;
+  margin: 200px auto;
+}
+
 .spinner-button {
   width: fit-content;
   margin: auto;

@@ -4,6 +4,20 @@ const months = [
   'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September'
 ];
 
+const LOCATIONS = {
+  AVONMOUTH: "Avonmouth",
+  AWE: "AWE",
+  BASINGSTOKE: "Basingstoke",
+  BIRMINGHAM: "Birmingham",
+  EASTERN: "Eastern",
+  FELTHAM: "Feltham",
+  GLASGOW: "Glasgow",
+  LEEDS: "Leeds",
+  LONDON: "London",
+  MANCHESTER: "Manchester",
+  NEWCASTLE: "Newcastle"
+}
+
 
 // TODO
 exports.createAwardsDiary = async (req, res) => {
@@ -57,6 +71,8 @@ exports.createAwardsDiariesForYear = async (req, res) => {
   }
 }
 
+
+
 // Return all record for current year based on location
 exports.getAwardsForLocation = async (req, res) => {
   const {location} = req.query;
@@ -75,6 +91,23 @@ exports.getAwardsForLocation = async (req, res) => {
   }
 }
 
+// Return all record for current year based on location
+exports.getAllAwards = async (req, res) => {
+
+  try {
+    // Find all AwardsDiary records for the given location
+    const allAwards = await AwardsDiary.find().exec();
+
+    // Populate the 'items' field for each AwardsDiary record
+    await AwardsDiary.populate(allAwards, { path: 'items' });
+
+    res.status(201).send(allAwards);
+  } catch (error) {
+    res.status(400);
+    console.log('Error getting all records for location: ', error);
+  }
+}
+
 // TODO
 exports.getAllAwardsDiary = async (req, res) => {
   console.log('CALLED');
@@ -85,10 +118,3 @@ exports.getAllAwardsDiary = async (req, res) => {
     res.status(500).send(error);
   }
 };
-
-
-function buildData(location) {
-  months.forEach((month) => {
-
-  })
-}

@@ -1,21 +1,20 @@
 import React from 'react';
 import './navbar.css';
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
-
   const handleLogOut = () => {
     // TODO
     console.log('log out clicked');
   }
-   
+
   return (
     <nav className='navbar-container'>
       <div className='nav-end-container'>
-        <a href='/' onClick={handleLogOut}>Sign Out</a>
-        <a href='/admin'>Admin</a>
-        <a href='/awards-form'>Awards</a>
-        <a href='/awards-totals'>Awards Summary</a>
-        <a href='/tenders-submitted'>Tenders Submitted</a>
+        <Link to="/">Sign Out</Link>
+        <Link to="/">Admin</Link>
+        <Link to="/awards-form">Awards</Link>
+        <Link to="/awards-summary">Awards Summary</Link>
       </div>
     </nav>
   )

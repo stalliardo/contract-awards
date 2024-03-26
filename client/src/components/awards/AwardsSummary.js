@@ -4,7 +4,7 @@ import { fetchData } from '../../redux/features/awards/awardsThunks';
 
 const AwardsSummary = () => {
     const awardsData = useSelector((state) => state.awards);
-
+    
     const dispatch = useDispatch();
 
     useEffect(() => {

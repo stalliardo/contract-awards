@@ -71,8 +71,6 @@ exports.deleteAwardsDiaryItem = async (req, res) => {
   try {
     const { awardsDiaryId, awardsDiaryItemId } = req.params;
 
-    console.log('delete called+ data = ', awardsDiaryId, " ", awardsDiaryItemId);
-
     // Find the AwardsDiary record
     const awardsDiary = await AwardsDiary.findById(awardsDiaryId);
     if (!awardsDiary) {

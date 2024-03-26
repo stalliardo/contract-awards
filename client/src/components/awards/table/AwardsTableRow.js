@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import AwardsTableAddRow from './AwardsTableAddRow';
 
 import axios from 'axios';
@@ -6,11 +6,6 @@ import axios from 'axios';
 const AwardsTableRow = ({data, onItemDeleted, onItemEdited}) => {
 
     const [isEditing, setIsEditing] = useState(false);
-
-    useEffect(() => {
-        // console.log('data from useEffect row = ', data);
-    }, [])
-
     const onDeleteClicked = () => {
        const confirmation = window.confirm("Are you sure you want to delete this item?");
 
@@ -28,7 +23,6 @@ const AwardsTableRow = ({data, onItemDeleted, onItemEdited}) => {
     }
 
     const itemEdited = (data) => {
-        console.log('edited clicked + data = ', data);
         onItemEdited(data)
         setIsEditing(false);
     }
@@ -45,7 +39,6 @@ const AwardsTableRow = ({data, onItemDeleted, onItemEdited}) => {
                 <td>{data.region}</td>
                 <td>{data.core}</td>
     
-    
                 <td className='table-actions-cell'>
                     <button className='table-actions-cell blue' onClick={onEditClicked}>Edit</button>
                 </td>
@@ -55,18 +48,6 @@ const AwardsTableRow = ({data, onItemDeleted, onItemEdited}) => {
             </tr>
         )
     }
-
-
-   
 }
 
-export default AwardsTableRow
-
-
-// Each row will need to display from mongo:
-// contractNumber
-// project
-// programme
-// contractor
-// region
-// core
+export default AwardsTableRow;

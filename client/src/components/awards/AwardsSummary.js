@@ -3,12 +3,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchData } from '../../redux/features/awards/awardsThunks';
 
 const AwardsSummary = () => {
-    const data = useSelector((state) => state.awards);
+    const awardsData = useSelector((state) => state.awards);
+
     const dispatch = useDispatch();
 
     useEffect(() => {
-      dispatch(fetchData())
-    })
+
+        console.log('awards = ', awardsData);
+
+        if(awardsData.data.length) {
+            // there is data in the store, no need for network request
+            console.log('There is data in the store');
+        } else {
+            dispatch(fetchData()).catch((error) => {
+                console.log('error getting data using fetchData. Error: ', error);
+            })
+        }
+    }, [awardsData])
 
     return (
         <div className='awards-page-container'>
@@ -462,7 +473,7 @@ const AwardsSummary = () => {
             </div>
 
             <div className='awards-page-table-container'>
-                
+
                 <table id="awards-table">
                     <thead>
                         <tr>

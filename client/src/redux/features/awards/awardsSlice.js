@@ -15,16 +15,13 @@ export const awardsSlice = createSlice({
     incrementByAmount: (state, action) => {
       state.value += action.payload
     },
-
-    getData: (state, action) => {
-      console.log('get data caleld');
-    }
   },
 
   extraReducers: (builder) => {
     builder.addCase(fetchData.fulfilled, (state, action) => {
       // Do something with the state and the payload
       console.log('action.payload = ', action.payload);
+      state.data = action.payload;
     })
   }
 })

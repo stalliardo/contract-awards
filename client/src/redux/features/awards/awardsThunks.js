@@ -4,8 +4,13 @@ import axios from 'axios';
 const fetchData = createAsyncThunk(
     'awards/fetchData',
     async () => {
-        const response = await axios.get("/api/awards-diary/location?location=Basingstoke");
-        return response.data;
+        try {
+            console.log('NETWORK REQUEST MADE');
+            const response = await axios.get("/api/awards-diary/location?location=Basingstoke");
+            return response.data;
+        } catch (error) {
+            return new Error("There was an error getting the data.")
+        }
     },
 )
 

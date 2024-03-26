@@ -58,8 +58,8 @@ const store = configureStore({
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    {/* Is the below line okay to go here? */}
     <Provider store={store}>
+      {/* Is the below line okay to go here? */}
       <Navbar />
       <RouterProvider router={router} />
     </Provider>

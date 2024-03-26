@@ -1,11 +1,8 @@
-// reducers/index.js
-
 import { combineReducers } from 'redux';
-import awardsReducer from './awardsReducer';
+import awardsReducer from '../features/awards/awardsSlice';
 
 const rootReducer = combineReducers({
   awards: awardsReducer
-  // Add more reducers here if needed
 });
 
 export default rootReducer;

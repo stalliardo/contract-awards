@@ -1,6 +1,15 @@
-import React from 'react'
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchData } from '../../redux/features/awards/awardsThunks';
 
 const AwardsSummary = () => {
+    const data = useSelector((state) => state.awards);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+      dispatch(fetchData())
+    })
+
     return (
         <div className='awards-page-container'>
             <div className='awards-page-table-container'>

@@ -18,22 +18,20 @@ const AwardsSummary = () => {
             console.log('There is data in the store');
         } else {
             setIsLoading(true);
-
-
-
-            dispatch(fetchData()).catch((error) => {
-                console.log('error getting data using fetchData. Error: ', error);
-            }).finally(() => {
-                setTimeout(() => {
-                    // TODO -> experimental to disable page blinks and actually show the spinner
-                    setIsLoading(false);
-                }, 1500)
-            })
+            
+            // dispatch(fetchData()).catch((error) => {
+            //     console.log('error getting data using fetchData. Error: ', error);
+            // }).finally(() => {
+            //     setTimeout(() => {
+            //         // TODO -> experimental to disable page blinks and actually show the spinner
+            //         setIsLoading(false);
+            //     }, 1500)
+            // })
         }
     }, [awardsData]);
 
     if (isLoading) {
-        return <div className='spinner-container-page'><Spinner classes="page" /></div>
+        return <div className='spinner-container-page'><Spinner classes="page" text="Generating Summary Table...." /></div>
     } else {
         return (
             <div className='awards-page-container'>

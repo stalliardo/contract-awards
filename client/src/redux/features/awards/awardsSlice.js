@@ -14,8 +14,8 @@ export const awardsSlice = createSlice({
   initialState,
   reducers: {
     
-    incrementByAmount: (state, action) => {
-      state.value += action.payload
+    setLoading: (state, action) => {
+      state.loading = action.payload
     },
   },
 
@@ -30,6 +30,6 @@ export const awardsSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { incrementByAmount, getData } = awardsSlice.actions;
+export const { setLoading, getData } = awardsSlice.actions;
 
 export default awardsSlice.reducer;

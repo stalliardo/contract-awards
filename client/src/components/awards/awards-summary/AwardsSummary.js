@@ -4,6 +4,7 @@ import { fetchData } from '../../../redux/features/awards/awardsThunks';
 import Spinner from '../../spinner/Spinner';
 import AwardsSummaryTableRow from './AwardsSummaryTableRow';
 import { getLocations } from '../../../utils/locationUtils';
+import { setLoading } from '../../../redux/features/awards/awardsSlice';
 
 const locations = getLocations();
 
@@ -19,6 +20,7 @@ const AwardsSummary = () => {
     useEffect(() => {
         if (awardsData.coreTotals.length > 0) {
             console.log('There is data in the store');
+            setSpinnerComplete(true);
         } else {
             dispatch(fetchData()).finally(() => {
                 setTimeout(() => {

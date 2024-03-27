@@ -5,6 +5,7 @@ const monthsInFinancialOrder = getMonthsInFinancialOrder();
 
 const AwardsSummaryTableRow = ({coreTotals, locationRef}) => {
     const filteredTotals = coreTotals.filter((totals) => totals.location === locationRef);
+    const cumalitiveTotal = filteredTotals.reduce((total, currentItem) => total + currentItem.sum, 0);
 
     return (
         <tr>
@@ -16,7 +17,7 @@ const AwardsSummaryTableRow = ({coreTotals, locationRef}) => {
             }
 
             {/* Total */}
-            <td>£29,011</td>
+            <td>£{cumalitiveTotal}</td>
 
             {/* Month Target */}
             <td>

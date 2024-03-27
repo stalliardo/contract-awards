@@ -4,18 +4,17 @@ import { fetchData } from '../../../redux/features/awards/awardsThunks';
 import Spinner from '../../spinner/Spinner';
 import AwardsSummaryTableRow from './AwardsSummaryTableRow';
 import { getLocations } from '../../../utils/locationUtils';
-import { setLoading } from '../../../redux/features/awards/awardsSlice';
 
 const locations = getLocations();
 
 const AwardsSummary = () => {
     const awardsData = useSelector((state) => state.awards);
     const isLoading = useSelector((state) => state.awards.loading);
+    const dispatch = useDispatch();
 
     const [spinnerComplete, setSpinnerComplete] = useState(false);
     const showUI = !isLoading && spinnerComplete;
 
-    const dispatch = useDispatch();
 
     useEffect(() => {
         if (awardsData.coreTotals.length > 0) {

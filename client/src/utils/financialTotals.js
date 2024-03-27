@@ -9,39 +9,24 @@ export const getCoreTotal = (items) => {
     return sum;
 }
 
-export const generateDataForSummaryTable = (data) => {
-    console.log('called generate suammary data');
-    // loop overe the data will only need location, month and corevalues for each place as depicted belwo
-}
+export const generateCoreTotalsData = (data) => {
+    const summaryTableData = [];
 
-// const data = [
-//     {
-//       location: "Location A",
-//       months: [
-//         {
-//           month: "January",
-//           items: [
-//             { core: 100 },
-//             { core: 200 },
-//             // More core values for January
-//           ]
-//         },
-//         {
-//           month: "February",
-//           items: [
-//             { core: 150 },
-//             { core: 250 },
-//             // More core values for February
-//           ]
-//         },
-//         // More months for Location A
-//       ]
-//     },
-//     {
-//       location: "Location B",
-//       months: [
-//         // Months with core values for Location B
-//       ]
-//     },
-//     // More locations with their respective months and core values
-//   ]
+    data.forEach((item) => {
+        let sum = 0;
+
+        if(item.items.length){
+            item.items.forEach((i) => {
+                sum += parseInt(i.core);
+            })
+        }
+
+        summaryTableData.push({
+            location: item.location,
+            month: item.month,
+            sum
+        })
+    })
+
+    return summaryTableData;
+}

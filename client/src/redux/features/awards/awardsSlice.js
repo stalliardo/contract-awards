@@ -1,9 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchData } from './awardsThunks';
-import { generateDataForSummaryTable } from '../../../utils/financialTotals';
+import { generateCoreTotalsData } from '../../../utils/financialTotals';
 
 const initialState = {
     data: [],
+    coreTotals: [],
     loading: false,
     error: null
   };
@@ -19,15 +20,21 @@ export const awardsSlice = createSlice({
   },
 
   extraReducers: (builder) => {
+
+    builder.addCase(fetchData.pending, (state) => {
+      console.log('pending called');
+      state.loading = true;
+    })
+
     builder.addCase(fetchData.fulfilled, (state, action) => {
       // Do something with the state and the payload
-      console.log('action.payload = ', action.payload);
+      // console.log('action.payload = ', action.payload);
 
       // will need to generated the reuqired data for the table
       // the object will need to look like 
-      const generatedSummayData = generateDataForSummaryTable(action.payload);
+      const generatedCoreTotals = generateCoreTotalsData(action.payload);
 
-      state.data = action.payload;
+      state.coreTotals = generatedCoreTotals;
     })
   }
 })

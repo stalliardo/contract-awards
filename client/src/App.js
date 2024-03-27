@@ -8,7 +8,7 @@ import {
 
 
 import Root from './routes/root';
-import AwardsSummary from './components/awards/AwardsSummary';
+import AwardsSummary from './components/awards/awards-summary/AwardsSummary';
 import DevPage from './components/developer/DevPage';
 import TendersSubmitted from './routes/TendersSubmitted';
 import Admin from './routes/Admin';

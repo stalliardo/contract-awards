@@ -9,39 +9,27 @@ const locations = getLocations();
 
 const AwardsSummary = () => {
     const awardsData = useSelector((state) => state.awards);
-    const [isLoading, setIsLoading] = useState(false);
-    // const [isLoading, setIsLoading] = useState(false);
-    // const [coreTotals, setCoreTotals] = useState([]);
+    const isLoading = useSelector((state) => state.awards.loading);
 
-    const noDisplay = true;
+    const [spinnerComplete, setSpinnerComplete] = useState(false);
+    const showUI = !isLoading && spinnerComplete;
 
     const dispatch = useDispatch();
 
     useEffect(() => {
-        console.log('use feect called');
         if (awardsData.coreTotals.length > 0) {
-            // there is data in the store, no need for network request
             console.log('There is data in the store');
         } else {
-            setIsLoading(true);
-
-            console.log('is loading is true');
-
-            dispatch(fetchData()).unwrap().catch((error) => {
-                console.log('error getting data using fetchData. Error: ', error);
-            }).finally(() => {
-                // setTimeout(() => {
-                //     // TODO -> experimental to disable page blinks and actually show the spinner
-                //     setIsLoading(false);
-                // }, 1500)
-                setIsLoading(false);
+            dispatch(fetchData()).finally(() => {
+                setTimeout(() => {
+                    setSpinnerComplete(true);
+                }, 1250);
             })
         }
-    }, []); // <- ?????
-
+    }, []);
 
     return (
-        isLoading ?
+        !showUI ?
             <div className='spinner-container-page'><Spinner classes="page" text="Generating Summary Table...." /></div>
             :
             <div className='awards-page-container'>
@@ -90,13 +78,12 @@ const AwardsSummary = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {!noDisplay &&
+                            {
                                 locations.map((location, index) => {
                                     console.log('location = ', location);
                                     return <AwardsSummaryTableRow coreTotals={awardsData.coreTotals} locationRef={location} key={index} />
                                 })
                             }
-
                             {/* Totals below here */}
                             <tr className='bold-cells'>
                                 <td>UK Core Total</td>
@@ -192,25 +179,10 @@ const AwardsSummary = () => {
                                 </td>
                                 <td>121%</td>
                             </tr>
-
-                            {/* <tr className='last-row'>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td className='last-cell'>Total: £100,000</td>
-                            </tr> */}
                         </tbody>
-
                     </table>
-
                     <p>% T A = Percentage of Target Achieved (TBC)</p>
                 </div>
-
-
-
-
                 {/* Temporay tables for demo purposes only TO BE REMOVED */}
                 <div className='awards-page-table-container'>
                     <h3>Company Performance</h3>
@@ -251,9 +223,7 @@ const AwardsSummary = () => {
                         </tbody>
                     </table>
                 </div>
-
                 <div className='awards-page-table-container'>
-
                     <table id="awards-table">
                         <thead>
                             <tr>

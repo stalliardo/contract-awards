@@ -5,7 +5,7 @@ import { generateCoreTotalsData } from '../../../utils/financialTotals';
 const initialState = {
     data: [],
     coreTotals: [],
-    loading: false,
+    loading: true,
     error: null
   };
 
@@ -20,21 +20,11 @@ export const awardsSlice = createSlice({
   },
 
   extraReducers: (builder) => {
-
-    builder.addCase(fetchData.pending, (state) => {
-      console.log('pending called');
-      state.loading = true;
-    })
-
     builder.addCase(fetchData.fulfilled, (state, action) => {
-      // Do something with the state and the payload
-      // console.log('action.payload = ', action.payload);
-
-      // will need to generated the reuqired data for the table
-      // the object will need to look like 
       const generatedCoreTotals = generateCoreTotalsData(action.payload);
 
       state.coreTotals = generatedCoreTotals;
+      state.loading = false;
     })
   }
 })

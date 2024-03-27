@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchData } from '../../../redux/features/awards/awardsThunks';
 import Spinner from '../../spinner/Spinner';
-import AwardsSummaryTableRow from './AwardsSummaryTableRow';
+import AwardsSummaryCoreTotalsRow from './AwardsSummaryCoreTotalsRow';
 import { getLocations } from '../../../utils/locationUtils';
+import AwardsSummaryUKCoreTotalsRow from './AwardsSummaryUKCoreTotalsRow';
 
 const locations = getLocations();
 
@@ -82,24 +83,19 @@ const AwardsSummary = () => {
                             {
                                 locations.map((location, index) => {
                                     console.log('location = ', location);
-                                    return <AwardsSummaryTableRow coreTotals={awardsData.coreTotals} locationRef={location} key={index} />
+                                    return <AwardsSummaryCoreTotalsRow coreTotals={awardsData.coreTotals} locationRef={location} key={index} />
                                 })
                             }
-                            {/* Totals below here */}
+                            {/* Totals below here core total is exactly that - need a function to loop each branch and each month and get a sum for each of the months */}
                             <tr className='bold-cells'>
                                 <td>UK Core Total</td>
-                                <td>£3,000,000</td>
-                                <td>£3,000,000</td>
-                                <td>£3,000,000</td>
-                                <td>£3,000,000</td>
-                                <td>£3,000,000</td>
-                                <td>£3,000,000</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
+                               
+                            {
+                                awardsData.ukCoreTotals.map((data) => {
+                                    return <AwardsSummaryUKCoreTotalsRow data={data}/>
+                                })
+                            }
+
                                 <td>£29,011</td>
                                 <td>
                                     £100,000

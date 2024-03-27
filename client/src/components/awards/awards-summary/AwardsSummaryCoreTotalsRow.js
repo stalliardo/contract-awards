@@ -3,7 +3,7 @@ import { getMonthsInFinancialOrder } from '../../../utils/DateUtils'
 
 const monthsInFinancialOrder = getMonthsInFinancialOrder();
 
-const AwardsSummaryTableRow = ({coreTotals, locationRef}) => {
+const AwardsSummaryCoreTotalsRow = ({coreTotals, locationRef}) => {
     const filteredTotals = coreTotals.filter((totals) => totals.location === locationRef);
     const cumalitiveTotal = filteredTotals.reduce((total, currentItem) => total + currentItem.sum, 0);
 
@@ -33,4 +33,5 @@ const AwardsSummaryTableRow = ({coreTotals, locationRef}) => {
     )
 }
 
-export default AwardsSummaryTableRow
+export default AwardsSummaryCoreTotalsRow;
+

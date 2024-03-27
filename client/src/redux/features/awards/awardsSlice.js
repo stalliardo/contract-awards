@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchData } from './awardsThunks';
-import { generateCoreTotalsData } from '../../../utils/financialTotals';
+import { generateCoreTotalsData, generateUkCoreTotals } from '../../../utils/financialTotals';
 
 const initialState = {
     data: [],
     coreTotals: [],
+    ukCoreTotals: [],
     loading: true,
     error: null
   };
@@ -22,8 +23,10 @@ export const awardsSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchData.fulfilled, (state, action) => {
       const generatedCoreTotals = generateCoreTotalsData(action.payload);
+      const generatedUKCoreTotals = generateUkCoreTotals(generatedCoreTotals);
 
       state.coreTotals = generatedCoreTotals;
+      state.ukCoreTotals = generatedUKCoreTotals;
       state.loading = false;
     })
   }

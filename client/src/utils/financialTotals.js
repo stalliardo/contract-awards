@@ -1,3 +1,5 @@
+import { getMonthsInFinancialOrder } from "./DateUtils";
+
 export const getCoreTotal = (items) => {
     let sum = 0;
 
@@ -29,4 +31,27 @@ export const generateCoreTotalsData = (data) => {
     })
 
     return summaryTableData;
+}
+
+export const generateUkCoreTotals = (data) => {
+    const totals = [];
+    const monthsInFinancialOrder = getMonthsInFinancialOrder();
+
+    monthsInFinancialOrder.forEach((month) => {
+        let ukCoreTotal = 0;
+
+        data.forEach((item) => {
+            if(item.month === month) {
+                ukCoreTotal += item.sum;
+            }
+        })
+
+        totals.push({month, ukCoreTotal});
+
+        ukCoreTotal = 0;
+    })
+
+    console.log('totals: ', totals);
+
+    return totals;
 }

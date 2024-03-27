@@ -11,11 +11,12 @@ const locations = getLocations();
 const AwardsSummary = () => {
     const awardsData = useSelector((state) => state.awards);
     const isLoading = useSelector((state) => state.awards.loading);
+    // const [cumalitiveTotal, setCumalitiveTotal] = useState(0);
+
     const dispatch = useDispatch();
 
     const [spinnerComplete, setSpinnerComplete] = useState(false);
     const showUI = !isLoading && spinnerComplete;
-
 
     useEffect(() => {
         if (awardsData.coreTotals.length > 0) {
@@ -29,6 +30,27 @@ const AwardsSummary = () => {
             })
         }
     }, []);
+
+    useEffect(() => {
+        if(!awardsData.loading) {
+            // const filteredTotals = coreTotals.filter((totals) => totals.location === locationRef);
+            // const cumalitiveTotal = filteredTotals.reduce((total, currentItem) => total + currentItem.sum, 0);
+        }
+    }, [awardsData.loading])
+
+    const generateFilteredTotals = (location) => {
+
+        console.log('loaction = ', location);
+
+        return awardsData.coreTotals.filter((totals) => totals.location === location)
+        
+    }
+
+    const generateCumalitiveTotals = (location) => {
+        const filteredTotals = generateFilteredTotals(location);
+
+        return filteredTotals.reduce((total, currentItem) => total + currentItem.sum, 0);
+    }
 
     return (
         !showUI ?
@@ -82,8 +104,7 @@ const AwardsSummary = () => {
                         <tbody>
                             {
                                 locations.map((location, index) => {
-                                    console.log('location = ', location);
-                                    return <AwardsSummaryCoreTotalsRow coreTotals={awardsData.coreTotals} locationRef={location} key={index} />
+                                    return <AwardsSummaryCoreTotalsRow filteredTotals={generateFilteredTotals(location)} cumalitiveTotal={generateCumalitiveTotals(location)} locationRef={location} key={index} />
                                 })
                             }
                             {/* Totals below here core total is exactly that - need a function to loop each branch and each month and get a sum for each of the months */}
@@ -91,12 +112,12 @@ const AwardsSummary = () => {
                                 <td>UK Core Total</td>
                                
                             {
-                                awardsData.ukCoreTotals.map((data) => {
-                                    return <AwardsSummaryUKCoreTotalsRow data={data}/>
+                                awardsData.ukCoreTotals.map((data, index) => {
+                                    return <AwardsSummaryUKCoreTotalsRow data={data} key={index}/>
                                 })
                             }
 
-                                <td>£29,011</td>
+                                <td>£899999</td>
                                 <td>
                                     £100,000
                                 </td>

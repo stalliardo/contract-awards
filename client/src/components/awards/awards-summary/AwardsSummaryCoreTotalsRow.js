@@ -1,12 +1,11 @@
-import React from 'react'
+import React, { useEffect} from 'react'
 import { getMonthsInFinancialOrder } from '../../../utils/DateUtils'
 
 const monthsInFinancialOrder = getMonthsInFinancialOrder();
 
-const AwardsSummaryCoreTotalsRow = ({coreTotals, locationRef}) => {
-    const filteredTotals = coreTotals.filter((totals) => totals.location === locationRef);
-    const cumalitiveTotal = filteredTotals.reduce((total, currentItem) => total + currentItem.sum, 0);
-
+const AwardsSummaryCoreTotalsRow = ({coreTotals, cumalitiveTotal, locationRef, filteredTotals}) => {
+    // const filteredTotals = coreTotals.filter((totals) => totals.location === locationRef);
+    console.log('cuma = ', cumalitiveTotal);    
     return (
         <tr>
             <td>{locationRef}</td>

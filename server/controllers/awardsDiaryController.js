@@ -135,18 +135,11 @@ exports.generateAllDataForYear = async (req, res) => {
   })
 
   try {
-    await Promise.all(locationAddedPromises).then(() => {
-      console.log('All created');
-    })
+    await Promise.all(locationAddedPromises);
+    res.status(201).send({message: "All records successfully created!"});
 
   } catch (error) {
     console.log('Error while calling promise.all from generateAllData: E : ', error);
-  }
-
-
-  // and call the createAwardsDiariesForYear function, add the response to an array of promises
-  // the call the promise.all function 
+    res.status(500).send(error);
+  } 
 }
-
-
-// id like to get a callback after each item has been created so i can display a loading indicator, think that would look cool

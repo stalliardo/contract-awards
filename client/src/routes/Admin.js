@@ -1,8 +1,26 @@
 import React from 'react'
+import './admin.css';
 
 const Admin = () => {
   return (
-    <div>Admin</div>
+    <div className='admin-page-container'>
+      <div className='admin-top-container'>
+        <div className='admin-current-locations-container'>
+          <h3>Current Locations:</h3>
+          <ul>
+            <ol>Basingstoke</ol>
+            <ol>Basingstoke</ol>
+            <ol>Basingstoke</ol>
+            <ol>Basingstoke</ol>
+            <ol>Basingstoke</ol>
+            <ol>Basingstoke</ol>
+            <ol>Basingstoke</ol>
+            <ol>Basingstoke</ol>
+            <ol>Basingstoke</ol>
+          </ul>
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -22,3 +40,7 @@ export default Admin;
   // Definietly will need the ability to add a location
   // will probably be better to have a database model to handle these things
   // Currently the locations const is static so if more places are added someone will have to manually add locations in multiple files and then rebuild the app etc...
+
+
+  // 1 - Get the current locations
+  // 2 - Add new location form

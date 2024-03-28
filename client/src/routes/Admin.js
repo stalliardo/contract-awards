@@ -8,8 +8,6 @@ const Admin = () => {
 
 export default Admin;
 
-
-
 // Questions:
   // How will the targets be set
   // where does the special Projects values come from

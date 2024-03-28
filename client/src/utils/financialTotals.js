@@ -5,7 +5,6 @@ export const getCoreTotal = (items) => {
 
     items.forEach((item) => {
         sum += parseInt(item.core);
-        // return the sum
     });
 
     return sum;
@@ -28,7 +27,7 @@ export const generateCoreTotalsData = (data) => {
             month: item.month,
             sum
         })
-    })
+    });
 
     return summaryTableData;
 }
@@ -50,8 +49,6 @@ export const generateUkCoreTotals = (data) => {
 
         ukCoreTotal = 0;
     })
-
-    console.log('totals: ', totals);
 
     return totals;
 }

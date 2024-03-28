@@ -8,10 +8,11 @@ import AwardsSummaryUKCoreTotalsRow from './AwardsSummaryUKCoreTotalsRow';
 
 const locations = getLocations();
 
+let cumalitiveTotalsSum = 0;
+
 const AwardsSummary = () => {
     const awardsData = useSelector((state) => state.awards);
     const isLoading = useSelector((state) => state.awards.loading);
-    // const [cumalitiveTotal, setCumalitiveTotal] = useState(0);
 
     const dispatch = useDispatch();
 
@@ -43,13 +44,23 @@ const AwardsSummary = () => {
         console.log('loaction = ', location);
 
         return awardsData.coreTotals.filter((totals) => totals.location === location)
-        
     }
 
     const generateCumalitiveTotals = (location) => {
         const filteredTotals = generateFilteredTotals(location);
 
-        return filteredTotals.reduce((total, currentItem) => total + currentItem.sum, 0);
+        const sum = filteredTotals.reduce((total, currentItem) => total + currentItem.sum, 0);
+        
+        console.log('sum = = = = ' , sum);
+        cumalitiveTotalsSum += sum;
+
+        console.log('counter = ', cumalitiveTotalsSum);
+
+        return sum;
+    }
+
+    const generateUkCoreTotals = () => {
+
     }
 
     return (
@@ -116,8 +127,8 @@ const AwardsSummary = () => {
                                     return <AwardsSummaryUKCoreTotalsRow data={data} key={index}/>
                                 })
                             }
-
-                                <td>£899999</td>
+                                {/* Not sure about this below */}
+                                <td>£{cumalitiveTotalsSum}</td>
                                 <td>
                                     £100,000
                                 </td>

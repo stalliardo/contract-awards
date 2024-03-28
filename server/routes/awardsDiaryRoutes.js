@@ -12,17 +12,11 @@ router.get('/awards-diary', awardsDiaryController.getAllAwardsDiary);
 // GET all records for location
 router.get('/awards-diary/location', awardsDiaryController.getAwardsForLocation);
 
+// Is this a duplicate of the getallawardDiary ????
+router.get('/awards-diary/getAllAwards', awardsDiaryController.getAllAwards);
+
+// below need locking down TODO
 router.post('/awards-diary/add-year', awardsDiaryController.createAwardsDiariesForYear);
-
-// router.post("/awards-diary/add-item", awardsDiaryItemController.addAwardsDiaryItem);
-
-// // GET request to fetch a single awards diary entry by ID
-// router.get('/awards-diary/:id', awardsDiaryController.getAwardsDiaryById);
-
-// // PUT request to update an existing awards diary entry by ID
-// router.put('/awards-diary/:id', awardsDiaryController.updateAwardsDiaryById);
-
-// // DELETE request to delete an awards diary entry by ID
-// router.delete('/awards-diary/:id', awardsDiaryController.deleteAwardsDiaryById);
+router.get("/awards-diary/generateALLData", awardsDiaryController.generateAllDataForYear);
 
 module.exports = router;

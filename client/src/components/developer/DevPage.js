@@ -32,6 +32,14 @@ const DevPage = () => {
         }).catch((error) => console.log('Error getting location data - ', error))
     }
 
+    const generateAllDataForYear = () => {
+        console.log('called');
+
+        axios.get("/api/awards-diary/generateALLData").then((response) => {
+            
+        }).catch((error) => console.log('Error getting location data - ', error))
+    }
+
     return (
         <div className='dev-page-container'>
             <h2>Test Page</h2>
@@ -39,10 +47,11 @@ const DevPage = () => {
                 <button onClick={onAddAwardsClicked}>create awards diary</button>
                 <button onClick={onCreateYearlyClicked}>create yearly location records</button>
                 <button onClick={onGetRecordsVialocationClicked}>Get records via location</button>
+                <button onClick={generateAllDataForYear}>generateAllDataForYear</button>
             </div>
 
             {/* TODO below location needs to be dynamic */}
-           <AwardsTable/>
+           {/* <AwardsTable/> */}
         </div>
     )
 }

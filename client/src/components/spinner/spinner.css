@@ -24,9 +24,17 @@
     height: 100px;
   }
 
+  .loader.page.with-text {
+    margin: auto;
+  }
+
   .loader.button {
     width: 22px;
     height: 22px;
+  }
+
+  .spinner-outer-container {
+    text-align: center;
   }
 
   @keyframes rotate {

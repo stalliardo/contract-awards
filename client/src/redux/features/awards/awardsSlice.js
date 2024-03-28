@@ -1,9 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchData } from './awardsThunks';
+import { generateCoreTotalsData, generateUkCoreTotals } from '../../../utils/financialTotals';
 
 const initialState = {
     data: [],
-    loading: false,
+    coreTotals: [],
+    ukCoreTotals: [],
+    loading: true,
     error: null
   };
 
@@ -12,21 +15,24 @@ export const awardsSlice = createSlice({
   initialState,
   reducers: {
     
-    incrementByAmount: (state, action) => {
-      state.value += action.payload
+    setLoading: (state, action) => {
+      state.loading = action.payload
     },
   },
 
   extraReducers: (builder) => {
     builder.addCase(fetchData.fulfilled, (state, action) => {
-      // Do something with the state and the payload
-      console.log('action.payload = ', action.payload);
-      state.data = action.payload;
+      const generatedCoreTotals = generateCoreTotalsData(action.payload);
+      const generatedUKCoreTotals = generateUkCoreTotals(generatedCoreTotals);
+
+      state.coreTotals = generatedCoreTotals;
+      state.ukCoreTotals = generatedUKCoreTotals;
+      state.loading = false;
     })
   }
 })
 
 // Action creators are generated for each case reducer function
-export const { incrementByAmount, getData } = awardsSlice.actions;
+export const { setLoading, getData } = awardsSlice.actions;
 
 export default awardsSlice.reducer;

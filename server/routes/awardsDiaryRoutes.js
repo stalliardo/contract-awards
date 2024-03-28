@@ -16,4 +16,6 @@ router.post('/awards-diary/add-year', awardsDiaryController.createAwardsDiariesF
 
 router.get('/awards-diary/getAllAwards', awardsDiaryController.getAllAwards);
 
+router.get("/awards-diary/generateALLData", awardsDiaryController.generateAllDataForYear);
+
 module.exports = router;

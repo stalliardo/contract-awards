@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import './admin.css';
 import Spinner from '../components/spinner/Spinner';
+import MembersTable from '../components/admin/MembersTable';
 
 const Admin = () => {
   const [location, setLocation] = useState("");
@@ -71,7 +72,7 @@ const Admin = () => {
             }
         </div>
         <div className='admin-members-container'>
-          <h3>Members / Users:</h3>
+          <MembersTable />
         </div>
       </div>
       }

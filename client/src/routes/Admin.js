@@ -1,11 +1,24 @@
-import React from 'react'
+import React, { useState } from 'react';
+import axios from 'axios';
+
 import './admin.css';
 
 const Admin = () => {
+  const [location, setLocation] = useState("");
+
+  const onAddLocation = () => {
+    axios.post("/api/location/add-item", {name: "AWE"}).then((response) => {
+      console.log('Response from add llcoation = ', response);
+    }).catch((error) => {
+      console.log('Error adding location. Error: ', error);
+    })
+  }
+
   return (
     <div className='admin-page-container'>
       <div className='admin-top-container'>
         <div className='admin-current-locations-container'>
+          <button onClick={onAddLocation}>Add location</button>
           <h3>Current Locations:</h3>
           <ul>
             <ol>Basingstoke</ol>
@@ -44,3 +57,6 @@ export default Admin;
 
   // 1 - Get the current locations
   // 2 - Add new location form
+
+  // /location/add-item
+  // /location/get-locations

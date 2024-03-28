@@ -12,7 +12,7 @@ const Navbar = () => {
     <nav className='navbar-container'>
       <div className='nav-end-container'>
         <Link to="/">Sign Out</Link>
-        <Link to="/">Admin</Link>
+        <Link to="/admin">Admin</Link>
         <Link to="/awards-form">Awards</Link>
         <Link to="/awards-summary">Awards Summary</Link>
       </div>

@@ -1,13 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import './admin.css';
+import Spinner from '../components/spinner/Spinner';
 
 const Admin = () => {
+
   const [location, setLocation] = useState("");
+  const [locationsRetrieved, setLocationsRetrieved] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  
+
+  useEffect(() => {
+    // Get locations:
+    axios.get("/api/location/get-locations").then((response) => {
+      setLocationsRetrieved(response.data);
+    }).catch((error) => {
+      console.log('Error getting Locations. Error: ', error);
+    }).finally(() => {
+      setIsLoading(false);
+    })
+  }, [])
+
 
   const onAddLocation = () => {
-    axios.post("/api/location/add-item", {name: "AWE"}).then((response) => {
+    axios.post("/api/location/add-item", {name: "M&E"}).then((response) => {
       console.log('Response from add llcoation = ', response);
     }).catch((error) => {
       console.log('Error adding location. Error: ', error);
@@ -16,23 +33,22 @@ const Admin = () => {
 
   return (
     <div className='admin-page-container'>
-      <div className='admin-top-container'>
+      {
+        isLoading ? <div className='spinner-container-page'><Spinner classes="page" /></div> :
+        <div className='admin-top-container'>
         <div className='admin-current-locations-container'>
           <button onClick={onAddLocation}>Add location</button>
           <h3>Current Locations:</h3>
           <ul>
-            <ol>Basingstoke</ol>
-            <ol>Basingstoke</ol>
-            <ol>Basingstoke</ol>
-            <ol>Basingstoke</ol>
-            <ol>Basingstoke</ol>
-            <ol>Basingstoke</ol>
-            <ol>Basingstoke</ol>
-            <ol>Basingstoke</ol>
-            <ol>Basingstoke</ol>
+            {
+              locationsRetrieved.map((location, index) => {
+                return <ol key={index}>{location.name}</ol>
+              })
+            }
           </ul>
         </div>
       </div>
+      }
     </div>
   )
 }

@@ -9,5 +9,7 @@ export const LOCATIONS = {
     LEEDS: "Leeds",
     LONDON: "London",
     MANCHESTER: "Manchester",
-    NEWCASTLE: "Newcastle"
+    NEWCASTLE: "Newcastle",
+    SPECIAL_PROJECTS: "Special Projects",
+    M_AND_E: "M&E"
 }

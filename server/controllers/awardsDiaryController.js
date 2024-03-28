@@ -18,9 +18,7 @@ const LOCATIONS = {
   NEWCASTLE: "Newcastle",
   SPECIAL_PROJECTS: "Special Projects",
   M_AND_E: "M&E"
-
 }
-
 
 // TODO
 exports.createAwardsDiary = async (req, res) => {
@@ -34,12 +32,6 @@ exports.createAwardsDiary = async (req, res) => {
     res.status(400).send(error);
   }
 };
-
-
-
-
-
-
 
 // Return all record for current year based on location
 exports.getAwardsForLocation = async (req, res) => {
@@ -86,12 +78,6 @@ exports.getAllAwardsDiary = async (req, res) => {
     res.status(500).send(error);
   }
 };
-
-
-
-
-
-
 
 const createAwardsDiariesForYearParentFunction = async (req, res, location) => {
   const promises = [];

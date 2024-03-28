@@ -5,7 +5,6 @@ const monthsInFinancialOrder = getMonthsInFinancialOrder();
 
 const AwardsSummaryCoreTotalsRow = ({coreTotals, cumalitiveTotal, locationRef, filteredTotals}) => {
     // const filteredTotals = coreTotals.filter((totals) => totals.location === locationRef);
-    console.log('cuma = ', cumalitiveTotal);    
     return (
         <tr>
             <td>{locationRef}</td>

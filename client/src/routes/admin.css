@@ -15,6 +15,26 @@
            
             width: 30%;
             border: 1px solid green;
+
+            ul {
+                padding-left: 2px;
+
+                ol {
+                    padding-left: 16px;
+                    margin-top: 8px;
+                }
+            }
+
+            .admin-add-location {
+                margin-top: 16px;
+                display: flex;
+                justify-content: space-between;
+                input {
+                    width: 80%;
+                }
+
+                border: 1px solid pink;
+            }
         }
     }
 }

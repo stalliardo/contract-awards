@@ -5,14 +5,14 @@ import './admin.css';
 import Spinner from '../components/spinner/Spinner';
 
 const Admin = () => {
-
   const [location, setLocation] = useState("");
   const [locationsRetrieved, setLocationsRetrieved] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  
+  const [isSaving, setIsSaving] = useState(false);
+  const [showAddNewLocation, setShowAddNewLocation] = useState(false);
+  const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
 
   useEffect(() => {
-    // Get locations:
     axios.get("/api/location/get-locations").then((response) => {
       setLocationsRetrieved(response.data);
     }).catch((error) => {
@@ -22,13 +22,26 @@ const Admin = () => {
     })
   }, [])
 
+  useEffect(() => {
+    setSaveButtonDisabled(location.length < 1);
+  }, [location]);
 
   const onAddLocation = () => {
-    axios.post("/api/location/add-item", {name: "M&E"}).then((response) => {
-      console.log('Response from add llcoation = ', response);
+    setIsSaving(true);
+    axios.post("/api/location/add-item", {name: location}).then((response) => {
+      const newArray = locationsRetrieved;
+      newArray.push({name: location});
+
+      setLocationsRetrieved(newArray);
+      setLocation("");
     }).catch((error) => {
       console.log('Error adding location. Error: ', error);
+    }).finally(() => {
+      setIsSaving(false);
     })
+  }
+  const handleChange = (e) => {
+    setLocation(e.target.value)
   }
 
   return (
@@ -37,15 +50,24 @@ const Admin = () => {
         isLoading ? <div className='spinner-container-page'><Spinner classes="page" /></div> :
         <div className='admin-top-container'>
         <div className='admin-current-locations-container'>
-          <button onClick={onAddLocation}>Add location</button>
-          <h3>Current Locations:</h3>
-          <ul>
+            <h3>Current Locations:</h3>
+            <ul>
+              {
+                locationsRetrieved.map((location, index) => {
+                  return <ol key={index}>{location.name}</ol>
+                })
+              }
+            </ul>
+
+            <button onClick={() => setShowAddNewLocation(true)}>Add Location</button>
             {
-              locationsRetrieved.map((location, index) => {
-                return <ol key={index}>{location.name}</ol>
-              })
+              showAddNewLocation ? <div className='admin-add-location'>
+              <input type='text' value={location} onChange={handleChange}/>
+              <button className='green' onClick={onAddLocation} disabled={saveButtonDisabled}>
+                {isSaving ? <div className='spinner-button'><Spinner classes="button"/></div> : "Save"}
+              </button>
+            </div> : null
             }
-          </ul>
         </div>
       </div>
       }

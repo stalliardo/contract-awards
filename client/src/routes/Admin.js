@@ -46,6 +46,7 @@ const Admin = () => {
 
   return (
     <div className='admin-page-container'>
+      <h1>Admin / Director Page</h1>
       {
         isLoading ? <div className='spinner-container-page'><Spinner classes="page" /></div> :
         <div className='admin-top-container'>
@@ -68,6 +69,9 @@ const Admin = () => {
               </button>
             </div> : null
             }
+        </div>
+        <div className='admin-members-container'>
+          <h3>Members / Users:</h3>
         </div>
       </div>
       }

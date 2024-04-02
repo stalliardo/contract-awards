@@ -14,7 +14,19 @@ const MembersTable = () => {
             role: "Director",
             permissions: "Read / Write",
             locations: "All"
-        }
+        },
+        {
+            name: "Darren Stallard",
+            role: "Director",
+            permissions: "Read / Write",
+            locations: "All"
+        },
+        {
+            name: "Darren Stallard",
+            role: "Director",
+            permissions: "Read / Write",
+            locations: "All"
+        },
     ] // TODO REmove
 
     return (

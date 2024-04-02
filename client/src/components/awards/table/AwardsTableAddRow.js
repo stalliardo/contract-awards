@@ -73,7 +73,7 @@ const AwardsTableAddRow = ({ awardsTableId, location, onItemAdded, onCancelClick
                 <input type='number' name='core' value={data.core} onChange={handleChange} />
             </td>
             <td className='table-actions-cell'>
-                <button className='table-actions-cell blue' onClick={onCancelClicked}>Cancel</button>
+                <button className='table-actions-cell' onClick={onCancelClicked}>Cancel</button>
             </td>
             <td className='table-actions-cell'>
                 <button className='table-actions-cell green' disabled={!saveButtonEnabled} onClick={onSaveClicked}>

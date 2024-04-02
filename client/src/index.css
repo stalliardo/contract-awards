@@ -110,22 +110,14 @@ button {
   border-radius: 3px;
   padding: 4px 8px;
   border: none;
-  background-color: #666666;
+  background-color: rgb(0, 132, 255);
   color: white;
   letter-spacing: 1px;
-  height: 31px;
+  height: 24px;
 
   &:hover {
     cursor: pointer;
-    background-color: #aaaaaa;
-  }
-}
-
-button.blue {
-  background-color: rgb(0, 132, 255);
-
-  &:hover {
-    background-color: rgb(155, 218, 255);
+    background-color: rgb(155, 218, 255);;
   }
 }
 

@@ -38,7 +38,6 @@ const AwardsTableAddRow = ({ awardsTableId, location, onItemAdded, onCancelClick
             }).finally(() => {
                 setIsLoading(false);
             })
-
             console.log('data = ', data);
         }
     }
@@ -85,5 +84,3 @@ const AwardsTableAddRow = ({ awardsTableId, location, onItemAdded, onCancelClick
 }
 
 export default AwardsTableAddRow;
-
-// another consideration: the fields that are supposed to be numbers will have to be validated otherwise will mess up the calcualtions further down the road

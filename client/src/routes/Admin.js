@@ -100,6 +100,12 @@ export default Admin;
 
   // 1 - Get the current locations
   // 2 - Add new location form
+  // 3 - how will adding new members be handled?
 
   // /location/add-item
   // /location/get-locations
+
+
+  // Adding Members / User roles:
+    // If they can add members manually how will the members be associated with branches etc?
+    

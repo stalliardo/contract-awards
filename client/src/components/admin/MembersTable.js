@@ -48,7 +48,7 @@ const MembersTable = () => {
                                     <th>Role</th>
                                     <th>Permissions</th>
                                     <th>Locations</th>
-                                    <th colSpan="2" style={{ textAlign: "center", width: "20%" }}>Actions</th>
+                                    <th colSpan="2" style={{ textAlign: "center", width: "10%" }}>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>

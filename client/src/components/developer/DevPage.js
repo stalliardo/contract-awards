@@ -50,6 +50,16 @@ const DevPage = () => {
         })
     }
 
+    const onGetUsersForGroup = () => {
+        const group = "Projects";
+
+        axios.get(`/api/ad/users-for-group/${group}`).then((res) => {
+
+        }).catch((error) => {
+            console.log('Error checking the users for the group. Error: ', error);
+        })
+    }
+
     return (
         <div className='dev-page-container'>
             <h2>Test Page</h2>
@@ -64,6 +74,7 @@ const DevPage = () => {
                 <div className='dev-awards-functions-container'>
                 <h3>Admin functions</h3>
                 <button onClick={onCheckUserExists}>check user exists</button>
+                <button onClick={onGetUsersForGroup}>get users for group</button>
 
                 </div>
             </div>

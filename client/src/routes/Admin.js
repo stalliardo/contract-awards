@@ -106,6 +106,11 @@ export default Admin;
   // /location/get-locations
 
 
-  // Adding Members / User roles:
-    // If they can add members manually how will the members be associated with branches etc?
+  // Adding Members / User roles via AD groups
+
+    // Will have a group in AD called ContractAwardsUsers (or whatever)
+    // 
+    
+
+
     

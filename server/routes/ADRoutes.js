@@ -3,5 +3,6 @@ const router = express.Router();
 const ADController = require('../controllers/ADController');
 
 router.get("/ad/user-exists/:name", ADController.userExists);
+router.get("/ad/users-for-group/:group", ADController.retrieveUsersForGroup);
 
 module.exports = router;

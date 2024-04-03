@@ -17,10 +17,14 @@ exports.userExists = async (req, res) => {
         AD.userExists(name, (err, exists) => {
             if(err) {
                 console.log('ERROR: ' +JSON.stringify(err));
-                return res.status(404).send({message: "The user was not found"});
+                return res.status(500).send({message: "An error occured"});
             }
-            return res.status(200).send({message: "The user was found"});
 
+            if(exists) {
+                return res.status(200).send({message: "The user was found"});
+            }
+
+            return res.status(404).send({message: "The user was not found"});
         })
     } catch (error) {
         return res.status(500).send({message: "An error occured"});

@@ -2,18 +2,21 @@
 
 const ActiveDirectory = require("activedirectory2");
 
+const getConfig = () => {
+    return {
+        url: `ldap://${process.env.DOMAIN_IP}:389`, // TODO see if i can use the secure LDAPS
+        baseDN: 'dc=DAZCORP,dc=COM',
+        username: 'administrator@DAZCORP.COM',
+        password: process.env.DOMAIN_PASSWORD
+    }
+}
+
 exports.userExists = async (req, res) => {
     try {
-        const ADConfig = {
-            url: `ldap://${process.env.DOMAIN_IP}:389`, // TODO see if i can use the secure LDAPS
-            baseDN: 'dc=DAZCORP,dc=COM',
-            username: 'administrator@DAZCORP.COM',
-            password: process.env.DOMAIN_PASSWORD
-        }  
-        
+        const ADConfig = getConfig();
         const { name } = req.params; // first.last format works
-        
         const AD = new ActiveDirectory(ADConfig);
+        
         AD.userExists(name, (err, exists) => {
             if(err) {
                 console.log('ERROR: ' +JSON.stringify(err));

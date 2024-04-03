@@ -10,6 +10,7 @@ const awardsDiaryRoutes = require("./server/routes/awardsDiaryRoutes");
 const awardsDiaryItemRoutes = require("./server/routes/awardsDiaryItemRoutes");
 const locationRoutes = require("./server/routes/locationRoutes");
 const memberRoutes = require("./server/routes/memberRoutes");
+const ADRoutes = require("./server/routes/ADRoutes");
 
 const { generateTableForYear } = require("./server/utils/AwardsDiaryUtils");
 
@@ -26,6 +27,7 @@ app.use("/api", awardsDiaryRoutes); // Will this cause issue with the "/api" cal
 app.use("/api", awardsDiaryItemRoutes);
 app.use("/api", locationRoutes);
 app.use("/api", memberRoutes);
+app.use("/api", ADRoutes);
 
 // initialize active directory connection:
 var config = {

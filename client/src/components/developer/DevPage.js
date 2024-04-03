@@ -40,6 +40,16 @@ const DevPage = () => {
         }).catch((error) => console.log('Error getting location data - ', error))
     }
 
+    const onCheckUserExists = () => {
+        const name = "Darren";
+
+        axios.get(`/api/ad/user-exists/${name}`).then((res) => {
+
+        }).catch((error) => {
+            console.log('Error checking if the user exists. Error: ', error);
+        })
+    }
+
     return (
         <div className='dev-page-container'>
             <h2>Test Page</h2>
@@ -53,6 +63,7 @@ const DevPage = () => {
                 </div>
                 <div className='dev-awards-functions-container'>
                 <h3>Admin functions</h3>
+                <button onClick={onCheckUserExists}>check user exists</button>
 
                 </div>
             </div>
@@ -63,4 +74,11 @@ const DevPage = () => {
     )
 }
 
-export default DevPage
+export default DevPage;
+
+// functions required for admin functions:
+    // isUserMemberOf(username, groupName) -> Checks to see if a user is a member of the specified group.
+    // userExists(opts, username, callback) -> Checks to see if the specified user exists.
+    // getUsersForGroup(opts, groupName, callback) -> For the specified group, retrieve all of the users that belong to the group
+
+

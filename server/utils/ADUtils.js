@@ -5,4 +5,4 @@ const ADConfig = {
     password: process.env.DOMAIN_PASSWORD
 }  
 
-module.exports = { ADConfig }; 
+module.exports = ADConfig;

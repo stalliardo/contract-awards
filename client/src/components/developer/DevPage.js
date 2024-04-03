@@ -41,7 +41,7 @@ const DevPage = () => {
     }
 
     const onCheckUserExists = () => {
-        const name = "Darren";
+        const name = "darren.stallard"; // <- This format is a SamAccountName
 
         axios.get(`/api/ad/user-exists/${name}`).then((res) => {
 

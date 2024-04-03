@@ -1,35 +1,28 @@
 
 
-// TODO
-
-// exports.addMember = async (req, res) => {
-//   try {
-//     const newLocation = new Location(req.body);
-//     await newLocation.save();
-//     res.status(201).send(newLocation);
-//   } catch (error) {
-//     res.status(500).json({ error: 'Internal server error' });
-//   }
-// }
-
-// exports.getMembers = async (req, res) => {
-//     try {
-//       // Find all Locations records
-//       const locations = await Location.find().exec();
-  
-//       res.status(201).send(locations);
-//     } catch (error) {
-//       res.status(400);
-//       console.log('Error getting locations: ', error);
-//     }
-//   }
+const ActiveDirectory = require("activedirectory2");
 
 exports.userExists = async (req, res) => {
     try {
-        const { name } = req.params;
-        console.log('name = ', name);
-        res.status(200);
-    } catch (error) {
+        const ADConfig = {
+            url: `ldap://${process.env.DOMAIN_IP}:389`, // TODO see if i can use the secure LDAPS
+            baseDN: 'dc=DAZCORP,dc=COM',
+            username: 'administrator@DAZCORP.COM',
+            password: process.env.DOMAIN_PASSWORD
+        }  
         
+        const { name } = req.params; // first.last format works
+        
+        const AD = new ActiveDirectory(ADConfig);
+        AD.userExists(name, (err, exists) => {
+            if(err) {
+                console.log('ERROR: ' +JSON.stringify(err));
+                return res.status(404).send({message: "The user was not found"});
+            }
+            return res.status(200).send({message: "The user was found"});
+
+        })
+    } catch (error) {
+        return res.status(500).send({message: "An error occured"});
     }
 }

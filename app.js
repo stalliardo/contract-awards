@@ -1,8 +1,9 @@
 // const ActiveDirectory = require("activedirectory/lib/activedirectory");
 const express = require("express");
-const ActiveDirectory = require("activedirectory");
+const ActiveDirectory = require("activedirectory2");
 const bodyParser = require("body-parser");
 const path = require("path");
+// const ADConfig = require("./server/utils/ADUtils")
 
 const db = require("./server/database/db"); // Import the database connection utility
 
@@ -29,14 +30,14 @@ app.use("/api", locationRoutes);
 app.use("/api", memberRoutes);
 app.use("/api", ADRoutes);
 
-// initialize active directory connection:
-var config = {
+const ADConfig = {
     url: `ldap://${process.env.DOMAIN_IP}:389`, // TODO see if i can use the secure LDAPS
     baseDN: 'dc=DAZCORP,dc=COM',
     username: 'administrator@DAZCORP.COM',
     password: process.env.DOMAIN_PASSWORD
-}  // TODO <- env variable
-var ad = new ActiveDirectory(config);
+} 
+
+var ad = new ActiveDirectory(ADConfig);
 
 app.post("/login", (req, res) => {
     console.log('POST login called');

@@ -1,6 +1,6 @@
 
 
-const ActiveDirectory = require("activedirectory2");
+const ActiveDirectory = require("activedirectory2").promiseWrapper;
 
 const getConfig = () => {
     return {
@@ -11,61 +11,92 @@ const getConfig = () => {
     }
 }
 
+// exports.getADUsers = async (req, res) => {
+//     try {
+//         const ADConfig = getConfig();
+//         const AD = new ActiveDirectory(ADConfig);
+
+
+//         const groupNames = ["CA01", "CA02", "CA03"];
+
+//         const usersDataFromAD = [];
+
+//         const promises = []; 
+
+//         groupNames.forEach((group) => {
+//             promises.push(AD.getUsersForGroup(group));
+//         })
+
+
+//         Promise.all(promises).then((res) => {
+//             console.log('res = ', res);
+//             res.forEach((i) => {
+//                 i.forEach((x) => {
+//                     console.log('x.dn = ', x.dn);
+//                 })
+//             })
+//         }),
+
+//         console.log('after called.....');
+
+
+//         // const tData = await getData();
+
+
+
+
+//         return res.status(200);
+
+//     } catch (error) {
+//         return res.status(500).send({ message: "An error occured", error });
+//     }
+// }
+
 exports.getADUsers = async (req, res) => {
     try {
         const ADConfig = getConfig();
         const AD = new ActiveDirectory(ADConfig);
-
-
-        // get the users from the 3 groups and check the length
-
-
         const groupNames = ["CA01", "CA02", "CA03"];
-        
-        const promiseLoop = new Promise((res, rej) => {
-            const usersDataFromAD = [];
+        const usersDataFromAD = [];
 
-            groupNames.forEach((group) => {
-                AD.getUsersForGroup(group, (err, users) => {
-                    if(err) {
-                        console.log('ERROR: ' +JSON.stringify(err));
-                        rej();
-                    }
-        
-                    if(users) {
-                        console.log('users called + users = ', users);
-                        usersDataFromAD.push({groupName: group});
-                    }
-                })
+        for (let i = 0; i < groupNames.length; i++) {
+            const usersData = await AD.getUsersForGroup(groupNames[i]);
+            usersDataFromAD.push({ groupName: groupNames[i], items: usersData })
+        }
+
+        const formattedData = [];
+
+        if (usersDataFromAD.length) {
+            usersDataFromAD.forEach((userItem) => {
+                const formattedObject = { items: [] };
+                formattedObject.groupName = userItem.groupName;
+
+                if (userItem.items.length) {
+                    userItem.items.forEach((item) => {
+                        formattedObject.items.push({
+                            firstName: item.givenName,
+                            lastName: item.sn,
+                            fullName: item.displayName,
+                        })
+                    });
+                }
+
+                formattedData.push(formattedObject);
             })
 
-            res(usersDataFromAD);
-        })
+            formattedData.forEach((d) => {
+                d.items.forEach((i) => {
+                    console.log('i = ', i);
+                })
+            })
+        }
 
-        // groupNames.forEach((group) => {
-        //     console.log('group called + group = ', group);
-        //     AD.getUsersForGroup(group, (err, users) => {
-        //         if(err) {
-        //             console.log('ERROR: ' +JSON.stringify(err));
-        //             return
-        //         }
-    
-        //         if(users) {
-        //             console.log('users called + users = ', users);
-        //             usersDataFromAD.push({groupName: group});
-                    
-        //         }
-        //     })
-        // })
-        // console.log('users from AD = ', usersDataFromAD);
+        // Now need to check the length of the items in the arraty above against the users in the DB - Requires thought!!!!
 
-        const tData = await promiseLoop();
-        console.log('data from promise = ', tData);
-        
         return res.status(200);
-        
+
     } catch (error) {
-        return res.status(500).send({message: "An error occured", error});
+        return res.status(500).send({ message: "An error occured", error });
     }
 }
 
@@ -76,19 +107,19 @@ exports.userExists = async (req, res) => {
         const AD = new ActiveDirectory(ADConfig);
 
         AD.userExists(name, (err, exists) => {
-            if(err) {
-                console.log('ERROR: ' +JSON.stringify(err));
-                return res.status(500).send({message: "An error occured"});
+            if (err) {
+                console.log('ERROR: ' + JSON.stringify(err));
+                return res.status(500).send({ message: "An error occured" });
             }
 
-            if(exists) {
-                return res.status(200).send({message: "The user was found"});
+            if (exists) {
+                return res.status(200).send({ message: "The user was found" });
             }
 
-            return res.status(404).send({message: "The user was not found"});
+            return res.status(404).send({ message: "The user was not found" });
         })
     } catch (error) {
-        return res.status(500).send({message: "An error occured"});
+        return res.status(500).send({ message: "An error occured" });
     }
 }
 
@@ -97,20 +128,23 @@ exports.retrieveUsersForGroup = async (req, res) => {
         const ADConfig = getConfig();
         const { group } = req.params; // first.last format works
         const AD = new ActiveDirectory(ADConfig);
-        
+
         AD.getUsersForGroup(group, (err, users) => {
-            if(err) {
-                console.log('ERROR: ' +JSON.stringify(err));
-                return res.status(500).send({message: "An error occured"});
+            if (err) {
+                console.log('ERROR: ' + JSON.stringify(err));
+                return res.status(500).send({ message: "An error occured" });
             }
 
-            if(users) {
-                return res.status(200).send({message: "Users found", users});
+            if (users) {
+                return res.status(200).send({ message: "Users found", users });
             }
 
-            return res.status(404).send({message: "No users found"});
+            return res.status(404).send({ message: "No users found" });
         })
     } catch (error) {
-        return res.status(500).send({message: "An error occured"});
+        return res.status(500).send({ message: "An error occured" });
     }
 }
+
+
+

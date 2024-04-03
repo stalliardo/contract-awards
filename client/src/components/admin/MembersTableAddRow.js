@@ -10,7 +10,7 @@ const MembersTableAddRow = () => {
     const [data, setData] = useState(initialData);
 
     const handleOnChange = (e) => {
-        
+        // TODO
     } 
 
     const onCancelClicked = () => {
@@ -24,9 +24,9 @@ const MembersTableAddRow = () => {
     return (
         <tr>
             <td><input name="name" value={data.name} onChange={handleOnChange}/></td>
-            <td><input name="name" value={data.name} /></td>
-            <td><input name="name" value={data.name} /></td>
-            <td><input name="name" value={data.name} /></td>
+            <td><input name="role" value={data.name} onChange={handleOnChange}/></td>
+            <td><input name="permission" value={data.name} onChange={handleOnChange}/></td>
+            <td><input name="locations" value={data.name} onChange={handleOnChange}/></td>
             
             <td className='table-actions-cell'>
                 <button className='table-actions-cell' onClick={onCancelClicked}>Cancel</button>

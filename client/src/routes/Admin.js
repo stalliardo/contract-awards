@@ -101,11 +101,33 @@ export default Admin;
   // 1 - Get the current locations
   // 2 - Add new location form
   // 3 - how will adding new members be handled?
+  // 4 - What about what locations a user has access to??
 
   // /location/add-item
   // /location/get-locations
 
 
-  // Adding Members / User roles:
-    // If they can add members manually how will the members be associated with branches etc?
+  // User roles via AD groups
+
+    // Will have a group in AD called CA01, CA02, CA03 01 is high level 03 is read only
+    // Will load the members into state? Or just make a newtwork request each time? i think inot state so the data can be used across each page easily
+    // Where will the mebers data be needed? 
+      // 1 - The admin page
+      // 2 - when a user logs in 
+      // 3 - When viewing awards diaries
+
+  // Users in state:
+    // When the app loads get all the members from the LDAP api's
+    // Filter / build the members in the db. Check the length of mebers returned from LDAP API's against the result from the db. if different either add or remove only the differnt user?
+    // Once rebuilt load the app
+    // Set the memebers data into state to be used across the app
+    // Then in the admin page the table will be populated by the memeber array in the store
+    // Will also need a way to determine who is the logged in user -> serparte Authentication feature and state object "auth"
+    // updating the values in the admin page will update the values in the database -> wont effect the LDAP groups
+    
+
+
+      
+
+
     

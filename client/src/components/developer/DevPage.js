@@ -89,7 +89,7 @@ export default DevPage;
 
 // functions required for admin functions:
     // isUserMemberOf(username, groupName) -> Checks to see if a user is a member of the specified group.
-    // userExists(opts, username, callback) -> Checks to see if the specified user exists.
-    // getUsersForGroup(opts, groupName, callback) -> For the specified group, retrieve all of the users that belong to the group
+    // userExists(opts, username, callback) -> Checks to see if the specified user exists. - DONE
+    // getUsersForGroup(opts, groupName, callback) -> For the specified group, retrieve all of the users that belong to the group - DONE
 
 

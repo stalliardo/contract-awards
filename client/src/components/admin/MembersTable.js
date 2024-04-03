@@ -8,7 +8,7 @@ const MembersTable = () => {
 
     const [showAddMember, setShowAddMember] = useState(false);
 
-    const members = [
+    const members = [ // Will need to load these from either the store or via an api call to get via LDAP
         {
             name: "Darren Stallard",
             role: "Director",

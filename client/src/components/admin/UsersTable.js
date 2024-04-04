@@ -6,13 +6,17 @@ import UsersTableAddRow from './UsersTableAddRow';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-const UsersTable = ({availableLocations}) => {
+const UsersTable = ({ availableLocations }) => {
     const users = useSelector((state) => state.users);
-    
-    useEffect(() => {
-        console.log('effect called from members tabke, users = ', users);
+    const [formattedAvailableLocations, setFormattedAvailableLocations] = useState([]);
 
-        console.log('locations = ', availableLocations);
+
+    useEffect(() => {
+        const formattedSelectMenuItems = availableLocations.map((location) => {
+            return { ...location, value: location.name }
+        })
+
+        setFormattedAvailableLocations(formattedSelectMenuItems);
     }, [])
 
     const [showAddMember, setShowAddMember] = useState(false);
@@ -65,15 +69,15 @@ const UsersTable = ({availableLocations}) => {
                                     users.data.length ?
                                         users.data.map((data, index) => (
 
-                                            <UsersTableRow data={data} key={index} availableLocations={availableLocations}/>
+                                            <UsersTableRow data={data} key={index} availableLocations={formattedAvailableLocations} />
                                         ))
                                         : null
                                 }
                                 {
-                            showAddMember &&
-                            // the below line will be used to replace the below code for adding data in the table
-                            <UsersTableAddRow />
-                        }
+                                    showAddMember &&
+                                    // the below line will be used to replace the below code for adding data in the table
+                                    <UsersTableAddRow />
+                                }
                             </tbody>
                         </table>
                         : <div className='awards-table-no-data-container'>

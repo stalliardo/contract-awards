@@ -43,9 +43,8 @@ exports.getADUsers = async (req, res) => {
             })
 
             formattedData.forEach((d) => {
-                console.log('data = ', d);
                 d.items.forEach((i) => {
-                    // console.log('i = ', i);
+                    // Get the length of the users to used in the following conditional statements
                     userLengthFromAD++;
                 })
             })
@@ -104,10 +103,6 @@ exports.getADUsers = async (req, res) => {
                     }
                 }
             }
-
-        } else {
-            // All good, there are no differences
-            console.log('No action required');
         }
 
         return res.status(200);
@@ -162,4 +157,3 @@ exports.retrieveUsersForGroup = async (req, res) => {
         return res.status(500).send({ message: "An error occured" });
     }
 }
-

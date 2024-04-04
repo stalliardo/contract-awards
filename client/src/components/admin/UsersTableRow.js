@@ -24,10 +24,10 @@ const UsersTableRow = ({ data, availableLocations }) => {
     const [showAddNewLocation, setShowAddNewLocation] = useState(false);
 
     useEffect(() => {
-        
+
     }, [])
 
-    
+
 
     const onEditClicked = () => {
 
@@ -70,41 +70,41 @@ const UsersTableRow = ({ data, availableLocations }) => {
                             <button onClick={onViewLocationsClicked}>View</button>
                         </div> :
                         <div className='blackout-overlay'>
-                            <div className={`users-table-locations-dropdown-container`}>
-                                <div className='users-table-locations-dropdown-container-left'>
-                                    <h4>Current Locations</h4>
-                                    <ul>
-                                        {
-                                            TEMP_LOCATIONS.map((location, index) => {
-                                                return <li className='' key={index}>
-                                                    {location}
-                                                    <button className='red'>Remove</button>
-                                                </li>
-                                            })
-                                        }
-                                    </ul>
-                                    {/* <button onClick={() => setShowAddNewLocation(true)}>Edit</button> */}
-                                </div>
-                                <div className='users-table-display-locations-container'>
-                                        <h4>Add New Location</h4>
-                                        {/* <ul>
+                            <div className="users-table-locations-dropdown-container">
+                                <h2>Location Information for {data.name}</h2>
+                                <div className='fixer'>
+                                    <div className='users-table-locations-dropdown-container-left'>
+                                        <h4>Current Locations</h4>
+                                        <ul>
                                             {
-                                                availableLocations.map((location, index) => {
-                                                    return <li key={index}>{location.name}</li>
+                                                TEMP_LOCATIONS.map((location, index) => {
+                                                    return <li className='' key={index}>
+                                                        {location}
+                                                        <button className='red'>Remove</button>
+                                                    </li>
                                                 })
                                             }
-                                        </ul> */}
+                                        </ul>
+                                        {/* <button onClick={() => setShowAddNewLocation(true)}>Edit</button> */}
+                                    </div>
+                                    <div className='users-table-display-locations-container'>
+                                        <div>
+                                            <h4>Add New Location</h4>
 
-                                        <SelectMenu menuItems={availableLocations} placeholder={"Locations"}/>
 
-                                        <div className='users-table-display-locations-spacer'>
+                                            <SelectMenu menuItems={availableLocations} placeholder={"Locations"} />
+
+                                            <div className='users-table-display-locations-buttons'>
+                                                {/* Button disabled TODO TODO TODO TODO */}
+                                                <button onClick={() => setShowAddNewLocation(true)}>Save</button>
+                                            </div>
                                         </div>
 
-                                        <div className='users-table-display-locations-buttons'>
-                                            <button onClick={() => setShowAddNewLocation(false)}>Cancel</button>
-                                            <button onClick={() => setShowAddNewLocation(true)}>Save</button>
+                                        <div className='users-table-display-locations-buttons cancel'>
+                                            <button onClick={() => setshowLocationsDropdown(false)}>Cancel</button>
                                         </div>
                                     </div>
+                                </div>
                             </div>
                         </div>
                 }

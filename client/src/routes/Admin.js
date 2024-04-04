@@ -126,6 +126,9 @@ export default Admin;
     // updating the values in the admin page will update the values in the database -> wont effect the LDAP groups
 
   // Locations for the members in the users table
+    // If all display "All" or display the location count
+    // When cell clicked display a dropdown
+    // Needs to be editable
     
 
 

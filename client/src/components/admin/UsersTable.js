@@ -65,7 +65,7 @@ const UsersTable = ({availableLocations}) => {
                                     users.data.length ?
                                         users.data.map((data, index) => (
 
-                                            <UsersTableRow data={data} key={index} />
+                                            <UsersTableRow data={data} key={index} availableLocations={availableLocations}/>
                                         ))
                                         : null
                                 }

@@ -6,11 +6,13 @@ import UsersTableAddRow from './UsersTableAddRow';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-const UsersTable = () => {
+const UsersTable = ({availableLocations}) => {
     const users = useSelector((state) => state.users);
     
     useEffect(() => {
         console.log('effect called from members tabke, users = ', users);
+
+        console.log('locations = ', availableLocations);
     }, [])
 
     const [showAddMember, setShowAddMember] = useState(false);

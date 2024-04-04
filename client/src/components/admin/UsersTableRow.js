@@ -1,4 +1,7 @@
-import React from 'react'
+import React from 'react';
+import SelectMenu from '../selectMenu/SelectMenu';
+
+import '../awards/table/awardsTable.css';
 
 const UsersTableRow = ({ data }) => {
     const onEditClicked = () => {
@@ -10,17 +13,22 @@ const UsersTableRow = ({ data }) => {
     }
 
     const formattedRole = (groupName) => {
-        if(groupName === "CA01") return "Director";
-        if(groupName === "CA02") return "Regional Director";
-        if(groupName === "CA03") return "User";
+        if (groupName === "CA01") return "Director";
+        if (groupName === "CA02") return "Regional Director";
+        if (groupName === "CA03") return "User";
     }
 
     return (
         <tr>
             <td>{data.name}</td>
             <td>{formattedRole(data.role)}</td>
-            <td>{data.permissions}</td>
-            <td>{data.locations}</td>
+            <td>Required???</td>
+            <td>
+                <div className='users-table-locations-container'>
+                    <p>10</p>
+                    <button>View</button>
+                </div>
+            </td>
             <td className='table-actions-cell'>
                 <button className='table-actions-cell' onClick={onEditClicked}>Edit</button>
             </td>

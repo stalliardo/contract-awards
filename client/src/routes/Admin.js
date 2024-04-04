@@ -72,7 +72,7 @@ const Admin = () => {
             }
         </div>
         <div className='admin-members-container'>
-          <UsersTable />
+          <UsersTable availableLocations={locationsRetrieved}/>
         </div>
       </div>
       }

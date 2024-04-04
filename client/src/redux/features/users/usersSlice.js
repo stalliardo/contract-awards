@@ -23,6 +23,10 @@ export const usersSlice = createSlice({
       // const generatedCoreTotals = generateCoreTotalsData(action.payload);
       // const generatedUKCoreTotals = generateUkCoreTotals(generatedCoreTotals);
 
+      console.log('Fulfilled caalled + action.payload', action.payload);
+      state.data = action.payload;
+      state.loading = false;
+
       // state.coreTotals = generatedCoreTotals;
       // state.ukCoreTotals = generatedUKCoreTotals;
       // state.loading = false;

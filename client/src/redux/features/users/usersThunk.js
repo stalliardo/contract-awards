@@ -5,7 +5,7 @@ const fetchUsers = createAsyncThunk(
     'awards/fetchUsers',
     async () => {
         try {
-            const response = await axios.get("/api/ad/get-AD-users");
+            const response = await axios.get("/api/users");
             return response.data;
         } catch (error) {
             console.log('catch called + error: ', error);

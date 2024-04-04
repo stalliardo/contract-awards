@@ -9,10 +9,16 @@ const MemebersTableRow = ({ data }) => {
 
     }
 
+    const formattedRole = (groupName) => {
+        if(groupName === "CA01") return "Director";
+        if(groupName === "CA02") return "Regional Director";
+        if(groupName === "CA03") return "User";
+    }
+
     return (
         <tr>
             <td>{data.name}</td>
-            <td>{data.role}</td>
+            <td>{formattedRole(data.role)}</td>
             <td>{data.permissions}</td>
             <td>{data.locations}</td>
             <td className='table-actions-cell'>

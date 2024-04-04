@@ -3,6 +3,6 @@ const router = express.Router();
 const userController = require('../controllers/usersController');
 
 // router.post("/location/add-item", locationController.addLocation);
-// router.get('/location/get-locations', locationController.getAllLocations);
+router.get('/users', userController.getUsers);
 
 module.exports = router;

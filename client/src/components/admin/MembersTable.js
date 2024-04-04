@@ -1,33 +1,41 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import '../awards/table/awardsTable.css';
 import MemebersTableRow from './MemebersTableRow';
 import MembersTableAddRow from './MembersTableAddRow';
 
+import { useDispatch, useSelector } from 'react-redux';
+
+
 const MembersTable = () => {
+    const users = useSelector((state) => state.users);
+    
+    useEffect(() => {
+        console.log('effect called from members tabke, users = ', users);
+    }, [])
 
     const [showAddMember, setShowAddMember] = useState(false);
 
-    const members = [ // Will need to load these from either the store or via an api call to get via LDAP
-        {
-            name: "Darren Stallard",
-            role: "Director",
-            permissions: "Read / Write",
-            locations: "All"
-        },
-        {
-            name: "Darren Stallard",
-            role: "Director",
-            permissions: "Read / Write",
-            locations: "All"
-        },
-        {
-            name: "Darren Stallard",
-            role: "Director",
-            permissions: "Read / Write",
-            locations: "All"
-        },
-    ] // TODO REmove
+    // const members = [ // Will need to load these from either the store or via an api call to get via LDAP
+    //     {
+    //         name: "Darren Stallard",
+    //         role: "Director",
+    //         permissions: "Read / Write",
+    //         locations: "All"
+    //     },
+    //     {
+    //         name: "Darren Stallard",
+    //         role: "Director",
+    //         permissions: "Read / Write",
+    //         locations: "All"
+    //     },
+    //     {
+    //         name: "Darren Stallard",
+    //         role: "Director",
+    //         permissions: "Read / Write",
+    //         locations: "All"
+    //     },
+    // ] // TODO REmove
 
     return (
         <div className='awards-table-container'>
@@ -40,7 +48,7 @@ const MembersTable = () => {
                     </button>
                 </div>
                 {
-                    members.length ?
+                    users.data.length ?
                         <table id="awards-table" className='awards-form-table'>
                             <thead>
                                 <tr>
@@ -53,8 +61,8 @@ const MembersTable = () => {
                             </thead>
                             <tbody>
                                 {
-                                    members.length ?
-                                        members.map((data, index) => (
+                                    users.data.length ?
+                                        users.data.map((data, index) => (
 
                                             <MemebersTableRow data={data} key={index} />
                                         ))

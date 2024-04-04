@@ -13,14 +13,14 @@ const User = require('../models/User');
 //   }
 // }
 
-// exports.getMembers = async (req, res) => {
-//     try {
-//       // Find all Locations records
-//       const locations = await Location.find().exec();
+exports.getUsers = async (req, res) => {
+    try {
+      // Find all Locations records
+      const users = await User.find().exec();
   
-//       res.status(201).send(locations);
-//     } catch (error) {
-//       res.status(400);
-//       console.log('Error getting locations: ', error);
-//     }
-//   }
+      res.status(201).send(users);
+    } catch (error) {
+      res.status(400);
+      console.log('Error getting users: ', error);
+    }
+  }

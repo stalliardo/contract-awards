@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const memberController = require('../controllers/membersController');
+const userController = require('../controllers/usersController');
 
 // router.post("/location/add-item", locationController.addLocation);
 // router.get('/location/get-locations', locationController.getAllLocations);

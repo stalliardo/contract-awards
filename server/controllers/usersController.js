@@ -1,5 +1,5 @@
 
-const Member = require('../models/Member');
+const User = require('../models/User');
 
 // TODO
 

@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
 import '../awards/table/awardsTable.css';
-import MemebersTableRow from './MemebersTableRow';
-import MembersTableAddRow from './MembersTableAddRow';
+import UsersTableRow from './UsersTableRow';
+import UsersTableAddRow from './UsersTableAddRow';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-
-const MembersTable = () => {
+const UsersTable = () => {
     const users = useSelector((state) => state.users);
     
     useEffect(() => {
@@ -41,10 +40,10 @@ const MembersTable = () => {
         <div className='awards-table-container'>
             <div className='awards-page-table-container'>
                 <div className='awards-page-title-and-button admin'>
-                    <h3>Members</h3>
+                    <h3>Users</h3>
 
                     <button onClick={() => setShowAddMember(true)}>
-                        Add Member
+                        Add User
                     </button>
                 </div>
                 {
@@ -64,14 +63,14 @@ const MembersTable = () => {
                                     users.data.length ?
                                         users.data.map((data, index) => (
 
-                                            <MemebersTableRow data={data} key={index} />
+                                            <UsersTableRow data={data} key={index} />
                                         ))
                                         : null
                                 }
                                 {
                             showAddMember &&
                             // the below line will be used to replace the below code for adding data in the table
-                            <MembersTableAddRow />
+                            <UsersTableAddRow />
                         }
                             </tbody>
                         </table>
@@ -86,4 +85,4 @@ const MembersTable = () => {
     )
 }
 
-export default MembersTable
+export default UsersTable

@@ -20,16 +20,9 @@ export const usersSlice = createSlice({
 
   extraReducers: (builder) => {
     builder.addCase(fetchUsers.fulfilled, (state, action) => {
-      // const generatedCoreTotals = generateCoreTotalsData(action.payload);
-      // const generatedUKCoreTotals = generateUkCoreTotals(generatedCoreTotals);
-
       console.log('Fulfilled caalled + action.payload', action.payload);
       state.data = action.payload;
       state.loading = false;
-
-      // state.coreTotals = generatedCoreTotals;
-      // state.ukCoreTotals = generatedUKCoreTotals;
-      // state.loading = false;
     })
   }
 })

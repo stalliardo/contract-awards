@@ -1,6 +1,6 @@
 import React from 'react'
 
-const MemebersTableRow = ({ data }) => {
+const UsersTableRow = ({ data }) => {
     const onEditClicked = () => {
 
     }
@@ -31,7 +31,7 @@ const MemebersTableRow = ({ data }) => {
     )
 }
 
-export default MemebersTableRow;
+export default UsersTableRow;
 
 // need to check a users permissions to see what they can actually do on this page.  Or just not enable certain options for certain people
 

@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import './admin.css';
 import Spinner from '../components/spinner/Spinner';
-import MembersTable from '../components/admin/MembersTable';
+import UsersTable from '../components/admin/UsersTable';
 
 const Admin = () => {
   const [location, setLocation] = useState("");
@@ -72,7 +72,7 @@ const Admin = () => {
             }
         </div>
         <div className='admin-members-container'>
-          <MembersTable />
+          <UsersTable />
         </div>
       </div>
       }
@@ -124,6 +124,8 @@ export default Admin;
     // Then in the admin page the table will be populated by the memeber array in the store
     // Will also need a way to determine who is the logged in user -> serparte Authentication feature and state object "auth"
     // updating the values in the admin page will update the values in the database -> wont effect the LDAP groups
+
+  // Locations for the members in the users table
     
 
 

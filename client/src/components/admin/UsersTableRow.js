@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import SelectMenu from '../selectMenu/SelectMenu';
 
 import '../awards/table/awardsTable.css';
+import { useDispatch } from 'react-redux';
+import { addLocationToUser } from '../../redux/features/users/usersThunk';
 
 
-// REMOVE...
+// REMOVE... Replace with real data
 const TEMP_LOCATIONS = [
     "Basingstoke",
     "AWE",
@@ -17,8 +19,7 @@ const TEMP_LOCATIONS = [
 
 const UsersTableRow = ({ data, availableLocations }) => {
 
-
-
+    const dispatch = useDispatch();
 
     const [showLocationsDropdown, setshowLocationsDropdown] = useState(false);
     const [showAddNewLocation, setShowAddNewLocation] = useState(false);
@@ -37,8 +38,20 @@ const UsersTableRow = ({ data, availableLocations }) => {
 
     }
 
-    const onDeleteClicked = () => {
+    const onDeleteUserClicked = () => {
 
+    }
+
+
+    const onRemoveLocationClicked = (location) => {
+        const confirmation = window.confirm(`Are you sure you want to remove "${location}"?`);
+
+        // TODO once the real locations have been retrieved
+        if(confirmation) {
+            console.log('conf');
+        } else {
+            console.log('den');
+        }
     }
 
     const formattedRole = (groupName) => {
@@ -59,8 +72,6 @@ const UsersTableRow = ({ data, availableLocations }) => {
         setSaveButtonDisabled(true);
     }
 
-
-
     const onLocationSelected = (location) => {
         console.log('location from parent = ', location);
         // set save button to visisble
@@ -68,7 +79,9 @@ const UsersTableRow = ({ data, availableLocations }) => {
         setSelectedLocation(location);
     }
 
-
+    const onSaveLocationClicked = () => {
+        dispatch(addLocationToUser({location: selectedLocation.name, userId: data._id}));
+    }
 
     return (
         <tr>
@@ -93,7 +106,7 @@ const UsersTableRow = ({ data, availableLocations }) => {
                                                 TEMP_LOCATIONS.map((location, index) => {
                                                     return <li className='' key={index}>
                                                         {location}
-                                                        <button className='red'>Remove</button>
+                                                        <button onClick={() => onRemoveLocationClicked(location)} className='red'>Remove</button>
                                                     </li>
                                                 })
                                             }
@@ -114,7 +127,7 @@ const UsersTableRow = ({ data, availableLocations }) => {
                                         </div>
 
                                         <div className='users-table-display-locations-buttons cancel'>
-                                            <button disabled={saveButtonDisabled} onClick={() => setShowAddNewLocation(true)}>Save</button>
+                                            <button disabled={saveButtonDisabled} onClick={onSaveLocationClicked}>Save</button>
                                             <button onClick={onCancelClicked}>Cancel</button>
                                         </div>
                                     </div>
@@ -127,7 +140,7 @@ const UsersTableRow = ({ data, availableLocations }) => {
                 <button className='table-actions-cell' onClick={onEditClicked}>Edit</button>
             </td>
             <td className='table-actions-cell'>
-                <button className='table-actions-cell red' onClick={onDeleteClicked}>Delete</button>
+                <button className='table-actions-cell red' onClick={onDeleteUserClicked}>Delete</button>
             </td>
         </tr>
     )
@@ -142,3 +155,5 @@ export default UsersTableRow;
 
 
 // TODO Save button needs to be hidden by default
+
+// REMOVE edit button in the row - no longer needed

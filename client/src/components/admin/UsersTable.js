@@ -48,9 +48,9 @@ const UsersTable = ({ availableLocations }) => {
                 <div className='awards-page-title-and-button admin'>
                     <h3>Users</h3>
 
-                    <button onClick={() => setShowAddMember(true)}>
+                    {/* <button onClick={() => setShowAddMember(true)}>
                         Add User
-                    </button>
+                    </button> */}
                 </div>
                 {
                     users.data.length ?
@@ -73,11 +73,11 @@ const UsersTable = ({ availableLocations }) => {
                                         ))
                                         : null
                                 }
-                                {
+                                {/* {
                                     showAddMember &&
                                     // the below line will be used to replace the below code for adding data in the table
                                     <UsersTableAddRow />
-                                }
+                                } */}
                             </tbody>
                         </table>
                         : <div className='awards-table-no-data-container'>

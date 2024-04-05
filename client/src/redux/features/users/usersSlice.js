@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchUsers } from '../users/usersThunk';
+import { fetchUsers, addLocationToUser } from '../users/usersThunk';
 
 const initialState = {
     data: [],
@@ -23,7 +23,18 @@ export const usersSlice = createSlice({
       console.log('Fulfilled caalled + action.payload', action.payload);
       state.data = action.payload;
       state.loading = false;
-    })
+    });
+
+    builder.addCase(addLocationToUser.pending, (state, action) => {
+      console.log('Pending called set is loading to true');
+      state.loading = true;
+    });
+
+    builder.addCase(addLocationToUser.fulfilled, (state, action) => {
+      console.log('Fulfilled caalled for adding a location to user', action.payload);
+      state.data = action.payload;
+      state.loading = false;
+    });
   }
 })
 

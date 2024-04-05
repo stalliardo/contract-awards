@@ -48,17 +48,8 @@ exports.addLocationToUser = async (req, res) => {
 
 exports.removeLocationFromUser = async (req, res) => {
   try {
-    // Assume userId is the ID of the user document you want to update
-
     const { userId, location } = req.params;
-
-    console.log('userId = ', userId);
-    console.log('location = ', location);
-
-    // Update the user document to remove the specified location from the locations array
     const updatedUser = await User.findByIdAndUpdate(userId, { $pull: { locations: location } }, { new: true });
-
-    console.log('updatedUser = ', updatedUser);
     res.status(200).json({ message: "Location successfully removed", user: updatedUser });
 
   } catch (error) {

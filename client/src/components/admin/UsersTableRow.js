@@ -16,16 +16,15 @@ const UsersTableRow = ({ data, availableLocations }) => {
 
     useEffect(() => {
         if (Object.keys(selectedLocation).length) {
-            setSaveButtonDisabled(false);
+            if(data.locations.includes(selectedLocation.name)) {
+                setSaveButtonDisabled(true);
+            } else {
+                setSaveButtonDisabled(false);
+            }
         }
     }, [selectedLocation])
 
-    useEffect(() => {
-        console.log('%cData changed', "color: yellow");
-    }, [data])
-
-
-
+ 
     const onEditClicked = () => {
 
     }
@@ -35,8 +34,6 @@ const UsersTableRow = ({ data, availableLocations }) => {
     }
 
 
-
-
     const formattedRole = (groupName) => {
         if (groupName === "CA01") return "Director";
         if (groupName === "CA02") return "Regional Director";
@@ -44,9 +41,7 @@ const UsersTableRow = ({ data, availableLocations }) => {
     }
 
     const onViewLocationsClicked = () => {
-        console.log('clicked');
         setshowLocationsDropdown(true);
-
     }
 
     const onCancelClicked = () => {
@@ -126,7 +121,7 @@ const UsersTableRow = ({ data, availableLocations }) => {
 
                                         <div className='users-table-display-locations-buttons cancel'>
                                             <button disabled={saveButtonDisabled} onClick={onSaveLocationClicked}>Save</button>
-                                            <button onClick={onCancelClicked}>Cancel</button>
+                                            <button onClick={onCancelClicked}>Close</button>
                                         </div>
                                     </div>
                                 </div>

@@ -14,6 +14,7 @@ const UsersTableRow = ({ data, availableLocations }) => {
     const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
     const [selectedLocation, setSelectedLocation] = useState({});
     const [addAllButtonDisabled, setAddAllButtonDisabled] = useState(false);
+    const [filteredLocations, setFilteredLocations] = useState([]);
 
     useEffect(() => {
         if (Object.keys(selectedLocation).length) {
@@ -27,7 +28,17 @@ const UsersTableRow = ({ data, availableLocations }) => {
 
     useEffect(() => {
         setAddAllButtonDisabled(data.locations.length === availableLocations.length);
+
+        const filteredLocs = availableLocations.filter(location => !data.locations.includes(location.name));
+
+        setFilteredLocations(filteredLocs);
+
     }, [data.locations, availableLocations])
+
+    useEffect(() => {
+        
+
+    }, [availableLocations, data.locations])
 
 
     const onEditClicked = () => {
@@ -128,9 +139,9 @@ const UsersTableRow = ({ data, availableLocations }) => {
                                                 :
                                                 <>
                                                     <h4>Add New Location</h4>
-                                                    <SelectMenu menuItems={availableLocations} placeholder={"Locations"} handleItemSelection={onLocationSelected} />
+                                                    <SelectMenu menuItems={filteredLocations} placeholder={"Locations"} handleItemSelection={onLocationSelected} />
                                                     <div className='users-table-display-locations-buttons add-all'>
-                                                        <button disabled={addAllButtonDisabled} onClick={onAddAllLocationsClicked}>Add All</button>
+                                                        <button disabled={addAllButtonDisabled} onClick={onAddAllLocationsClicked}>Save All</button>
                                                     </div>
                                                 </>
                                         }

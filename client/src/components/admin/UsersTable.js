@@ -60,8 +60,7 @@ const UsersTable = ({ availableLocations }) => {
                                     <th>Name</th>
                                     <th>Role</th>
                                     <th>Permissions</th>
-                                    <th>Locations</th>
-                                    <th colSpan="2" style={{ textAlign: "center", width: "10%" }}>Actions</th>
+                                    <th>Locations</th>                                    
                                 </tr>
                             </thead>
                             <tbody>

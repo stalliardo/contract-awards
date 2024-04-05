@@ -1,6 +1,5 @@
 .admin-page-container {
     margin: 60px auto;
-    border: 1px solid red;
     width: 90%;
     height: 800px;
 
@@ -9,42 +8,70 @@
         flex-direction: row;
         justify-content: space-between;
         width: 100%;
-        border: 1px solid blue;
-
-
+        border: 1px solid grey;
+        border-radius: 6px;
+        padding: 10px 20px 10px 0px;
+        
         .admin-current-locations-container {
-            width: 30%;
-            border: 1px solid green;
+            width: 20%;
+            padding-left: 20px;
+            border-right: 1px solid gray;
 
-            ul {
-                padding-left: 20px;
-
-                ol {
-                    padding-left: 16px;
-                    margin-top: 8px;
-                }
+            h3 {
+                margin-top: 10px;
             }
 
-            .admin-add-location {
-                margin-top: 16px;
-                display: flex;
-                justify-content: space-between;
-                input {
-                    width: 80%;
-                }
+            ul {
+                padding-left: 0px;
 
-                border: 1px solid pink;
+                ol {
+                    padding-left: 0px;
+                    margin-top: 8px;
+                }
             }
         }
 
         .admin-members-container {
-            border: 1px solid green;
-            width: 70%;
+            width: 80%;
             padding-left: 20px;
+        }
+    }
 
-            h3 {
-                /* margin-left: 20px; */
-            }
+    .admin-add-location {
+        position: fixed;
+        height: 200px;
+        width: 30%;
+        top: 50vh;
+        left: 50vw;
+        transform: translate(-50%,-50%);
+        background-color: rgb(255, 255, 255);
+        padding: 8px 12px;
+        border: 2px solid grey;
+        border-radius: 4px;
+
+        margin-top: 16px;
+        display: flex;
+        flex-direction: column;
+
+        h3 {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .admin-add-location-buttons {
+            display: flex;
+            width: 60%;
+            margin: 10px auto;
+            justify-content: space-between;
+        }
+
+        input {
+            width: 58%;
+            margin: 20px auto;
+        }
+
+        button {
+            width: 40%;
         }
     }
 }

@@ -45,6 +45,11 @@ const Admin = () => {
     setLocation(e.target.value)
   }
 
+  const onCloseAddLocationModal = () => {
+    setShowAddNewLocation(false);
+    setLocation("");
+  }
+
   return (
     <div className='admin-page-container'>
       <h1>Admin / Director Page</h1>
@@ -60,15 +65,22 @@ const Admin = () => {
                 })
               }
             </ul>
-
             <button onClick={() => setShowAddNewLocation(true)}>Add Location</button>
             {
-              showAddNewLocation ? <div className='admin-add-location'>
-              <input type='text' value={location} onChange={handleChange}/>
-              <button className='green' onClick={onAddLocation} disabled={saveButtonDisabled}>
-                {isSaving ? <div className='spinner-button'><Spinner classes="button"/></div> : "Save"}
-              </button>
-            </div> : null
+              showAddNewLocation ? 
+              <div className='blackout-overlay'>
+                 <div className='admin-add-location'>
+                  <h3>Add Location</h3>
+                  <input type='text' value={location} onChange={handleChange}/>
+                  <div className='admin-add-location-buttons'>
+                    <button onClick={onCloseAddLocationModal}>Close</button>
+                    <button className='green' onClick={onAddLocation} disabled={saveButtonDisabled}>
+                      {isSaving ? <div className='spinner-button'><Spinner classes="button"/></div> : "Save"}
+                    </button>
+                  </div>
+                </div> 
+              </div>
+            : null
             }
         </div>
         <div className='admin-members-container'>

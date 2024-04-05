@@ -141,7 +141,7 @@ const UsersTableRow = ({ data, availableLocations }) => {
                                                     <h4>Add New Location</h4>
                                                     <SelectMenu menuItems={filteredLocations} placeholder={"Locations"} handleItemSelection={onLocationSelected} />
                                                     <div className='users-table-display-locations-buttons add-all'>
-                                                        <button disabled={addAllButtonDisabled} onClick={onAddAllLocationsClicked}>Save All</button>
+                                                        <button disabled={addAllButtonDisabled} onClick={onAddAllLocationsClicked}>Save / Add All</button>
                                                     </div>
                                                 </>
                                         }
@@ -157,12 +157,12 @@ const UsersTableRow = ({ data, availableLocations }) => {
                     </div>
                 }
             </td>
-            <td className='table-actions-cell'>
+            {/* <td className='table-actions-cell'>
                 <button className='table-actions-cell' onClick={onEditClicked}>Edit</button>
             </td>
             <td className='table-actions-cell'>
                 <button className='table-actions-cell red' onClick={onDeleteUserClicked}>Delete</button>
-            </td>
+            </td> */}
         </tr>
     )
 }

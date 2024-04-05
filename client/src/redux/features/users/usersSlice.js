@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchUsers, addLocationToUser, removeLocationFromUser } from '../users/usersThunk';
+import { fetchUsers, addLocationToUser, removeLocationFromUser, addAllLocationsToUser
+ } from '../users/usersThunk';
 
 const initialState = {
   data: [],
@@ -30,6 +31,26 @@ export const usersSlice = createSlice({
     });
 
     builder.addCase(addLocationToUser.fulfilled, (state, action) => {
+      state.loading = false;
+
+      const updatedUser = action.payload;
+
+      // replace the user in the existing array
+      const userToReplaceIndex = state.data.findIndex(user => user._id === updatedUser._id);
+
+      if (userToReplaceIndex > -1) {
+        // Create a new array updatedArray using the spread operator (...state.data) to maintain immutability.
+        const updatedArray = [...state.data];
+        updatedArray[userToReplaceIndex] = updatedUser;
+        state.data = updatedArray;
+      }
+    });
+
+    builder.addCase(addAllLocationsToUser.pending, (state, action) => {
+      state.loading = true;
+    });
+
+    builder.addCase(addAllLocationsToUser.fulfilled, (state, action) => {
       state.loading = false;
 
       const updatedUser = action.payload;

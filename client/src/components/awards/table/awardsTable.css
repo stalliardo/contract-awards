@@ -125,6 +125,11 @@
             }
         }
     }
+
+    p#all-assigned {
+        font-size: 20px;
+        margin-top: 0;
+    }
 }
 
 .users-table-display-locations-buttons {
@@ -143,6 +148,10 @@
     
     padding-top: 10px;
     border-top: 1px solid grey;
+}
+
+.users-table-display-locations-buttons.add-all {
+    margin-top: 10px;
 }
 
 .users-table-locations-dropdown-container-no-locations-container {

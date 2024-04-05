@@ -3,7 +3,7 @@ import SelectMenu from '../selectMenu/SelectMenu';
 
 import '../awards/table/awardsTable.css';
 import { useDispatch } from 'react-redux';
-import { addLocationToUser, removeLocationFromUser } from '../../redux/features/users/usersThunk';
+import { addAllLocationsToUser, addLocationToUser, removeLocationFromUser } from '../../redux/features/users/usersThunk';
 
 const UsersTableRow = ({ data, availableLocations }) => {
 
@@ -13,10 +13,11 @@ const UsersTableRow = ({ data, availableLocations }) => {
     const [showAddNewLocation, setShowAddNewLocation] = useState(false);
     const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
     const [selectedLocation, setSelectedLocation] = useState({});
+    const [addAllButtonDisabled, setAddAllButtonDisabled] = useState(false);
 
     useEffect(() => {
         if (Object.keys(selectedLocation).length) {
-            if(data.locations.includes(selectedLocation.name)) {
+            if (data.locations.includes(selectedLocation.name)) {
                 setSaveButtonDisabled(true);
             } else {
                 setSaveButtonDisabled(false);
@@ -24,7 +25,11 @@ const UsersTableRow = ({ data, availableLocations }) => {
         }
     }, [selectedLocation])
 
- 
+    useEffect(() => {
+        setAddAllButtonDisabled(data.locations.length === availableLocations.length);
+    }, [data.locations, availableLocations])
+
+
     const onEditClicked = () => {
 
     }
@@ -61,6 +66,15 @@ const UsersTableRow = ({ data, availableLocations }) => {
         dispatch(addLocationToUser({ location: selectedLocation.name, userId: data._id }));
     }
 
+    const onAddAllLocationsClicked = () => {
+        const confirmation = window.confirm("Are you sure you want to add ALL locations?");
+
+        // disable add all if the length of the locations and the users locations match
+        if (confirmation) {
+            dispatch(addAllLocationsToUser({ userId: data._id }));
+        }
+    }
+
     const onRemoveLocationClicked = (location) => {
         const confirmation = window.confirm(`Are you sure you want to remove "${location}"?`);
 
@@ -84,15 +98,15 @@ const UsersTableRow = ({ data, availableLocations }) => {
                 </div>
                 {
                     showLocationsDropdown &&
-                        <div className='blackout-overlay'>
-                            <div className="users-table-locations-dropdown-container">
-                                <h2>Location Information for {data.name}</h2>
-                                <div className='fixer'>
-                                    <div className='users-table-locations-dropdown-container-left'>
-                                        <h4>Current Locations</h4>
-                                        <ul>
-                                            {
-                                                data.locations.length ?
+                    <div className='blackout-overlay'>
+                        <div className="users-table-locations-dropdown-container">
+                            <h2>Location Information for {data.name}</h2>
+                            <div className='fixer'>
+                                <div className='users-table-locations-dropdown-container-left'>
+                                    <h4>Current Locations</h4>
+                                    <ul>
+                                        {
+                                            data.locations.length ?
                                                 data.locations.map((location, index) => {
                                                     return <li className='' key={index}>
                                                         {location}
@@ -102,31 +116,34 @@ const UsersTableRow = ({ data, availableLocations }) => {
                                                 <div className='users-table-locations-dropdown-container-no-locations-container'>
                                                     <p>0</p>
                                                 </div>
-                                            }
-                                        </ul>
-                                        {/* <button onClick={() => setShowAddNewLocation(true)}>Edit</button> */}
+                                        }
+                                    </ul>
+                                    {/* <button onClick={() => setShowAddNewLocation(true)}>Edit</button> */}
+                                </div>
+                                <div className='users-table-display-locations-container'>
+                                    <div>
+                                        {
+                                            addAllButtonDisabled ?
+                                                <p id='all-assigned'>{data.name} has all locations assigned</p>
+                                                :
+                                                <>
+                                                    <h4>Add New Location</h4>
+                                                    <SelectMenu menuItems={availableLocations} placeholder={"Locations"} handleItemSelection={onLocationSelected} />
+                                                    <div className='users-table-display-locations-buttons add-all'>
+                                                        <button disabled={addAllButtonDisabled} onClick={onAddAllLocationsClicked}>Add All</button>
+                                                    </div>
+                                                </>
+                                        }
                                     </div>
-                                    <div className='users-table-display-locations-container'>
-                                        <div>
-                                            <h4>Add New Location</h4>
 
-
-                                            <SelectMenu menuItems={availableLocations} placeholder={"Locations"} handleItemSelection={onLocationSelected} />
-
-                                            <div className='users-table-display-locations-buttons'>
-                                                {/* Button disabled TODO TODO TODO TODO */}
-
-                                            </div>
-                                        </div>
-
-                                        <div className='users-table-display-locations-buttons cancel'>
-                                            <button disabled={saveButtonDisabled} onClick={onSaveLocationClicked}>Save</button>
-                                            <button onClick={onCancelClicked}>Close</button>
-                                        </div>
+                                    <div className='users-table-display-locations-buttons cancel'>
+                                        <button disabled={saveButtonDisabled} onClick={onSaveLocationClicked}>Save</button>
+                                        <button onClick={onCancelClicked}>Close</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
                 }
             </td>
             <td className='table-actions-cell'>
@@ -152,3 +169,7 @@ export default UsersTableRow;
 // REMOVE edit button in the row - no longer needed
 
 // Add ALL option in the location seciton
+
+// Add all works but, should only work once.
+// The height of the modal needs to be capped and overflow y set to scroll
+// Also, when clicking add all - only add the values that thhe user doesnt already have - same as ^

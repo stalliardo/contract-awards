@@ -39,4 +39,19 @@ const removeLocationFromUser = createAsyncThunk(
     },
 )
 
-export { fetchUsers, addLocationToUser, removeLocationFromUser }
+const addAllLocationsToUser = createAsyncThunk(
+    'awards/addAllLocationsToUser',
+    async (data) => {
+        try {
+            const response = await axios.put(`/api/users/${data.userId}/locations`);
+            return response.data;
+        } catch (error) {
+            console.log('catch called + error: ', error);
+            return new Error("There was an error adding the location to the user.")
+        }
+    },
+)
+
+
+
+export { fetchUsers, addLocationToUser, removeLocationFromUser, addAllLocationsToUser }

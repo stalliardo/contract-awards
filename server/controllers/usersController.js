@@ -1,5 +1,6 @@
 
 const User = require('../models/User');
+const Location = require('../models/Location');
 
 // TODO
 
@@ -45,6 +46,38 @@ exports.addLocationToUser = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 }
+
+exports.addAllLocationsToUser = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    // Get all locations from the database
+    const locations = await Location.find().exec();
+
+    if (!locations || locations.length === 0) {
+      return res.status(404).json({ error: 'Locations not found' });
+    }
+
+     // Extract the names of the locations
+     const locationNames = locations.map(location => location.name);
+
+    // Update the user document to add all locations
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $addToSet: { locations: { $each: locationNames } } }, // Use $push to add all locations
+      { new: true } // Return the updated document after the update
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.status(200).json(updatedUser); // Send the updated user document in the response
+  } catch (error) {
+    console.error('Error adding locations to user:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 
 exports.removeLocationFromUser = async (req, res) => {
   try {

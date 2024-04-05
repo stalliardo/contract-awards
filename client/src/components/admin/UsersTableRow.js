@@ -3,7 +3,7 @@ import SelectMenu from '../selectMenu/SelectMenu';
 
 import '../awards/table/awardsTable.css';
 import { useDispatch } from 'react-redux';
-import { addLocationToUser } from '../../redux/features/users/usersThunk';
+import { addLocationToUser, removeLocationFromUser } from '../../redux/features/users/usersThunk';
 
 
 // REMOVE... Replace with real data
@@ -43,16 +43,7 @@ const UsersTableRow = ({ data, availableLocations }) => {
     }
 
 
-    const onRemoveLocationClicked = (location) => {
-        const confirmation = window.confirm(`Are you sure you want to remove "${location}"?`);
-
-        // TODO once the real locations have been retrieved
-        if(confirmation) {
-            console.log('conf');
-        } else {
-            console.log('den');
-        }
-    }
+   
 
     const formattedRole = (groupName) => {
         if (groupName === "CA01") return "Director";
@@ -81,6 +72,17 @@ const UsersTableRow = ({ data, availableLocations }) => {
 
     const onSaveLocationClicked = () => {
         dispatch(addLocationToUser({location: selectedLocation.name, userId: data._id}));
+    }
+
+    const onRemoveLocationClicked = (location) => {
+        const confirmation = window.confirm(`Are you sure you want to remove "${location}"?`);
+
+        // TODO once the real locations have been retrieved
+        if(confirmation) {
+            dispatch(removeLocationFromUser({location: selectedLocation.name, userId: data._id}));
+        } else {
+            console.log('den');
+        }
     }
 
     return (

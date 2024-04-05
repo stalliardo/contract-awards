@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import './admin.css';
 import Spinner from '../components/spinner/Spinner';
-import MembersTable from '../components/admin/MembersTable';
+import UsersTable from '../components/admin/UsersTable';
 
 const Admin = () => {
   const [location, setLocation] = useState("");
@@ -45,6 +45,11 @@ const Admin = () => {
     setLocation(e.target.value)
   }
 
+  const onCloseAddLocationModal = () => {
+    setShowAddNewLocation(false);
+    setLocation("");
+  }
+
   return (
     <div className='admin-page-container'>
       <h1>Admin / Director Page</h1>
@@ -60,19 +65,26 @@ const Admin = () => {
                 })
               }
             </ul>
-
             <button onClick={() => setShowAddNewLocation(true)}>Add Location</button>
             {
-              showAddNewLocation ? <div className='admin-add-location'>
-              <input type='text' value={location} onChange={handleChange}/>
-              <button className='green' onClick={onAddLocation} disabled={saveButtonDisabled}>
-                {isSaving ? <div className='spinner-button'><Spinner classes="button"/></div> : "Save"}
-              </button>
-            </div> : null
+              showAddNewLocation ? 
+              <div className='blackout-overlay'>
+                 <div className='admin-add-location'>
+                  <h3>Add Location</h3>
+                  <input type='text' value={location} onChange={handleChange}/>
+                  <div className='admin-add-location-buttons'>
+                    <button onClick={onCloseAddLocationModal}>Close</button>
+                    <button className='green' onClick={onAddLocation} disabled={saveButtonDisabled}>
+                      {isSaving ? <div className='spinner-button'><Spinner classes="button"/></div> : "Save"}
+                    </button>
+                  </div>
+                </div> 
+              </div>
+            : null
             }
         </div>
         <div className='admin-members-container'>
-          <MembersTable />
+          <UsersTable availableLocations={locationsRetrieved}/>
         </div>
       </div>
       }
@@ -124,6 +136,11 @@ export default Admin;
     // Then in the admin page the table will be populated by the memeber array in the store
     // Will also need a way to determine who is the logged in user -> serparte Authentication feature and state object "auth"
     // updating the values in the admin page will update the values in the database -> wont effect the LDAP groups
+
+  // Locations for the members in the users table
+    // If all display "All" or display the location count
+    // When cell clicked display a dropdown
+    // Needs to be editable
     
 
 

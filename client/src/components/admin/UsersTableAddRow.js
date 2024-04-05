@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Spinner from '../spinner/Spinner';
 
-const MembersTableAddRow = () => {
+const UsersTableAddRow = () => {
 
     const initialData = {name: "", role: "", permissions: "", locations: ""};
 
@@ -40,4 +40,4 @@ const MembersTableAddRow = () => {
     )
 }
 
-export default MembersTableAddRow
+export default UsersTableAddRow

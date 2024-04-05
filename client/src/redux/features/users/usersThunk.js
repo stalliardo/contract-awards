@@ -32,6 +32,7 @@ const removeLocationFromUser = createAsyncThunk(
     async (data) => {
         try {
             const response = await axios.delete(`/api/users/${data.userId}/location/${data.location}`);
+            console.log('response =  / / / ', response);
             return response.data;
         } catch (error) {
             console.log('catch called + error: ', error);

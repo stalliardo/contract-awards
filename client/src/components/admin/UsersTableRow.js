@@ -5,18 +5,6 @@ import '../awards/table/awardsTable.css';
 import { useDispatch } from 'react-redux';
 import { addLocationToUser, removeLocationFromUser } from '../../redux/features/users/usersThunk';
 
-
-// REMOVE... Replace with real data
-const TEMP_LOCATIONS = [
-    "Basingstoke",
-    "AWE",
-    "Birmingham",
-    "Glasgow",
-    "London",
-
-]
-
-
 const UsersTableRow = ({ data, availableLocations }) => {
 
     const dispatch = useDispatch();
@@ -32,6 +20,10 @@ const UsersTableRow = ({ data, availableLocations }) => {
         }
     }, [selectedLocation])
 
+    useEffect(() => {
+        console.log('%cData changed', "color: yellow");
+    }, [data])
+
 
 
     const onEditClicked = () => {
@@ -43,7 +35,7 @@ const UsersTableRow = ({ data, availableLocations }) => {
     }
 
 
-   
+
 
     const formattedRole = (groupName) => {
         if (groupName === "CA01") return "Director";
@@ -71,15 +63,15 @@ const UsersTableRow = ({ data, availableLocations }) => {
     }
 
     const onSaveLocationClicked = () => {
-        dispatch(addLocationToUser({location: selectedLocation.name, userId: data._id}));
+        dispatch(addLocationToUser({ location: selectedLocation.name, userId: data._id }));
     }
 
     const onRemoveLocationClicked = (location) => {
         const confirmation = window.confirm(`Are you sure you want to remove "${location}"?`);
 
         // TODO once the real locations have been retrieved
-        if(confirmation) {
-            dispatch(removeLocationFromUser({location: selectedLocation.name, userId: data._id}));
+        if (confirmation) {
+            dispatch(removeLocationFromUser({ location, userId: data._id }));
         } else {
             console.log('den');
         }
@@ -91,12 +83,12 @@ const UsersTableRow = ({ data, availableLocations }) => {
             <td>{formattedRole(data.role)}</td>
             <td>Required???</td>
             <td>
+                <div className='users-table-locations-container' >
+                    <p>{data.locations.length}</p>
+                    <button onClick={onViewLocationsClicked}>Edit</button>
+                </div>
                 {
-                    !showLocationsDropdown ?
-                        <div className='users-table-locations-container' >
-                            <p>10</p>
-                            <button onClick={onViewLocationsClicked}>View</button>
-                        </div> :
+                    showLocationsDropdown &&
                         <div className='blackout-overlay'>
                             <div className="users-table-locations-dropdown-container">
                                 <h2>Location Information for {data.name}</h2>
@@ -105,12 +97,16 @@ const UsersTableRow = ({ data, availableLocations }) => {
                                         <h4>Current Locations</h4>
                                         <ul>
                                             {
-                                                TEMP_LOCATIONS.map((location, index) => {
+                                                data.locations.length ?
+                                                data.locations.map((location, index) => {
                                                     return <li className='' key={index}>
                                                         {location}
                                                         <button onClick={() => onRemoveLocationClicked(location)} className='red'>Remove</button>
                                                     </li>
-                                                })
+                                                }) :
+                                                <div className='users-table-locations-dropdown-container-no-locations-container'>
+                                                    <p>0</p>
+                                                </div>
                                             }
                                         </ul>
                                         {/* <button onClick={() => setShowAddNewLocation(true)}>Edit</button> */}
@@ -159,3 +155,5 @@ export default UsersTableRow;
 // TODO Save button needs to be hidden by default
 
 // REMOVE edit button in the row - no longer needed
+
+// Add ALL option in the location seciton

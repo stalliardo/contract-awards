@@ -2,17 +2,17 @@ import { createSlice } from '@reduxjs/toolkit';
 import { fetchUsers, addLocationToUser, removeLocationFromUser } from '../users/usersThunk';
 
 const initialState = {
-    data: [],
-    
-    loading: true,
-    error: null
-  };
+  data: [],
+
+  loading: true,
+  error: null
+};
 
 export const usersSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {
-    
+
     setLoading: (state, action) => {
       state.loading = action.payload
     },
@@ -32,7 +32,7 @@ export const usersSlice = createSlice({
 
     builder.addCase(addLocationToUser.fulfilled, (state, action) => {
       console.log('Fulfilled caalled for adding a location to user', action.payload);
-      state.data = action.payload;
+      // state.data = action.payload;
       state.loading = false;
     });
 
@@ -43,8 +43,32 @@ export const usersSlice = createSlice({
 
     builder.addCase(removeLocationFromUser.fulfilled, (state, action) => {
       console.log('Fulfilled caalled for removing a location from a user', action.payload);
-      state.data = action.payload;
+      // state.data = action.payload;
       state.loading = false;
+
+      console.log('action.payload from remove = ', action.payload);
+
+      const updatedUser = action.payload.user;
+      console.log('user = ', updatedUser);
+
+      // replace the user in the existing array
+
+      const userToReplaceIndex = state.data.findIndex(user => user._id === updatedUser._id);
+
+      if (userToReplaceIndex > -1) {
+        console.log('user found - Replace');
+
+        // Create a new array updatedArray using the spread operator (...state.data) to maintain immutability.
+        const updatedArray = [...state.data];
+
+
+        updatedArray[userToReplaceIndex] = updatedUser;
+
+        state.data = updatedArray;
+      }
+
+      // 
+
     });
   }
 })

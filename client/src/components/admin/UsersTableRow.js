@@ -22,10 +22,14 @@ const UsersTableRow = ({ data, availableLocations }) => {
 
     const [showLocationsDropdown, setshowLocationsDropdown] = useState(false);
     const [showAddNewLocation, setShowAddNewLocation] = useState(false);
+    const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
+    const [selectedLocation, setSelectedLocation] = useState({});
 
     useEffect(() => {
-
-    }, [])
+        if (Object.keys(selectedLocation).length) {
+            setSaveButtonDisabled(false);
+        }
+    }, [selectedLocation])
 
 
 
@@ -49,10 +53,19 @@ const UsersTableRow = ({ data, availableLocations }) => {
 
     }
 
-    const testLeave = () => {
-        // console.log('leave called');
-        // setshowLocationsDropdown(false);
-        // setShowAddNewLocation(false);
+    const onCancelClicked = () => {
+        setshowLocationsDropdown(false);
+        setSelectedLocation({});
+        setSaveButtonDisabled(true);
+    }
+
+
+
+    const onLocationSelected = (location) => {
+        console.log('location from parent = ', location);
+        // set save button to visisble
+
+        setSelectedLocation(location);
     }
 
 
@@ -92,16 +105,17 @@ const UsersTableRow = ({ data, availableLocations }) => {
                                             <h4>Add New Location</h4>
 
 
-                                            <SelectMenu menuItems={availableLocations} placeholder={"Locations"} />
+                                            <SelectMenu menuItems={availableLocations} placeholder={"Locations"} handleItemSelection={onLocationSelected} />
 
                                             <div className='users-table-display-locations-buttons'>
                                                 {/* Button disabled TODO TODO TODO TODO */}
-                                                <button onClick={() => setShowAddNewLocation(true)}>Save</button>
+
                                             </div>
                                         </div>
 
                                         <div className='users-table-display-locations-buttons cancel'>
-                                            <button onClick={() => setshowLocationsDropdown(false)}>Cancel</button>
+                                            <button disabled={saveButtonDisabled} onClick={() => setShowAddNewLocation(true)}>Save</button>
+                                            <button onClick={onCancelClicked}>Cancel</button>
                                         </div>
                                     </div>
                                 </div>
@@ -124,3 +138,7 @@ export default UsersTableRow;
 // need to check a users permissions to see what they can actually do on this page.  Or just not enable certain options for certain people
 
 // will need a new members model, route, controller, endpoint
+
+
+
+// TODO Save button needs to be hidden by default

@@ -4,6 +4,7 @@ import axios from 'axios';
 import './admin.css';
 import Spinner from '../components/spinner/Spinner';
 import UsersTable from '../components/admin/UsersTable';
+import TargetsTable from '../components/admin/TargetsTable';
 
 const Admin = () => {
   const [location, setLocation] = useState("");
@@ -57,7 +58,7 @@ const Admin = () => {
         isLoading ? <div className='spinner-container-page'><Spinner classes="page" /></div> :
         <div className='admin-top-container'>
         <div className='admin-current-locations-container'>
-            <h3>Current Locations:</h3>
+            <h3>Current Locations: ({locationsRetrieved.length})</h3>
             <ul>
               {
                 locationsRetrieved.map((location, index) => {
@@ -88,6 +89,28 @@ const Admin = () => {
         </div>
       </div>
       }
+
+
+
+      <h3 id="targets-h3">Awards and Tender Targets</h3>
+      <div className='admin-targets-container'>
+        <div className='admin-targets-flex'>
+          <div className='admin-targets-flex-left'>
+            <TargetsTable tableTitle="Contract Awards Targets" data={locationsRetrieved}/>
+          </div>
+          <div className='admin-targets-flex-right'>
+            <TargetsTable tableTitle="Submitted Tenders Targets" data={locationsRetrieved}/>
+          </div>
+        </div>
+      </div>
+
+      {/* Add some whitespace at the bottom of the page */}
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
     </div>
   )
 }
@@ -143,9 +166,13 @@ export default Admin;
     // Needs to be editable - DONE
     
   // Ability for Admins / and certain users to be able to add / edit the yearly totals for the summary page etc.
+    //  - Be able to set the Annual target for each branch / location
+    //  - Be able to set the Annual target for each branch / location for the tenders submitted
+    // locations? 
 
 
-      
 
+
+  // Will need to amend the awardsDiary comp to display either awwards data or submitted tenders data, same layout just differenet data and calcualtions, because od the calculations might be easier to copy and amend the awardDiaryTable comp
 
     

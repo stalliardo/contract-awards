@@ -148,7 +148,7 @@ const UsersTableRow = ({ data, availableLocations }) => {
                                     </div>
 
                                     <div className='users-table-display-locations-buttons cancel'>
-                                        <button disabled={saveButtonDisabled} onClick={onSaveLocationClicked}>Save</button>
+                                        <button disabled={saveButtonDisabled} onClick={onSaveLocationClicked}>Save / Add One</button>
                                         <button onClick={onCancelClicked}>Close</button>
                                     </div>
                                 </div>

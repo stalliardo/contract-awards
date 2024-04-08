@@ -12,6 +12,7 @@ const awardsDiaryItemRoutes = require("./server/routes/awardsDiaryItemRoutes");
 const locationRoutes = require("./server/routes/locationRoutes");
 const userRoutes = require("./server/routes/userRoutes");
 const ADRoutes = require("./server/routes/ADRoutes");
+const targetRoutes = require("./server/routes/targetRoutes");
 
 const { generateTableForYear } = require("./server/utils/AwardsDiaryUtils");
 
@@ -29,6 +30,7 @@ app.use("/api", awardsDiaryItemRoutes);
 app.use("/api", locationRoutes);
 app.use("/api", userRoutes);
 app.use("/api", ADRoutes);
+app.use("/api", targetRoutes);
 
 const ADConfig = {
     url: `ldap://${process.env.DOMAIN_IP}:389`, // TODO see if i can use the secure LDAPS

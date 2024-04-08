@@ -42,9 +42,9 @@
         }
     }
 
-    .admin-add-location {
+    .admin-modal {
         position: fixed;
-        height: 200px;
+        height: fit-content;
         width: 30%;
         top: 50vh;
         left: 50vw;
@@ -63,7 +63,7 @@
             margin-top: 10px;
         }
 
-        .admin-add-location-buttons {
+        .admin-modal-buttons {
             display: flex;
             width: 60%;
             margin: 10px auto;

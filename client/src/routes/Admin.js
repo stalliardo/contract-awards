@@ -9,14 +9,41 @@ import TargetsTable from '../components/admin/TargetsTable';
 const Admin = () => {
   const [location, setLocation] = useState("");
   const [locationsRetrieved, setLocationsRetrieved] = useState([]);
+  const [targetAndLocationData, setTargetAndLocationData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [showAddNewLocation, setShowAddNewLocation] = useState(false);
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
 
   useEffect(() => {
+
+    const formattedTargetData = [];
+
     axios.get("/api/location/get-locations").then((response) => {
       setLocationsRetrieved(response.data);
+
+      // get the targets data
+
+      console.log('locations retrieved = ', response.data);
+
+      axios.get("/api/targets").then((res) => {
+        if(!res.data.length) {
+          
+          response.data.forEach((location) => {
+
+            const targetDataToAdd = res.data.find(target => target.location === location.name );
+
+            const formattedTargetObject = {locationData: {...location}, targetData: targetDataToAdd ? {...targetDataToAdd} :  {}};
+
+            formattedTargetData.push(formattedTargetObject);
+         })
+
+         setTargetAndLocationData(formattedTargetData);
+        
+        }
+      }).catch((error) => {
+        console.log('Error getting targets. Error: ', error);
+      })
     }).catch((error) => {
       console.log('Error getting Locations. Error: ', error);
     }).finally(() => {
@@ -70,14 +97,14 @@ const Admin = () => {
             {
               showAddNewLocation ? 
               <div className='blackout-overlay'>
-                 <div className='admin-add-location'>
+                 <div className='admin-modal'>
                   <h3>Add Location</h3>
                   <input type='text' value={location} onChange={handleChange}/>
-                  <div className='admin-add-location-buttons'>
-                    <button onClick={onCloseAddLocationModal}>Close</button>
+                  <div className='admin-modal-buttons'>
                     <button className='green' onClick={onAddLocation} disabled={saveButtonDisabled}>
                       {isSaving ? <div className='spinner-button'><Spinner classes="button"/></div> : "Save"}
                     </button>
+                    <button onClick={onCloseAddLocationModal}>Close</button>
                   </div>
                 </div> 
               </div>
@@ -96,10 +123,10 @@ const Admin = () => {
       <div className='admin-targets-container'>
         <div className='admin-targets-flex'>
           <div className='admin-targets-flex-left'>
-            <TargetsTable tableTitle="Contract Awards Targets" data={locationsRetrieved}/>
+            <TargetsTable tableTitle="Contract Awards Targets" data={targetAndLocationData} targetCategory="contract-awards"/>
           </div>
           <div className='admin-targets-flex-right'>
-            <TargetsTable tableTitle="Submitted Tenders Targets" data={locationsRetrieved}/>
+            <TargetsTable tableTitle="Submitted Tenders Targets" data={targetAndLocationData} targetCategory="tenders-submitted"/>
           </div>
         </div>
       </div>

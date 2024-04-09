@@ -34,10 +34,6 @@ const UsersTableRow = ({ data, availableLocations }) => {
 
     }, [data.locations, availableLocations])
 
-    useEffect(() => {
-        console.log('called from users row: ', availableLocations);
-    }, [availableLocations.length])
-
     const formattedRole = (groupName) => {
         if (groupName === "CA01") return "Director";
         if (groupName === "CA02") return "Regional Director";

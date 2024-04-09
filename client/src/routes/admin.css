@@ -2,10 +2,12 @@
     margin: 60px auto;
     width: 90%;
     height: fit-content;
-
-    border: 1px solid red;
-
+    /* border: 1px solid red; */
     padding: 0px 20px;
+
+    #admin-page-top-h3 {
+        margin: 0 0 8px 0;
+    }
 
     .admin-top-container {
         display: flex;

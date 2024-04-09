@@ -17,7 +17,6 @@ const Admin = () => {
   const [showAddNewLocation, setShowAddNewLocation] = useState(false);
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
 
-
   const buildData = (locations, targets) => {
     const formattedTargetData = [];
 
@@ -43,33 +42,11 @@ const Admin = () => {
   }
 
   useEffect(() => {
-    // const formattedTargetData = [];
-
     axios.get("/api/location/get-locations").then((response) => {
       setLocationsRetrieved(response.data);
       
       axios.get("/api/targets").then((res) => {
         setTargetDataRetrieved(res.data);
-
-        //   response.data.forEach((location) => {
-        //     const targetDataToAdd = res.data.filter(target => target.location === location.name );
-        //     let data = {locationData: {...location}};
-        //     if(targetDataToAdd.length) {
-        //       targetDataToAdd.forEach((dataItem) => {
-        //         if(dataItem.category === TARGET_CATEGORIES.CONTRACT_AWARDS) {
-        //           data.awardsData = dataItem
-        //         } 
-        //         if(dataItem.category === TARGET_CATEGORIES.TENDERS_SUBMITTED) {
-        //           data.tendersData = dataItem
-        //         }
-        //       })
-        //       formattedTargetData.push(data);
-        //     } else {
-        //       formattedTargetData.push(data);
-        //     }
-        //   })
-          
-        // setTargetAndLocationData(formattedTargetData);
 
         buildData(response.data, res.data);
          
@@ -116,7 +93,8 @@ const Admin = () => {
 
   return (
     <div className='admin-page-container'>
-      <h1>Admin / Director Page</h1>
+      <h3 id="admin-page-top-h3">Available Locations and Assigned Users</h3>
+
       {
         isLoading ? <div className='spinner-container-page'><Spinner classes="page" /></div> :
         <>
@@ -152,7 +130,6 @@ const Admin = () => {
           <UsersTable availableLocations={locationsRetrieved}/>
         </div>
       </div>
-      
 
       <h3 id="targets-h3">Awards and Tender Targets</h3>
 

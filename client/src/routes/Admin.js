@@ -26,46 +26,27 @@ const Admin = () => {
     axios.get("/api/location/get-locations").then((response) => {
       setLocationsRetrieved(response.data);
 
-      // get the targets data
-
-      console.log('locations retrieved = ', response.data);
-
       axios.get("/api/targets").then((res) => {
-        if(res.data.length) {
-          
           response.data.forEach((location) => {
-
-            const targetDataToAdd = res.data.find(target => target.location === location.name );
-
-            if(targetDataToAdd) {
-              console.log('data to add = ', targetDataToAdd);
-
-              if(targetDataToAdd.category === TARGET_CATEGORIES.CONTRACT_AWARDS) {
-                const data = {locationData: {...location}, awardsData: targetDataToAdd ? {...targetDataToAdd} :  {}};
-                formattedTargetData.push(data);
-              } else if(targetDataToAdd.category === TARGET_CATEGORIES.TENDERS_SUBMITTED) {
-                const data = {locationData: {...location}, tendersData: targetDataToAdd ? {...targetDataToAdd} :  {}};
-                formattedTargetData.push(data);
-              }
+            const targetDataToAdd = res.data.filter(target => target.location === location.name );
+            let data = {locationData: {...location}};
+            if(targetDataToAdd.length) {
+              targetDataToAdd.forEach((dataItem) => {
+                if(dataItem.category === TARGET_CATEGORIES.CONTRACT_AWARDS) {
+                  data.awardsData = dataItem
+                } 
+                if(dataItem.category === TARGET_CATEGORIES.TENDERS_SUBMITTED) {
+                  data.tendersData = dataItem
+                }
+              })
+              formattedTargetData.push(data);
             } else {
-              const data = {locationData: {...location}};
               formattedTargetData.push(data);
             }
-
-            
-            
-            
-            
-            // const formattedTargetObject = {locationData: {...location}, targetData: targetDataToAdd ? {...targetDataToAdd} :  {}};
-            
-            // formattedTargetData.push(formattedTargetObject);
           })
           
-          console.log('formattedT data = ', formattedTargetData);
-
-         setTargetAndLocationData(formattedTargetData);
-        
-        }
+        setTargetAndLocationData(formattedTargetData);
+         
       }).catch((error) => {
         console.log('Error getting targets. Error: ', error);
       })
@@ -141,12 +122,9 @@ const Admin = () => {
         </div>
       </div>
       }
-
-
-
+      
       <h3 id="targets-h3">Awards and Tender Targets</h3>
 
-      {/* // Add Spinner around here */}
       <div className='admin-targets-container'>
         <div className='admin-targets-flex'>
           <div className='admin-targets-flex-left'>

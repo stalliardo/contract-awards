@@ -33,7 +33,7 @@ const TargetsTable = ({ locations, tableTitle, targetData, data, targetCategory 
                                 {
                                     data.length ?
                                         data.map((item, index) => (
-                                            <TargetsTableRow location={item.locationData} key={index} target={targetCategory === TARGET_CATEGORIES.CONTRACT_AWARDS ? item.awardsData : item.tendersData} />
+                                            <TargetsTableRow location={item.locationData} key={index} target={targetCategory === TARGET_CATEGORIES.CONTRACT_AWARDS ? item.awardsData : item.tendersData} targetCategory={targetCategory}/>
                                         ))
                                         : null
                                 }

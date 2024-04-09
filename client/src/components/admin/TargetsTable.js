@@ -16,7 +16,7 @@ const TargetsTable = ({ locations, tableTitle, targetData, data, targetCategory 
                             <thead>
                                 <tr>
                                     <th>Location</th>
-                                    <th>Total</th>
+                                    <th>Target (Monthly)</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>

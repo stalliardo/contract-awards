@@ -27,7 +27,7 @@ const AwardsSummary = () => {
             dispatch(fetchData()).finally(() => {
                 setTimeout(() => {
                     setSpinnerComplete(true);
-                }, 1250);
+                }, 750);
             })
         }
     }, []);
@@ -41,8 +41,6 @@ const AwardsSummary = () => {
 
     const generateFilteredTotals = (location) => {
 
-        console.log('loaction = ', location);
-
         return awardsData.coreTotals.filter((totals) => totals.location === location)
     }
 
@@ -51,10 +49,7 @@ const AwardsSummary = () => {
 
         const sum = filteredTotals.reduce((total, currentItem) => total + currentItem.sum, 0);
         
-        console.log('sum = = = = ' , sum);
         cumalitiveTotalsSum += sum;
-
-        console.log('counter = ', cumalitiveTotalsSum);
 
         return sum;
     }
@@ -115,7 +110,7 @@ const AwardsSummary = () => {
                         <tbody>
                             {
                                 locations.map((location, index) => {
-                                    return <AwardsSummaryCoreTotalsRow filteredTotals={generateFilteredTotals(location)} cumalitiveTotal={generateCumalitiveTotals(location)} locationRef={location} key={index} />
+                                    return <AwardsSummaryCoreTotalsRow targetsData={awardsData.targets} filteredTotals={generateFilteredTotals(location)} cumalitiveTotal={generateCumalitiveTotals(location)} locationRef={location} key={index} />
                                 })
                             }
                             {/* Totals below here core total is exactly that - need a function to loop each branch and each month and get a sum for each of the months */}
@@ -133,6 +128,7 @@ const AwardsSummary = () => {
                                     £100,000
                                 </td>
                                 <td>
+                                    {/* // here is where the targets go */}
                                     £1,200,000
                                 </td>
                                 <td>121%</td>

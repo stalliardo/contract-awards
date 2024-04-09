@@ -78,9 +78,6 @@ const DevPage = () => {
 
                 </div>
             </div>
-
-            {/* TODO below location needs to be dynamic */}
-            {/* <AwardsTable/> */}
         </div>
     )
 }

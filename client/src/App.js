@@ -38,23 +38,23 @@ const router = createBrowserRouter([
         element: <Auth />
       },
       {
-        path: "/awards-form", // <- TODO
+        path: "/awards-form",
         element: <Root />
       },
       {
-        path: "/tenders-submitted", // <- TODO
+        path: "/tenders-submitted",
         element: <TendersSubmitted />
       },
       {
-        path: "/admin", // <- TODO
+        path: "/admin",
         element: <Admin />
       },
       {
-        path: "/awards-summary", // <- TODO
+        path: "/awards-summary",
         element: <AwardsSummary />
       },
       {
-        path: "/dev", // <- TODO
+        path: "/dev",
         element: <DevPage />
       }
     ]

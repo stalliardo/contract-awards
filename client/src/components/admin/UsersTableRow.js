@@ -10,7 +10,6 @@ const UsersTableRow = ({ data, availableLocations }) => {
     const dispatch = useDispatch();
 
     const [showLocationsDropdown, setshowLocationsDropdown] = useState(false);
-    const [showAddNewLocation, setShowAddNewLocation] = useState(false);
     const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
     const [selectedLocation, setSelectedLocation] = useState({});
     const [addAllButtonDisabled, setAddAllButtonDisabled] = useState(false);
@@ -36,19 +35,8 @@ const UsersTableRow = ({ data, availableLocations }) => {
     }, [data.locations, availableLocations])
 
     useEffect(() => {
-        
-
-    }, [availableLocations, data.locations])
-
-
-    const onEditClicked = () => {
-
-    }
-
-    const onDeleteUserClicked = () => {
-
-    }
-
+        console.log('called from users row: ', availableLocations);
+    }, [availableLocations.length])
 
     const formattedRole = (groupName) => {
         if (groupName === "CA01") return "Director";
@@ -67,9 +55,6 @@ const UsersTableRow = ({ data, availableLocations }) => {
     }
 
     const onLocationSelected = (location) => {
-        console.log('location from parent = ', location);
-        // set save button to visisble
-
         setSelectedLocation(location);
     }
 
@@ -80,7 +65,6 @@ const UsersTableRow = ({ data, availableLocations }) => {
     const onAddAllLocationsClicked = () => {
         const confirmation = window.confirm("Are you sure you want to add ALL locations?");
 
-        // disable add all if the length of the locations and the users locations match
         if (confirmation) {
             dispatch(addAllLocationsToUser({ userId: data._id }));
         }
@@ -89,12 +73,9 @@ const UsersTableRow = ({ data, availableLocations }) => {
     const onRemoveLocationClicked = (location) => {
         const confirmation = window.confirm(`Are you sure you want to remove "${location}"?`);
 
-        // TODO once the real locations have been retrieved
         if (confirmation) {
             dispatch(removeLocationFromUser({ location, userId: data._id }));
-        } else {
-            console.log('den');
-        }
+        } 
     }
 
     return (
@@ -104,7 +85,7 @@ const UsersTableRow = ({ data, availableLocations }) => {
             <td>Required???</td>
             <td>
                 <div className='users-table-locations-container' >
-                    <p>{data.locations.length}</p>
+                    <p>{data.locations.length}/{availableLocations.length}</p>
                     <button onClick={onViewLocationsClicked}>Edit</button>
                 </div>
                 {
@@ -129,7 +110,6 @@ const UsersTableRow = ({ data, availableLocations }) => {
                                                 </div>
                                         }
                                     </ul>
-                                    {/* <button onClick={() => setShowAddNewLocation(true)}>Edit</button> */}
                                 </div>
                                 <div className='users-table-display-locations-container'>
                                     <div>
@@ -157,30 +137,10 @@ const UsersTableRow = ({ data, availableLocations }) => {
                     </div>
                 }
             </td>
-            {/* <td className='table-actions-cell'>
-                <button className='table-actions-cell' onClick={onEditClicked}>Edit</button>
-            </td>
-            <td className='table-actions-cell'>
-                <button className='table-actions-cell red' onClick={onDeleteUserClicked}>Delete</button>
-            </td> */}
         </tr>
     )
 }
 
 export default UsersTableRow;
 
-// need to check a users permissions to see what they can actually do on this page.  Or just not enable certain options for certain people
-
-// will need a new members model, route, controller, endpoint
-
-
-
-// TODO Save button needs to be hidden by default
-
-// REMOVE edit button in the row - no longer needed
-
-// Add ALL option in the location seciton
-
-// Add all works but, should only work once.
-// The height of the modal needs to be capped and overflow y set to scroll
-// Also, when clicking add all - only add the values that thhe user doesnt already have - same as ^
+// TODO - need to check a users permissions to see what they can actually do on this page.  Or just not enable certain options for certain people

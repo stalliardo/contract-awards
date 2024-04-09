@@ -47,9 +47,6 @@ function generateTableForYear() {
 
     // generating tables complete
 
-    console.log('Generating tables complete');
-    console.log('tables = ', tables);
-
 }
 
 module.exports = { generateTableForYear }

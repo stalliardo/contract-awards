@@ -30,7 +30,7 @@ const TargtesTableRow = ({ location, target, targetCategory, data }) => {
 
             let targetPostData = {}
 
-            console.log('targetState = ', targetState);
+            console.log('targetState = = = = =', targetState);
 
             if (targetState._id) {
                 targetPostData = {
@@ -71,8 +71,6 @@ const TargtesTableRow = ({ location, target, targetCategory, data }) => {
         setTargetState(prevTargetState);
         setShowModal(false);
     }
-
-    console.log('targetstate = ', targetState);
 
     return (
         <tr id='admin-targets-tr'>

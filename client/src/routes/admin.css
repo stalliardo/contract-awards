@@ -84,12 +84,17 @@
         margin: 46px 0 -14px 0;
     }
 
+    .admin-targets-spinner {
+        width: fit-content;
+        margin: auto;
+    }
+
     .admin-targets-container {
         border: 1px solid grey;
         margin-top: 20px;
         border-radius: 6px;
 
-        padding: 0px 20px;
+        padding: 0px 20px 10px;
 
         .admin-targets-flex {
             display: flex;

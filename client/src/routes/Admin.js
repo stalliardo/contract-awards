@@ -10,42 +10,68 @@ import { TARGET_CATEGORIES } from '../utils/constants';
 const Admin = () => {
   const [location, setLocation] = useState("");
   const [locationsRetrieved, setLocationsRetrieved] = useState([]);
+  const [targetDataRetrieved, setTargetDataRetrieved] = useState([]);
   const [targetAndLocationData, setTargetAndLocationData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [showAddNewLocation, setShowAddNewLocation] = useState(false);
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
 
-  useEffect(() => {
 
+  const buildData = (locations, targets) => {
     const formattedTargetData = [];
 
-    const awardsData = [];
-    const tendersData = [];
+    locations.forEach((location) => {
+      const targetDataToAdd = targets.filter(target => target.location === location.name );
+      let data = {locationData: {...location}};
+      if(targetDataToAdd.length) {
+        targetDataToAdd.forEach((dataItem) => {
+          if(dataItem.category === TARGET_CATEGORIES.CONTRACT_AWARDS) {
+            data.awardsData = dataItem
+          } 
+          if(dataItem.category === TARGET_CATEGORIES.TENDERS_SUBMITTED) {
+            data.tendersData = dataItem
+          }
+        })
+        formattedTargetData.push(data);
+      } else {
+        formattedTargetData.push(data);
+      }
+    })
+
+    setTargetAndLocationData(formattedTargetData);
+  }
+
+  useEffect(() => {
+    // const formattedTargetData = [];
 
     axios.get("/api/location/get-locations").then((response) => {
       setLocationsRetrieved(response.data);
-
+      
       axios.get("/api/targets").then((res) => {
-          response.data.forEach((location) => {
-            const targetDataToAdd = res.data.filter(target => target.location === location.name );
-            let data = {locationData: {...location}};
-            if(targetDataToAdd.length) {
-              targetDataToAdd.forEach((dataItem) => {
-                if(dataItem.category === TARGET_CATEGORIES.CONTRACT_AWARDS) {
-                  data.awardsData = dataItem
-                } 
-                if(dataItem.category === TARGET_CATEGORIES.TENDERS_SUBMITTED) {
-                  data.tendersData = dataItem
-                }
-              })
-              formattedTargetData.push(data);
-            } else {
-              formattedTargetData.push(data);
-            }
-          })
+        setTargetDataRetrieved(res.data);
+
+        //   response.data.forEach((location) => {
+        //     const targetDataToAdd = res.data.filter(target => target.location === location.name );
+        //     let data = {locationData: {...location}};
+        //     if(targetDataToAdd.length) {
+        //       targetDataToAdd.forEach((dataItem) => {
+        //         if(dataItem.category === TARGET_CATEGORIES.CONTRACT_AWARDS) {
+        //           data.awardsData = dataItem
+        //         } 
+        //         if(dataItem.category === TARGET_CATEGORIES.TENDERS_SUBMITTED) {
+        //           data.tendersData = dataItem
+        //         }
+        //       })
+        //       formattedTargetData.push(data);
+        //     } else {
+        //       formattedTargetData.push(data);
+        //     }
+        //   })
           
-        setTargetAndLocationData(formattedTargetData);
+        // setTargetAndLocationData(formattedTargetData);
+
+        buildData(response.data, res.data);
          
       }).catch((error) => {
         console.log('Error getting targets. Error: ', error);
@@ -53,7 +79,9 @@ const Admin = () => {
     }).catch((error) => {
       console.log('Error getting Locations. Error: ', error);
     }).finally(() => {
-      setIsLoading(false);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 750);
     })
   }, [])
 
@@ -68,11 +96,13 @@ const Admin = () => {
       newArray.push({name: location});
 
       setLocationsRetrieved(newArray);
-      setLocation("");
+      onCloseAddLocationModal();
+      buildData(newArray, targetDataRetrieved);
     }).catch((error) => {
       console.log('Error adding location. Error: ', error);
     }).finally(() => {
       setIsSaving(false);
+      
     })
   }
   const handleChange = (e) => {
@@ -89,7 +119,8 @@ const Admin = () => {
       <h1>Admin / Director Page</h1>
       {
         isLoading ? <div className='spinner-container-page'><Spinner classes="page" /></div> :
-        <div className='admin-top-container'>
+        <>
+          <div className='admin-top-container'>
         <div className='admin-current-locations-container'>
             <h3>Current Locations: ({locationsRetrieved.length})</h3>
             <ul>
@@ -121,8 +152,8 @@ const Admin = () => {
           <UsersTable availableLocations={locationsRetrieved}/>
         </div>
       </div>
-      }
       
+
       <h3 id="targets-h3">Awards and Tender Targets</h3>
 
       <div className='admin-targets-container'>
@@ -135,14 +166,14 @@ const Admin = () => {
           </div>
         </div>
       </div>
-
-      {/* Add some whitespace at the bottom of the page */}
       <br/>
       <br/>
       <br/>
       <br/>
       <br/>
       <br/>
+        </>
+    }
     </div>
   )
 }
@@ -207,4 +238,4 @@ export default Admin;
 
   // Will need to amend the awardsDiary comp to display either awwards data or submitted tenders data, same layout just differenet data and calcualtions, because od the calculations might be easier to copy and amend the awardDiaryTable comp
 
-    
+  // Adding location doesnt reflect in the available options in the users table

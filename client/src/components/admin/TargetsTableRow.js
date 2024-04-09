@@ -26,14 +26,16 @@ const TargtesTableRow = ({ location, target, targetCategory, data }) => {
 
             let targetPostData = {}
 
-            if (target) {
+            if (targetState._id) {
+                console.log('if called + t = ', target);
                 targetPostData = {
                     category: targetCategory,
                     targetValue: newTargetValue,
                     location: location.name,
-                    id: target._id
+                    id: targetState._id
                 }
             } else {
+                console.log('else called');
                 targetPostData = {
                     category: targetCategory,
                     targetValue: newTargetValue,
@@ -41,12 +43,12 @@ const TargtesTableRow = ({ location, target, targetCategory, data }) => {
                 }
             }
 
-            await axios.put("/api/target", targetPostData);
+            const targetAdded = await axios.put("/api/target", targetPostData);
+            console.log('target addede = ', targetAdded);
 
             setTargetState({
                 ...targetState,
-                targetValue: newTargetValue,
-                category: targetCategory
+                ...targetAdded.data
             })
 
             setShowModal(false);

@@ -4,20 +4,11 @@ import { TARGET_CATEGORIES } from '../../utils/constants';
 
 const TargetsTable = ({ locations, tableTitle, targetData, data, targetCategory }) => {
 
-
-    console.log('data = = = = ', data);
-
-
-
     return (
         <div className='awards-table-container'>
             <div className='awards-page-table-container'>
                 <div className='awards-page-title-and-button admin'>
                     <h3>{tableTitle}</h3>
-
-                    {/* <button onClick={() => setShowAddMember(true)}>
-                Add User
-            </button> */}
                 </div>
                 {
                     data.length ?

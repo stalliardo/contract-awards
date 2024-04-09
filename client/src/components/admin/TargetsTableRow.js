@@ -8,15 +8,19 @@ const TargtesTableRow = ({ location, target, targetCategory, data }) => {
     const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
 
-    const [targetState, setTargetState] = useState(target || {});
-    const [newTargetValue, setNewTargetValue] = useState(targetState.targetValue || "");
+    const [targetState, setTargetState] = useState(target || {targetValue: ""});
+    const [prevTargetState, setPrevTargetState] = useState({});
+    // const [newTargetValue, setNewTargetValue] = useState(targetState.targetValue || "");
 
     useEffect(() => {
-        setSaveButtonDisabled(!newTargetValue.length > 0);
-    }, [newTargetValue])
+        setSaveButtonDisabled(!targetState.targetValue?.length > 0);
+    }, [targetState.targetValue])
 
     const handleChange = (e) => {
-        setNewTargetValue(e.target.value);
+        setTargetState({
+            ...targetState,
+            targetValue: e.target.value
+        })
     }
 
     const onSetTargetClicked = async () => {
@@ -26,25 +30,24 @@ const TargtesTableRow = ({ location, target, targetCategory, data }) => {
 
             let targetPostData = {}
 
+            console.log('targetState = ', targetState);
+
             if (targetState._id) {
-                console.log('if called + t = ', target);
                 targetPostData = {
                     category: targetCategory,
-                    targetValue: newTargetValue,
+                    targetValue: targetState.targetValue,
                     location: location.name,
                     id: targetState._id
                 }
             } else {
-                console.log('else called');
                 targetPostData = {
                     category: targetCategory,
-                    targetValue: newTargetValue,
+                    targetValue: targetState.targetValue,
                     location: location.name,
                 }
             }
 
             const targetAdded = await axios.put("/api/target", targetPostData);
-            console.log('target addede = ', targetAdded);
 
             setTargetState({
                 ...targetState,
@@ -59,16 +62,24 @@ const TargtesTableRow = ({ location, target, targetCategory, data }) => {
         }
     }
 
+    const onShowModal = () => {
+        setPrevTargetState(targetState);
+        setShowModal(true);
+    }
+
     const onCloseModal = () => {
+        setTargetState(prevTargetState);
         setShowModal(false);
     }
+
+    console.log('targetstate = ', targetState);
 
     return (
         <tr id='admin-targets-tr'>
             <td>{location.name}</td>
-            <td>£{newTargetValue !== "" ? newTargetValue : 0}</td>
+            <td>£{targetState.targetValue !== "" ? targetState.targetValue : 0}</td>
             <td>
-                <button onClick={() => setShowModal(true)}>{newTargetValue === 0 || newTargetValue === "" ? "Add" : "Edit"}</button>
+                <button onClick={onShowModal}>{targetState.targetValue === "" || targetState.targetValue === "" ? "Add" : "Edit"}</button>
             </td>
 
             {
@@ -77,7 +88,7 @@ const TargtesTableRow = ({ location, target, targetCategory, data }) => {
                     <div className='blackout-overlay'>
                         <div className='admin-modal'>
                             <h3>TEMP text generated basde on adding or editing</h3>
-                            <input type='number' value={newTargetValue} onChange={handleChange} />
+                            <input type='number' value={targetState.targetValue} onChange={handleChange} />
                             <div className='admin-modal-buttons'>
                                 <button className='green' onClick={onSetTargetClicked} disabled={saveButtonDisabled}>
                                     {isSaving ? <div className='spinner-button'><Spinner classes="button" /></div> : "Save"}
@@ -93,3 +104,6 @@ const TargtesTableRow = ({ location, target, targetCategory, data }) => {
 }
 
 export default TargtesTableRow;
+
+
+// only set the value once the button has been pressed (save). cuurrently entering a value adds that to the celleven when closing the model

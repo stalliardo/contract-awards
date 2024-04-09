@@ -1,12 +1,13 @@
 import React from 'react'
-import TargtesTableRow from './TargtesTableRow';
+import TargetsTableRow from './TargetsTableRow';
+import { TARGET_CATEGORIES } from '../../utils/constants';
 
-const TargetsTable = ({ tableTitle, data }) => {
+const TargetsTable = ({ locations, tableTitle, targetData, data, targetCategory }) => {
 
 
-    console.log('data = ', data);
+    console.log('data = = = = ', data);
 
-    
+
 
     return (
         <div className='awards-table-container'>
@@ -31,12 +32,12 @@ const TargetsTable = ({ tableTitle, data }) => {
                             <tbody>
                                 {
                                     data.length ?
-                                        data.map((objects, index) => (
-                                            <TargtesTableRow location={objects.locationData} target={objects.targetData} key={index}/>
+                                        data.map((item, index) => (
+                                            <TargetsTableRow location={item.locationData} key={index} target={targetCategory === TARGET_CATEGORIES.CONTRACT_AWARDS ? item.awardsData : item.tendersData} />
                                         ))
                                         : null
                                 }
-                                
+
                             </tbody>
                         </table>
                         : <div className='awards-table-no-data-container'>

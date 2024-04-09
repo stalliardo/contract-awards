@@ -5,6 +5,7 @@ import './admin.css';
 import Spinner from '../components/spinner/Spinner';
 import UsersTable from '../components/admin/UsersTable';
 import TargetsTable from '../components/admin/TargetsTable';
+import { TARGET_CATEGORIES } from '../utils/constants';
 
 const Admin = () => {
   const [location, setLocation] = useState("");
@@ -19,6 +20,9 @@ const Admin = () => {
 
     const formattedTargetData = [];
 
+    const awardsData = [];
+    const tendersData = [];
+
     axios.get("/api/location/get-locations").then((response) => {
       setLocationsRetrieved(response.data);
 
@@ -27,16 +31,37 @@ const Admin = () => {
       console.log('locations retrieved = ', response.data);
 
       axios.get("/api/targets").then((res) => {
-        if(!res.data.length) {
+        if(res.data.length) {
           
           response.data.forEach((location) => {
 
             const targetDataToAdd = res.data.find(target => target.location === location.name );
 
-            const formattedTargetObject = {locationData: {...location}, targetData: targetDataToAdd ? {...targetDataToAdd} :  {}};
+            if(targetDataToAdd) {
+              console.log('data to add = ', targetDataToAdd);
 
-            formattedTargetData.push(formattedTargetObject);
-         })
+              if(targetDataToAdd.category === TARGET_CATEGORIES.CONTRACT_AWARDS) {
+                const data = {locationData: {...location}, awardsData: targetDataToAdd ? {...targetDataToAdd} :  {}};
+                formattedTargetData.push(data);
+              } else if(targetDataToAdd.category === TARGET_CATEGORIES.TENDERS_SUBMITTED) {
+                const data = {locationData: {...location}, tendersData: targetDataToAdd ? {...targetDataToAdd} :  {}};
+                formattedTargetData.push(data);
+              }
+            } else {
+              const data = {locationData: {...location}};
+              formattedTargetData.push(data);
+            }
+
+            
+            
+            
+            
+            // const formattedTargetObject = {locationData: {...location}, targetData: targetDataToAdd ? {...targetDataToAdd} :  {}};
+            
+            // formattedTargetData.push(formattedTargetObject);
+          })
+          
+          console.log('formattedT data = ', formattedTargetData);
 
          setTargetAndLocationData(formattedTargetData);
         
@@ -120,13 +145,15 @@ const Admin = () => {
 
 
       <h3 id="targets-h3">Awards and Tender Targets</h3>
+
+      {/* // Add Spinner around here */}
       <div className='admin-targets-container'>
         <div className='admin-targets-flex'>
           <div className='admin-targets-flex-left'>
-            <TargetsTable tableTitle="Contract Awards Targets" data={targetAndLocationData} targetCategory="contract-awards"/>
+            <TargetsTable tableTitle="Contract Awards Targets" data={targetAndLocationData} targetData={targetAndLocationData.awardsData} targetCategory={TARGET_CATEGORIES.CONTRACT_AWARDS}/>
           </div>
           <div className='admin-targets-flex-right'>
-            <TargetsTable tableTitle="Submitted Tenders Targets" data={targetAndLocationData} targetCategory="tenders-submitted"/>
+            <TargetsTable tableTitle="Submitted Tenders Targets" data={targetAndLocationData} targetData={targetAndLocationData.tendersData} targetCategory={TARGET_CATEGORIES.TENDERS_SUBMITTED}/>
           </div>
         </div>
       </div>

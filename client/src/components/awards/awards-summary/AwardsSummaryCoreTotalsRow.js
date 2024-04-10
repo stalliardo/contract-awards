@@ -1,5 +1,6 @@
 import React from 'react';
 import { getMonthsInFinancialOrder } from '../../../utils/DateUtils';
+import { generateTargetAcheivedPercentage } from '../../../utils/financialTotals';
 
 const monthsInFinancialOrder = getMonthsInFinancialOrder();
 
@@ -23,7 +24,7 @@ const AwardsSummaryCoreTotalsRow = ({ coreTotals, targetsData, cumalitiveTotal, 
                 })
             }
 
-            <td>£{cumalitiveTotal}</td>
+            <td style={{width: "80px"}}>£{cumalitiveTotal}</td>
 
             {/* Month Target */}
             <td>
@@ -34,7 +35,9 @@ const AwardsSummaryCoreTotalsRow = ({ coreTotals, targetsData, cumalitiveTotal, 
             <td>
                 £{formattedTargetValue() * 12}
             </td>
-            <td>121%</td>
+
+            {/* // TODO below value */}
+            <td>{generateTargetAcheivedPercentage(formattedTargetValue() * 12, cumalitiveTotal)}%</td>
         </tr>
     )
 }

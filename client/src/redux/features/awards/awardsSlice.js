@@ -1,13 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchData } from './awardsThunks';
-import { generateCoreTotalsData, generateUkCoreTotals } from '../../../utils/financialTotals';
+import { generateCoreTotalsData, generateSpecialsTotals, generateUkCoreTotals } from '../../../utils/financialTotals';
 import { TARGET_CATEGORIES } from '../../../utils/constants';
 
 const initialState = {
   data: [],
   coreTotals: [],
   ukCoreTotals: [],
-  targets: [], // TODO will be an array filtering by category "contract-awards"
+  targets: [],
   locations: [],
   specialLocations: [],
   loading: true,
@@ -29,23 +29,19 @@ export const awardsSlice = createSlice({
       const generatedCoreTotals = generateCoreTotalsData(action.payload.awardsData);
       const generatedUKCoreTotals = generateUkCoreTotals(generatedCoreTotals);
 
-      console.log('awardsData = ', action.payload.awardsData);
-      console.log('targetsData = ', action.payload.targetsData);
-      console.log('locations = ', action.payload.locationsData);
-
       const filteredTargets = action.payload.targetsData.filter((target) => target.category === TARGET_CATEGORIES.CONTRACT_AWARDS);
-
       const formattedLocations = action.payload.locationsData.map((location) => location.name);
-      const filteredSpecialLocations = action.payload.locationsData.filter((location) => location.name === "M&E" || location.name === "Special Projects");
+      const filteredSpecialLocations = action.payload.locationsData.filter((location) => location.name === "M&E" || location.name === "Special Projects")
+      const formattedSpecialTotals = filteredSpecialLocations.map((item) => item.name); 
 
+      console.log('generatedUKCoreTotals = ', generatedUKCoreTotals);
 
       state.targets = filteredTargets;
       state.coreTotals = generatedCoreTotals;
-      state.ukCoreTotals = generatedUKCoreTotals;
+      state.ukCoreTotals = generatedUKCoreTotals.uk;
       state.locations = formattedLocations;
-      state.specialLocations = filteredSpecialLocations;
+      state.specialLocations = formattedSpecialTotals;
 
-      console.log('loading called');
       state.loading = false;
     })
   }

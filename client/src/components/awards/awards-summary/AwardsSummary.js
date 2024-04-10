@@ -5,14 +5,20 @@ import Spinner from '../../spinner/Spinner';
 import AwardsSummaryCoreTotalsRow from './AwardsSummaryCoreTotalsRow';
 import { getLocations } from '../../../utils/locationUtils';
 import AwardsSummaryUKCoreTotalsRow from './AwardsSummaryUKCoreTotalsRow';
+import AwardsSummarySpecialsRow from './AwardsSummarySpecialsRow';
 
-const locations = getLocations(); // Broken, need to use the locations from the backend
+// const locations = getLocations(); // Broken, need to use the locations from the backend
 
 let cumalitiveTotalsSum = 0;
 
 const AwardsSummary = () => {
     const awardsData = useSelector((state) => state.awards);
     const isLoading = useSelector((state) => state.awards.loading);
+
+    const locations = useSelector((state) => state.awards.locations);
+    const specialLocations = useSelector((state) => state.awards.specialLocations);
+
+    console.log('locationds = ', locations);
 
     const dispatch = useDispatch();
 
@@ -27,7 +33,7 @@ const AwardsSummary = () => {
             dispatch(fetchData()).finally(() => {
                 setTimeout(() => {
                     setSpinnerComplete(true);
-                }, 750);
+                }, 500);
             })
         }
     }, []);
@@ -113,7 +119,10 @@ const AwardsSummary = () => {
                         <tbody>
                             {
                                 locations.map((location, index) => {
-                                    return <AwardsSummaryCoreTotalsRow targetsData={awardsData.targets} filteredTotals={generateFilteredTotals(location)} cumalitiveTotal={generateCumalitiveTotals(location)} locationRef={location} key={index} />
+                                    if(location !== "M&E" && location !== "Special Projects"){
+                                        return <AwardsSummaryCoreTotalsRow targetsData={awardsData.targets} filteredTotals={generateFilteredTotals(location)} cumalitiveTotal={generateCumalitiveTotals(location)} locationRef={location} key={index} />
+                                    }
+                                    return null;
                                 })
                             }
                             {/* Totals below here core total is exactly that - need a function to loop each branch and each month and get a sum for each of the months */}
@@ -134,56 +143,17 @@ const AwardsSummary = () => {
                                     {/* // here is where the targets go */}
                                     £1,200,000
                                 </td>
-                                <td>121%</td>
-                            </tr>
-                            <tr className='bold-cells'>
-                                <td>Special Projects</td>
-                                <td>£1,000,500</td>
-                                <td>£1,000,500</td>
-                                <td>£1,000,500</td>
-                                <td>£1,000,500</td>
-                                <td>£1,000,500</td>
-                                <td>£1,000,500</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>£29,011</td>
-                                <td>
-                                    £100,000
-                                </td>
-                                <td>
-                                    £1,200,000
-                                </td>
+                                <td></td>
                                 <td>121%</td>
                             </tr>
 
-                            <tr className='bold-cells'>
-                                <td>M&E</td>
-                                <td>£750,000</td>
-                                <td>£750,000</td>
-                                <td>£750,000</td>
-                                <td>£750,000</td>
-                                <td>£750,000</td>
-                                <td>£750,000</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>£29,011</td>
-                                <td>
-                                    £100,000
-                                </td>
-                                <td>
-                                    £1,200,000
-                                </td>
-                                <td>121%</td>
-                            </tr>
-
+                            {
+                                specialLocations.map((location, index) =>{
+                                    console.log('special locations = ', location);
+                                    return <AwardsSummarySpecialsRow targetsData={awardsData.targets} filteredTotals={generateFilteredTotals(location)} cumalitiveTotal={generateCumalitiveTotals(location)} locationRef={location} key={index}/>
+                                })
+                            }
+                            
                             <tr className='bold-cells'>
                                 <td>Total</td>
                                 <td>£500,000</td>
@@ -205,6 +175,7 @@ const AwardsSummary = () => {
                                 <td>
                                     £1,200,000
                                 </td>
+                                <td></td>
                                 <td>121%</td>
                             </tr>
                         </tbody>

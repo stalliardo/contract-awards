@@ -16,7 +16,7 @@ export const generateCoreTotalsData = (data) => {
     data.forEach((item) => {
         let sum = 0;
 
-        if(item.items.length){
+        if (item.items.length) {
             item.items.forEach((i) => {
                 sum += parseInt(i.core);
             })
@@ -33,21 +33,31 @@ export const generateCoreTotalsData = (data) => {
 }
 
 export const generateUkCoreTotals = (data) => {
-    const totals = [];
+    const totals = {
+        uk: [],
+        specials: []
+    };
     const monthsInFinancialOrder = getMonthsInFinancialOrder();
 
     monthsInFinancialOrder.forEach((month) => {
         let ukCoreTotal = 0;
+        let specialsTotal = 0;
 
         data.forEach((item) => {
-            if(item.month === month) {
-                ukCoreTotal += item.sum;
+            if (item.month === month) {
+                if (item.location !== "Special Projects" && item.location !== "M&E") {
+                    ukCoreTotal += item.sum;
+                } else {
+                    specialsTotal += item.sum;
+                }
             }
         })
 
-        totals.push({month, ukCoreTotal});
+        totals.specials.push({ month, specialsTotal });
+        totals.uk.push({ month, ukCoreTotal });
 
         ukCoreTotal = 0;
+        specialsTotal = 0;
     })
 
     return totals;
@@ -55,7 +65,7 @@ export const generateUkCoreTotals = (data) => {
 
 export const generateTargetAmountToDate = (annualAmount, cumalitiveTotal) => {
     if (annualAmount === 0) return 0;
-  
+
 
     const daysSinceOct01 = getDaysSinceOct01();
 
@@ -68,9 +78,9 @@ export const generateTargetAmountToDate = (annualAmount, cumalitiveTotal) => {
 
 export const generateTargetAcheivedPercentage = (annualAmount, cumalitiveTotal) => {
 
-   
+
     if (annualAmount === 0) return 0;
-  
+
     const targetToDate = generateTargetAmountToDate(annualAmount, cumalitiveTotal);
 
 
@@ -78,7 +88,7 @@ export const generateTargetAcheivedPercentage = (annualAmount, cumalitiveTotal) 
     console.log('targetachievcn = ', targetAchieved);
 
     return Math.round(targetAchieved);
-    
+
     // Get the number of days since oct01
 }
 
@@ -88,7 +98,7 @@ export const generateTargetAcheivedPercentage = (annualAmount, cumalitiveTotal) 
 // 2: get the days since oct1 to current data
 // 3: 1 * 2 = the percentage
 
-// example 
+// example
 // annual = 1,200,000
 // days = 365
 // dayssince oct 01 = 150

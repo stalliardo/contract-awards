@@ -2,7 +2,7 @@ import React from 'react'
 
 const AwardsSummaryUKCoreTotalsRow = ({data}) => {
   return (
-    <td>£{data.ukCoreTotal}</td>
+    <td>£{data.ukCoreTotal.toLocaleString()}</td>
   )
 }
 

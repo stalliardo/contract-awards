@@ -6,7 +6,7 @@ import AwardsSummaryCoreTotalsRow from './AwardsSummaryCoreTotalsRow';
 import { getLocations } from '../../../utils/locationUtils';
 import AwardsSummaryUKCoreTotalsRow from './AwardsSummaryUKCoreTotalsRow';
 
-const locations = getLocations();
+const locations = getLocations(); // Broken, need to use the locations from the backend
 
 let cumalitiveTotalsSum = 0;
 
@@ -89,7 +89,7 @@ const AwardsSummary = () => {
                                 {/* Test positioning below */}
                                 <th>Cumalitive Totals</th>
 
-                                <th colSpan="2">
+                                <th colSpan="3">
                                     <div className='cumulative-totals-container'>
                                         <div>
                                             <h3>Targets</h3>
@@ -100,6 +100,9 @@ const AwardsSummary = () => {
                                             </div>
                                             <div>
                                                 Annual
+                                            </div>
+                                            <div>
+                                                To Date
                                             </div>
                                         </div>
                                     </div>
@@ -123,7 +126,7 @@ const AwardsSummary = () => {
                                 })
                             }
                                 {/* Not sure about this below */}
-                                <td>£{cumalitiveTotalsSum}</td>
+                                <td>£{cumalitiveTotalsSum.toLocaleString()}</td>
                                 <td>
                                     £100,000
                                 </td>

@@ -30,8 +30,6 @@ const TargtesTableRow = ({ location, target, targetCategory, data }) => {
 
             let targetPostData = {}
 
-            console.log('targetState = = = = =', targetState);
-
             if (targetState._id) {
                 targetPostData = {
                     category: targetCategory,

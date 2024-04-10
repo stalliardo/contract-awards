@@ -23,8 +23,6 @@ const FirstAwardsEntry = ({ awardsTableId, location, onItemAdded }) => {
         data.location = location;
 
         axios.post("/api/awards-diary/add-item", data).then((response) => {
-            console.log('response from adding item = ', response);
-
             onItemAdded(response.data);
         }).catch((error) => {
             console.log('Error adding item: ', error);

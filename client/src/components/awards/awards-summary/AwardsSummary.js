@@ -3,22 +3,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchData } from '../../../redux/features/awards/awardsThunks';
 import Spinner from '../../spinner/Spinner';
 import AwardsSummaryCoreTotalsRow from './AwardsSummaryCoreTotalsRow';
-import { getLocations } from '../../../utils/locationUtils';
 import AwardsSummaryUKCoreTotalsRow from './AwardsSummaryUKCoreTotalsRow';
 import AwardsSummarySpecialsRow from './AwardsSummarySpecialsRow';
-
-// const locations = getLocations(); // Broken, need to use the locations from the backend
+import { generateTargetAcheivedPercentage, generateTargetAmountToDate } from '../../../utils/financialTotals';
 
 let cumalitiveTotalsSum = 0;
 
 const AwardsSummary = () => {
     const awardsData = useSelector((state) => state.awards);
     const isLoading = useSelector((state) => state.awards.loading);
-
     const locations = useSelector((state) => state.awards.locations);
     const specialLocations = useSelector((state) => state.awards.specialLocations);
-
-    console.log('locationds = ', locations);
 
     const dispatch = useDispatch();
 
@@ -39,7 +34,7 @@ const AwardsSummary = () => {
     }, []);
 
     useEffect(() => {
-        if(!awardsData.loading) {
+        if (!awardsData.loading) {
             // const filteredTotals = coreTotals.filter((totals) => totals.location === locationRef);
             // const cumalitiveTotal = filteredTotals.reduce((total, currentItem) => total + currentItem.sum, 0);
         }
@@ -52,16 +47,10 @@ const AwardsSummary = () => {
 
     const generateCumalitiveTotals = (location) => {
         const filteredTotals = generateFilteredTotals(location);
-
         const sum = filteredTotals.reduce((total, currentItem) => total + currentItem.sum, 0);
-        
+
         cumalitiveTotalsSum += sum;
-
         return sum;
-    }
-
-    const generateUkCoreTotals = () => {
-
     }
 
     return (
@@ -69,9 +58,6 @@ const AwardsSummary = () => {
             <div className='spinner-container-page'><Spinner classes="page" text="Generating Summary Table...." /></div>
             :
             <div className='awards-page-container'>
-                {
-                    console.log('CALLEDLELDLEDL')
-                }
                 <div className='awards-page-table-container'>
                     <h3>Contract Awards Summary (TBC)</h3>
 
@@ -119,7 +105,7 @@ const AwardsSummary = () => {
                         <tbody>
                             {
                                 locations.map((location, index) => {
-                                    if(location !== "M&E" && location !== "Special Projects"){
+                                    if (location !== "M&E" && location !== "Special Projects") {
                                         return <AwardsSummaryCoreTotalsRow targetsData={awardsData.targets} filteredTotals={generateFilteredTotals(location)} cumalitiveTotal={generateCumalitiveTotals(location)} locationRef={location} key={index} />
                                     }
                                     return null;
@@ -128,32 +114,30 @@ const AwardsSummary = () => {
                             {/* Totals below here core total is exactly that - need a function to loop each branch and each month and get a sum for each of the months */}
                             <tr className='bold-cells'>
                                 <td>UK Core Total</td>
-                               
-                            {
-                                awardsData.ukCoreTotals.map((data, index) => {
-                                    return <AwardsSummaryUKCoreTotalsRow data={data} key={index}/>
-                                })
-                            }
+
+                                {
+                                    awardsData.ukCoreTotals.map((data, index) => {
+                                        return <AwardsSummaryUKCoreTotalsRow data={data} key={index} />
+                                    })
+                                }
                                 {/* Not sure about this below */}
                                 <td>£{cumalitiveTotalsSum.toLocaleString()}</td>
                                 <td>
-                                    £100,000
+                                    £{awardsData.monthlyTargetTotal.toLocaleString()}
                                 </td>
                                 <td>
-                                    {/* // here is where the targets go */}
-                                    £1,200,000
+                                    £{(awardsData.monthlyTargetTotal * 12).toLocaleString()}
                                 </td>
-                                <td></td>
-                                <td>121%</td>
+                                <td>£{generateTargetAmountToDate((awardsData.monthlyTargetTotal * 12), cumalitiveTotalsSum).toLocaleString()}</td>
+                                <td>{generateTargetAcheivedPercentage(awardsData.monthlyTargetTotal * 12, cumalitiveTotalsSum)}%</td>
                             </tr>
 
                             {
-                                specialLocations.map((location, index) =>{
-                                    console.log('special locations = ', location);
-                                    return <AwardsSummarySpecialsRow targetsData={awardsData.targets} filteredTotals={generateFilteredTotals(location)} cumalitiveTotal={generateCumalitiveTotals(location)} locationRef={location} key={index}/>
+                                specialLocations.map((location, index) => {
+                                    return <AwardsSummarySpecialsRow targetsData={awardsData.targets} filteredTotals={generateFilteredTotals(location)} cumalitiveTotal={generateCumalitiveTotals(location)} locationRef={location} key={index} />
                                 })
                             }
-                            
+
                             <tr className='bold-cells'>
                                 <td>Total</td>
                                 <td>£500,000</td>

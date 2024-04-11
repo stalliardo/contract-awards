@@ -72,11 +72,10 @@ export const generateUKTargetTotals = (data) => {
 export const generateSpecialTargetTotals = (data) => {
     const filteredData = data.filter((item) => item.location === "Special Projects" || item.location === "M&E");
 
-    console.log('Filtered = = = ',  filteredData);
     return filteredData.reduce((total, target) => total + parseInt(target.targetValue), 0);
 }
 
-export const generateTargetAmountToDate = (annualAmount, cumalitiveTotal) => {
+export const generateTargetAmountToDate = (annualAmount) => {
     if (annualAmount === 0) return 0;
 
     const daysSinceOct01 = getDaysSinceOct01();
@@ -96,5 +95,5 @@ export const generateTargetAcheivedPercentage = (annualAmount, cumalitiveTotal) 
         return targetAchieved.toFixed(2);
     }
 
-    return Math.round(targetAchieved);
+    return targetAchieved.toFixed(2)
 }

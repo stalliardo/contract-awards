@@ -242,4 +242,3 @@ const AwardsSummary = () => {
 }
 
 export default AwardsSummary
-

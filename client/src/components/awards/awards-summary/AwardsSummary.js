@@ -7,6 +7,7 @@ import AwardsSummaryUKCoreTotalsRow from './AwardsSummaryUKCoreTotalsRow';
 import AwardsSummarySpecialsRow from './AwardsSummarySpecialsRow';
 import { generateTargetAcheivedPercentage, generateTargetAmountToDate } from '../../../utils/financialTotals';
 import AwardsSummaryTotalsRow from './AwardsSummaryTotalsRow';
+import AwardsSummaryMonthlyPerformanceRow from './AwardsSummaryMonthlyPerformanceRow';
 
 let cumalitiveTotalsSum = 0;
 
@@ -182,18 +183,7 @@ const AwardsSummary = () => {
                         <tbody>
                             <tr>
                                 <td>Plus/Minus</td>
-                                <td>£300,000</td>
-                                <td>£300,000</td>
-                                <td>£300,000</td>
-                                <td>£300,000</td>
-                                <td>£300,000</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <AwardsSummaryMonthlyPerformanceRow monthlyCoreTotals={awardsData.ukAndSpecialCoreTotals} monthlyTargetTotal={awardsData.ukAndSpecialTargetTotal}/>
                             </tr>
                         </tbody>
                     </table>

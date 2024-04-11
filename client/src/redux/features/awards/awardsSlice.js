@@ -11,6 +11,7 @@ const initialState = {
   ukTargetTotal: 0,
   specialsTargetTotal: 0,
   ukAndSpecialTargetTotal: 0,
+  ukAndSpecialCoreTotals: [],
   targets: [],
   locations: [],
   specialLocations: [],
@@ -26,6 +27,18 @@ export const awardsSlice = createSlice({
     setLoading: (state, action) => {
       state.loading = action.payload
     },
+
+    getUkAndSpecialTotals: (state) => {
+      const monthlyTotals = []
+
+      state.ukCoreTotals.forEach((total, i) => {
+        const monthlyTotalsSum = (total.ukCoreTotal + state.specialCoreTotals[i].specialsTotal);
+         monthlyTotals.push({column: total.month, sum: monthlyTotalsSum})
+       })
+
+
+      //  return monthlyTotals;
+    }
   },
 
   extraReducers: (builder) => {
@@ -52,11 +65,24 @@ export const awardsSlice = createSlice({
       state.specialLocations = formattedSpecialTotals;
 
       state.loading = false;
+
+
+      const monthlyTotals = []
+
+      state.ukCoreTotals.forEach((total, i) => {
+        const monthlyTotalsSum = (total.ukCoreTotal + state.specialCoreTotals[i].specialsTotal);
+         monthlyTotals.push({column: total.month, sum: monthlyTotalsSum})
+       })
+
+       console.log('monthy tots = ', monthlyTotals);
+
+       state.ukAndSpecialCoreTotals = monthlyTotals;
+
     })
   }
 })
 
 // Action creators are generated for each case reducer function
-export const { setLoading, getData } = awardsSlice.actions;
+export const { getUkAndSpecialTotals, setLoading, getData } = awardsSlice.actions;
 
 export default awardsSlice.reducer;

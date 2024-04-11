@@ -18,3 +18,8 @@ export const TARGET_CATEGORIES = {
     CONTRACT_AWARDS: "contract-awards",
     TENDERS_SUBMITTED: "tenders-submitted"
 }
+
+export const COLOURS = {
+    GREEN: "#30c924",
+    RED: "red"
+}

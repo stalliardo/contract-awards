@@ -8,6 +8,7 @@ import AwardsSummarySpecialsRow from './AwardsSummarySpecialsRow';
 import { generateTargetAcheivedPercentage, generateTargetAmountToDate } from '../../../utils/financialTotals';
 import AwardsSummaryTotalsRow from './AwardsSummaryTotalsRow';
 import AwardsSummaryMonthlyPerformanceRow from './AwardsSummaryMonthlyPerformanceRow';
+import { COLOURS } from '../../../utils/constants';
 
 let cumalitiveTotalsSum = 0;
 
@@ -127,7 +128,9 @@ const AwardsSummary = () => {
                                     £{(awardsData.ukTargetTotal * 12).toLocaleString()}
                                 </td>
                                 <td>£{generateTargetAmountToDate((awardsData.ukTargetTotal * 12), cumalitiveTotalsSum).toLocaleString()}</td>
-                                <td>{generateTargetAcheivedPercentage(awardsData.ukTargetTotal * 12, cumalitiveTotalsSum)}%</td>
+                                <td style={{color: generateTargetAcheivedPercentage(awardsData.ukTargetTotal * 12, cumalitiveTotalsSum) >= 100 ? COLOURS.GREEN : COLOURS.RED}}>
+                                    {generateTargetAcheivedPercentage(awardsData.ukTargetTotal * 12, cumalitiveTotalsSum)}%
+                                </td>
                             </tr>
 
                             {
@@ -231,4 +234,9 @@ const AwardsSummary = () => {
     )
 }
 
-export default AwardsSummary
+export default AwardsSummary;
+
+
+// NTH's
+
+    // Can click a locations total value and be transistioned to the corresponing awards form

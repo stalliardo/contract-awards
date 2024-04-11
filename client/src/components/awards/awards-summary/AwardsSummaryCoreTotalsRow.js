@@ -17,6 +17,9 @@ const AwardsSummaryCoreTotalsRow = ({ targetsData, cumalitiveTotal, locationRef,
         return 0;
     }
 
+    const targetPercentageAcheived = generateTargetAcheivedPercentage(formattedTargetValue() * 12, cumalitiveTotal);
+    const targetPercentageAcheivedColour = parseFloat(targetPercentageAcheived) >= 100 ? COLOURS.GREEN : COLOURS.RED;
+
     return (
         <tr>
             <td>{locationRef}</td>
@@ -45,7 +48,7 @@ const AwardsSummaryCoreTotalsRow = ({ targetsData, cumalitiveTotal, locationRef,
             <td>£{generateTargetAmountToDate(formattedTargetValue() * 12, cumalitiveTotal).toLocaleString()}</td>
 
             {/* // TODO below value */}
-            <td>{generateTargetAcheivedPercentage(formattedTargetValue() * 12, cumalitiveTotal)}%</td>
+            <td style={{color: targetPercentageAcheivedColour}}>{targetPercentageAcheived}%</td>
         </tr>
     )
 }

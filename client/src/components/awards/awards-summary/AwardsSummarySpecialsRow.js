@@ -1,6 +1,7 @@
 import React from 'react';
 import { getMonthsInFinancialOrder } from '../../../utils/DateUtils';
 import { generateTargetAcheivedPercentage, generateTargetAmountToDate } from '../../../utils/financialTotals';
+import { COLOURS } from '../../../utils/constants';
 
 const monthsInFinancialOrder = getMonthsInFinancialOrder();
 
@@ -14,6 +15,9 @@ const AwardsSummarySpecialsRow = ({ coreTotals, targetsData, cumalitiveTotal, lo
 
         return 0;
     }
+
+    const targetAchievedPrecentage = generateTargetAcheivedPercentage(formattedTargetValue() * 12, cumalitiveTotal);
+    const colour = targetAchievedPrecentage >= 100 ? COLOURS.GREEN : COLOURS.RED;
 
     return (
         <tr>
@@ -39,7 +43,7 @@ const AwardsSummarySpecialsRow = ({ coreTotals, targetsData, cumalitiveTotal, lo
             <td>£{generateTargetAmountToDate(formattedTargetValue() * 12, cumalitiveTotal).toLocaleString()}</td>
 
             {/* // TODO below value */}
-            <td>{generateTargetAcheivedPercentage(formattedTargetValue() * 12, cumalitiveTotal)}%</td>
+            <td style={{color: colour}}>{targetAchievedPrecentage}%</td>
         </tr>
     )
 }

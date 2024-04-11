@@ -216,3 +216,5 @@ export default Admin;
   // Will need to amend the awardsDiary comp to display either awwards data or submitted tenders data, same layout just differenet data and calcualtions, because od the calculations might be easier to copy and amend the awardDiaryTable comp
 
   // Adding location doesnt reflect in the available options in the users table
+
+  // Core value in the awards table awards page needs to formatted: toLocaleString

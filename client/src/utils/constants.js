@@ -20,6 +20,6 @@ export const TARGET_CATEGORIES = {
 }
 
 export const COLOURS = {
-    GREEN: "#30c924",
+    GREEN: "#299e20",
     RED: "red"
 }

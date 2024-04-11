@@ -1,11 +1,12 @@
 import React from 'react';
 import { getMonthsInFinancialOrder } from '../../../utils/DateUtils';
 import { generateTargetAcheivedPercentage, generateTargetAmountToDate } from '../../../utils/financialTotals';
+import { COLOURS } from '../../../utils/constants';
 
 const monthsInFinancialOrder = getMonthsInFinancialOrder();
 
 const AwardsSummaryCoreTotalsRow = ({ targetsData, cumalitiveTotal, locationRef, filteredTotals }) => {
-
+    // TODO - does this need to extracted out into a util?
     const formattedTargetValue = () => {
         const validTarget = targetsData.find((t) => t.location === locationRef);
 
@@ -21,7 +22,11 @@ const AwardsSummaryCoreTotalsRow = ({ targetsData, cumalitiveTotal, locationRef,
             <td>{locationRef}</td>
             {
                 monthsInFinancialOrder.map((month, index) => {
-                    return <td key={index}>£{filteredTotals.find((total) => total.month === month).sum.toLocaleString()}</td>
+                    const total = filteredTotals.find((total) => total.month === month).sum;
+                    const target = parseInt(formattedTargetValue());
+                    const colour =  total >= target ? COLOURS.GREEN : COLOURS.RED;
+
+                    return <td style={{color: colour}} key={index}>£{total.toLocaleString()}</td>
                 })
             }
 

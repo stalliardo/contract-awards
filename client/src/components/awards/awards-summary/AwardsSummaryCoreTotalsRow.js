@@ -4,7 +4,8 @@ import { generateTargetAcheivedPercentage, generateTargetAmountToDate } from '..
 
 const monthsInFinancialOrder = getMonthsInFinancialOrder();
 
-const AwardsSummaryCoreTotalsRow = ({ coreTotals, targetsData, cumalitiveTotal, locationRef, filteredTotals }) => {
+const AwardsSummaryCoreTotalsRow = ({ targetsData, cumalitiveTotal, locationRef, filteredTotals }) => {
+
     const formattedTargetValue = () => {
         const validTarget = targetsData.find((t) => t.location === locationRef);
 

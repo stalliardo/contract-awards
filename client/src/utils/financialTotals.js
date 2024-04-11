@@ -63,8 +63,17 @@ export const generateUkCoreTotals = (data) => {
     return totals;
 }
 
-export const generateTargetTotals = (data) => {
-    return data.reduce((total, target) => total + parseInt(target.targetValue), 0);
+export const generateUKTargetTotals = (data) => {
+    const filteredData = data.filter((item) => item.location !== "Special Projects" && item.location !== "M&E");
+
+    return filteredData.reduce((total, target) => total + parseInt(target.targetValue), 0);
+}
+
+export const generateSpecialTargetTotals = (data) => {
+    const filteredData = data.filter((item) => item.location === "Special Projects" || item.location === "M&E");
+
+    console.log('Filtered = = = ',  filteredData);
+    return filteredData.reduce((total, target) => total + parseInt(target.targetValue), 0);
 }
 
 export const generateTargetAmountToDate = (annualAmount, cumalitiveTotal) => {

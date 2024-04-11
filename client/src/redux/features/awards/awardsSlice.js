@@ -1,13 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchData } from './awardsThunks';
-import { generateCoreTotalsData, generateSpecialsTotals, generateUkCoreTotals, generateTargetTotals } from '../../../utils/financialTotals';
+import { generateCoreTotalsData, generateUKTargetTotals, generateUkCoreTotals, generateTargetTotals, generateSpecialTargetTotals } from '../../../utils/financialTotals';
 import { TARGET_CATEGORIES } from '../../../utils/constants';
 
 const initialState = {
   data: [],
   coreTotals: [],
   ukCoreTotals: [],
-  monthlyTargetTotal: 0,
+  specialCoreTotals: [],
+  ukTargetTotal: 0,
+  specialsTargetTotal: 0,
+  ukAndSpecialTargetTotal: 0,
   targets: [],
   locations: [],
   specialLocations: [],
@@ -35,12 +38,16 @@ export const awardsSlice = createSlice({
       const filteredSpecialLocations = action.payload.locationsData.filter((location) => location.name === "M&E" || location.name === "Special Projects")
       const formattedSpecialTotals = filteredSpecialLocations.map((item) => item.name); 
 
-      const generatedTargetMonthlyTotal = generateTargetTotals(filteredTargets);
+      const generatedUkTargetTotal = generateUKTargetTotals(filteredTargets);
+      const generatedSpecialTargetTotals = generateSpecialTargetTotals(filteredTargets);
 
       state.targets = filteredTargets;
       state.coreTotals = generatedCoreTotals;
       state.ukCoreTotals = generatedUKCoreTotals.uk;
-      state.monthlyTargetTotal = generatedTargetMonthlyTotal;
+      state.specialCoreTotals = generatedUKCoreTotals.specials;
+      state.ukTargetTotal = generatedUkTargetTotal;
+      state.specialsTargetTotal = generatedSpecialTargetTotals;
+      state.ukAndSpecialTargetTotal = generatedUkTargetTotal + generatedSpecialTargetTotals;
       state.locations = formattedLocations;
       state.specialLocations = formattedSpecialTotals;
 

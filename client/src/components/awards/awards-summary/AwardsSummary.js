@@ -6,6 +6,7 @@ import AwardsSummaryCoreTotalsRow from './AwardsSummaryCoreTotalsRow';
 import AwardsSummaryUKCoreTotalsRow from './AwardsSummaryUKCoreTotalsRow';
 import AwardsSummarySpecialsRow from './AwardsSummarySpecialsRow';
 import { generateTargetAcheivedPercentage, generateTargetAmountToDate } from '../../../utils/financialTotals';
+import AwardsSummaryTotalsRow from './AwardsSummaryTotalsRow';
 
 let cumalitiveTotalsSum = 0;
 
@@ -78,9 +79,7 @@ const AwardsSummary = () => {
                                 <th>Jul-24</th>
                                 <th>Aug-24</th>
                                 <th>Sep-24</th>
-                                {/* Test positioning below */}
                                 <th>Cumalitive Totals</th>
-
                                 <th colSpan="3">
                                     <div className='cumulative-totals-container'>
                                         <div>
@@ -114,22 +113,20 @@ const AwardsSummary = () => {
                             {/* Totals below here core total is exactly that - need a function to loop each branch and each month and get a sum for each of the months */}
                             <tr className='bold-cells'>
                                 <td>UK Core Total</td>
-
                                 {
                                     awardsData.ukCoreTotals.map((data, index) => {
                                         return <AwardsSummaryUKCoreTotalsRow data={data} key={index} />
                                     })
                                 }
-                                {/* Not sure about this below */}
                                 <td>£{cumalitiveTotalsSum.toLocaleString()}</td>
                                 <td>
-                                    £{awardsData.monthlyTargetTotal.toLocaleString()}
+                                    £{awardsData.ukTargetTotal.toLocaleString()}
                                 </td>
                                 <td>
-                                    £{(awardsData.monthlyTargetTotal * 12).toLocaleString()}
+                                    £{(awardsData.ukTargetTotal * 12).toLocaleString()}
                                 </td>
-                                <td>£{generateTargetAmountToDate((awardsData.monthlyTargetTotal * 12), cumalitiveTotalsSum).toLocaleString()}</td>
-                                <td>{generateTargetAcheivedPercentage(awardsData.monthlyTargetTotal * 12, cumalitiveTotalsSum)}%</td>
+                                <td>£{generateTargetAmountToDate((awardsData.ukTargetTotal * 12), cumalitiveTotalsSum).toLocaleString()}</td>
+                                <td>{generateTargetAcheivedPercentage(awardsData.ukTargetTotal * 12, cumalitiveTotalsSum)}%</td>
                             </tr>
 
                             {
@@ -140,32 +137,27 @@ const AwardsSummary = () => {
 
                             <tr className='bold-cells'>
                                 <td>Total</td>
-                                <td>£500,000</td>
-                                <td>£500,000</td>
-                                <td>£500,000</td>
-                                <td>£500,000</td>
-                                <td>£500,000</td>
-                                <td>£500,000</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>£29,011</td>
-                                <td>
-                                    £100,000
-                                </td>
-                                <td>
-                                    £1,200,000
-                                </td>
-                                <td></td>
-                                <td>121%</td>
+                                <AwardsSummaryTotalsRow 
+                                    ukCoreTotals={awardsData.ukCoreTotals} 
+                                    specialCoreTotals={awardsData.specialCoreTotals} 
+                                    cumalativeTotals={cumalitiveTotalsSum} 
+                                    ukAndSpecialTargetTotal={awardsData.ukAndSpecialTargetTotal}
+                                />
                             </tr>
                         </tbody>
                     </table>
                     <p>% T A = Percentage of Target Achieved (TBC)</p>
                 </div>
+
+
+
+
+
+
+
+
+
+
                 {/* Temporay tables for demo purposes only TO BE REMOVED */}
                 <div className='awards-page-table-container'>
                     <h3>Company Performance</h3>
@@ -206,6 +198,7 @@ const AwardsSummary = () => {
                         </tbody>
                     </table>
                 </div>
+                
                 <div className='awards-page-table-container'>
                     <table id="awards-table">
                         <thead>
@@ -249,3 +242,4 @@ const AwardsSummary = () => {
 }
 
 export default AwardsSummary
+

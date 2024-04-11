@@ -10,6 +10,7 @@ import AwardsSummaryTotalsRow from './AwardsSummaryTotalsRow';
 import AwardsSummaryMonthlyPerformanceRow from './AwardsSummaryMonthlyPerformanceRow';
 import { COLOURS } from '../../../utils/constants';
 import AwardsSummaryCumalitivePerformanceRow from './AwardsSummaryCumalitivePerformanceRow';
+import { generateMonthsForCurrentYear } from '../../../utils/DateUtils';
 
 let cumalitiveTotalsSum = 0;
 
@@ -23,6 +24,8 @@ const AwardsSummary = () => {
 
     const [spinnerComplete, setSpinnerComplete] = useState(false);
     const showUI = !isLoading && spinnerComplete;
+
+    const months = generateMonthsForCurrentYear()
 
     useEffect(() => {
         if (awardsData.coreTotals.length > 0) {
@@ -153,14 +156,6 @@ const AwardsSummary = () => {
                     </table>
                     <p>% T A = Percentage of Target Achieved (TBC)</p>
                 </div>
-
-
-
-
-
-
-
-
 
 
                 {/* Temporay tables for demo purposes only TO BE REMOVED */}

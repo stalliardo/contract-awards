@@ -9,5 +9,17 @@ export const LOCATIONS = {
     LEEDS: "Leeds",
     LONDON: "London",
     MANCHESTER: "Manchester",
-    NEWCASTLE: "Newcastle"
+    NEWCASTLE: "Newcastle",
+    SPECIAL_PROJECTS: "Special Projects",
+    M_AND_E: "M&E"
+}
+
+export const TARGET_CATEGORIES = {
+    CONTRACT_AWARDS: "contract-awards",
+    TENDERS_SUBMITTED: "tenders-submitted"
+}
+
+export const COLOURS = {
+    GREEN: "#299e20",
+    RED: "red"
 }

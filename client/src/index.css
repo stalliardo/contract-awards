@@ -110,22 +110,14 @@ button {
   border-radius: 3px;
   padding: 4px 8px;
   border: none;
-  background-color: #666666;
+  background-color: rgb(0, 132, 255);
   color: white;
   letter-spacing: 1px;
-  height: 31px;
+  height: 24px;
 
   &:hover {
     cursor: pointer;
-    background-color: #aaaaaa;
-  }
-}
-
-button.blue {
-  background-color: rgb(0, 132, 255);
-
-  &:hover {
-    background-color: rgb(155, 218, 255);
+    background-color: rgb(155, 218, 255);;
   }
 }
 
@@ -146,7 +138,7 @@ button.red {
 }
 
 button:disabled {
-  background-color: #666666;
+  background-color: #9b9b9b;
   &:hover {
     background-color: #a0a0a0;
     cursor: not-allowed;
@@ -163,4 +155,15 @@ input {
 .spinner-container {
   margin: auto;
   width: fit-content;
+}
+
+.blackout-overlay {
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 0.7); /* color */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vw;
+  /* display: none; */
 }

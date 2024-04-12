@@ -5,8 +5,7 @@ import { COLOURS } from '../../../utils/constants';
 
 const monthsInFinancialOrder = getMonthsInFinancialOrder();
 
-const AwardsSummaryCoreTotalsRow = ({ targetsData, cumalitiveTotal, locationRef, filteredTotals }) => {
-    // TODO - does this need to extracted out into a util?
+const AwardsSummarySpecialsRow = ({ coreTotals, targetsData, cumalitiveTotal, locationRef, filteredTotals }) => {
     const formattedTargetValue = () => {
         const validTarget = targetsData.find((t) => t.location === locationRef);
 
@@ -17,8 +16,8 @@ const AwardsSummaryCoreTotalsRow = ({ targetsData, cumalitiveTotal, locationRef,
         return 0;
     }
 
-    const targetPercentageAcheived = generateTargetAcheivedPercentage(formattedTargetValue() * 12, cumalitiveTotal);
-    const targetPercentageAcheivedColour = parseFloat(targetPercentageAcheived) >= 100 ? COLOURS.GREEN : COLOURS.RED;
+    const targetAchievedPrecentage = generateTargetAcheivedPercentage(formattedTargetValue() * 12, cumalitiveTotal);
+    const colour = targetAchievedPrecentage >= 100 ? COLOURS.GREEN : COLOURS.RED;
 
     return (
         <tr>
@@ -48,9 +47,10 @@ const AwardsSummaryCoreTotalsRow = ({ targetsData, cumalitiveTotal, locationRef,
             <td>£{generateTargetAmountToDate(formattedTargetValue() * 12, cumalitiveTotal).toLocaleString()}</td>
 
             {/* // TODO below value */}
-            <td style={{color: targetPercentageAcheivedColour}}>{targetPercentageAcheived}%</td>
+            <td style={{color: colour}}>{targetAchievedPrecentage}%</td>
         </tr>
     )
 }
 
-export default AwardsSummaryCoreTotalsRow;
+export default AwardsSummarySpecialsRow;
+

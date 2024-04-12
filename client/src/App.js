@@ -14,6 +14,9 @@ import TendersSubmitted from './routes/TendersSubmitted';
 import Admin from './routes/Admin';
 
 import Navbar from './components/navbar/Navbar';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUsers } from './redux/features/users/usersThunk';
 
 const AppLayout = () => (
   <>
@@ -35,23 +38,23 @@ const router = createBrowserRouter([
         element: <Auth />
       },
       {
-        path: "/awards-form", // <- TODO
+        path: "/awards-form",
         element: <Root />
       },
       {
-        path: "/tenders-submitted", // <- TODO
+        path: "/tenders-submitted",
         element: <TendersSubmitted />
       },
       {
-        path: "/admin", // <- TODO
+        path: "/admin",
         element: <Admin />
       },
       {
-        path: "/awards-summary", // <- TODO
+        path: "/awards-summary",
         element: <AwardsSummary />
       },
       {
-        path: "/dev", // <- TODO
+        path: "/dev",
         element: <DevPage />
       }
     ]
@@ -60,6 +63,25 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+  const dispatch = useDispatch();
+  const users = useSelector((state) => state.users);
+
+  useEffect(() => {
+    // Only want this to be called once
+
+    // check if the users has data from the store
+
+    console.log('user.data.length = ', users.data.length);
+
+    if(users.data.length) {
+      // dont call the api
+    } else {
+      dispatch(fetchUsers());
+    }
+
+    console.log('%capp effect called, getting AD data from backend...', "color: red");
+
+  }, [])
 
   return (
    <RouterProvider router={router}/>
@@ -67,3 +89,6 @@ function App() {
 }
 
 export default App;
+
+// dispatch an event from the membersSlice
+// This will call the AD API, get all the users in the CA01, CA02 and CA03 groups

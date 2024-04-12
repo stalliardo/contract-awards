@@ -20,7 +20,6 @@ const LOCATIONS = {
   M_AND_E: "M&E"
 }
 
-// TODO
 exports.createAwardsDiary = async (req, res) => {
   console.log('Create awards diary called + data = ', req.body);
   try {
@@ -68,7 +67,6 @@ exports.getAllAwards = async (req, res) => {
   }
 }
 
-// TODO
 exports.getAllAwardsDiary = async (req, res) => {
   console.log('CALLED');
   try {

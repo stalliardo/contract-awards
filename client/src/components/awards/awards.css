@@ -15,6 +15,12 @@
     align-items: flex-end;
 }
 
+.awards-page-title-and-button.admin {
+    h3 {
+        margin-top: 0;
+    }
+}
+
 .awards-page-location-select-container {
     width: 20%;
     margin: 60px auto 0;
@@ -49,11 +55,19 @@
         display: flex;
         flex-direction: column;
         text-align: center;
+
+        h3 {
+            margin: 0 0 10px 0;
+        }
     }
 
     .cumulative-totals-m-a {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+
+        div {
+            text-align: center;
+        }
     }   
 }

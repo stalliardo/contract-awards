@@ -1,13 +1,19 @@
 // const ActiveDirectory = require("activedirectory/lib/activedirectory");
 const express = require("express");
-const ActiveDirectory = require("activedirectory");
+const ActiveDirectory = require("activedirectory2");
 const bodyParser = require("body-parser");
 const path = require("path");
+// const ADConfig = require("./server/utils/ADUtils")
 
 const db = require("./server/database/db"); // Import the database connection utility
 
 const awardsDiaryRoutes = require("./server/routes/awardsDiaryRoutes");
 const awardsDiaryItemRoutes = require("./server/routes/awardsDiaryItemRoutes");
+const locationRoutes = require("./server/routes/locationRoutes");
+const userRoutes = require("./server/routes/userRoutes");
+const ADRoutes = require("./server/routes/ADRoutes");
+const targetRoutes = require("./server/routes/targetRoutes");
+
 const { generateTableForYear } = require("./server/utils/AwardsDiaryUtils");
 
 require('dotenv').config()
@@ -21,15 +27,19 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 }));
 app.use("/api", awardsDiaryRoutes); // Will this cause issue with the "/api" call down the bottom
 app.use("/api", awardsDiaryItemRoutes);
+app.use("/api", locationRoutes);
+app.use("/api", userRoutes);
+app.use("/api", ADRoutes);
+app.use("/api", targetRoutes);
 
-// initialize active directory connection:
-var config = {
+const ADConfig = {
     url: `ldap://${process.env.DOMAIN_IP}:389`, // TODO see if i can use the secure LDAPS
     baseDN: 'dc=DAZCORP,dc=COM',
     username: 'administrator@DAZCORP.COM',
     password: process.env.DOMAIN_PASSWORD
-}  // TODO <- env variable
-var ad = new ActiveDirectory(config);
+} 
+
+var ad = new ActiveDirectory(ADConfig);
 
 app.post("/login", (req, res) => {
     console.log('POST login called');

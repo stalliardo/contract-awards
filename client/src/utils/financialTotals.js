@@ -1,4 +1,4 @@
-import { getMonthsInFinancialOrder } from "./DateUtils";
+import { getDaysSinceOct01, getMonthsInFinancialOrder } from "./DateUtils";
 
 export const getCoreTotal = (items) => {
     let sum = 0;
@@ -16,7 +16,7 @@ export const generateCoreTotalsData = (data) => {
     data.forEach((item) => {
         let sum = 0;
 
-        if(item.items.length){
+        if (item.items.length) {
             item.items.forEach((i) => {
                 sum += parseInt(i.core);
             })
@@ -33,22 +33,67 @@ export const generateCoreTotalsData = (data) => {
 }
 
 export const generateUkCoreTotals = (data) => {
-    const totals = [];
+    const totals = {
+        uk: [],
+        specials: []
+    };
     const monthsInFinancialOrder = getMonthsInFinancialOrder();
 
     monthsInFinancialOrder.forEach((month) => {
         let ukCoreTotal = 0;
+        let specialsTotal = 0;
 
         data.forEach((item) => {
-            if(item.month === month) {
-                ukCoreTotal += item.sum;
+            if (item.month === month) {
+                if (item.location !== "Special Projects" && item.location !== "M&E") {
+                    ukCoreTotal += item.sum;
+                } else {
+                    specialsTotal += item.sum;
+                }
             }
         })
 
-        totals.push({month, ukCoreTotal});
+        totals.specials.push({ month, specialsTotal });
+        totals.uk.push({ month, ukCoreTotal });
 
         ukCoreTotal = 0;
+        specialsTotal = 0;
     })
 
     return totals;
+}
+
+export const generateUKTargetTotals = (data) => {
+    const filteredData = data.filter((item) => item.location !== "Special Projects" && item.location !== "M&E");
+
+    return filteredData.reduce((total, target) => total + parseInt(target.targetValue), 0);
+}
+
+export const generateSpecialTargetTotals = (data) => {
+    const filteredData = data.filter((item) => item.location === "Special Projects" || item.location === "M&E");
+
+    return filteredData.reduce((total, target) => total + parseInt(target.targetValue), 0);
+}
+
+export const generateTargetAmountToDate = (annualAmount) => {
+    if (annualAmount === 0) return 0;
+
+    const daysSinceOct01 = getDaysSinceOct01();
+    const dailyAmount = Math.round(annualAmount / 365);
+    const targetAmountTodate = dailyAmount * daysSinceOct01;
+
+    return targetAmountTodate;
+}
+
+export const generateTargetAcheivedPercentage = (annualAmount, cumalitiveTotal) => {
+    if (annualAmount === 0) return 0;
+
+    const targetToDate = generateTargetAmountToDate(annualAmount, cumalitiveTotal);
+    const targetAchieved = 100 / targetToDate * cumalitiveTotal;
+
+    if(targetAchieved < 1 && targetAchieved > 0) {
+        return targetAchieved.toFixed(2);
+    }
+
+    return targetAchieved.toFixed(2)
 }

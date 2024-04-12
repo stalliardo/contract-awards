@@ -38,7 +38,6 @@ const AwardsTableAddRow = ({ awardsTableId, location, onItemAdded, onCancelClick
             }).finally(() => {
                 setIsLoading(false);
             })
-
             console.log('data = ', data);
         }
     }
@@ -73,7 +72,7 @@ const AwardsTableAddRow = ({ awardsTableId, location, onItemAdded, onCancelClick
                 <input type='number' name='core' value={data.core} onChange={handleChange} />
             </td>
             <td className='table-actions-cell'>
-                <button className='table-actions-cell blue' onClick={onCancelClicked}>Cancel</button>
+                <button className='table-actions-cell' onClick={onCancelClicked}>Cancel</button>
             </td>
             <td className='table-actions-cell'>
                 <button className='table-actions-cell green' disabled={!saveButtonEnabled} onClick={onSaveClicked}>
@@ -85,5 +84,3 @@ const AwardsTableAddRow = ({ awardsTableId, location, onItemAdded, onCancelClick
 }
 
 export default AwardsTableAddRow;
-
-// another consideration: the fields that are supposed to be numbers will have to be validated otherwise will mess up the calcualtions further down the road

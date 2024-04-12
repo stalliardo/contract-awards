@@ -40,7 +40,7 @@ const AwardsTableRow = ({data, onItemDeleted, onItemEdited}) => {
                 <td>{data.core}</td>
     
                 <td className='table-actions-cell'>
-                    <button className='table-actions-cell blue' onClick={onEditClicked}>Edit</button>
+                    <button className='table-actions-cell' onClick={onEditClicked}>Edit</button>
                 </td>
                 <td className='table-actions-cell'>
                     <button className='table-actions-cell red' onClick={onDeleteClicked}>Delete</button>

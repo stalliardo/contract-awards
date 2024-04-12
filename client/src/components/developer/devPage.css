@@ -2,13 +2,25 @@
     padding: 50px;
 }
 
-.dev-page-container-buttons {
+.dev-functions-container {
     display: flex;
-    width: 20%;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.dev-awards-functions-container {
+    display: flex;
+    width: 30%;
     flex-direction: column;
     margin-bottom: 100px;
+    border: 1px solid grey;
+    padding: 20px;
 
     button {
         margin-top: 10px;
     }
+}
+
+.dev-admin-functions-container {
+
 }

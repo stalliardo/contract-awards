@@ -121,7 +121,7 @@ const AwardsSummary = () => {
                                 <td>UK Core Total</td>
                                 {
                                     awardsData.ukCoreTotals.map((data, index) => {
-                                        return <AwardsSummaryUKCoreTotalsRow data={data} key={index} />
+                                        return <AwardsSummaryUKCoreTotalsRow data={data} key={index} ukTargetTotal={awardsData.ukTargetTotal}/>
                                     })
                                 }
                                 <td>£{cumalitiveTotalsSum.toLocaleString()}</td>

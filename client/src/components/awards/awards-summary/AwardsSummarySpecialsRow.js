@@ -24,7 +24,11 @@ const AwardsSummarySpecialsRow = ({ coreTotals, targetsData, cumalitiveTotal, lo
             <td>{locationRef}</td>
             {
                 monthsInFinancialOrder.map((month, index) => {
-                    return <td key={index}>£{filteredTotals.find((total) => total.month === month).sum.toLocaleString()}</td>
+                    const total = filteredTotals.find((total) => total.month === month).sum;
+                    const target = parseInt(formattedTargetValue());
+                    const colour =  total >= target ? COLOURS.GREEN : COLOURS.RED;
+
+                    return <td style={{color: colour}} key={index}>£{total.toLocaleString()}</td>
                 })
             }
 

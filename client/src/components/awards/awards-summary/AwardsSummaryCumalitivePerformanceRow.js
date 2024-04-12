@@ -1,15 +1,17 @@
 import React from 'react'
+import { COLOURS } from '../../../utils/constants';
 
 const AwardsSummaryCumalitivePerformanceRow = ({monthlyCoreTotals, monthlyTargetTotal}) => {
   const totals = generateTotals(monthlyCoreTotals, monthlyTargetTotal);
 
-  return totals.map((total) => {
-    return <td>{(total.sum).toLocaleString()}</td>
+  return totals.map((total, i) => {
+    return <td key={i} style={{color: parseInt(total.sum) >= 0 ? COLOURS.GREEN : COLOURS.RED}}>
+      £{(total.sum).toLocaleString()}
+      </td>
   })
 }
 
 export default AwardsSummaryCumalitivePerformanceRow;
-  
   const generateTotals = (monthlyCoreTotals, monthlyTargetTotal) => {
     const totals = []
 
@@ -26,11 +28,10 @@ export default AwardsSummaryCumalitivePerformanceRow;
           sumCounter += monthlyCoreTotals[i - x].sum;
         }
 
-        const result = (sumCounter - monthlyTargetTotal) * (i + 1);
+        const result = sumCounter - monthlyTargetTotal * (i + 1);
 
         totals.push({column: monthlyCoreTotals[i].column, sum: result})
         sumCounter = 0;
-
       }
     }
 

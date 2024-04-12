@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import Spinner from '../../spinner/Spinner';
 
-import { addData } from '../../../redux/features/awards/awardsThunks';
+import { addData, editItem } from '../../../redux/features/awards/awardsThunks';
 
 const AwardsTableAddRow = ({ awardsTableId, location, month, onItemAdded, onCancelClicked, dataFromEdit }) => {
     const [data, setData] = useState(dataFromEdit ?? { contractNumber: "", project: "", programme: "", contractor: "", region: "", core: "", location: "", month: "" }); // Use data passed in or defaults
@@ -37,14 +37,14 @@ const AwardsTableAddRow = ({ awardsTableId, location, month, onItemAdded, onCanc
             })
 
         } else { // Edit
-            axios.patch(`/api/awards-diary/edit-item`, data).then(() => {
-                onItemAdded(data);
+            dispatch(editItem({data, month, location, previousCoreValue: dataFromEdit.core})).unwrap().then((response) => {
+                console.log('response from unwrap = ', response);
+                onItemAdded(response);
             }).catch((error) => {
                 console.log('Error adding item: ', error);
             }).finally(() => {
                 setIsLoading(false);
             })
-            console.log('data = ', data);
         }
     }
 

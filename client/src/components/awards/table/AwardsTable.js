@@ -147,7 +147,7 @@ const AwardsTable = () => {
                                     {
                                         filteredData.items && filteredData.items.length ?
                                             filteredData.items.map((data) => (
-                                                <AwardsTableRow data={data} key={data._id} onItemDeleted={itemDeleted} onItemEdited={onItemEdited} />
+                                                <AwardsTableRow data={data} key={data._id} onItemDeleted={itemDeleted} onItemEdited={onItemEdited} location={location} month={month}/>
                                             ))
                                             : null
                                     }

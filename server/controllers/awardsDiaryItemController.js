@@ -61,7 +61,7 @@ exports.editAwardsDiaryItem = async (req, res) => {
       return res.status(404).json({ error: 'Item not found' });
     }
 
-    res.status(200).json({message: "Item Suucessfully updated"});
+    res.status(200).json(updatedItem);
   } catch (error) {
     res.status(500).json({ error: 'Internal server error' });
   }

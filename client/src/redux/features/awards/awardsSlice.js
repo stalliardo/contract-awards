@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { addData, fetchData } from './awardsThunks';
+import { addData, editItem, fetchData } from './awardsThunks';
 import { generateCoreTotalsData, generateUKTargetTotals, generateUkCoreTotals, generateTargetTotals, generateSpecialTargetTotals } from '../../../utils/financialTotals';
 import { TARGET_CATEGORIES } from '../../../utils/constants';
 
@@ -28,18 +28,6 @@ export const awardsSlice = createSlice({
       state.loading = action.payload
     },
 
-    onAwardsItemAdded: (state, action) => {
-      console.log("Action passed to oniutemadded =  ", action.payload);
-
-      // check if there is data in the coreTotals
-
-      if (state.coreTotals.length) {
-        console.log('core totals has data', state.coreTotals);
-      } else {
-        console.log('core totals has no data');
-      }
-    },
-
     getUkAndSpecialTotals: (state) => {
       const monthlyTotals = []
 
@@ -47,9 +35,6 @@ export const awardsSlice = createSlice({
         const monthlyTotalsSum = (total.ukCoreTotal + state.specialCoreTotals[i].specialsTotal);
         monthlyTotals.push({ column: total.month, sum: monthlyTotalsSum })
       })
-
-
-      //  return monthlyTotals;
     }
   },
 
@@ -83,16 +68,11 @@ export const awardsSlice = createSlice({
         monthlyTotals.push({ column: total.month, sum: monthlyTotalsSum })
       })
 
-      console.log('monthy tots = ', monthlyTotals);
-
       state.ukAndSpecialCoreTotals = monthlyTotals;
       state.loading = false;
     });
 
     builder.addCase(addData.fulfilled, (state, action) => {
-
-      console.log('fulfilled cakked for addData. Payload = ', action.payload);
-
       const {location, month, core} = action.payload;
 
       if (state.coreTotals.length) {
@@ -107,10 +87,35 @@ export const awardsSlice = createSlice({
 
       state.loading = false;
     })
+
+    builder.addCase(editItem.fulfilled, (state, action) => {
+      const {location, month, core, previousCoreValue} = action.payload; 
+
+      if (state.coreTotals.length) {
+        const itemToUpdateIndex = state.coreTotals.findIndex(item => item.location === location && item.month === month);
+
+        if(itemToUpdateIndex > -1) {
+          const updatedArray = [...state.coreTotals];
+
+          if(previousCoreValue > core) {
+            const difference = parseInt(previousCoreValue) - parseInt(core);
+
+            updatedArray[itemToUpdateIndex].sum -= parseInt(difference);
+          } else if(previousCoreValue < core) {
+            const difference = parseInt(core) - parseInt(previousCoreValue);
+
+            updatedArray[itemToUpdateIndex].sum += parseInt(difference);
+          } 
+          state.coreTotals = updatedArray;
+        }
+      }
+
+      state.loading = false;
+    })
   }
 })
 
 // Action creators are generated for each case reducer function
-export const { getUkAndSpecialTotals, setLoading, getData, onAwardsItemAdded } = awardsSlice.actions;
+export const { getUkAndSpecialTotals, setLoading, getData } = awardsSlice.actions;
 
 export default awardsSlice.reducer;

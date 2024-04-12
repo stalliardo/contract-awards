@@ -171,7 +171,7 @@ const AwardsTable = () => {
                             : <div className='awards-table-no-data-container'>
                                 <h3>No entries found for {month}</h3>
                                 {/* Now how to dispay the add row? */}
-                                <FirstAwardsEntry awardsTableId={filteredData._id} location={filteredData.location} onItemAdded={itemAdded} />
+                                <FirstAwardsEntry awardsTableId={filteredData._id} location={filteredData.location} onItemAdded={itemAdded} month={month}/>
                             </div>
                     }
                 </div>

@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import './forms.css';
-import axios from 'axios';
 import Spinner from '../spinner/Spinner';
 
-const FirstAwardsEntry = ({ awardsTableId, location, onItemAdded }) => {
+import { useDispatch } from 'react-redux';
+import { addData } from '../../redux/features/awards/awardsThunks';
+
+const FirstAwardsEntry = ({ awardsTableId, location, month, onItemAdded }) => {
     const [data, setData] = useState({ contractNumber: "", project: "", programme: "", contractor: "", region: "", core: "" })
     const [saveButtonEnabled, setSaveButtonEnabled] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         setSaveButtonEnabled(isFormValid());
@@ -22,8 +26,9 @@ const FirstAwardsEntry = ({ awardsTableId, location, onItemAdded }) => {
         data.awardsDiaryId = awardsTableId;
         data.location = location;
 
-        axios.post("/api/awards-diary/add-item", data).then((response) => {
-            onItemAdded(response.data);
+        dispatch(addData({data, month, location})).unwrap().then((response) => {
+            console.log('response from unwrap = ', response);
+            onItemAdded(response);
         }).catch((error) => {
             console.log('Error adding item: ', error);
         }).finally(() => {

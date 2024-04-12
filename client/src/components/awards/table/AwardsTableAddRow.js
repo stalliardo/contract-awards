@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import Spinner from '../../spinner/Spinner';
 
-import { onAwardsItemAdded } from '../../../redux/features/awards/awardsSlice';
 import { addData } from '../../../redux/features/awards/awardsThunks';
 
 const AwardsTableAddRow = ({ awardsTableId, location, month, onItemAdded, onCancelClicked, dataFromEdit }) => {

@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import Spinner from '../../spinner/Spinner';
 
-const AwardsTableAddRow = ({ awardsTableId, location, onItemAdded, onCancelClicked, dataFromEdit }) => {
-    const [data, setData] = useState(dataFromEdit ?? { contractNumber: "", project: "", programme: "", contractor: "", region: "", core: "" }); // Use data passed in or defaults
+import { onAwardsItemAdded } from '../../../redux/features/awards/awardsSlice';
+import { addData } from '../../../redux/features/awards/awardsThunks';
+
+const AwardsTableAddRow = ({ awardsTableId, location, month, onItemAdded, onCancelClicked, dataFromEdit }) => {
+    const [data, setData] = useState(dataFromEdit ?? { contractNumber: "", project: "", programme: "", contractor: "", region: "", core: "", location: "", month: "" }); // Use data passed in or defaults
 
     const [saveButtonEnabled, setSaveButtonEnabled] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         setSaveButtonEnabled(isFormValid());
@@ -21,15 +27,16 @@ const AwardsTableAddRow = ({ awardsTableId, location, onItemAdded, onCancelClick
         if(!dataFromEdit) {data.awardsDiaryId = awardsTableId;}
         data.location = location; // TODO <- needed?
 
-        // Use the dataFromEdit as flag to determine whether adding or editing a document.
         if(!dataFromEdit) { // Add
-            axios.post("/api/awards-diary/add-item", data).then((response) => {
-                onItemAdded(response.data);
+            dispatch(addData({data, month, location})).unwrap().then((response) => {
+                console.log('response from unwrap = ', response);
+                onItemAdded(response);
             }).catch((error) => {
                 console.log('Error adding item: ', error);
             }).finally(() => {
                 setIsLoading(false);
             })
+
         } else { // Edit
             axios.patch(`/api/awards-diary/edit-item`, data).then(() => {
                 onItemAdded(data);

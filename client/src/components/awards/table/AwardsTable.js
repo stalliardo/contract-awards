@@ -58,6 +58,7 @@ const AwardsTable = () => {
     }, [filteredData.items]) // observe the items array for changes
 
     const itemAdded = (data) => {
+        console.log('data from itemAded = ', data);
         const updatedFilteredData = [...filteredData.items, data];
         setFilteredData(prevState => ({
             ...prevState,
@@ -146,7 +147,6 @@ const AwardsTable = () => {
                                     {
                                         filteredData.items && filteredData.items.length ?
                                             filteredData.items.map((data) => (
-
                                                 <AwardsTableRow data={data} key={data._id} onItemDeleted={itemDeleted} onItemEdited={onItemEdited} />
                                             ))
                                             : null
@@ -154,7 +154,7 @@ const AwardsTable = () => {
                                     {
                                         showAddRow &&
                                         // the below line will be used to replace the below code for adding data in the table
-                                        <AwardsTableAddRow awardsTableId={filteredData._id} onCancelClicked={() => setShowAddRow(false)} onItemAdded={itemAdded} />
+                                        <AwardsTableAddRow awardsTableId={filteredData._id} onCancelClicked={() => setShowAddRow(false)} onItemAdded={itemAdded} location={location} month={month}/>
                                     }
                                     <tr className='last-row'>
                                         <td></td>

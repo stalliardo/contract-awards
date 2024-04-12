@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchData } from './awardsThunks';
+import { addData, fetchData } from './awardsThunks';
 import { generateCoreTotalsData, generateUKTargetTotals, generateUkCoreTotals, generateTargetTotals, generateSpecialTargetTotals } from '../../../utils/financialTotals';
 import { TARGET_CATEGORIES } from '../../../utils/constants';
 
@@ -28,13 +28,25 @@ export const awardsSlice = createSlice({
       state.loading = action.payload
     },
 
+    onAwardsItemAdded: (state, action) => {
+      console.log("Action passed to oniutemadded =  ", action.payload);
+
+      // check if there is data in the coreTotals
+
+      if (state.coreTotals.length) {
+        console.log('core totals has data', state.coreTotals);
+      } else {
+        console.log('core totals has no data');
+      }
+    },
+
     getUkAndSpecialTotals: (state) => {
       const monthlyTotals = []
 
       state.ukCoreTotals.forEach((total, i) => {
         const monthlyTotalsSum = (total.ukCoreTotal + state.specialCoreTotals[i].specialsTotal);
-         monthlyTotals.push({column: total.month, sum: monthlyTotalsSum})
-       })
+        monthlyTotals.push({ column: total.month, sum: monthlyTotalsSum })
+      })
 
 
       //  return monthlyTotals;
@@ -49,7 +61,7 @@ export const awardsSlice = createSlice({
       const filteredTargets = action.payload.targetsData.filter((target) => target.category === TARGET_CATEGORIES.CONTRACT_AWARDS);
       const formattedLocations = action.payload.locationsData.map((location) => location.name);
       const filteredSpecialLocations = action.payload.locationsData.filter((location) => location.name === "M&E" || location.name === "Special Projects")
-      const formattedSpecialTotals = filteredSpecialLocations.map((item) => item.name); 
+      const formattedSpecialTotals = filteredSpecialLocations.map((item) => item.name);
 
       const generatedUkTargetTotal = generateUKTargetTotals(filteredTargets);
       const generatedSpecialTargetTotals = generateSpecialTargetTotals(filteredTargets);
@@ -64,25 +76,41 @@ export const awardsSlice = createSlice({
       state.locations = formattedLocations;
       state.specialLocations = formattedSpecialTotals;
 
-      state.loading = false;
-
-
       const monthlyTotals = []
 
       state.ukCoreTotals.forEach((total, i) => {
         const monthlyTotalsSum = (total.ukCoreTotal + state.specialCoreTotals[i].specialsTotal);
-         monthlyTotals.push({column: total.month, sum: monthlyTotalsSum})
-       })
+        monthlyTotals.push({ column: total.month, sum: monthlyTotalsSum })
+      })
 
-       console.log('monthy tots = ', monthlyTotals);
+      console.log('monthy tots = ', monthlyTotals);
 
-       state.ukAndSpecialCoreTotals = monthlyTotals;
+      state.ukAndSpecialCoreTotals = monthlyTotals;
+      state.loading = false;
+    });
 
+    builder.addCase(addData.fulfilled, (state, action) => {
+
+      console.log('fulfilled cakked for addData. Payload = ', action.payload);
+
+      const {location, month, core} = action.payload;
+
+      if (state.coreTotals.length) {
+        const itemToUpdateIndex = state.coreTotals.findIndex(item => item.location === location && item.month === month);
+
+        if(itemToUpdateIndex > -1) {
+          const updatedArray = [...state.coreTotals];
+          updatedArray[itemToUpdateIndex].sum += parseInt(core);
+          state.coreTotals = updatedArray;
+        }
+      }
+
+      state.loading = false;
     })
   }
 })
 
 // Action creators are generated for each case reducer function
-export const { getUkAndSpecialTotals, setLoading, getData } = awardsSlice.actions;
+export const { getUkAndSpecialTotals, setLoading, getData, onAwardsItemAdded } = awardsSlice.actions;
 
 export default awardsSlice.reducer;

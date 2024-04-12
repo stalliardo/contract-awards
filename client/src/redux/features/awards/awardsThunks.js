@@ -17,4 +17,21 @@ const fetchData = createAsyncThunk(
     },
 )
 
-export { fetchData }
+const addData = createAsyncThunk(
+    'awards/addData',
+    async ({data, location, month}) => {
+        
+        try {
+            const response = await axios.post("/api/awards-diary/add-item", data);
+            response.data.location = location;
+            response.data.month = month;
+
+            return response.data;
+        } catch (error) {
+            console.log('catch called + error: ', error);
+            return new Error("There was an error adding the data.")
+        }
+    },
+)
+
+export { fetchData, addData }

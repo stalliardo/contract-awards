@@ -38,6 +38,7 @@ const AwardsSummary = () => {
     useEffect(() => {
         if (awardsData.coreTotals.length > 0) {
             console.log('There is data in the store');
+            console.log('And the data is: ', awardsData.coreTotals);
             setSpinnerComplete(true);
         } else {
             dispatch(fetchData()).finally(() => {

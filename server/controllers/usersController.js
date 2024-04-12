@@ -2,18 +2,6 @@
 const User = require('../models/User');
 const Location = require('../models/Location');
 
-// TODO
-
-// exports.addMember = async (req, res) => {
-//   try {
-//     const newLocation = new Location(req.body);
-//     await newLocation.save();
-//     res.status(201).send(newLocation);
-//   } catch (error) {
-//     res.status(500).json({ error: 'Internal server error' });
-//   }
-// }
-
 exports.getUsers = async (req, res) => {
   try {
     // Find all Locations records

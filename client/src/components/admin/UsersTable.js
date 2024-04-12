@@ -17,30 +17,11 @@ const UsersTable = ({ availableLocations }) => {
         })
 
         setFormattedAvailableLocations(formattedSelectMenuItems);
-    }, [])
+    }, [availableLocations.length])
+
+  
 
     const [showAddMember, setShowAddMember] = useState(false);
-
-    // const members = [ // Will need to load these from either the store or via an api call to get via LDAP
-    //     {
-    //         name: "Darren Stallard",
-    //         role: "Director",
-    //         permissions: "Read / Write",
-    //         locations: "All"
-    //     },
-    //     {
-    //         name: "Darren Stallard",
-    //         role: "Director",
-    //         permissions: "Read / Write",
-    //         locations: "All"
-    //     },
-    //     {
-    //         name: "Darren Stallard",
-    //         role: "Director",
-    //         permissions: "Read / Write",
-    //         locations: "All"
-    //     },
-    // ] // TODO REmove
 
     return (
         <div className='awards-table-container'>

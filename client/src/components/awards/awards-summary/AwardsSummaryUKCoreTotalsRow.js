@@ -1,8 +1,11 @@
 import React from 'react'
+import { COLOURS } from '../../../utils/constants';
 
-const AwardsSummaryUKCoreTotalsRow = ({data}) => {
+const AwardsSummaryUKCoreTotalsRow = ({ data, ukTargetTotal }) => {
   return (
-    <td>£{data.ukCoreTotal}</td>
+    <td style={{color: data.ukCoreTotal >= ukTargetTotal ? COLOURS.GREEN : COLOURS.RED}}>
+      £{data.ukCoreTotal.toLocaleString()}
+    </td>
   )
 }
 

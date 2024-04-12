@@ -8,7 +8,6 @@
 
 .nav-end-container {
     height: inherit;
-    /* TODO fix width on small screens */
     width: fit-content;
     margin-right: 100px;
     display: flex;

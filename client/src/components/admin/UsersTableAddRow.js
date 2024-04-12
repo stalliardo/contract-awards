@@ -10,7 +10,6 @@ const UsersTableAddRow = () => {
     const [data, setData] = useState(initialData);
 
     const handleOnChange = (e) => {
-        // TODO
     } 
 
     const onCancelClicked = () => {

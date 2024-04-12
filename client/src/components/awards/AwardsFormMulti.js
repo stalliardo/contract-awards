@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import './awards.css';
 import SelectMenu from '../selectMenu/SelectMenu';
 
-// TODO - refactor so that the table rows an be edited and deleted
 const dateOptions = [
     { value: "Oct-23" },
     { value: "Nov-23" },

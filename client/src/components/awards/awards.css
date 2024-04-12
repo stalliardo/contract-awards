@@ -55,11 +55,19 @@
         display: flex;
         flex-direction: column;
         text-align: center;
+
+        h3 {
+            margin: 0 0 10px 0;
+        }
     }
 
     .cumulative-totals-m-a {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+
+        div {
+            text-align: center;
+        }
     }   
 }

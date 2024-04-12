@@ -10,9 +10,19 @@ import AwardsSummaryTotalsRow from './AwardsSummaryTotalsRow';
 import AwardsSummaryMonthlyPerformanceRow from './AwardsSummaryMonthlyPerformanceRow';
 import { COLOURS } from '../../../utils/constants';
 import AwardsSummaryCumalitivePerformanceRow from './AwardsSummaryCumalitivePerformanceRow';
-import { generateMonthsForCurrentYear } from '../../../utils/DateUtils';
+import { generateFinancialYearMonths } from '../../../utils/DateUtils';
 
 let cumalitiveTotalsSum = 0;
+
+const MonthsForTableHead = ({k}) => {
+    const months = generateFinancialYearMonths();
+
+    const cells = months.map((month, i) => {
+        return <th key={`${k} ${i}`}>{month}</th>
+    })
+
+    return cells
+}
 
 const AwardsSummary = () => {
     const awardsData = useSelector((state) => state.awards);
@@ -24,8 +34,6 @@ const AwardsSummary = () => {
 
     const [spinnerComplete, setSpinnerComplete] = useState(false);
     const showUI = !isLoading && spinnerComplete;
-
-    const months = generateMonthsForCurrentYear()
 
     useEffect(() => {
         if (awardsData.coreTotals.length > 0) {
@@ -39,13 +47,6 @@ const AwardsSummary = () => {
             })
         }
     }, []);
-
-    useEffect(() => {
-        if (!awardsData.loading) {
-            // const filteredTotals = coreTotals.filter((totals) => totals.location === locationRef);
-            // const cumalitiveTotal = filteredTotals.reduce((total, currentItem) => total + currentItem.sum, 0);
-        }
-    }, [awardsData.loading])
 
     const generateFilteredTotals = (location) => {
 
@@ -67,24 +68,12 @@ const AwardsSummary = () => {
             <div className='awards-page-container'>
                 <div className='awards-page-table-container'>
                     <h3>Contract Awards Summary (TBC)</h3>
-
                     <table id="awards-table" className='awards-summary-table'>
                         <thead>
                             <tr>
                                 <th>Location</th>
                                 {/* Years need to be dynamic */}
-                                <th>Oct-23</th>
-                                <th>Nov-23</th>
-                                <th>Dec-23</th>
-                                <th>Jan-24</th>
-                                <th>Feb-24</th>
-                                <th>Mar-24</th>
-                                <th>Apr-24</th>
-                                <th>May-24</th>
-                                <th>Jun-24</th>
-                                <th>Jul-24</th>
-                                <th>Aug-24</th>
-                                <th>Sep-24</th>
+                                <MonthsForTableHead k="1"/>
                                 <th>Cumalitive Totals</th>
                                 <th colSpan="3">
                                     <div className='cumulative-totals-container'>
@@ -116,12 +105,11 @@ const AwardsSummary = () => {
                                     return null;
                                 })
                             }
-                            {/* Totals below here core total is exactly that - need a function to loop each branch and each month and get a sum for each of the months */}
                             <tr className='bold-cells'>
                                 <td>UK Core Total</td>
                                 {
                                     awardsData.ukCoreTotals.map((data, index) => {
-                                        return <AwardsSummaryUKCoreTotalsRow data={data} key={index} ukTargetTotal={awardsData.ukTargetTotal}/>
+                                        return <AwardsSummaryUKCoreTotalsRow data={data} key={index} ukTargetTotal={awardsData.ukTargetTotal} />
                                     })
                                 }
                                 <td>£{cumalitiveTotalsSum.toLocaleString()}</td>
@@ -132,23 +120,21 @@ const AwardsSummary = () => {
                                     £{(awardsData.ukTargetTotal * 12).toLocaleString()}
                                 </td>
                                 <td>£{generateTargetAmountToDate((awardsData.ukTargetTotal * 12), cumalitiveTotalsSum).toLocaleString()}</td>
-                                <td style={{color: generateTargetAcheivedPercentage(awardsData.ukTargetTotal * 12, cumalitiveTotalsSum) >= 100 ? COLOURS.GREEN : COLOURS.RED}}>
+                                <td style={{ color: generateTargetAcheivedPercentage(awardsData.ukTargetTotal * 12, cumalitiveTotalsSum) >= 100 ? COLOURS.GREEN : COLOURS.RED }}>
                                     {generateTargetAcheivedPercentage(awardsData.ukTargetTotal * 12, cumalitiveTotalsSum)}%
                                 </td>
                             </tr>
-
                             {
                                 specialLocations.map((location, index) => {
                                     return <AwardsSummarySpecialsRow targetsData={awardsData.targets} filteredTotals={generateFilteredTotals(location)} cumalitiveTotal={generateCumalitiveTotals(location)} locationRef={location} key={index} />
                                 })
                             }
-
                             <tr className='bold-cells'>
                                 <td>Total</td>
-                                <AwardsSummaryTotalsRow 
-                                    ukCoreTotals={awardsData.ukCoreTotals} 
-                                    specialCoreTotals={awardsData.specialCoreTotals} 
-                                    cumalativeTotals={cumalitiveTotalsSum} 
+                                <AwardsSummaryTotalsRow
+                                    ukCoreTotals={awardsData.ukCoreTotals}
+                                    specialCoreTotals={awardsData.specialCoreTotals}
+                                    cumalativeTotals={cumalitiveTotalsSum}
                                     ukAndSpecialTargetTotal={awardsData.ukAndSpecialTargetTotal}
                                 />
                             </tr>
@@ -157,60 +143,36 @@ const AwardsSummary = () => {
                     <p>% T A = Percentage of Target Achieved (TBC)</p>
                 </div>
 
-
-                {/* Temporay tables for demo purposes only TO BE REMOVED */}
                 <div className='awards-page-table-container'>
                     <h3>Company Performance</h3>
                     <table id="awards-table">
                         <thead>
                             <tr>
                                 <th>Month</th>
-                                <th>Oct-23</th>
-                                <th>Nov-23</th>
-                                <th>Dec-23</th>
-                                <th>Jan-24</th>
-                                <th>Feb-24</th>
-                                <th>Mar-24</th>
-                                <th>Apr-24</th>
-                                <th>May-24</th>
-                                <th>Jun-24</th>
-                                <th>Jul-24</th>
-                                <th>Aug-24</th>
-                                <th>Sep-24</th>
+                                <MonthsForTableHead k="2"/>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>Plus/Minus</td>
-                                <AwardsSummaryMonthlyPerformanceRow monthlyCoreTotals={awardsData.ukAndSpecialCoreTotals} monthlyTargetTotal={awardsData.ukAndSpecialTargetTotal}/>
+                                <AwardsSummaryMonthlyPerformanceRow monthlyCoreTotals={awardsData.ukAndSpecialCoreTotals} monthlyTargetTotal={awardsData.ukAndSpecialTargetTotal} />
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                
+
                 <div className='awards-page-table-container'>
                     <table id="awards-table">
                         <thead>
                             <tr>
                                 <th>Cumalitive</th>
-                                <th>Oct-23</th>
-                                <th>Nov-23</th>
-                                <th>Dec-23</th>
-                                <th>Jan-24</th>
-                                <th>Feb-24</th>
-                                <th>Mar-24</th>
-                                <th>Apr-24</th>
-                                <th>May-24</th>
-                                <th>Jun-24</th>
-                                <th>Jul-24</th>
-                                <th>Aug-24</th>
-                                <th>Sep-24</th>
+                                <MonthsForTableHead k="3"/>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>Plus/Minus</td>
-                                <AwardsSummaryCumalitivePerformanceRow monthlyCoreTotals={awardsData.ukAndSpecialCoreTotals} monthlyTargetTotal={awardsData.ukAndSpecialTargetTotal}/>
+                                <AwardsSummaryCumalitivePerformanceRow monthlyCoreTotals={awardsData.ukAndSpecialCoreTotals} monthlyTargetTotal={awardsData.ukAndSpecialTargetTotal} />
                             </tr>
                         </tbody>
                     </table>
@@ -218,10 +180,7 @@ const AwardsSummary = () => {
             </div>
     )
 }
-
 export default AwardsSummary;
-
-
 // NTH's
 
-    // Can click a locations total value and be transistioned to the corresponing awards form
+// Can click a locations total value and be transistioned to the corresponing awards form

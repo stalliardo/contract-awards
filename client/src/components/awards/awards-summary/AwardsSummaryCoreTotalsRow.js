@@ -2,11 +2,20 @@ import React from 'react';
 import { getMonthsInFinancialOrder } from '../../../utils/DateUtils';
 import { generateTargetAcheivedPercentage, generateTargetAmountToDate } from '../../../utils/financialTotals';
 import { COLOURS } from '../../../utils/constants';
+import { useNavigate } from 'react-router-dom';
 
 const monthsInFinancialOrder = getMonthsInFinancialOrder();
 
 const AwardsSummaryCoreTotalsRow = ({ targetsData, cumalitiveTotal, locationRef, filteredTotals }) => {
     // TODO - does this need to extracted out into a util?
+    const navigate = useNavigate();
+
+    const handleTotalClicked = (month) => {
+
+        navigate(`/awards-form?location=${locationRef}&month=${month}`);
+    }
+
+
     const formattedTargetValue = () => {
         const validTarget = targetsData.find((t) => t.location === locationRef);
 
@@ -29,7 +38,7 @@ const AwardsSummaryCoreTotalsRow = ({ targetsData, cumalitiveTotal, locationRef,
                     const target = parseInt(formattedTargetValue());
                     const colour =  total >= target ? COLOURS.GREEN : COLOURS.RED;
 
-                    return <td style={{color: colour}} key={index}>£{total.toLocaleString()}</td>
+                    return <td className='navigation-cell' onClick={() => handleTotalClicked(month)} style={{color: colour}} key={index}>£{total.toLocaleString()}</td>
                 })
             }
 

@@ -39,6 +39,8 @@ exports.getAwardsForLocation = async (req, res) => {
   try {
     // Find all AwardsDiary records for the given location
     const awardsForLocation = await AwardsDiary.find({ location }).exec();
+    // const awardsForLocation = await AwardsDiary.find({ location: { $regex: new RegExp('^' + location + '$', 'i') } }).exec();
+
 
     // Populate the 'items' field for each AwardsDiary record
     await AwardsDiary.populate(awardsForLocation, { path: 'items' });

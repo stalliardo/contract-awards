@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import AwardsTableRow from './AwardsTableRow';
 import { extractMonthFromString, generateDateOptionsForSelectMenu, getCurrentMonth } from '../../../utils/DateUtils';
 import { getLocations, generateLocationOptionsForSelectMenu } from '../../../utils/locationUtils';
@@ -14,8 +15,11 @@ import { getCoreTotal } from '../../../utils/financialTotals';
 
 const locationOptions = generateLocationOptionsForSelectMenu();
 
+function capitalizeFirstLetter(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 const AwardsTable = () => {
-    // Get the cuurent month to display that information by default
     const currentMonth = getCurrentMonth();
     const [filteredData, setFilteredData] = useState({ items: [] });
     const [showAddRow, setShowAddRow] = useState(false);
@@ -26,19 +30,27 @@ const AwardsTable = () => {
     const [month, setMonth] = useState(currentMonth);
     const [coreSum, setCoreSum] = useState(0);
 
+    const locationHelper = useLocation();
+    const queryParams = new URLSearchParams(locationHelper.search);
+    const locationParam = queryParams.get("location");
+    const monthParam = queryParams.get("month");
+
     useEffect(() => {
         if (!isLoading) {
             setIsLoading(true);
         }
 
-        const encodedLocation = encodeURIComponent(location);
+        if(locationParam && monthParam) {
+            // TODO set loading or something
+         
+            setLocation(capitalizeFirstLetter(locationParam));
+            setMonth(capitalizeFirstLetter(monthParam));
+        }
 
-        axios.get(`/api/awards-diary/location?location=${encodedLocation}`).then((response) => {
-            // Got the data for the given location, now need to filter based on current month.
-            // Is this where state would come in handy becuase now gonna have to make anetwirk request for every time an option is selected??????
+        let encodedLocation = encodeURIComponent(location);
+        let url = `/api/awards-diary/location?location=${encodedLocation}`
+        axios.get(url).then((response) => {
             const filteredLocationData = response.data.find((item) => item.month === month);
-
-            console.log('response = ', response);
             setFilteredData(filteredLocationData);
         }).catch((error) => {
             console.log('Error getting filterd data. Error: ', error);

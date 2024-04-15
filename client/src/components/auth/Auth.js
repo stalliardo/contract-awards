@@ -69,7 +69,7 @@ const Auth = () => {
 
   return (
     <div className='auth-container'>
-        <h1>Contract Awards Authentication</h1>
+        <h1>Authentication</h1>
 
         <form className='auth-form-container' onSubmit={login}>
           <input type='text' name="username" placeholder='John.Smith' onChange={handleChange}/> 

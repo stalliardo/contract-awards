@@ -12,7 +12,7 @@ const fetchData = createAsyncThunk(
             return {targetsData: targets.data, awardsData: awards.data, locationsData: locations.data};
         } catch (error) {
             console.log('catch called + error: ', error);
-            return new Error("There was an error getting the data.")
+            throw Error("There was an error getting the data.")
         }
     },
 )
@@ -29,7 +29,7 @@ const addData = createAsyncThunk(
             return response.data;
         } catch (error) {
             console.log('catch called + error: ', error);
-            return new Error("There was an error adding the data.")
+            throw Error("There was an error adding the data.")
         }
     },
 )
@@ -48,7 +48,7 @@ const editItem = createAsyncThunk(
             return response.data;
         } catch (error) {
             console.log('catch called + error: ', error);
-            return new Error("There was an error adding the data.")
+            throw Error("There was an error adding the data.")
         }
     },
 )

@@ -21,9 +21,16 @@ export const usersSlice = createSlice({
 
   extraReducers: (builder) => {
     builder.addCase(fetchUsers.fulfilled, (state, action) => {
+      console.log('\n\nusers fulfilled called');
       state.data = action.payload;
       state.loading = false;
     });
+
+    builder.addCase(fetchUsers.rejected, (state, action) => {
+      console.log('rejected called + error = ', action.payload);
+      state.loading = true;
+    });
+
 
     builder.addCase(addLocationToUser.pending, (state, action) => {
       state.loading = true;

@@ -95,8 +95,6 @@ app.get("/api", (req, res) => {
 //     res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
 // })
 
-// how do i trigger the crud operations from the frontend? and how will they be received in the backend?
-
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
     // generateTableForYear() // TODO for testing purposes currently

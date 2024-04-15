@@ -23,10 +23,6 @@ export const authSlice = createSlice({
       console.log('pending called');
     });
     builder.addCase(verifyToken.fulfilled, (state, action) => {
-      console.log('fulfilled called + action.payload = ', action.payload);
-      const { data, status } = action.payload;
-
-      // TODO - good place to check for expired status code
 
     });
 
@@ -35,10 +31,6 @@ export const authSlice = createSlice({
 
 
       switch (status) {
-        case 200: {
-
-          break;
-        }
         case 401: {
           console.log('401 called in switch????');
 

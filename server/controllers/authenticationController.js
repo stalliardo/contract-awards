@@ -8,7 +8,9 @@ exports.verifyToken = async (req, res) => {
       
       // verified code goes Headers.apply.apply.
 
-      res.json("The verification was successful");
+      console.log('req.user = ', req.user);
+
+      res.status(200).json({message: "Token verification successful!", user: req.user});
 
     })
 

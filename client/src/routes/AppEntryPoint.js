@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { getTokenFromStorage } from '../utils/localStorageUtils';
 import { verifyToken } from '../redux/features/auth/authThunk';
 import { setIsAuthenticated } from '../redux/features/auth/authSlice';
+import { extractFirstAndLastName } from '../utils/stringUtils';
+import { setSignedInUser } from '../redux/features/users/usersSlice';
 
 const AppEntryPoint = () => {
     const navigate = useNavigate();
@@ -19,10 +21,21 @@ const AppEntryPoint = () => {
             dispatch(verifyToken(token)).unwrap().then(response => {
                 console.log('response from unwrap = ', response);
                 const {status} = response;
+                const {user} = response.data;
+
+                console.log('user = = ', user);
+
+                // TODO also need to link the logged in user with the users in the database
+                // This will enable the handling of roles
 
                 if(status === 200) {
-                    console.log('200 called in switch');
                     dispatch(setIsAuthenticated(true));
+
+                    dispatch(setSignedInUser(user.username));
+
+                    // Can now use the full name to link up with the names in the
+
+                    //bit of a navigation problem TODO
                     navigate("/");
                 }
                 

@@ -46,18 +46,13 @@ const ADConfig = {
 var ad = new ActiveDirectory(ADConfig);
 
 app.post("/login", (req, res) => {
-    console.log('POST login called');
-
     const username = `${req.body.username}@DAZCORP.COM`;
     const password = req.body.password;
-
-    console.log('username and password = ', username, " ", password);
 
 
     const token = jwt.generateJWT(username);
 
     res.json({token});
-
 
     // DISABLED WHILE TESTING JWT
     // ad.authenticate(username, password, function (err, auth) {
@@ -80,8 +75,8 @@ app.post("/login", (req, res) => {
     //     }
     // })
 
-
-    return res.json({ message: "Authetication Successful" })
+    // RE-Enable with above
+    // return res.json({ message: "Authetication Successful" })
 })
 
 app.get("/api", (req, res) => {

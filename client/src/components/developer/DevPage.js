@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import "./devPage.css";
 import AwardsTable from '../awards/table/AwardsTable';
+import { useSelector } from 'react-redux';
 
 const DevPage = () => {
     const [rowData, setRowData] = useState([]);
+    const user = useSelector(state => state.user);
+
     const onAddAwardsClicked = () => {
         // pass some data as an object via axios
         const awardsdata = {
@@ -69,6 +72,11 @@ const DevPage = () => {
         })
     }
 
+    const onCheckAuthedUser = () => {
+        // TODO nav problem
+        console.log('state . autheduser = ', user.authenticatedUser);
+    }
+
     return (
         <div className='dev-page-container'>
             <h2>Test Page</h2>
@@ -85,6 +93,7 @@ const DevPage = () => {
                 <button onClick={onCheckUserExists}>check user exists</button>
                 <button onClick={onGetUsersForGroup}>get users for group</button>
                 <button onClick={onCheckToken}>Check Token</button>
+                <button onClick={onCheckAuthedUser}>Check authed user</button>
 
                 </div>
             </div>

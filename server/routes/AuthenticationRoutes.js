@@ -2,6 +2,6 @@ const express = require('express');
 const router = express.Router();
 const authenticationController = require('../controllers/authenticationController');
 
-router.get("/auth/protected-route/:token", authenticationController.protectedRoute);
+router.get("/auth/verify/:token", authenticationController.verifyToken);
 
 module.exports = router;

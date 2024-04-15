@@ -3,9 +3,7 @@ import Auth from './components/auth/Auth';
 import {
   createBrowserRouter,
   RouterProvider,
-  Outlet
 } from "react-router-dom";
-
 
 import Root from './routes/root';
 import AwardsSummary from './components/awards/awards-summary/AwardsSummary';
@@ -13,21 +11,14 @@ import DevPage from './components/developer/DevPage';
 import TendersSubmitted from './routes/TendersSubmitted';
 import Admin from './routes/Admin';
 
-import Navbar from './components/navbar/Navbar';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUsers } from './redux/features/users/usersThunk';
-
-const AppLayout = () => (
-  <>
-    <Navbar  />
-    <Outlet />
-  </>
-);
+import AppEntryPoint from './routes/AppEntryPoint';
 
 const router = createBrowserRouter([
   {
-    element: <AppLayout />,
+    element: <AppEntryPoint />,
     children: [
       {
         path: "/",
@@ -67,10 +58,6 @@ function App() {
   const users = useSelector((state) => state.users);
 
   useEffect(() => {
-    // Only want this to be called once
-
-    // check if the users has data from the store
-
     console.log('user.data.length = ', users.data.length);
 
     if(users.data.length) {

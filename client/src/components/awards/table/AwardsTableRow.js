@@ -3,7 +3,7 @@ import AwardsTableAddRow from './AwardsTableAddRow';
 
 import axios from 'axios';
 
-const AwardsTableRow = ({data, onItemDeleted, onItemEdited}) => {
+const AwardsTableRow = ({data, onItemDeleted, onItemEdited, location, month}) => {
 
     const [isEditing, setIsEditing] = useState(false);
     const onDeleteClicked = () => {
@@ -28,7 +28,7 @@ const AwardsTableRow = ({data, onItemDeleted, onItemEdited}) => {
     }
 
     if(isEditing) {
-        return <AwardsTableAddRow awardsTableId={data.awardsDiary} dataFromEdit={data} onCancelClicked={() => setIsEditing(false)} onItemAdded={itemEdited} />
+        return <AwardsTableAddRow awardsTableId={data.awardsDiary} dataFromEdit={data} onCancelClicked={() => setIsEditing(false)} onItemAdded={itemEdited} location={location} month={month}/>
     } else {
         return (
             <tr>

@@ -37,6 +37,14 @@ code {
     text-align: center;
     width: 80px;   
   }
+
+  .navigation-cell {
+    
+    &:hover {
+      cursor: pointer;
+      background-color: #dddddd
+    }
+  }
 }
 
 #awards-table .last-cell {

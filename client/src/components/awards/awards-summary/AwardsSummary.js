@@ -12,19 +12,19 @@ import { COLOURS } from '../../../utils/constants';
 import AwardsSummaryCumalitivePerformanceRow from './AwardsSummaryCumalitivePerformanceRow';
 import { generateFinancialYearMonths } from '../../../utils/DateUtils';
 
-let cumalitiveTotalsSum = 0;
-
 const MonthsForTableHead = ({k}) => {
     const months = generateFinancialYearMonths();
-
+    
     const cells = months.map((month, i) => {
         return <th key={`${k} ${i}`}>{month}</th>
     })
-
+    
     return cells
 }
 
 const AwardsSummary = () => {
+    let cumalitiveTotalsSum = 0;
+
     const awardsData = useSelector((state) => state.awards);
     const isLoading = useSelector((state) => state.awards.loading);
     const locations = useSelector((state) => state.awards.locations);
@@ -37,9 +37,10 @@ const AwardsSummary = () => {
 
     useEffect(() => {
         if (awardsData.coreTotals.length > 0) {
-            console.log('There is data in the store');
+            console.log('And the data is: ', awardsData.coreTotals);
             setSpinnerComplete(true);
         } else {
+            console.log('else called, fetchdata called');
             dispatch(fetchData()).finally(() => {
                 setTimeout(() => {
                     setSpinnerComplete(true);
@@ -49,7 +50,6 @@ const AwardsSummary = () => {
     }, []);
 
     const generateFilteredTotals = (location) => {
-
         return awardsData.coreTotals.filter((totals) => totals.location === location)
     }
 
@@ -72,7 +72,6 @@ const AwardsSummary = () => {
                         <thead>
                             <tr>
                                 <th>Location</th>
-                                {/* Years need to be dynamic */}
                                 <MonthsForTableHead k="1"/>
                                 <th>Cumalitive Totals</th>
                                 <th colSpan="3">

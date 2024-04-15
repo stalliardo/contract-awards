@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react'
 import './auth.css' 
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { verifyToken } from '../../utils/JWTUtils';
 
 const Auth = () => {
   useEffect(() => {
     console.log('getting env var = ', process.env.REACT_APP_TEST);
-    axios.get("/api");
+    
   }, [])
 
   const initialFormData = {username: "", password: ""};
@@ -26,7 +27,13 @@ const Auth = () => {
       password: formData.password
     }).then((res) => {  
       console.log('post login success + res = ', res);
-      navigate("/contract-form");
+      console.log('token = ', res.data.token);
+
+      const token = res.data.token;
+
+      verifyToken(token)
+
+      navigate("/");
 
       setErrorText("");
     }).catch((e) => {

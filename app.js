@@ -13,6 +13,7 @@ const locationRoutes = require("./server/routes/locationRoutes");
 const userRoutes = require("./server/routes/userRoutes");
 const ADRoutes = require("./server/routes/ADRoutes");
 const targetRoutes = require("./server/routes/targetRoutes");
+const jwt = require("./server/utils/JWTUtils");
 
 const { generateTableForYear } = require("./server/utils/AwardsDiaryUtils");
 
@@ -49,25 +50,35 @@ app.post("/login", (req, res) => {
 
     console.log('username and password = ', username, " ", password);
 
-    ad.authenticate(username, password, function (err, auth) {
-        if (err) {
-            console.log("LDAP error: ", err);
 
-            return res.status(401).json({ error: "Invalid Credentials" })
-        }
+    const token = jwt.generateJWT(username);
 
-        if (auth) {
-            console.log('LDAP Authentication successful!');
-            console.log('auth = ', auth);
+    res.json({token});
 
-            return res.json({ message: "Authetication Successful" })
-        }
 
-        else {
-            console.log('Authentication failed!');
-            return res.status(500).json({ error: "Authentication failed" })
-        }
-    })
+    // DISABLED WHILE TESTING JWT
+    // ad.authenticate(username, password, function (err, auth) {
+    //     if (err) {
+    //         console.log("LDAP error: ", err);
+
+    //         return res.status(401).json({ error: "Invalid Credentials" })
+    //     }
+
+    //     if (auth) {
+    //         console.log('LDAP Authentication successful!');
+    //         console.log('auth = ', auth);
+
+    //         return res.json({ message: "Authetication Successful" })
+    //     }
+
+    //     else {
+    //         console.log('Authentication failed!');
+    //         return res.status(500).json({ error: "Authentication failed" })
+    //     }
+    // })
+
+
+    return res.json({ message: "Authetication Successful" })
 })
 
 app.get("/api", (req, res) => {

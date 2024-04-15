@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import './auth.css' 
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { verifyToken } from '../../utils/JWTUtils';
 
 const Auth = () => {
   useEffect(() => {
@@ -31,7 +30,8 @@ const Auth = () => {
 
       const token = res.data.token;
 
-      verifyToken(token)
+      //TODO uninstall JWT
+
 
       navigate("/");
 

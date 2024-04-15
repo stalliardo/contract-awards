@@ -60,6 +60,15 @@ const DevPage = () => {
         })
     }
 
+    const onCheckToken = () => {
+       const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRhcnJlbi5zdGFsbGFyZEBEQVpDT1JQLkNPTSIsImlhdCI6MTcxMzE4MDM5NiwiZXhwIjoxNzE0Mzg5OTk2fQ.f0_kTRA_xtfJwwOFwOXqqzpX1scgf9dX3WLA3Q0-R9k"
+        axios.get(`/api/auth/protected-route/${token}`).then((res) => {
+            console.log('res from check tokon = ', res);
+        }).catch((error) => {
+            console.log('error = ', error);
+        })
+    }
+
     return (
         <div className='dev-page-container'>
             <h2>Test Page</h2>
@@ -75,6 +84,7 @@ const DevPage = () => {
                 <h3>Admin functions</h3>
                 <button onClick={onCheckUserExists}>check user exists</button>
                 <button onClick={onGetUsersForGroup}>get users for group</button>
+                <button onClick={onCheckToken}>Check Token</button>
 
                 </div>
             </div>

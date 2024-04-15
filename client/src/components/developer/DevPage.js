@@ -61,7 +61,7 @@ const DevPage = () => {
     }
 
     const onCheckToken = () => {
-       const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRhcnJlbi5zdGFsbGFyZEBEQVpDT1JQLkNPTSIsImlhdCI6MTcxMzE4MDM5NiwiZXhwIjoxNzE0Mzg5OTk2fQ.f0_kTRA_xtfJwwOFwOXqqzpX1scgf9dX3WLA3Q0-R9k"
+       const token = ""
         axios.get(`/api/auth/protected-route/${token}`).then((res) => {
             console.log('res from check tokon = ', res);
         }).catch((error) => {

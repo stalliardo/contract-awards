@@ -23,4 +23,9 @@
             color: rgb(172, 172, 172);
         }
     }
+
+    button {
+        background: none;
+        color: black;
+    }
 }

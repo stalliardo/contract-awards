@@ -61,7 +61,6 @@ function App() {
     console.log('user.data.length = ', users.data.length);
 
     if(users.data.length) {
-      // dont call the api
     } else {
       dispatch(fetchUsers());
     }
@@ -76,6 +75,3 @@ function App() {
 }
 
 export default App;
-
-// dispatch an event from the membersSlice
-// This will call the AD API, get all the users in the CA01, CA02 and CA03 groups

@@ -11,7 +11,7 @@ const AwardsSummaryCoreTotalsRow = ({ targetsData, cumalitiveTotal, locationRef,
     const navigate = useNavigate();
 
     const handleTotalClicked = (month) => {
-
+        // strange bug, when clicking this and then returning to the summary page the totals are being adjusted????/
         navigate(`/awards-form?location=${locationRef}&month=${month}`);
     }
 

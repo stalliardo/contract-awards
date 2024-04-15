@@ -218,3 +218,19 @@ export default Admin;
   // Adding location doesnt reflect in the available options in the users table
 
   // Core value in the awards table awards page needs to formatted: toLocaleString
+
+
+
+  // User roles / permissions: 
+    // User can only only view/edit the location they have access to
+    // Users have no access to the admin page
+
+  // Regional Directors
+    // Have access to the admin page and can only add members to the locations they have access to
+    // Can only amend users that are "user"(CA03) level
+    // Can only see / edit their assigned locations in the awards page, summary page and tenders page
+  
+  // Directors / Admins
+    // Full Access
+    // Only people who can view previuos years vai a seledct menu in the summary page
+    

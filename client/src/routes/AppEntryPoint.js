@@ -14,21 +14,22 @@ const AppEntryPoint = () => {
     const dispatch = useDispatch();
 
     const users = useSelector((state) => state.users);
+    const auth = useSelector((state) => state.auth);
 
     useEffect(() => {
         const token = getTokenFromStorage();
         if (token) {
             dispatch(verifyToken(token)).unwrap().then(response => {
-                const {status} = response;
-                const {user} = response.data;
+                const { status } = response;
+                const { user } = response.data;
 
-                if(status === 200) {
+                if (status === 200) {
                     dispatch(setIsAuthenticated(true));
                     dispatch(setSignedInUsersFullName(user.username));
 
-                    if(users.data.length) {
+                    if (users.data.length) {
                     } else {
-                      dispatch(fetchUsers());
+                        dispatch(fetchUsers());
                     }
                 }
             }).catch((error) => {
@@ -39,7 +40,7 @@ const AppEntryPoint = () => {
         } else {
             navigate("/auth");
         }
-    }, [])
+    }, [auth.isAuthenticated])
 
     return (
         <div>
@@ -49,4 +50,4 @@ const AppEntryPoint = () => {
     )
 }
 
-export default AppEntryPoint
+export default AppEntryPoint;

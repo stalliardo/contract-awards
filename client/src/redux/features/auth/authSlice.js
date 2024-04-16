@@ -20,7 +20,7 @@ export const authSlice = createSlice({
 
   extraReducers: (builder) => {
     builder.addCase(verifyToken.pending, (state, action) => {
-      console.log('pending called');
+      
     });
     builder.addCase(verifyToken.fulfilled, (state, action) => {
 

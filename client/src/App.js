@@ -10,10 +10,6 @@ import AwardsSummary from './components/awards/awards-summary/AwardsSummary';
 import DevPage from './components/developer/DevPage';
 import TendersSubmitted from './routes/TendersSubmitted';
 import Admin from './routes/Admin';
-
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchUsers } from './redux/features/users/usersThunk';
 import AppEntryPoint from './routes/AppEntryPoint';
 
 const router = createBrowserRouter([
@@ -50,25 +46,9 @@ const router = createBrowserRouter([
       }
     ]
   },
-  
 ]);
 
 function App() {
-  const dispatch = useDispatch();
-  const users = useSelector((state) => state.users);
-
-  useEffect(() => {
-    console.log('user.data.length = ', users.data.length);
-
-    if(users.data.length) {
-    } else {
-      dispatch(fetchUsers());
-    }
-
-    console.log('%capp effect called, getting AD data from backend...', "color: red");
-
-  }, [])
-
   return (
    <RouterProvider router={router}/>
   );

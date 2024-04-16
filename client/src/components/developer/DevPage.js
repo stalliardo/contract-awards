@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 
 const DevPage = () => {
     const [rowData, setRowData] = useState([]);
-    const user = useSelector(state => state.user);
+    const user = useSelector((state) => state.users);
 
     const onAddAwardsClicked = () => {
         // pass some data as an object via axios
@@ -73,7 +73,6 @@ const DevPage = () => {
     }
 
     const onCheckAuthedUser = () => {
-        // TODO nav problem
         console.log('state . autheduser = ', user.authenticatedUser);
     }
 
@@ -102,10 +101,3 @@ const DevPage = () => {
 }
 
 export default DevPage;
-
-// functions required for admin functions:
-    // isUserMemberOf(username, groupName) -> Checks to see if a user is a member of the specified group.
-    // userExists(opts, username, callback) -> Checks to see if the specified user exists. - DONE
-    // getUsersForGroup(opts, groupName, callback) -> For the specified group, retrieve all of the users that belong to the group - DONE
-
-

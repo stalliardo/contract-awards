@@ -1,11 +1,13 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, current } from '@reduxjs/toolkit';
 import { fetchUsers, addLocationToUser, removeLocationFromUser, addAllLocationsToUser
  } from '../users/usersThunk';
 import { extractFirstAndLastName } from '../../../utils/stringUtils';
 
 const initialState = {
   data: [],
-  authenticatedUser: {},
+  authenticatedUser: {
+    fullName: ""
+  },
   loading: true,
   error: null
 };
@@ -19,28 +21,23 @@ export const usersSlice = createSlice({
       state.loading = action.payload
     },
 
-    setSignedInUser: (state, action) => {
-      const fullName = extractFirstAndLastName(action.payload);
+    setSignedInUsersFullName: (state, action) => {
+      state.authenticatedUser.fullName = extractFirstAndLastName(action.payload);
+    },
 
-      console.log('fullname = ', fullName);
-
-      state.authenticatedUser = state.data.find((user) => user.name.toLowerCase() === fullName.toLowerCase());
-
+    clearAuthenticatedUserData: (state) => {
+      state.authenticatedUser = {};
     }
   },
 
   extraReducers: (builder) => {
     builder.addCase(fetchUsers.fulfilled, (state, action) => {
-      console.log('\n\nusers fulfilled called. Data = ', action.payload);
+      const foundUser = action.payload.find(user => user.name.toLowerCase() === state.authenticatedUser.fullName.toLowerCase());
+
+      state.authenticatedUser = foundUser;
       state.data = action.payload;
       state.loading = false;
     });
-
-    builder.addCase(fetchUsers.rejected, (state, action) => {
-      console.log('rejected called + error = ', action.payload);
-      state.loading = true;
-    });
-
 
     builder.addCase(addLocationToUser.pending, (state, action) => {
       state.loading = true;
@@ -104,7 +101,6 @@ export const usersSlice = createSlice({
   }
 })
 
-// Action creators are generated for each case reducer function
-export const { setLoading, setSignedInUser } = usersSlice.actions;
+export const { setLoading, setSignedInUsersFullName, clearAuthenticatedUserData } = usersSlice.actions;
 
 export default usersSlice.reducer;

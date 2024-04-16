@@ -1,51 +1,42 @@
 import React, { useEffect } from 'react'
 import Navbar from '../components/navbar/Navbar'
 import { Outlet } from 'react-router-dom'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { getTokenFromStorage } from '../utils/localStorageUtils';
 import { verifyToken } from '../redux/features/auth/authThunk';
 import { setIsAuthenticated } from '../redux/features/auth/authSlice';
-import { extractFirstAndLastName } from '../utils/stringUtils';
-import { setSignedInUser } from '../redux/features/users/usersSlice';
+import { clearAuthenticatedUserData, setSignedInUsersFullName } from '../redux/features/users/usersSlice';
+import { fetchUsers } from '../redux/features/users/usersThunk';
 
 const AppEntryPoint = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    const users = useSelector((state) => state.users);
+
     useEffect(() => {
         const token = getTokenFromStorage();
         if (token) {
-            console.log('token from storage found! Verifying...');
-
             dispatch(verifyToken(token)).unwrap().then(response => {
-                console.log('response from unwrap = ', response);
                 const {status} = response;
                 const {user} = response.data;
 
-                console.log('user = = ', user);
-
-                // TODO also need to link the logged in user with the users in the database
-                // This will enable the handling of roles
-
                 if(status === 200) {
                     dispatch(setIsAuthenticated(true));
+                    dispatch(setSignedInUsersFullName(user.username));
 
-                    dispatch(setSignedInUser(user.username));
-
-                    // Can now use the full name to link up with the names in the
-
-                    //bit of a navigation problem TODO
-                    navigate("/");
+                    if(users.data.length) {
+                    } else {
+                      dispatch(fetchUsers());
+                    }
                 }
-                
             }).catch((error) => {
                 dispatch(setIsAuthenticated(false));
-
-                console.log('error from unwrap. error = ', error);  
+                dispatch(clearAuthenticatedUserData());
+                navigate("/auth");
             })
         } else {
-            console.log('No token found in storgae');
             navigate("/auth");
         }
     }, [])

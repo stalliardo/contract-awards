@@ -23,12 +23,17 @@ const Navbar = () => {
     <nav className='navbar-container'>
       <div className='nav-end-container'>
         {
-          auth.isAuthenticated && <a onClick={handleSignOut}>Sign Out</a>
+          auth.isAuthenticated &&
+          <>
+            <a onClick={handleSignOut}>Sign Out</a>
+            <Link to="/admin">Admin</Link>
+            <Link to="/awards-form">Awards</Link>
+            <Link to="/awards-summary">Awards Summary</Link>
+            <Link to="/dev">Dev</Link>
+          </>
         }
-         {/* // TODO only visible if has role  */}
-        <Link to="/admin">Admin</Link>
-        <Link to="/awards-form">Awards</Link>
-        <Link to="/awards-summary">Awards Summary</Link>
+        {/* // TODO only visible if has role  */}
+
       </div>
     </nav>
   )

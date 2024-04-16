@@ -15,7 +15,7 @@ export const authSlice = createSlice({
   reducers: {
     setIsAuthenticated: (state, action) => {
       state.isAuthenticated = action.payload;
-    }
+    },
   },
 
   extraReducers: (builder) => {
@@ -27,31 +27,7 @@ export const authSlice = createSlice({
     });
 
     builder.addCase(verifyToken.rejected, (state, action) => {
-      const { status } = action.payload;
-
-
-      switch (status) {
-        case 401: {
-          console.log('401 called in switch????');
-
-          // navigate("/auth");
-          // Access denied no token
-          break;
-
-        }
-        case 403: {
-          console.log('403 called in switch??????');
-          // invalid token
-          // navigate("/auth");
-          break;
-
-        }
-        default: {
-          // navigate("/auth");
-          console.log('def called');
-        }
-      }
-
+      const status = action.payload;
     });
   }
 })

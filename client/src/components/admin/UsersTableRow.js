@@ -7,11 +7,7 @@ import { addAllLocationsToUser, addLocationToUser, removeLocationFromUser } from
 import { ROLES } from '../../utils/constants';
 
 const UsersTableRow = ({ data, availableLocations }) => {
-
     const dispatch = useDispatch();
-
-
-    console.log('availableLocations = ', availableLocations);
 
     const [showLocationsDropdown, setshowLocationsDropdown] = useState(false);
     const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
@@ -35,9 +31,14 @@ const UsersTableRow = ({ data, availableLocations }) => {
         setAddAllButtonDisabled(data.locations.length === availableLocations.length);
         const permittedLocationsForCurrentUser = [];
 
+        console.log('authed user from row = ', authenticatedUser.locations);
+        console.log('available locations = ', availableLocations);
+
         authenticatedUser.locations.forEach((location) => {
             permittedLocationsForCurrentUser.push(availableLocations.find((item) => item.name === location));
-        })       
+        })     
+        
+        console.log('permitted = = ', permittedLocationsForCurrentUser);
 
         const filteredLocs = permittedLocationsForCurrentUser.filter(location => !data.locations.includes(location.name));
 
@@ -151,3 +152,6 @@ const UsersTableRow = ({ data, availableLocations }) => {
 export default UsersTableRow;
 
 // TODO - need to check a users permissions to see what they can actually do on this page.  Or just not enable certain options for certain people
+// TODO - Who can a level 2 (regional director) see within the users table?
+
+// So level two can see level one people only and can only give them access to their locations-> 

@@ -52,9 +52,10 @@ app.post("/login", (req, res) => {
 
     const token = jwt.generateJWT(username);
 
-    res.json({token});
+    return res.json({message: "Authetication Successful", token});
 
-    // DISABLED WHILE TESTING JWT
+
+
     // ad.authenticate(username, password, function (err, auth) {
     //     if (err) {
     //         console.log("LDAP error: ", err);
@@ -66,7 +67,9 @@ app.post("/login", (req, res) => {
     //         console.log('LDAP Authentication successful!');
     //         console.log('auth = ', auth);
 
-    //         return res.json({ message: "Authetication Successful" })
+    //         return res.json({message: "Authetication Successful", token});
+
+    //         // return res.json({ message: "Authetication Successful" })
     //     }
 
     //     else {
@@ -74,9 +77,6 @@ app.post("/login", (req, res) => {
     //         return res.status(500).json({ error: "Authentication failed" })
     //     }
     // })
-
-    // RE-Enable with above
-    // return res.json({ message: "Authetication Successful" })
 })
 
 app.get("/api", (req, res) => {

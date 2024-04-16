@@ -16,6 +16,10 @@ export const authSlice = createSlice({
     setIsAuthenticated: (state, action) => {
       state.isAuthenticated = action.payload;
     },
+
+    setLoading: (state, action) => {
+      state.loading = action.payload;
+    }
   },
 
   extraReducers: (builder) => {

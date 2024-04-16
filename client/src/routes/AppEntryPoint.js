@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { getTokenFromStorage } from '../utils/localStorageUtils';
 import { verifyToken } from '../redux/features/auth/authThunk';
-import { setIsAuthenticated } from '../redux/features/auth/authSlice';
-import { clearAuthenticatedUserData, setSignedInUsersFullName } from '../redux/features/users/usersSlice';
+import { setIsAuthenticated, setLoading } from '../redux/features/auth/authSlice';
+import { clearAuthenticatedUserData, setSignedInUsersFullName, setLoading as setUsersLoading } from '../redux/features/users/usersSlice';
 import { fetchUsers } from '../redux/features/users/usersThunk';
 
 const AppEntryPoint = () => {
@@ -39,6 +39,9 @@ const AppEntryPoint = () => {
                 navigate("/auth");
             })
         } else {
+            console.log('else called');
+            dispatch(setLoading(false));
+            dispatch(setUsersLoading(false))
             navigate("/auth");
         }
     }, [auth.isAuthenticated])
@@ -57,3 +60,5 @@ const AppEntryPoint = () => {
 }
 
 export default AppEntryPoint;
+
+// Test0101{}

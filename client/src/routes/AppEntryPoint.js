@@ -17,7 +17,6 @@ const AppEntryPoint = () => {
     const auth = useSelector((state) => state.auth);
 
     useEffect(() => {
-        console.log('%cVerify token useffect called', "color: yellow");
         const token = getTokenFromStorage();
         if (token) {
             dispatch(verifyToken(token)).unwrap().then(response => {

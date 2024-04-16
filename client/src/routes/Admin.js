@@ -50,7 +50,7 @@ const Admin = () => {
 
 
   useEffect(() => {
-      if(authenticatedUser.role !== ROLES.CA03) {
+      if(authenticatedUser.role === ROLES.CA01 || authenticatedUser.role === ROLES.CA02 ) {
         axios.get("/api/location/get-locations").then((response) => {
           setLocationsRetrieved(response.data);
           
@@ -120,7 +120,10 @@ const Admin = () => {
                 })
               }
             </ul>
-            <button onClick={() => setShowAddNewLocation(true)}>Add Location</button>
+           {  authenticatedUser.role === ROLES.CA01 ?
+             <button onClick={() => setShowAddNewLocation(true)}>Add Location</button> 
+             : null
+           }
             {
               showAddNewLocation ? 
               <div className='blackout-overlay'>

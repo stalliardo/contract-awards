@@ -2,18 +2,24 @@ import React, { useEffect, useState } from 'react';
 import SelectMenu from '../selectMenu/SelectMenu';
 
 import '../awards/table/awardsTable.css';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addAllLocationsToUser, addLocationToUser, removeLocationFromUser } from '../../redux/features/users/usersThunk';
+import { ROLES } from '../../utils/constants';
 
 const UsersTableRow = ({ data, availableLocations }) => {
 
     const dispatch = useDispatch();
+
+
+    console.log('availableLocations = ', availableLocations);
 
     const [showLocationsDropdown, setshowLocationsDropdown] = useState(false);
     const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
     const [selectedLocation, setSelectedLocation] = useState({});
     const [addAllButtonDisabled, setAddAllButtonDisabled] = useState(false);
     const [filteredLocations, setFilteredLocations] = useState([]);
+
+    const authenticatedUser = useSelector(state => state.users.authenticatedUser);
 
     useEffect(() => {
         if (Object.keys(selectedLocation).length) {
@@ -27,17 +33,22 @@ const UsersTableRow = ({ data, availableLocations }) => {
 
     useEffect(() => {
         setAddAllButtonDisabled(data.locations.length === availableLocations.length);
+        const permittedLocationsForCurrentUser = [];
 
-        const filteredLocs = availableLocations.filter(location => !data.locations.includes(location.name));
+        authenticatedUser.locations.forEach((location) => {
+            permittedLocationsForCurrentUser.push(availableLocations.find((item) => item.name === location));
+        })       
+
+        const filteredLocs = permittedLocationsForCurrentUser.filter(location => !data.locations.includes(location.name));
 
         setFilteredLocations(filteredLocs);
 
     }, [data.locations, availableLocations])
 
     const formattedRole = (groupName) => {
-        if (groupName === "CA01") return "Director";
-        if (groupName === "CA02") return "Regional Director";
-        if (groupName === "CA03") return "User";
+        if (groupName === ROLES.CA01) return "Director";
+        if (groupName === ROLES.CA02) return "Regional Director";
+        if (groupName === ROLES.CA03) return "User";
     }
 
     const onViewLocationsClicked = () => {

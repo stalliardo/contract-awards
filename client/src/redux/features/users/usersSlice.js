@@ -1,10 +1,13 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, current } from '@reduxjs/toolkit';
 import { fetchUsers, addLocationToUser, removeLocationFromUser, addAllLocationsToUser
  } from '../users/usersThunk';
+import { extractFirstAndLastName } from '../../../utils/stringUtils';
 
 const initialState = {
   data: [],
-
+  authenticatedUser: {
+    fullName: ""
+  },
   loading: true,
   error: null
 };
@@ -17,10 +20,21 @@ export const usersSlice = createSlice({
     setLoading: (state, action) => {
       state.loading = action.payload
     },
+
+    setSignedInUsersFullName: (state, action) => {
+      state.authenticatedUser.fullName = extractFirstAndLastName(action.payload);
+    },
+
+    clearAuthenticatedUserData: (state) => {
+      state.authenticatedUser = {};
+    }
   },
 
   extraReducers: (builder) => {
     builder.addCase(fetchUsers.fulfilled, (state, action) => {
+      const foundUser = action.payload.find(user => user.name.toLowerCase() === state.authenticatedUser.fullName.toLowerCase());
+
+      state.authenticatedUser = foundUser;
       state.data = action.payload;
       state.loading = false;
     });
@@ -87,7 +101,6 @@ export const usersSlice = createSlice({
   }
 })
 
-// Action creators are generated for each case reducer function
-export const { setLoading } = usersSlice.actions;
+export const { setLoading, setSignedInUsersFullName, clearAuthenticatedUserData } = usersSlice.actions;
 
 export default usersSlice.reducer;

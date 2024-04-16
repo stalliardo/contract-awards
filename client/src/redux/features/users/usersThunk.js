@@ -9,7 +9,7 @@ const fetchUsers = createAsyncThunk(
             return response.data;
         } catch (error) {
             console.log('catch called + error: ', error);
-            return new Error("There was an error getting the data.")
+            throw Error("There was an error getting the data.")
         }
     },
 )
@@ -22,7 +22,7 @@ const addLocationToUser = createAsyncThunk(
             return response.data;
         } catch (error) {
             console.log('catch called + error: ', error);
-            return new Error("There was an error adding the location to the user.")
+            throw Error("There was an error adding the location to the user.")
         }
     },
 )
@@ -34,7 +34,7 @@ const removeLocationFromUser = createAsyncThunk(
             const response = await axios.delete(`/api/users/${data.userId}/location/${data.location}`);
             return response.data;
         } catch (error) {
-            return new Error("There was an error removing the location from the user.")
+            throw Error("There was an error removing the location from the user.")
         }
     },
 )
@@ -47,7 +47,7 @@ const addAllLocationsToUser = createAsyncThunk(
             return response.data;
         } catch (error) {
             console.log('catch called + error: ', error);
-            return new Error("There was an error adding the location to the user.")
+            throw Error("There was an error adding the location to the user.")
         }
     },
 )

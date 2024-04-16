@@ -32,8 +32,9 @@ export const usersSlice = createSlice({
 
   extraReducers: (builder) => {
     builder.addCase(fetchUsers.fulfilled, (state, action) => {
-      const foundUser = action.payload.find(user => user?.name.toLowerCase() === state.authenticatedUser?.fullName.toLowerCase());
+      const foundUser = action.payload.find(user => user?.name.toLowerCase() === state.authenticatedUser?.fullName?.toLowerCase());
 
+      // the above needs changing i dont like how buggy it is
       state.authenticatedUser = foundUser;
       state.data = action.payload;
       state.loading = false;

@@ -17,6 +17,7 @@ const AppEntryPoint = () => {
     const auth = useSelector((state) => state.auth);
 
     useEffect(() => {
+        console.log('%cVerify token useffect called', "color: yellow");
         const token = getTokenFromStorage();
         if (token) {
             dispatch(verifyToken(token)).unwrap().then(response => {
@@ -28,6 +29,7 @@ const AppEntryPoint = () => {
                     dispatch(setSignedInUsersFullName(user.username));
 
                     if (users.data.length) {
+                        console.log('THERE ARE USERS / NOT CALLING FETCH\nand hence not setting the ');
                     } else {
                         dispatch(fetchUsers());
                     }
@@ -44,8 +46,13 @@ const AppEntryPoint = () => {
 
     return (
         <div>
-            <Navbar />
-            <Outlet />
+            {
+                !auth.loading && !users.loading ?
+                    <>
+                        <Navbar />
+                        <Outlet />
+                    </> : null
+            }
         </div>
     )
 }

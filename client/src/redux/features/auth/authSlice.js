@@ -20,14 +20,15 @@ export const authSlice = createSlice({
 
   extraReducers: (builder) => {
     builder.addCase(verifyToken.pending, (state, action) => {
-      
+      state.loading = true;
     });
     builder.addCase(verifyToken.fulfilled, (state, action) => {
-
+      state.loading = false;
     });
 
     builder.addCase(verifyToken.rejected, (state, action) => {
       const status = action.payload;
+      state.loading = false;
     });
   }
 })

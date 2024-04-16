@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import './admin.css';
 import Spinner from '../components/spinner/Spinner';
 import UsersTable from '../components/admin/UsersTable';
 import TargetsTable from '../components/admin/TargetsTable';
-import { TARGET_CATEGORIES } from '../utils/constants';
+import { ROLES, TARGET_CATEGORIES } from '../utils/constants';
+import { useSelector } from 'react-redux';
 
 const Admin = () => {
   const [location, setLocation] = useState("");
@@ -16,6 +18,10 @@ const Admin = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [showAddNewLocation, setShowAddNewLocation] = useState(false);
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
+
+  const navigate = useNavigate();
+  const authenticatedUser = useSelector(state => state.users.authenticatedUser);
+  const auth = useSelector(state => state.auth);
 
   const buildData = (locations, targets) => {
     const formattedTargetData = [];
@@ -41,25 +47,31 @@ const Admin = () => {
     setTargetAndLocationData(formattedTargetData);
   }
 
-  useEffect(() => {
-    axios.get("/api/location/get-locations").then((response) => {
-      setLocationsRetrieved(response.data);
-      
-      axios.get("/api/targets").then((res) => {
-        setTargetDataRetrieved(res.data);
 
-        buildData(response.data, res.data);
-         
-      }).catch((error) => {
-        console.log('Error getting targets. Error: ', error);
-      })
-    }).catch((error) => {
-      console.log('Error getting Locations. Error: ', error);
-    }).finally(() => {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 750);
-    })
+
+  useEffect(() => {
+      if(authenticatedUser.role !== ROLES.CA03) {
+        axios.get("/api/location/get-locations").then((response) => {
+          setLocationsRetrieved(response.data);
+          
+          axios.get("/api/targets").then((res) => {
+            setTargetDataRetrieved(res.data);
+    
+            buildData(response.data, res.data);
+             
+          }).catch((error) => {
+            console.log('Error getting targets. Error: ', error);
+          })
+        }).catch((error) => {
+          console.log('Error getting Locations. Error: ', error);
+        }).finally(() => {
+          setTimeout(() => {
+            setIsLoading(false);
+          }, 750);
+        })
+      } else {
+        navigate("/");
+      }
   }, [])
 
   useEffect(() => {
@@ -231,3 +243,12 @@ export default Admin;
 
   // When amending the users locations will also need to update the locations for the authenticatedUser state
     
+
+  // Data / auth loading journey:
+    // 1 - token verification
+      // Token failure:
+        // No need to get any data, just send user to auth to sign in nd get a token
+      // Has token:
+        // Set the authenticatedUser.fullName -> hold all other async code until complete
+        // Then get the users from the database using fetchUsers => hold other code
+        // once data retireved set the authenticatedUser based off of the fullName prop

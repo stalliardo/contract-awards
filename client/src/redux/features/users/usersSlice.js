@@ -50,7 +50,9 @@ export const usersSlice = createSlice({
       // Will also need to update the authenticatedUsers locations TODO
 
       const updatedUser = action.payload;
-      state.authenticatedUser = updatedUser;
+
+      // TODO below is broken
+      // state.authenticatedUser = updatedUser;
 
       // replace the user in the existing array
       const userToReplaceIndex = state.data.findIndex(user => user._id === updatedUser._id);
@@ -71,7 +73,9 @@ export const usersSlice = createSlice({
       state.loading = false;
 
       const updatedUser = action.payload;
-      state.authenticatedUser = updatedUser;
+
+      // TODO below is broken
+      // state.authenticatedUser = updatedUser;
 
       // replace the user in the existing array
       const userToReplaceIndex = state.data.findIndex(user => user._id === updatedUser._id);
@@ -85,14 +89,17 @@ export const usersSlice = createSlice({
     });
 
     builder.addCase(removeLocationFromUser.pending, (state, action) => {
-      state.loading = true;
+      // state.loading = true;
     });
 
     builder.addCase(removeLocationFromUser.fulfilled, (state, action) => {
-      state.loading = false;
+      // state.loading = false;
 
+      
       const updatedUser = action.payload.user;
-      state.authenticatedUser = updatedUser;
+      
+      // TODO below is broken
+      // state.authenticatedUser = updatedUser;
 
       // replace the user in the existing array
       const userToReplaceIndex = state.data.findIndex(user => user._id === updatedUser._id);

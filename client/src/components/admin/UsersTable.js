@@ -74,7 +74,7 @@ const UsersTable = ({ availableLocations }) => {
                                     {
                                         permittedVisibleUserData.length ?
                                             permittedVisibleUserData.map((data, index) => (
-                                                
+
                                                 <UsersTableRow data={data} key={index} availableLocations={formattedAvailableLocations} />
                                             ))
                                             : null

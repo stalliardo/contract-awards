@@ -153,9 +153,4 @@ const UsersTableRow = ({ data, availableLocations }) => {
 
 export default UsersTableRow;
 
-// TODO - need to check a users permissions to see what they can actually do on this page.  Or just not enable certain options for certain people
-// TODO - Who can a level 2 (regional director) see within the users table?
-
-// So level two can see level one people only and can only give them access to their locations-> 
 // TODO save add all only availbe to CA01 users
-// TODO ca02 shouldnt be able to remove a users from locations other than the ones available

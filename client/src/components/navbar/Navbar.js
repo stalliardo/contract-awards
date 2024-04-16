@@ -32,7 +32,7 @@ const Navbar = () => {
             <Link to="/awards-form">Awards</Link>
             <Link to="/awards-summary">Awards Summary</Link>
             <Link to="/dev">Dev</Link>
-            <a>{authenticatedUser.name}</a>
+            <a>{authenticatedUser?.name}</a>
           </>
         }
         {/* // TODO only visible if has role  */}

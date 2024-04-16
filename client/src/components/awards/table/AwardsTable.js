@@ -142,9 +142,12 @@ const AwardsTable = ({ locations }) => {
                     <div className='awards-page-title-and-button'>
                         <h3>{location} {filteredData.month}-{filteredData.year}</h3>
 
-                        <button onClick={() => setShowAddRow(true)}>
-                            Add Row
-                        </button>
+                        {   filteredData.items.length ?
+                            <button onClick={() => setShowAddRow(true)}>
+                                Add Row
+                            </button>
+                            : null
+                        }
                     </div>
                     {
                         filteredData.items.length ?

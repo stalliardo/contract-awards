@@ -32,7 +32,7 @@ export const usersSlice = createSlice({
 
   extraReducers: (builder) => {
     builder.addCase(fetchUsers.fulfilled, (state, action) => {
-      const foundUser = action.payload.find(user => user.name.toLowerCase() === state.authenticatedUser.fullName.toLowerCase());
+      const foundUser = action.payload.find(user => user?.name.toLowerCase() === state.authenticatedUser?.fullName.toLowerCase());
 
       state.authenticatedUser = foundUser;
       state.data = action.payload;
@@ -49,6 +49,7 @@ export const usersSlice = createSlice({
       // Will also need to update the authenticatedUsers locations TODO
 
       const updatedUser = action.payload;
+      state.authenticatedUser = updatedUser;
 
       // replace the user in the existing array
       const userToReplaceIndex = state.data.findIndex(user => user._id === updatedUser._id);
@@ -69,6 +70,7 @@ export const usersSlice = createSlice({
       state.loading = false;
 
       const updatedUser = action.payload;
+      state.authenticatedUser = updatedUser;
 
       // replace the user in the existing array
       const userToReplaceIndex = state.data.findIndex(user => user._id === updatedUser._id);
@@ -89,6 +91,7 @@ export const usersSlice = createSlice({
       state.loading = false;
 
       const updatedUser = action.payload.user;
+      state.authenticatedUser = updatedUser;
 
       // replace the user in the existing array
       const userToReplaceIndex = state.data.findIndex(user => user._id === updatedUser._id);

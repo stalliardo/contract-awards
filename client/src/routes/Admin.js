@@ -228,4 +228,6 @@ export default Admin;
   // Directors / Admins
     // Full Access
     // Only people who can view previuos years vai a seledct menu in the summary page
+
+  // When amending the users locations will also need to update the locations for the authenticatedUser state
     

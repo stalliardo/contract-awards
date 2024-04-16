@@ -31,15 +31,10 @@ const UsersTableRow = ({ data, availableLocations }) => {
         setAddAllButtonDisabled(data.locations.length === availableLocations.length);
         const permittedLocationsForCurrentUser = [];
 
-        console.log('authed user from row = ', authenticatedUser.locations);
-        console.log('available locations = ', availableLocations);
-
         authenticatedUser.locations.forEach((location) => {
             permittedLocationsForCurrentUser.push(availableLocations.find((item) => item.name === location));
         })     
         
-        console.log('permitted = = ', permittedLocationsForCurrentUser);
-
         const filteredLocs = permittedLocationsForCurrentUser.filter(location => !data.locations.includes(location.name));
 
         setFilteredLocations(filteredLocs);

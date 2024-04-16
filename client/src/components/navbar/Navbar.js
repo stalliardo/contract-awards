@@ -8,6 +8,8 @@ import { removeTokenFromStorage } from '../../utils/localStorageUtils';
 const Navbar = () => {
 
   const auth = useSelector(state => state.auth);
+  const authenticatedUser = useSelector(state => state.users.authenticatedUser);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -30,6 +32,7 @@ const Navbar = () => {
             <Link to="/awards-form">Awards</Link>
             <Link to="/awards-summary">Awards Summary</Link>
             <Link to="/dev">Dev</Link>
+            <a>{authenticatedUser.name}</a>
           </>
         }
         {/* // TODO only visible if has role  */}

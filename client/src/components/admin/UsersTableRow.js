@@ -103,9 +103,16 @@ const UsersTableRow = ({ data, availableLocations }) => {
                                         {
                                             data.locations.length ?
                                                 data.locations.map((location, index) => {
+
+                                                    let removeButtonDisabled = true;
+
+                                                    if(authenticatedUser.locations.includes(location)){
+                                                        removeButtonDisabled = false;
+                                                    }
+
                                                     return <li className='' key={index}>
                                                         {location}
-                                                        <button onClick={() => onRemoveLocationClicked(location)} className='red'>Remove</button>
+                                                        <button disabled={removeButtonDisabled} onClick={() => onRemoveLocationClicked(location)} className='red'>Remove</button>
                                                     </li>
                                                 }) :
                                                 <div className='users-table-locations-dropdown-container-no-locations-container'>
@@ -150,3 +157,5 @@ export default UsersTableRow;
 // TODO - Who can a level 2 (regional director) see within the users table?
 
 // So level two can see level one people only and can only give them access to their locations-> 
+// TODO save add all only availbe to CA01 users
+// TODO ca02 shouldnt be able to remove a users from locations other than the ones available

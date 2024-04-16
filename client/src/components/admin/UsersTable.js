@@ -22,7 +22,7 @@ const UsersTable = ({ availableLocations }) => {
         const filteredUsersBasedOnRole = [];
 
 
-        switch(authenticatedUserRole) {
+        switch (authenticatedUserRole) {
             case ROLES.CA01: {
                 console.log('01 called');
                 break;
@@ -48,11 +48,11 @@ const UsersTable = ({ availableLocations }) => {
 
     console.log('data from table=  ', users.data);
 
-  
+
 
     const [showAddMember, setShowAddMember] = useState(false);
 
-    if(!isLoading){
+    if (!isLoading) {
         return (
             <div className='awards-table-container'>
                 <div className='awards-page-table-container'>
@@ -67,14 +67,14 @@ const UsersTable = ({ availableLocations }) => {
                                         <th>Name</th>
                                         <th>Role</th>
                                         <th>Permissions</th>
-                                        <th>Locations</th>                                    
+                                        <th>Locations</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {
                                         permittedVisibleUserData.length ?
-                                        permittedVisibleUserData.map((data, index) => (
-    
+                                            permittedVisibleUserData.map((data, index) => (
+                                                
                                                 <UsersTableRow data={data} key={index} availableLocations={formattedAvailableLocations} />
                                             ))
                                             : null

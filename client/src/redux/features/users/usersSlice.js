@@ -46,6 +46,8 @@ export const usersSlice = createSlice({
     builder.addCase(addLocationToUser.fulfilled, (state, action) => {
       state.loading = false;
 
+      // Will also need to update the authenticatedUsers locations TODO
+
       const updatedUser = action.payload;
 
       // replace the user in the existing array

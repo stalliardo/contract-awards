@@ -11,6 +11,10 @@ const getConfig = () => {
 }
 
 exports.getADUsers = async (req, res) => {
+
+
+    // TODO - Am currently checking wheter the lengths differ to determine changes in the data, but what if a user is added to a different folder ie from CA01 to CA02?
+
     try {
         const ADConfig = getConfig();
         const AD = new ActiveDirectory(ADConfig);

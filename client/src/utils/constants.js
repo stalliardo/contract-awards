@@ -23,3 +23,9 @@ export const COLOURS = {
     GREEN: "#299e20",
     RED: "red"
 }
+
+export const ROLES = {
+    CA01: "CA01",
+    CA02: "CA02",
+    CA03: "CA03",
+}

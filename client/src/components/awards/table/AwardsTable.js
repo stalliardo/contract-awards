@@ -12,24 +12,27 @@ import Spinner from '../../spinner/Spinner';
 import './awardsTable.css';
 import '../../awards/awards.css';
 import { getCoreTotal } from '../../../utils/financialTotals';
+import { useSelector } from 'react-redux';
 
-const locationOptions = generateLocationOptionsForSelectMenu();
 
 function capitalizeFirstLetter(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-const AwardsTable = () => {
+const AwardsTable = ({ locations }) => {
+    const user = useSelector(state => state.users);
+
     const currentMonth = getCurrentMonth();
     const [filteredData, setFilteredData] = useState({ items: [] });
     const [showAddRow, setShowAddRow] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const locations = getLocations()
-    const [location, setLocation] = useState(locations[2]); // TODO change and handle "Cannot read properties of undefined (reading 'items')" error
+    const [location, setLocation] = useState(locations[0]);
+
     const [dateOptions, setDateOptions] = useState([])
     const [month, setMonth] = useState(currentMonth);
     const [coreSum, setCoreSum] = useState(0);
 
+    const locationOptions = generateLocationOptionsForSelectMenu(locations);
     const locationHelper = useLocation();
     const queryParams = new URLSearchParams(locationHelper.search);
     const locationParam = queryParams.get("location");
@@ -40,15 +43,17 @@ const AwardsTable = () => {
             setIsLoading(true);
         }
 
-        if(locationParam && monthParam) {
+        if (locationParam && monthParam) {
             // TODO set loading or something
-         
+
             setLocation(capitalizeFirstLetter(locationParam));
             setMonth(capitalizeFirstLetter(monthParam));
         }
 
         let encodedLocation = encodeURIComponent(location);
         let url = `/api/awards-diary/location?location=${encodedLocation}`
+
+
         axios.get(url).then((response) => {
             const filteredLocationData = response.data.find((item) => item.month === month);
             setFilteredData(filteredLocationData);
@@ -57,7 +62,7 @@ const AwardsTable = () => {
         }).finally(() => {
 
         })
-    }, [location, month]);
+    }, [location, month, user.authenticatedUser]);
 
     // This useEffect hook will be used to load the year from the selected diary
     useEffect(() => {
@@ -98,7 +103,7 @@ const AwardsTable = () => {
             }));
         }
 
-        if (showAddRow) setShowAddRow(false); 
+        if (showAddRow) setShowAddRow(false);
     }
 
     const itemDeleted = (awardsDiaryItemId) => {
@@ -159,14 +164,14 @@ const AwardsTable = () => {
                                     {
                                         filteredData.items && filteredData.items.length ?
                                             filteredData.items.map((data) => (
-                                                <AwardsTableRow data={data} key={data._id} onItemDeleted={itemDeleted} onItemEdited={onItemEdited} location={location} month={month}/>
+                                                <AwardsTableRow data={data} key={data._id} onItemDeleted={itemDeleted} onItemEdited={onItemEdited} location={location} month={month} />
                                             ))
                                             : null
                                     }
                                     {
                                         showAddRow &&
                                         // the below line will be used to replace the below code for adding data in the table
-                                        <AwardsTableAddRow awardsTableId={filteredData._id} onCancelClicked={() => setShowAddRow(false)} onItemAdded={itemAdded} location={location} month={month}/>
+                                        <AwardsTableAddRow awardsTableId={filteredData._id} onCancelClicked={() => setShowAddRow(false)} onItemAdded={itemAdded} location={location} month={month} />
                                     }
                                     <tr className='last-row'>
                                         <td></td>
@@ -183,7 +188,7 @@ const AwardsTable = () => {
                             : <div className='awards-table-no-data-container'>
                                 <h3>No entries found for {month}</h3>
                                 {/* Now how to dispay the add row? */}
-                                <FirstAwardsEntry awardsTableId={filteredData._id} location={filteredData.location} onItemAdded={itemAdded} month={month}/>
+                                <FirstAwardsEntry awardsTableId={filteredData._id} location={filteredData.location} onItemAdded={itemAdded} month={month} />
                             </div>
                     }
                 </div>
@@ -192,3 +197,10 @@ const AwardsTable = () => {
     }
 }
 export default AwardsTable;
+
+
+// How to handle filtering locations / data based on the userRole and their locations.
+
+// Where is this logic reuiqred?
+// 1 - awardsTable ie here the locations available need to filterted
+// 2 - the summaryTable... the same thing

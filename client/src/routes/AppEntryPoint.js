@@ -8,6 +8,7 @@ import { verifyToken } from '../redux/features/auth/authThunk';
 import { setIsAuthenticated, setLoading } from '../redux/features/auth/authSlice';
 import { clearAuthenticatedUserData, setSignedInUsersFullName, setLoading as setUsersLoading } from '../redux/features/users/usersSlice';
 import { fetchUsers } from '../redux/features/users/usersThunk';
+import Spinner from '../components/spinner/Spinner';
 
 const AppEntryPoint = () => {
     const navigate = useNavigate();
@@ -17,28 +18,33 @@ const AppEntryPoint = () => {
     const auth = useSelector((state) => state.auth);
 
     useEffect(() => {
-        console.log('%c\n1: App entry called', "color:red");
+        console.log('%c\n1: App entry called ', "color:red");
 
         const token = getTokenFromStorage();
-        if (token) {
+
+        if (token && !users.authenticatedUser._id) {
             console.log('if token called');
             dispatch(verifyToken(token)).unwrap().then(response => {
                 const { status } = response;
                 const { user } = response.data;
 
-                if (status === 200 && !users.authenticatedUser._id) {
-                    console.log('if status callde');
-                    dispatch(setIsAuthenticated(true));
-                    dispatch(setSignedInUsersFullName(user.username));
-                    dispatch(fetchUsers(user.username));
+                if (status === 200) {
+                    dispatch(fetchUsers(user.username)).unwrap().then((res) => {
+                        const {locations} = res;
+                        console.log('locations - ', locations);
+                        dispatch(setIsAuthenticated(true));
+                    })
                 }
             }).catch((error) => {
                 dispatch(setIsAuthenticated(false));
                 dispatch(clearAuthenticatedUserData());
                 navigate("/auth");
             })
+        } else if(token && users.authenticatedUser._id) {
+            dispatch(setLoading(false));
+            dispatch(setUsersLoading(false))
+            navigate("/");
         } else {
-            console.log('else called');
             dispatch(setLoading(false));
             dispatch(setUsersLoading(false))
             navigate("/auth");
@@ -52,6 +58,8 @@ const AppEntryPoint = () => {
                 <Outlet />
             </div>
         )
+    } else {
+        return <div style={{marginTop: "100px"}} className='spinner-container'><Spinner classes="page" /></div>
     }
 }
 

@@ -12,8 +12,6 @@ const Navbar = () => {
   const auth = useSelector(state => state.auth);
   const authenticatedUser = useSelector(state => state.users.authenticatedUser);
 
-  console.log('authenticated user from nav = ', authenticatedUser);
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

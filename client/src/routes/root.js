@@ -6,44 +6,51 @@ import { ROLES } from '../utils/constants';
 
 const Root = () => {
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [userHasLoaded, setUserHasLoaded] = useState(false);
-    const [locations, setLocations] = useState([]);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userHasLoaded, setUserHasLoaded] = useState(false);
+  const [locations, setLocations] = useState([]);
 
-    const authenticatedUser = useSelector(state => state.users.authenticatedUser);
-    const auth = useSelector(state => state.auth);
+  const authenticatedUser = useSelector(state => state.users.authenticatedUser);
+  const auth = useSelector(state => state.auth);
 
-    useEffect(() => {
-      console.log('use ffect called from root');
-      if(authenticatedUser._id) {
-        if(authenticatedUser.locations.length) {
+  useEffect(() => {
+    console.log('use ffect called from root');
+    if (authenticatedUser._id) {
+      if (authenticatedUser.locations.length) {
 
-          console.log('locations called');
-          const sortedLocations = [...authenticatedUser.locations].sort();
-          setLocations(sortedLocations);
-        } else {
-          console.log('no locations');
-        }
-
-        console.log('user has loaded called');
-
-        setUserHasLoaded(true);
+        console.log('locations called');
+        const sortedLocations = [...authenticatedUser.locations].sort();
+        setLocations(sortedLocations);
       } else {
-        setUserHasLoaded(false);
+        console.log('no locations');
       }
 
-    }, [])
+      console.log('user has loaded called');
+
+      setUserHasLoaded(true);
+    } else {
+      setUserHasLoaded(false);
+    }
+
+  }, [])
 
   return (
     <div className='root-page-awards-table'>
-      { userHasLoaded &&
+      {/* { userHasLoaded &&
         
           locations.length ? <AwardsTable locations={locations}/>
           : <div className='root-page-no-locations-message'>
             <p>Oops! It seems you haven't been assigned to any locations yet. Only directors, regional directors and site admins can allocate locations. Please reach out to the appropriate person for further assistance.</p>
           </div>
+      } */}
+
+      {
+        locations.length ? <AwardsTable locations={locations} />
+        : <div className='root-page-no-locations-message'>
+          <p>Oops! It seems you haven't been assigned to any locations yet. Only directors, regional directors and site admins can allocate locations. Please reach out to the appropriate person for further assistance.</p>
+        </div>
       }
     </div>
   )

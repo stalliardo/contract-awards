@@ -7,7 +7,6 @@ import axios from 'axios';
 import AwardsTableAddRow from './AwardsTableAddRow';
 import FirstAwardsEntry from '../../forms/FirstAwardsEntry';
 import SelectMenu from '../../selectMenu/SelectMenu';
-import Spinner from '../../spinner/Spinner';
 
 import './awardsTable.css';
 import '../../awards/awards.css';
@@ -42,6 +41,9 @@ const AwardsTable = ({ locations }) => {
         if (!isLoading) {
             setIsLoading(true);
         }
+
+        console.log('awards table called');
+
 
         if (locationParam && monthParam) {
             // TODO set loading or something
@@ -124,80 +126,76 @@ const AwardsTable = ({ locations }) => {
         setMonth(extractMonthFromString(value));
     }
 
-    if (isLoading) {
-        return <div className='spinner-container'><Spinner classes="page" /></div>
-    } else {
-        return (
-            <div className='awards-table-container'>
-                <div className='awards-table-container-select-menus'>
-                    <div className='awards-table-select'>
-                        <SelectMenu placeholder={location} menuItems={locationOptions} handleItemSelection={onLocationSelected} />
-                    </div>
-                    <div className='awards-table-select'>
-                        <SelectMenu placeholder={month} menuItems={dateOptions} handleItemSelection={onMonthSelected} allSettingPlaceholder={false} />
-                    </div>
+    return (
+        <div className='awards-table-container'>
+            <div className='awards-table-container-select-menus'>
+                <div className='awards-table-select'>
+                    <SelectMenu placeholder={location} menuItems={locationOptions} handleItemSelection={onLocationSelected} />
                 </div>
-
-                <div className='awards-page-table-container'>
-                    <div className='awards-page-title-and-button'>
-                        <h3>{location} {filteredData.month}-{filteredData.year}</h3>
-
-                        {   filteredData.items.length ?
-                            <button onClick={() => setShowAddRow(true)}>
-                                Add Row
-                            </button>
-                            : null
-                        }
-                    </div>
-                    {
-                        filteredData.items.length ?
-                            <table id="awards-table" className='awards-form-table'>
-                                <thead>
-                                    <tr>
-                                        <th className='contracts-column'>Contract No.</th>
-                                        <th>Project</th>
-                                        <th>Programme</th>
-                                        <th>Contractor</th>
-                                        <th>Region</th>
-                                        <th>Core</th>
-                                        <th colSpan="2" style={{ textAlign: "center" }}>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        filteredData.items && filteredData.items.length ?
-                                            filteredData.items.map((data) => (
-                                                <AwardsTableRow data={data} key={data._id} onItemDeleted={itemDeleted} onItemEdited={onItemEdited} location={location} month={month} />
-                                            ))
-                                            : null
-                                    }
-                                    {
-                                        showAddRow &&
-                                        // the below line will be used to replace the below code for adding data in the table
-                                        <AwardsTableAddRow awardsTableId={filteredData._id} onCancelClicked={() => setShowAddRow(false)} onItemAdded={itemAdded} location={location} month={month} />
-                                    }
-                                    <tr className='last-row'>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td className='last-cell'>Total: £{coreSum.toFixed(2)}</td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            : <div className='awards-table-no-data-container'>
-                                <h3>No entries found for {month}</h3>
-                                {/* Now how to dispay the add row? */}
-                                <FirstAwardsEntry awardsTableId={filteredData._id} location={filteredData.location} onItemAdded={itemAdded} month={month} />
-                            </div>
-                    }
+                <div className='awards-table-select'>
+                    <SelectMenu placeholder={month} menuItems={dateOptions} handleItemSelection={onMonthSelected} allSettingPlaceholder={false} />
                 </div>
             </div>
-        )
-    }
+
+            <div className='awards-page-table-container'>
+                <div className='awards-page-title-and-button'>
+                    <h3>{location} {filteredData.month}-{filteredData.year}</h3>
+
+                    {filteredData.items.length ?
+                        <button onClick={() => setShowAddRow(true)}>
+                            Add Row
+                        </button>
+                        : null
+                    }
+                </div>
+                {
+                    filteredData.items.length ?
+                        <table id="awards-table" className='awards-form-table'>
+                            <thead>
+                                <tr>
+                                    <th className='contracts-column'>Contract No.</th>
+                                    <th>Project</th>
+                                    <th>Programme</th>
+                                    <th>Contractor</th>
+                                    <th>Region</th>
+                                    <th>Core</th>
+                                    <th colSpan="2" style={{ textAlign: "center" }}>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    filteredData.items && filteredData.items.length ?
+                                        filteredData.items.map((data) => (
+                                            <AwardsTableRow data={data} key={data._id} onItemDeleted={itemDeleted} onItemEdited={onItemEdited} location={location} month={month} />
+                                        ))
+                                        : null
+                                }
+                                {
+                                    showAddRow &&
+                                    // the below line will be used to replace the below code for adding data in the table
+                                    <AwardsTableAddRow awardsTableId={filteredData._id} onCancelClicked={() => setShowAddRow(false)} onItemAdded={itemAdded} location={location} month={month} />
+                                }
+                                <tr className='last-row'>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td className='last-cell'>Total: £{coreSum.toFixed(2)}</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        : <div className='awards-table-no-data-container'>
+                            <h3>No entries found for {month}</h3>
+                            {/* Now how to dispay the add row? */}
+                            <FirstAwardsEntry awardsTableId={filteredData._id} location={filteredData.location} onItemAdded={itemAdded} month={month} />
+                        </div>
+                }
+            </div>
+        </div>
+    )
 }
 export default AwardsTable;
 

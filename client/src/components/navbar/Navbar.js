@@ -29,7 +29,7 @@ const Navbar = () => {
       <div className='nav-end-container'>
         {
           auth.isAuthenticated &&
-            authenticatedUser.locations.length ? 
+            authenticatedUser.locations?.length ? 
             <>
             <a onClick={handleSignOut}>Sign Out</a>
             <Link to="/admin">Admin</Link>

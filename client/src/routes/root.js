@@ -11,32 +11,30 @@ const Root = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userHasLoaded, setUserHasLoaded] = useState(false);
     const [locations, setLocations] = useState([]);
+
     const authenticatedUser = useSelector(state => state.users.authenticatedUser);
+    const auth = useSelector(state => state.auth);
 
     useEffect(() => {
-        // Check if authenticated, if not transition to the auth page
-
-        if(!isAuthenticated) {
-            // console.log('not authed called');
-            // navigate("/auth"); // TODO
-        }
-    }, []);
-
-    useEffect(() => {
+      console.log('use ffect called from root');
       if(authenticatedUser._id) {
         if(authenticatedUser.locations.length) {
+
+          console.log('locations called');
           const sortedLocations = [...authenticatedUser.locations].sort();
           setLocations(sortedLocations);
         } else {
           console.log('no locations');
         }
 
+        console.log('user has loaded called');
+
         setUserHasLoaded(true);
       } else {
         setUserHasLoaded(false);
       }
 
-    }, [authenticatedUser])
+    }, [])
 
   return (
     <div className='root-page-awards-table'>
@@ -44,9 +42,8 @@ const Root = () => {
         
           locations.length ? <AwardsTable locations={locations}/>
           : <div className='root-page-no-locations-message'>
-            <p>Oops! It seems you haven't been assigned to any locations yet. Only directors, regional directors ans site admins can allocate locations. Please reach out to the appropriate person for further assistance.</p>
+            <p>Oops! It seems you haven't been assigned to any locations yet. Only directors, regional directors and site admins can allocate locations. Please reach out to the appropriate person for further assistance.</p>
           </div>
-        
       }
     </div>
   )

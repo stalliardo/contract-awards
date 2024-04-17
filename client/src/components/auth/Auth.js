@@ -35,6 +35,7 @@ const Auth = () => {
       const token = res.data.token;
 
       addTokenToStorage(token);
+      console.log('token added to storgae');
       dispatch(setIsAuthenticated(true));
       navigate("/");
 

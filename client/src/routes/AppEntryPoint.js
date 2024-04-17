@@ -21,19 +21,16 @@ const AppEntryPoint = () => {
 
         const token = getTokenFromStorage();
         if (token) {
+            console.log('if token called');
             dispatch(verifyToken(token)).unwrap().then(response => {
                 const { status } = response;
                 const { user } = response.data;
 
                 if (status === 200 && !users.authenticatedUser._id) {
+                    console.log('if status callde');
                     dispatch(setIsAuthenticated(true));
                     dispatch(setSignedInUsersFullName(user.username));
-
-                    if (users.data.length) {
-                        console.log('THERE ARE USERS / NOT CALLING FETCH\nand hence not setting the ');
-                    } else {
-                        dispatch(fetchUsers(user.username));
-                    }
+                    dispatch(fetchUsers(user.username));
                 }
             }).catch((error) => {
                 dispatch(setIsAuthenticated(false));
@@ -46,7 +43,7 @@ const AppEntryPoint = () => {
             dispatch(setUsersLoading(false))
             navigate("/auth");
         }
-    }, [])
+    }, [auth.isAuthenticated])
 
     if (!auth.loading && !users.loading) {
         return (

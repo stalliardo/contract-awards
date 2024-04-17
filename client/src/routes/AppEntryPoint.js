@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { getTokenFromStorage } from '../utils/localStorageUtils';
 import { verifyToken } from '../redux/features/auth/authThunk';
 import { setIsAuthenticated, setLoading } from '../redux/features/auth/authSlice';
-import { clearAuthenticatedUserData, setSignedInUsersFullName, setLoading as setUsersLoading } from '../redux/features/users/usersSlice';
+import { clearAuthenticatedUserData, setLoading as setUsersLoading } from '../redux/features/users/usersSlice';
 import { fetchUsers } from '../redux/features/users/usersThunk';
 import Spinner from '../components/spinner/Spinner';
 import { setLocations } from '../redux/features/locations/locationSlice';
@@ -22,9 +22,7 @@ const AppEntryPoint = () => {
         console.log('%c\n1: App entry called ', "color:red");
 
         const token = getTokenFromStorage();
-
         if (token && !users.authenticatedUser._id) {
-            console.log('if token called');
             dispatch(verifyToken(token)).unwrap().then(response => {
                 const { status } = response;
                 const { user } = response.data;
@@ -32,14 +30,11 @@ const AppEntryPoint = () => {
                 if (status === 200) {
                     dispatch(fetchUsers(user.username)).unwrap().then((res) => {
                         const {locations} = res;
-                        // ^ work out where all refs to locations are....
-
-                        // have access to the locations above - ccan i not set these in state instead of mulitple newtork reqs???
                         dispatch(setLocations(locations));
                         dispatch(setIsAuthenticated(true));
                     })
                 }
-            }).catch((error) => {
+            }).catch(() => {
                 dispatch(setIsAuthenticated(false));
                 dispatch(clearAuthenticatedUserData());
                 navigate("/auth");

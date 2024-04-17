@@ -27,7 +27,6 @@ const FirstAwardsEntry = ({ awardsTableId, location, month, onItemAdded }) => {
         data.location = location;
 
         dispatch(addData({data, month, location})).unwrap().then((response) => {
-            console.log('response from unwrap = ', response);
             onItemAdded(response);
         }).catch((error) => {
             console.log('Error adding item: ', error);
@@ -47,8 +46,6 @@ const FirstAwardsEntry = ({ awardsTableId, location, month, onItemAdded }) => {
 
     return (
         <div className='first-awards-entry-form'>
-            <h3>Add Award Form</h3>
-
             <label>Contract No</label>
             <input type='text' name='contractNumber' onChange={handleChange} />
 

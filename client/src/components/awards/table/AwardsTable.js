@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import AwardsTableRow from './AwardsTableRow';
 import { extractMonthFromString, generateDateOptionsForSelectMenu, getCurrentMonth } from '../../../utils/DateUtils';
-import { getLocations, generateLocationOptionsForSelectMenu } from '../../../utils/locationUtils';
+import { generateLocationOptionsForSelectMenu } from '../../../utils/locationUtils';
 import axios from 'axios';
 import AwardsTableAddRow from './AwardsTableAddRow';
 import FirstAwardsEntry from '../../forms/FirstAwardsEntry';
 import SelectMenu from '../../selectMenu/SelectMenu';
 
-import './awardsTable.css';
-import '../../awards/awards.css';
 import { getCoreTotal } from '../../../utils/financialTotals';
 import { useSelector } from 'react-redux';
 
+import './awardsTable.css';
+import '../../awards/awards.css';
 
 function capitalizeFirstLetter(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -42,19 +42,13 @@ const AwardsTable = ({ locations }) => {
             setIsLoading(true);
         }
 
-        console.log('awards table called');
-
-
         if (locationParam && monthParam) {
-            // TODO set loading or something
-
             setLocation(capitalizeFirstLetter(locationParam));
             setMonth(capitalizeFirstLetter(monthParam));
         }
 
         let encodedLocation = encodeURIComponent(location);
         let url = `/api/awards-diary/location?location=${encodedLocation}`
-
 
         axios.get(url).then((response) => {
             const filteredLocationData = response.data.find((item) => item.month === month);
@@ -74,17 +68,15 @@ const AwardsTable = ({ locations }) => {
 
     useEffect(() => {
         setCoreSum(getCoreTotal(filteredData.items));
-    }, [filteredData.items]) // observe the items array for changes
+    }, [filteredData.items])
 
     const itemAdded = (data) => {
-        console.log('data from itemAded = ', data);
         const updatedFilteredData = [...filteredData.items, data];
         setFilteredData(prevState => ({
             ...prevState,
             items: updatedFilteredData
         }));
 
-        // if the add row is open, close it
         if (showAddRow) {
             setShowAddRow(false);
         }
@@ -111,7 +103,6 @@ const AwardsTable = ({ locations }) => {
     const itemDeleted = (awardsDiaryItemId) => {
         const updatedFilteredData = filteredData.items.filter(item => item._id !== awardsDiaryItemId);
 
-        // Update the state with the filteredArray
         setFilteredData(prevState => ({
             ...prevState,
             items: updatedFilteredData
@@ -136,7 +127,6 @@ const AwardsTable = ({ locations }) => {
                     <SelectMenu placeholder={month} menuItems={dateOptions} handleItemSelection={onMonthSelected} allSettingPlaceholder={false} />
                 </div>
             </div>
-
             <div className='awards-page-table-container'>
                 <div className='awards-page-title-and-button'>
                     <h3>{location} {filteredData.month}-{filteredData.year}</h3>
@@ -172,7 +162,6 @@ const AwardsTable = ({ locations }) => {
                                 }
                                 {
                                     showAddRow &&
-                                    // the below line will be used to replace the below code for adding data in the table
                                     <AwardsTableAddRow awardsTableId={filteredData._id} onCancelClicked={() => setShowAddRow(false)} onItemAdded={itemAdded} location={location} month={month} />
                                 }
                                 <tr className='last-row'>
@@ -188,8 +177,7 @@ const AwardsTable = ({ locations }) => {
                             </tbody>
                         </table>
                         : <div className='awards-table-no-data-container'>
-                            <h3>No entries found for {month}</h3>
-                            {/* Now how to dispay the add row? */}
+                            <h3>No awards found for {month}. Enter one below.</h3>
                             <FirstAwardsEntry awardsTableId={filteredData._id} location={filteredData.location} onItemAdded={itemAdded} month={month} />
                         </div>
                 }
@@ -198,10 +186,3 @@ const AwardsTable = ({ locations }) => {
     )
 }
 export default AwardsTable;
-
-
-// How to handle filtering locations / data based on the userRole and their locations.
-
-// Where is this logic reuiqred?
-// 1 - awardsTable ie here the locations available need to filterted
-// 2 - the summaryTable... the same thing

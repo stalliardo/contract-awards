@@ -1,4 +1,4 @@
-import { createSlice, current } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { fetchUsers, addLocationToUser, removeLocationFromUser, addAllLocationsToUser
  } from '../users/usersThunk';
 import { extractFirstAndLastName } from '../../../utils/stringUtils';
@@ -35,11 +35,10 @@ export const usersSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(fetchUsers.fulfilled, (state, action) => {
-      const foundUser = action.payload.find(user => user?.name.toLowerCase() === state.authenticatedUser?.fullName?.toLowerCase());
+      const {users, updatedUser} = action.payload;
 
-      // the above needs changing i dont like how buggy it is
-      state.authenticatedUser = foundUser;
-      state.data = action.payload;
+      state.authenticatedUser = updatedUser;
+      state.data = users;
       state.loading = false;
     });
 
@@ -49,9 +48,6 @@ export const usersSlice = createSlice({
 
     builder.addCase(addLocationToUser.fulfilled, (state, action) => {
       state.loading = false;
-
-      // Will also need to update the authenticatedUsers locations TODO
-
       const updatedUser = action.payload;
 
       // TODO below is broken

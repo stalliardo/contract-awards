@@ -29,11 +29,15 @@ const UsersTableRow = ({ data, availableLocations }) => {
 
     useEffect(() => {
         setAddAllButtonDisabled(data.locations.length === availableLocations.length);
-        const permittedLocationsForCurrentUser = [];
+        let permittedLocationsForCurrentUser = [];
 
-        authenticatedUser.locations.forEach((location) => {
-            permittedLocationsForCurrentUser.push(availableLocations.find((item) => item.name === location));
-        })
+        if (authenticatedUser.role !== ROLES.CA01) {
+            authenticatedUser.locations.forEach((location) => {
+                permittedLocationsForCurrentUser.push(availableLocations.find((item) => item.name === location));
+            })
+        } else if (authenticatedUser.role === ROLES.CA01) {
+            permittedLocationsForCurrentUser = availableLocations;
+        }
 
         const filteredLocs = permittedLocationsForCurrentUser.filter(location => !data.locations.includes(location.name));
 
@@ -130,7 +134,7 @@ const UsersTableRow = ({ data, availableLocations }) => {
                                                 <>
                                                     <h4>Add New Location</h4>
                                                     <SelectMenu menuItems={filteredLocations} placeholder={"Locations"} handleItemSelection={onLocationSelected} />
-                                                    {   authenticatedUser.role === ROLES.CA01 ?
+                                                    {authenticatedUser.role === ROLES.CA01 ?
                                                         <div className='users-table-display-locations-buttons add-all'>
                                                             <button disabled={addAllButtonDisabled} onClick={onAddAllLocationsClicked}>Save / Add All</button>
                                                         </div>
@@ -155,9 +159,3 @@ const UsersTableRow = ({ data, availableLocations }) => {
 }
 
 export default UsersTableRow;
-
-// TODO save add all only availbe to CA01 users
-
-
-// USer has not locations yet
-    // they log in and get error message 

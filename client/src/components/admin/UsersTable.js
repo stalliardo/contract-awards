@@ -24,6 +24,8 @@ const UsersTable = ({ availableLocations }) => {
         switch (authenticatedUserRole) {
             case ROLES.CA01: {
                 console.log('01 called');
+                filteredUsersBasedOnRole.push(users.data);
+                setPermittedVisibleUserData(...filteredUsersBasedOnRole);
                 break;
             }
             case ROLES.CA02: {

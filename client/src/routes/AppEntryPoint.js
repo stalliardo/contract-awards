@@ -32,7 +32,7 @@ const AppEntryPoint = () => {
                     if (users.data.length) {
                         console.log('THERE ARE USERS / NOT CALLING FETCH\nand hence not setting the ');
                     } else {
-                        dispatch(fetchUsers());
+                        dispatch(fetchUsers(user.username));
                     }
                 }
             }).catch((error) => {

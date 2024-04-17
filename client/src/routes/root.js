@@ -53,3 +53,6 @@ const Root = () => {
 }
 
 export default Root;
+
+// The above error message should only apply to none CA01 users
+//almost like if they ahave the ca01 titel they should automatically have all locations assigned by default.

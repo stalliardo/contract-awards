@@ -17,13 +17,15 @@ const AppEntryPoint = () => {
     const auth = useSelector((state) => state.auth);
 
     useEffect(() => {
+        console.log('%c\n1: App entry called', "color:red");
+
         const token = getTokenFromStorage();
         if (token) {
             dispatch(verifyToken(token)).unwrap().then(response => {
                 const { status } = response;
                 const { user } = response.data;
 
-                if (status === 200) {
+                if (status === 200 && !users.authenticatedUser._id) {
                     dispatch(setIsAuthenticated(true));
                     dispatch(setSignedInUsersFullName(user.username));
 
@@ -44,21 +46,16 @@ const AppEntryPoint = () => {
             dispatch(setUsersLoading(false))
             navigate("/auth");
         }
-    }, [auth.isAuthenticated])
+    }, [])
 
-    return (
-        <div>
-            {
-                !auth.loading && !users.loading ?
-                    <>
-                        <Navbar />
-                        <Outlet />
-                    </> : null
-            }
-        </div>
-    )
+    if (!auth.loading || !users.loading) {
+        return (
+            <div>
+                <Navbar />
+                <Outlet />
+            </div>
+        )
+    }
 }
 
 export default AppEntryPoint;
-
-// Test0101{}

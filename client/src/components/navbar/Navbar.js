@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { setIsAuthenticated } from '../../redux/features/auth/authSlice';
 import { removeTokenFromStorage } from '../../utils/localStorageUtils';
+import { clearAuthenticatedUserData } from '../../redux/features/users/usersSlice';
 
 const Navbar = () => {
 
@@ -14,9 +15,8 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const handleSignOut = () => {
-    // TODO
-    console.log('log out clicked');
     dispatch(setIsAuthenticated(false));
+    dispatch(clearAuthenticatedUserData())
     removeTokenFromStorage();
     navigate("/auth");
   }

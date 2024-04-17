@@ -8,7 +8,7 @@ const initialState = {
   authenticatedUser: {
     fullName: ""
   },
-  loading: true,
+  loading: false,
   error: null
 };
 
@@ -31,6 +31,9 @@ export const usersSlice = createSlice({
   },
 
   extraReducers: (builder) => {
+    builder.addCase(fetchUsers.pending, (state, action) => {
+      state.loading = true;
+    });
     builder.addCase(fetchUsers.fulfilled, (state, action) => {
       const foundUser = action.payload.find(user => user?.name.toLowerCase() === state.authenticatedUser?.fullName?.toLowerCase());
 

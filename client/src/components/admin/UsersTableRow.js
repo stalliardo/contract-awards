@@ -33,8 +33,8 @@ const UsersTableRow = ({ data, availableLocations }) => {
 
         authenticatedUser.locations.forEach((location) => {
             permittedLocationsForCurrentUser.push(availableLocations.find((item) => item.name === location));
-        })     
-        
+        })
+
         const filteredLocs = permittedLocationsForCurrentUser.filter(location => !data.locations.includes(location.name));
 
         setFilteredLocations(filteredLocs);
@@ -78,7 +78,7 @@ const UsersTableRow = ({ data, availableLocations }) => {
 
         if (confirmation) {
             dispatch(removeLocationFromUser({ location, userId: data._id }));
-        } 
+        }
     }
 
     return (
@@ -106,7 +106,7 @@ const UsersTableRow = ({ data, availableLocations }) => {
 
                                                     let removeButtonDisabled = true;
 
-                                                    if(authenticatedUser.locations.includes(location)){
+                                                    if (authenticatedUser.locations.includes(location)) {
                                                         removeButtonDisabled = false;
                                                     }
 
@@ -130,9 +130,12 @@ const UsersTableRow = ({ data, availableLocations }) => {
                                                 <>
                                                     <h4>Add New Location</h4>
                                                     <SelectMenu menuItems={filteredLocations} placeholder={"Locations"} handleItemSelection={onLocationSelected} />
-                                                    <div className='users-table-display-locations-buttons add-all'>
-                                                        <button disabled={addAllButtonDisabled} onClick={onAddAllLocationsClicked}>Save / Add All</button>
-                                                    </div>
+                                                    {   authenticatedUser.role === ROLES.CA01 ?
+                                                        <div className='users-table-display-locations-buttons add-all'>
+                                                            <button disabled={addAllButtonDisabled} onClick={onAddAllLocationsClicked}>Save / Add All</button>
+                                                        </div>
+                                                        : null
+                                                    }
                                                 </>
                                         }
                                     </div>

@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 
 import '../awards/table/awardsTable.css';
 import UsersTableRow from './UsersTableRow';
-import UsersTableAddRow from './UsersTableAddRow';
 
-import { useDispatch, useSelector } from 'react-redux';
 import { ROLES } from '../../utils/constants';
+import { useSelector } from 'react-redux';
 
 const UsersTable = ({ availableLocations }) => {
     const users = useSelector((state) => state.users);
-    const [isLoading, setIsLoading] = useState(true);
+
+    const [isLoading, setIsLoading] = useState(true); 
     const [formattedAvailableLocations, setFormattedAvailableLocations] = useState([]);
     const [permittedVisibleUserData, setPermittedVisibleUserData] = useState([]);
 
@@ -21,16 +21,13 @@ const UsersTable = ({ availableLocations }) => {
         const authenticatedUserRole = users.authenticatedUser.role;
         const filteredUsersBasedOnRole = [];
 
-
         switch (authenticatedUserRole) {
             case ROLES.CA01: {
                 console.log('01 called');
                 break;
             }
             case ROLES.CA02: {
-                console.log('02 called');
                 filteredUsersBasedOnRole.push(users.data.filter(user => user.role === ROLES.CA03));
-                console.log('filteredUsersBasedOnRole = ', ...filteredUsersBasedOnRole);
                 setPermittedVisibleUserData(...filteredUsersBasedOnRole);
                 break;
             }
@@ -40,17 +37,9 @@ const UsersTable = ({ availableLocations }) => {
             }
         }
 
-        console.log('current user stats = ', users.authenticatedUser);
-
         setFormattedAvailableLocations(formattedSelectMenuItems);
         setIsLoading(false);
     }, [availableLocations.length, users.data])
-
-    console.log('data from table=  ', users.data);
-
-
-
-    const [showAddMember, setShowAddMember] = useState(false);
 
     if (!isLoading) {
         return (

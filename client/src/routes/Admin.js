@@ -51,7 +51,6 @@ const Admin = () => {
 
   useEffect(() => {
       if(authenticatedUser.role === ROLES.CA01 || authenticatedUser.role === ROLES.CA02 ) {
-        console.log('if called top');
         axios.get("/api/location/get-locations").then((response) => {
           setLocationsRetrieved(response.data);
 

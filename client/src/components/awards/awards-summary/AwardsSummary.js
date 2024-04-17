@@ -28,6 +28,7 @@ const AwardsSummary = () => {
     const awardsData = useSelector((state) => state.awards);
     const isLoading = useSelector((state) => state.awards.loading);
     const locations = useSelector((state) => state.awards.locations);
+    const originalLocations = useSelector((state) => state.location.data);
     const specialLocations = useSelector((state) => state.awards.specialLocations);
 
     const dispatch = useDispatch();
@@ -37,11 +38,9 @@ const AwardsSummary = () => {
 
     useEffect(() => {
         if (awardsData.coreTotals.length > 0) {
-            console.log('And the data is: ', awardsData.coreTotals);
             setSpinnerComplete(true);
         } else {
-            console.log('else called, fetchdata called');
-            dispatch(fetchData()).finally(() => {
+            dispatch(fetchData(originalLocations)).finally(() => {
                 setTimeout(() => {
                     setSpinnerComplete(true);
                 }, 500);

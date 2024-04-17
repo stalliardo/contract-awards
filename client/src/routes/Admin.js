@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import './admin.css';
 import Spinner from '../components/spinner/Spinner';
 import UsersTable from '../components/admin/UsersTable';
 import TargetsTable from '../components/admin/TargetsTable';
-import { TARGET_CATEGORIES } from '../utils/constants';
+import { ROLES, TARGET_CATEGORIES } from '../utils/constants';
+import { useSelector } from 'react-redux';
 
 const Admin = () => {
   const [location, setLocation] = useState("");
@@ -16,6 +18,12 @@ const Admin = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [showAddNewLocation, setShowAddNewLocation] = useState(false);
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
+
+  const navigate = useNavigate();
+
+  const authenticatedUser = useSelector(state => state.users.authenticatedUser);
+  const auth = useSelector(state => state.auth);
+  const originalLocations = useSelector(state => state.location.data);
 
   const buildData = (locations, targets) => {
     const formattedTargetData = [];
@@ -42,24 +50,22 @@ const Admin = () => {
   }
 
   useEffect(() => {
-    axios.get("/api/location/get-locations").then((response) => {
-      setLocationsRetrieved(response.data);
-      
-      axios.get("/api/targets").then((res) => {
-        setTargetDataRetrieved(res.data);
-
-        buildData(response.data, res.data);
-         
-      }).catch((error) => {
-        console.log('Error getting targets. Error: ', error);
+      if(authenticatedUser.role === ROLES.CA01 || authenticatedUser.role === ROLES.CA02 ) {
+        setLocationsRetrieved(originalLocations);
+        axios.get("/api/targets").then((res) => {
+          setTargetDataRetrieved(res.data);
+          buildData(originalLocations, res.data);
+        }).catch((error) => {
+          console.log('Error getting targets. Error: ', error);
+        
+      }).finally(() => {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 750);
       })
-    }).catch((error) => {
-      console.log('Error getting Locations. Error: ', error);
-    }).finally(() => {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 750);
-    })
+    } else {
+      navigate("/");
+    }     
   }, [])
 
   useEffect(() => {
@@ -108,7 +114,10 @@ const Admin = () => {
                 })
               }
             </ul>
-            <button onClick={() => setShowAddNewLocation(true)}>Add Location</button>
+           {  authenticatedUser.role === ROLES.CA01 ?
+             <button onClick={() => setShowAddNewLocation(true)}>Add Location</button> 
+             : null
+           }
             {
               showAddNewLocation ? 
               <div className='blackout-overlay'>
@@ -228,4 +237,15 @@ export default Admin;
   // Directors / Admins
     // Full Access
     // Only people who can view previuos years vai a seledct menu in the summary page
+
+  // When amending the users locations will also need to update the locations for the authenticatedUser state
     
+
+  // Data / auth loading journey:
+    // 1 - token verification
+      // Token failure:
+        // No need to get any data, just send user to auth to sign in nd get a token
+      // Has token:
+        // Set the authenticatedUser.fullName -> hold all other async code until complete
+        // Then get the users from the database using fetchUsers => hold other code
+        // once data retireved set the authenticatedUser based off of the fullName prop

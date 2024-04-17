@@ -1,12 +1,30 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios';
+import { extractFirstAndLastName } from '../../../utils/stringUtils';
+import { ROLES } from '../../../utils/constants';
 
 const fetchUsers = createAsyncThunk(
     'awards/fetchUsers',
-    async () => {
+    async (fullName) => {
         try {
-            const response = await axios.get("/api/users");
-            return response.data;
+            const users = await axios.get("/api/users");
+            const locations = await axios.get("/api/location/get-locations");
+
+            if (users && locations) {
+                const name = extractFirstAndLastName(fullName);
+                const foundUser = users.data.find(user => user?.name.toLowerCase() === name.toLowerCase());
+
+                if (foundUser.role === ROLES.CA01 && foundUser.locations.length < locations.data.length) {
+                    const updatedUser = await axios.put(`/api/users/${foundUser._id}/locations`);
+                    return { users: users.data, updatedUser };
+                }
+
+                return { users: users.data, locations: locations.data, updatedUser: foundUser }
+
+            } else {
+                throw Error("There was an error getting the data.")
+            }
+            
         } catch (error) {
             console.log('catch called + error: ', error);
             throw Error("There was an error getting the data.")

@@ -2,73 +2,84 @@ import React, { useEffect, useState } from 'react';
 
 import '../awards/table/awardsTable.css';
 import UsersTableRow from './UsersTableRow';
-import UsersTableAddRow from './UsersTableAddRow';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { ROLES } from '../../utils/constants';
+import { useSelector } from 'react-redux';
 
 const UsersTable = ({ availableLocations }) => {
     const users = useSelector((state) => state.users);
-    const [formattedAvailableLocations, setFormattedAvailableLocations] = useState([]);
 
+    const [isLoading, setIsLoading] = useState(true); 
+    const [formattedAvailableLocations, setFormattedAvailableLocations] = useState([]);
+    const [permittedVisibleUserData, setPermittedVisibleUserData] = useState([]);
 
     useEffect(() => {
         const formattedSelectMenuItems = availableLocations.map((location) => {
             return { ...location, value: location.name }
         })
 
+        const authenticatedUserRole = users.authenticatedUser.role;
+        const filteredUsersBasedOnRole = [];
+
+        switch (authenticatedUserRole) {
+            case ROLES.CA01: {
+                console.log('01 called');
+                filteredUsersBasedOnRole.push(users.data);
+                setPermittedVisibleUserData(...filteredUsersBasedOnRole);
+                break;
+            }
+            case ROLES.CA02: {
+                filteredUsersBasedOnRole.push(users.data.filter(user => user.role === ROLES.CA03));
+                setPermittedVisibleUserData(...filteredUsersBasedOnRole);
+                break;
+            }
+            case ROLES.CA03: {
+                console.log('03 called');
+                break;
+            }
+        }
+
         setFormattedAvailableLocations(formattedSelectMenuItems);
-    }, [availableLocations.length])
+        setIsLoading(false);
+    }, [availableLocations.length, users.data])
 
-  
+    if (!isLoading) {
+        return (
+            <div className='awards-table-container'>
+                <div className='awards-page-table-container'>
+                    <div className='awards-page-title-and-button admin'>
+                        <h3>Users</h3>
+                    </div>
+                    {
+                        permittedVisibleUserData.length ?
+                            <table id="awards-table" className='awards-form-table'>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Role</th>
+                                        <th>Permissions</th>
+                                        <th>Locations</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        permittedVisibleUserData.length ?
+                                            permittedVisibleUserData.map((data, index) => (
 
-    const [showAddMember, setShowAddMember] = useState(false);
-
-    return (
-        <div className='awards-table-container'>
-            <div className='awards-page-table-container'>
-                <div className='awards-page-title-and-button admin'>
-                    <h3>Users</h3>
-
-                    {/* <button onClick={() => setShowAddMember(true)}>
-                        Add User
-                    </button> */}
+                                                <UsersTableRow data={data} key={index} availableLocations={formattedAvailableLocations} />
+                                            ))
+                                            : null
+                                    }
+                                </tbody>
+                            </table>
+                            : <div className='awards-table-no-data-container'>
+                                <h3>No Members Found</h3>
+                            </div>
+                    }
                 </div>
-                {
-                    users.data.length ?
-                        <table id="awards-table" className='awards-form-table'>
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Role</th>
-                                    <th>Permissions</th>
-                                    <th>Locations</th>                                    
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    users.data.length ?
-                                        users.data.map((data, index) => (
-
-                                            <UsersTableRow data={data} key={index} availableLocations={formattedAvailableLocations} />
-                                        ))
-                                        : null
-                                }
-                                {/* {
-                                    showAddMember &&
-                                    // the below line will be used to replace the below code for adding data in the table
-                                    <UsersTableAddRow />
-                                } */}
-                            </tbody>
-                        </table>
-                        : <div className='awards-table-no-data-container'>
-                            <h3>No Members Found</h3>
-                            {/* Now how to dispay the add row? */}
-                            {/* <FirstAwardsEntry awardsTableId={filteredData._id} location={filteredData.location} onItemAdded={itemAdded} /> */}
-                        </div>
-                }
             </div>
-        </div>
-    )
+        )
+    }
 }
 
-export default UsersTable
+export default UsersTable;

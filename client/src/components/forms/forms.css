@@ -8,6 +8,10 @@
     display: flex;
     flex-direction: column;
 
+    .awards-form-h3 { 
+        margin-top: 10px;
+    }
+
     label {
         margin-top: 10px;
     }

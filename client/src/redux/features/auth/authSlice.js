@@ -16,18 +16,23 @@ export const authSlice = createSlice({
     setIsAuthenticated: (state, action) => {
       state.isAuthenticated = action.payload;
     },
+
+    setLoading: (state, action) => {
+      state.loading = action.payload;
+    }
   },
 
   extraReducers: (builder) => {
     builder.addCase(verifyToken.pending, (state, action) => {
-      
+      state.loading = true;
     });
     builder.addCase(verifyToken.fulfilled, (state, action) => {
-
+      state.loading = false;
     });
 
     builder.addCase(verifyToken.rejected, (state, action) => {
       const status = action.payload;
+      state.loading = false;
     });
   }
 })

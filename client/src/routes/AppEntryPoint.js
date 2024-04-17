@@ -5,9 +5,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { getTokenFromStorage } from '../utils/localStorageUtils';
 import { verifyToken } from '../redux/features/auth/authThunk';
-import { setIsAuthenticated } from '../redux/features/auth/authSlice';
-import { clearAuthenticatedUserData, setSignedInUsersFullName } from '../redux/features/users/usersSlice';
+import { setIsAuthenticated, setLoading } from '../redux/features/auth/authSlice';
+import { clearAuthenticatedUserData, setLoading as setUsersLoading } from '../redux/features/users/usersSlice';
 import { fetchUsers } from '../redux/features/users/usersThunk';
+import Spinner from '../components/spinner/Spinner';
+import { setLocations } from '../redux/features/locations/locationSlice';
 
 const AppEntryPoint = () => {
     const navigate = useNavigate();
@@ -17,37 +19,47 @@ const AppEntryPoint = () => {
     const auth = useSelector((state) => state.auth);
 
     useEffect(() => {
+        console.log('%c\n1: App entry called ', "color:red");
+
         const token = getTokenFromStorage();
-        if (token) {
+        if (token && !users.authenticatedUser._id) {
             dispatch(verifyToken(token)).unwrap().then(response => {
                 const { status } = response;
                 const { user } = response.data;
 
                 if (status === 200) {
-                    dispatch(setIsAuthenticated(true));
-                    dispatch(setSignedInUsersFullName(user.username));
-
-                    if (users.data.length) {
-                    } else {
-                        dispatch(fetchUsers());
-                    }
+                    dispatch(fetchUsers(user.username)).unwrap().then((res) => {
+                        const {locations} = res;
+                        dispatch(setLocations(locations));
+                        dispatch(setIsAuthenticated(true));
+                    })
                 }
-            }).catch((error) => {
+            }).catch(() => {
                 dispatch(setIsAuthenticated(false));
                 dispatch(clearAuthenticatedUserData());
                 navigate("/auth");
             })
+        } else if(token && users.authenticatedUser._id) {
+            dispatch(setLoading(false));
+            dispatch(setUsersLoading(false))
+            navigate("/");
         } else {
+            dispatch(setLoading(false));
+            dispatch(setUsersLoading(false))
             navigate("/auth");
         }
     }, [auth.isAuthenticated])
 
-    return (
-        <div>
-            <Navbar />
-            <Outlet />
-        </div>
-    )
+    if (!auth.loading && !users.loading) {
+        return (
+            <div>
+                <Navbar />
+                <Outlet />
+            </div>
+        )
+    } else {
+        return <div style={{marginTop: "100px"}} className='spinner-container'><Spinner classes="page" /></div>
+    }
 }
 
 export default AppEntryPoint;

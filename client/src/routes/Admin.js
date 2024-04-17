@@ -20,8 +20,10 @@ const Admin = () => {
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
 
   const navigate = useNavigate();
+
   const authenticatedUser = useSelector(state => state.users.authenticatedUser);
   const auth = useSelector(state => state.auth);
+  const originalLocations = useSelector(state => state.location.data);
 
   const buildData = (locations, targets) => {
     const formattedTargetData = [];
@@ -47,31 +49,23 @@ const Admin = () => {
     setTargetAndLocationData(formattedTargetData);
   }
 
-
-
   useEffect(() => {
       if(authenticatedUser.role === ROLES.CA01 || authenticatedUser.role === ROLES.CA02 ) {
-        axios.get("/api/location/get-locations").then((response) => {
-          setLocationsRetrieved(response.data);
-
-          axios.get("/api/targets").then((res) => {
-            setTargetDataRetrieved(res.data);
-    
-            buildData(response.data, res.data);
-             
-          }).catch((error) => {
-            console.log('Error getting targets. Error: ', error);
-          })
+        setLocationsRetrieved(originalLocations);
+        axios.get("/api/targets").then((res) => {
+          setTargetDataRetrieved(res.data);
+          buildData(originalLocations, res.data);
         }).catch((error) => {
-          console.log('Error getting Locations. Error: ', error);
-        }).finally(() => {
-          setTimeout(() => {
-            setIsLoading(false);
-          }, 750);
-        })
-      } else {
-        navigate("/");
-      }
+          console.log('Error getting targets. Error: ', error);
+        
+      }).finally(() => {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 750);
+      })
+    } else {
+      navigate("/");
+    }     
   }, [])
 
   useEffect(() => {

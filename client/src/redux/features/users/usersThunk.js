@@ -7,9 +7,6 @@ const fetchUsers = createAsyncThunk(
     'awards/fetchUsers',
     async (fullName) => {
         try {
-
-            console.log('FETCH called');
-            
             const users = await axios.get("/api/users");
             const locations = await axios.get("/api/location/get-locations");
 

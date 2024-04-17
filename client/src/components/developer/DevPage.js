@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import "./devPage.css";
 import AwardsTable from '../awards/table/AwardsTable';
+import { useSelector } from 'react-redux';
 
 const DevPage = () => {
     const [rowData, setRowData] = useState([]);
+    const user = useSelector((state) => state.users);
+
     const onAddAwardsClicked = () => {
         // pass some data as an object via axios
         const awardsdata = {
@@ -60,6 +63,19 @@ const DevPage = () => {
         })
     }
 
+    const onCheckToken = () => {
+       const token = ""
+        axios.get(`/api/auth/protected-route/${token}`).then((res) => {
+            console.log('res from check tokon = ', res);
+        }).catch((error) => {
+            console.log('error = ', error);
+        })
+    }
+
+    const onCheckAuthedUser = () => {
+        console.log('state . autheduser = ', user.authenticatedUser);
+    }
+
     return (
         <div className='dev-page-container'>
             <h2>Test Page</h2>
@@ -75,6 +91,8 @@ const DevPage = () => {
                 <h3>Admin functions</h3>
                 <button onClick={onCheckUserExists}>check user exists</button>
                 <button onClick={onGetUsersForGroup}>get users for group</button>
+                <button onClick={onCheckToken}>Check Token</button>
+                <button onClick={onCheckAuthedUser}>Check authed user</button>
 
                 </div>
             </div>
@@ -83,10 +101,3 @@ const DevPage = () => {
 }
 
 export default DevPage;
-
-// functions required for admin functions:
-    // isUserMemberOf(username, groupName) -> Checks to see if a user is a member of the specified group.
-    // userExists(opts, username, callback) -> Checks to see if the specified user exists. - DONE
-    // getUsersForGroup(opts, groupName, callback) -> For the specified group, retrieve all of the users that belong to the group - DONE
-
-

@@ -1,26 +1,33 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
 import AwardsTable from '../components/awards/table/AwardsTable';
+import { useSelector } from 'react-redux';
 
 const Root = () => {
+  const [locations, setLocations] = useState([]);
 
-    const navigate = useNavigate();
+  const authenticatedUser = useSelector(state => state.users.authenticatedUser);
 
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-    useEffect(() => {
-        // Check if authenticated, if not transition to the auth page
-        if(!isAuthenticated) {
-            console.log('not authed called');
-            // navigate("/auth"); // TODO
-        }
-    }, []);
+  useEffect(() => {
+    if (authenticatedUser._id) {
+      if (authenticatedUser.locations.length) {
+        const sortedLocations = [...authenticatedUser.locations].sort();
+        setLocations(sortedLocations);
+      } else {
+        console.log('no locations');
+      }
+    }
+  }, [])
 
   return (
     <div className='root-page-awards-table'>
-      <AwardsTable />
+      {
+        locations.length ? <AwardsTable locations={locations} />
+        : <div className='root-page-no-locations-message'>
+          <p>Oops! It seems you haven't been assigned to any locations yet. Only directors, regional directors and site admins can allocate locations. Please reach out to the appropriate person for further assistance.</p>
+        </div>
+      }
     </div>
   )
 }
 
-export default Root
+export default Root;

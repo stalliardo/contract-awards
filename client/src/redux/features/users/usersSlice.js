@@ -1,11 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchUsers, addLocationToUser, removeLocationFromUser, addAllLocationsToUser
  } from '../users/usersThunk';
+import { extractFirstAndLastName } from '../../../utils/stringUtils';
 
 const initialState = {
   data: [],
-
-  loading: true,
+  authenticatedUser: {
+    fullName: ""
+  },
+  loading: false,
   error: null
 };
 
@@ -17,11 +20,25 @@ export const usersSlice = createSlice({
     setLoading: (state, action) => {
       state.loading = action.payload
     },
+
+    setSignedInUsersFullName: (state, action) => {
+      state.authenticatedUser.fullName = extractFirstAndLastName(action.payload);
+    },
+
+    clearAuthenticatedUserData: (state) => {
+      state.authenticatedUser = {};
+    }
   },
 
   extraReducers: (builder) => {
+    builder.addCase(fetchUsers.pending, (state, action) => {
+      state.loading = true;
+    });
     builder.addCase(fetchUsers.fulfilled, (state, action) => {
-      state.data = action.payload;
+      const {users, updatedUser} = action.payload;
+
+      state.authenticatedUser = updatedUser;
+      state.data = users;
       state.loading = false;
     });
 
@@ -31,8 +48,10 @@ export const usersSlice = createSlice({
 
     builder.addCase(addLocationToUser.fulfilled, (state, action) => {
       state.loading = false;
-
       const updatedUser = action.payload;
+
+      // TODO below is broken
+      // state.authenticatedUser = updatedUser;
 
       // replace the user in the existing array
       const userToReplaceIndex = state.data.findIndex(user => user._id === updatedUser._id);
@@ -54,6 +73,9 @@ export const usersSlice = createSlice({
 
       const updatedUser = action.payload;
 
+      // TODO below is broken
+      // state.authenticatedUser = updatedUser;
+
       // replace the user in the existing array
       const userToReplaceIndex = state.data.findIndex(user => user._id === updatedUser._id);
 
@@ -66,13 +88,17 @@ export const usersSlice = createSlice({
     });
 
     builder.addCase(removeLocationFromUser.pending, (state, action) => {
-      state.loading = true;
+      // state.loading = true;
     });
 
     builder.addCase(removeLocationFromUser.fulfilled, (state, action) => {
-      state.loading = false;
+      // state.loading = false;
 
+      
       const updatedUser = action.payload.user;
+      
+      // TODO below is broken
+      // state.authenticatedUser = updatedUser;
 
       // replace the user in the existing array
       const userToReplaceIndex = state.data.findIndex(user => user._id === updatedUser._id);
@@ -87,7 +113,6 @@ export const usersSlice = createSlice({
   }
 })
 
-// Action creators are generated for each case reducer function
-export const { setLoading } = usersSlice.actions;
+export const { setLoading, setSignedInUsersFullName, clearAuthenticatedUserData } = usersSlice.actions;
 
 export default usersSlice.reducer;

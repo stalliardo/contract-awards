@@ -13,6 +13,9 @@ const locationRoutes = require("./server/routes/locationRoutes");
 const userRoutes = require("./server/routes/userRoutes");
 const ADRoutes = require("./server/routes/ADRoutes");
 const targetRoutes = require("./server/routes/targetRoutes");
+const authenticationRoutes = require("./server/routes/AuthenticationRoutes");
+
+const jwt = require("./server/utils/JWTUtils");
 
 const { generateTableForYear } = require("./server/utils/AwardsDiaryUtils");
 
@@ -31,6 +34,7 @@ app.use("/api", locationRoutes);
 app.use("/api", userRoutes);
 app.use("/api", ADRoutes);
 app.use("/api", targetRoutes);
+app.use("/api", authenticationRoutes);
 
 const ADConfig = {
     url: `ldap://${process.env.DOMAIN_IP}:389`, // TODO see if i can use the secure LDAPS
@@ -42,32 +46,37 @@ const ADConfig = {
 var ad = new ActiveDirectory(ADConfig);
 
 app.post("/login", (req, res) => {
-    console.log('POST login called');
-
     const username = `${req.body.username}@DAZCORP.COM`;
     const password = req.body.password;
 
-    console.log('username and password = ', username, " ", password);
 
-    ad.authenticate(username, password, function (err, auth) {
-        if (err) {
-            console.log("LDAP error: ", err);
+    const token = jwt.generateJWT(username);
 
-            return res.status(401).json({ error: "Invalid Credentials" })
-        }
+    return res.json({message: "Authetication Successful", token});
 
-        if (auth) {
-            console.log('LDAP Authentication successful!');
-            console.log('auth = ', auth);
 
-            return res.json({ message: "Authetication Successful" })
-        }
 
-        else {
-            console.log('Authentication failed!');
-            return res.status(500).json({ error: "Authentication failed" })
-        }
-    })
+    // ad.authenticate(username, password, function (err, auth) {
+    //     if (err) {
+    //         console.log("LDAP error: ", err);
+
+    //         return res.status(401).json({ error: "Invalid Credentials" })
+    //     }
+
+    //     if (auth) {
+    //         console.log('LDAP Authentication successful!');
+    //         console.log('auth = ', auth);
+
+    //         return res.json({message: "Authetication Successful", token});
+
+    //         // return res.json({ message: "Authetication Successful" })
+    //     }
+
+    //     else {
+    //         console.log('Authentication failed!');
+    //         return res.status(500).json({ error: "Authentication failed" })
+    //     }
+    // })
 })
 
 app.get("/api", (req, res) => {
@@ -80,8 +89,6 @@ app.get("/api", (req, res) => {
 //     console.log('star route called');
 //     res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
 // })
-
-// how do i trigger the crud operations from the frontend? and how will they be received in the backend?
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);

@@ -69,6 +69,18 @@ code {
 .root-page-awards-table {
   width: 90%;
   margin: 60px auto;
+
+  .root-page-no-locations-message {
+    /* border: 1px solid salmon; */
+    width: 70%;
+    margin: 100px auto;
+    text-align: center;
+
+    p {
+      font-weight: 600;
+      font-size: 20px;
+    }
+  }
 }
 
 .awards-form-table {

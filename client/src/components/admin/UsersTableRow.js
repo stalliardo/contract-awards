@@ -157,3 +157,7 @@ const UsersTableRow = ({ data, availableLocations }) => {
 export default UsersTableRow;
 
 // TODO save add all only availbe to CA01 users
+
+
+// USer has not locations yet
+    // they log in and get error message 

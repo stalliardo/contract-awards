@@ -11,6 +11,8 @@ const Navbar = () => {
   const auth = useSelector(state => state.auth);
   const authenticatedUser = useSelector(state => state.users.authenticatedUser);
 
+  console.log('authenticated user from nav = ', authenticatedUser);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -26,7 +28,8 @@ const Navbar = () => {
       <div className='nav-end-container'>
         {
           auth.isAuthenticated &&
-          <>
+            authenticatedUser.locations.length ? 
+            <>
             <a onClick={handleSignOut}>Sign Out</a>
             <Link to="/admin">Admin</Link>
             <Link to="/awards-form">Awards</Link>
@@ -34,6 +37,8 @@ const Navbar = () => {
             <Link to="/dev">Dev</Link>
             <a>{authenticatedUser?.name}</a>
           </>
+          :
+          <a onClick={handleSignOut}>Sign Out</a>
         }
         {/* // TODO only visible if has role  */}
 

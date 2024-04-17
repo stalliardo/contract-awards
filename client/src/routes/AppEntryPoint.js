@@ -48,7 +48,7 @@ const AppEntryPoint = () => {
         }
     }, [])
 
-    if (!auth.loading || !users.loading) {
+    if (!auth.loading && !users.loading) {
         return (
             <div>
                 <Navbar />

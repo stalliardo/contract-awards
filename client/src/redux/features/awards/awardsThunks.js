@@ -3,13 +3,17 @@ import axios from 'axios';
 
 const fetchData = createAsyncThunk(
     'awards/fetchData',
-    async () => {
+    async (locationData) => {
         try {
             const awards = await axios.get("/api/awards-diary/getAllAwards");
             const targets = await axios.get("/api/targets");
-            const locations = await axios.get("/api/location/get-locations");
 
-            return {targetsData: targets.data, awardsData: awards.data, locationsData: locations.data};
+            if(locationData.length) {
+                return {targetsData: targets.data, awardsData: awards.data, locationsData: locationData};
+            } else {
+                const locations = await axios.get("/api/location/get-locations");
+                return {targetsData: targets.data, awardsData: awards.data, locationsData: locations.data};
+            }
         } catch (error) {
             console.log('catch called + error: ', error);
             throw Error("There was an error getting the data.")

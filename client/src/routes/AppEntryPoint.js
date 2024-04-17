@@ -9,6 +9,7 @@ import { setIsAuthenticated, setLoading } from '../redux/features/auth/authSlice
 import { clearAuthenticatedUserData, setSignedInUsersFullName, setLoading as setUsersLoading } from '../redux/features/users/usersSlice';
 import { fetchUsers } from '../redux/features/users/usersThunk';
 import Spinner from '../components/spinner/Spinner';
+import { setLocations } from '../redux/features/locations/locationSlice';
 
 const AppEntryPoint = () => {
     const navigate = useNavigate();
@@ -31,7 +32,10 @@ const AppEntryPoint = () => {
                 if (status === 200) {
                     dispatch(fetchUsers(user.username)).unwrap().then((res) => {
                         const {locations} = res;
-                        console.log('locations - ', locations);
+                        // ^ work out where all refs to locations are....
+
+                        // have access to the locations above - ccan i not set these in state instead of mulitple newtork reqs???
+                        dispatch(setLocations(locations));
                         dispatch(setIsAuthenticated(true));
                     })
                 }

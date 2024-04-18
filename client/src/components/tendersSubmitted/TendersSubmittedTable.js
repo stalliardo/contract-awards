@@ -22,9 +22,19 @@ const MonthsForTableHead = ({ k }) => {
     return cells
 }
 
-const TendersSubmittedTable = () => {
+const TendersSubmittedTable = ({data}) => {
 
     const originalLocations = useSelector(state => state.location.data);
+
+    console.log('data passed in  =  ', data);
+
+
+    const extractedDataForRow = (location) => {
+        return data.find((item) => item.location === location);
+    }
+
+
+
 
     return (
         <div className='awards-page-container'>
@@ -61,9 +71,9 @@ const TendersSubmittedTable = () => {
 
                         {
                             originalLocations.map((location, index) => {
-                                if (location !== "M&E" && location !== "Special Projects") {
+                                if (location.name !== "M&E" && location.name !== "Special Projects") {
                                     // return <AwardsSummaryCoreTotalsRow targetsData={awardsData.targets} filteredTotals={generateFilteredTotals(location)} cumalitiveTotal={generateCumalitiveTotals(location)} locationRef={location} key={index} />
-                                    return <TendersSubmittedRow key={index} />
+                                    return <TendersSubmittedRow key={index} data={extractedDataForRow(location.name)}/>
                                 }
                                 return null;
                             })

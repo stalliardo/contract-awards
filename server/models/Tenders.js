@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const tenderItemSchama = new mongoose.Schema({
+    _id: { type: mongoose.Schema.Types.ObjectId, default: undefined }, // Prevent automatic generation of _id
     month: {type: String, required: true},
     value: {type: Number, required: true},
 })

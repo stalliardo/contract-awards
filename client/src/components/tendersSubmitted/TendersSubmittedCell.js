@@ -4,13 +4,18 @@ import EditTenderValueModal from './EditTenderValueModal';
 const TendersSubmittedCell = ({ item }) => {
     const [showModal, setShowModal] = useState(false);
 
+    const onCloseModal = () => {
+        console.log('outer calose');
+        setShowModal(false)
+    }
+
     return (
-        <td onClick={() => setShowModal(true)}>
-            {item.value}
+        <td>
+            <div className='tenders-cell' onClick={() => setShowModal(true)}>{item.value}</div>
 
             {
                 showModal &&
-                <EditTenderValueModal item={item}/>
+                <EditTenderValueModal item={item} handleCloseModal={onCloseModal}/>
             }
         </td>
     )

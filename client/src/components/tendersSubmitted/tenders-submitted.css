@@ -1,7 +1,5 @@
 .tenders-table-container {
     background-color: red;
-
-    
 }
 
 .tenders-submitted-input {
@@ -9,6 +7,9 @@
 }
 
 .tenders-cell {
+    width: 100%;
+    height: 100%;
+
     &:hover {
         cursor: pointer;
     }

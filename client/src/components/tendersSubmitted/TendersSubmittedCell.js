@@ -10,7 +10,7 @@ const TendersSubmittedCell = ({ item }) => {
 
             {
                 showModal &&
-                <EditTenderValueModal />
+                <EditTenderValueModal item={item}/>
             }
         </td>
     )

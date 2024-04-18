@@ -6,6 +6,7 @@ const monthsInFinancialOrder = getMonthsInFinancialOrder();
 
 const TendersSubmittedRow = ({ data }) => {
     
+    // console.log('data from row = ', data);
 
     return (
         <tr>
@@ -13,7 +14,7 @@ const TendersSubmittedRow = ({ data }) => {
             {
                 data.items.map((item, i) => {
                     return (
-                       <TendersSubmittedCell key={i} item={item}/>
+                       <TendersSubmittedCell key={i} item={{...item, location: data.location}}/>
                     )
                 })
             }

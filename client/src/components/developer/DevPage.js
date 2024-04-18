@@ -76,6 +76,16 @@ const DevPage = () => {
         console.log('state . autheduser = ', user.authenticatedUser);
     }
 
+    const onGenerateTendersSubmittedData = () => {
+        axios.post("/api/tenders/generate-initial-data");
+
+    }
+
+    const onGenerateDataForNewLocation = () => {
+        axios.post("/api/tenders/generate-data-for-new-location", {location: "Bristol"});
+
+    }
+
     return (
         <div className='dev-page-container'>
             <h2>Test Page</h2>
@@ -93,7 +103,8 @@ const DevPage = () => {
                 <button onClick={onGetUsersForGroup}>get users for group</button>
                 <button onClick={onCheckToken}>Check Token</button>
                 <button onClick={onCheckAuthedUser}>Check authed user</button>
-
+                <button onClick={onGenerateTendersSubmittedData}>Generate Tenders Submitted Data</button>
+                <button onClick={onGenerateDataForNewLocation}>Generate Tender for new location</button>
                 </div>
             </div>
         </div>

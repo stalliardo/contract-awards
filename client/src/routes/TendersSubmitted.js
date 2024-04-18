@@ -24,3 +24,16 @@ const TendersSubmitted = () => {
 }
 
 export default TendersSubmitted;
+
+
+// What happens when a new lcoation is added?
+
+// Display defaults and real data togheter
+
+// for each location
+  // for each month
+    // get the data if any, is there any data for this locaiton / month? if yes
+      // disply the day
+    // if no
+      // display the default 0
+// This was when a new location is added the table wont break but just have a row of empty cells

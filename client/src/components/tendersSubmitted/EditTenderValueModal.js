@@ -1,19 +1,21 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import '../../routes/admin.css'
 import './tenders-submitted.css'
 import Spinner from '../spinner/Spinner';
+import { useDispatch, useSelector } from 'react-redux';
 
-const EditTenderValueModal = ({item, handleCloseModal}) => {
+const EditTenderValueModal = ({ item, handleCloseModal }) => {
 
-    const {location, month, value} = item;
+    const { location, month, value } = item;
     const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
     const [newValue, setNewValue] = useState(value);
-    
 
-    const isSaving = false; // TODO repoalce with loading from tender state
+    const dispatch = useDispatch();
+    const tenders = useSelector(state => state.tender);
 
     const onEditValue = () => {
-       
+        // TODO edit tender endpoint
+        dispatch()
     }
 
     const onCloseModal = () => {
@@ -22,11 +24,11 @@ const EditTenderValueModal = ({item, handleCloseModal}) => {
     }
 
     const handleChange = (e) => {
-        setNewValue( e.target.value);
+        setNewValue(e.target.value);
     }
 
     useEffect(() => {
-        if(newValue === 0 || newValue === "0") {
+        if (newValue === 0 || newValue === "0") {
             setNewValue("");
         }
     }, [])
@@ -34,26 +36,28 @@ const EditTenderValueModal = ({item, handleCloseModal}) => {
     useEffect(() => {
         console.log('new value = ', newValue);
         console.log('value = ', value);
-        
+
         setSaveButtonDisabled(newValue.length < 1 || parseInt(newValue) === value);
     }, [newValue])
+
 
     return (
         <div className='blackout-overlay'>
             <div className='tenders-modal'>
 
                 {/* TODO Improve the below */}
-                <h3>Edit value for {location}/{month}</h3> 
+                <h3>Edit value for {location}/{month}</h3>
                 <input autoFocus type='number' value={newValue} onChange={handleChange} />
                 <div className='admin-modal-buttons'>
                     <button className='green' onClick={onEditValue} disabled={saveButtonDisabled}>
-                        {isSaving ? <div className='spinner-button'><Spinner classes="button" /></div> : "Save"}
+                        {tenders.loading ? <div className='spinner-button'><Spinner classes="button" /></div> : "Save"}
                     </button>
                     <button onClick={onCloseModal}>Close</button>
                 </div>
             </div>
         </div>
     )
+
 }
 
 export default EditTenderValueModal

@@ -12,6 +12,8 @@ const TendersSubmitted = () => {
   const dispatch = useDispatch();
   const tenders = useSelector(state => state.tender);
 
+  console.log('tender data = ', tenders.data);
+
   useEffect(() => {
     if(!tenders.data || !tenders.data.length) {
       console.log('effect called getting data.....');

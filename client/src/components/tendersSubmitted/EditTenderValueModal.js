@@ -3,10 +3,11 @@ import '../../routes/admin.css'
 import './tenders-submitted.css'
 import Spinner from '../spinner/Spinner';
 import { useDispatch, useSelector } from 'react-redux';
+import { addTender } from '../../redux/features/tenders/tenderThunk';
 
 const EditTenderValueModal = ({ item, handleCloseModal }) => {
 
-    const { location, month, value } = item;
+    const { location, month, value, _id } = item;
     const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
     const [newValue, setNewValue] = useState(value);
 
@@ -14,12 +15,16 @@ const EditTenderValueModal = ({ item, handleCloseModal }) => {
     const tenders = useSelector(state => state.tender);
 
     const onEditValue = () => {
-        // TODO edit tender endpoint
-        dispatch()
+       const data = {
+        month,
+        newValue,
+        _id
+       }
+
+        dispatch(addTender(data));
     }
 
     const onCloseModal = () => {
-        console.log('close clalde');
         handleCloseModal()
     }
 
@@ -34,12 +39,8 @@ const EditTenderValueModal = ({ item, handleCloseModal }) => {
     }, [])
 
     useEffect(() => {
-        console.log('new value = ', newValue);
-        console.log('value = ', value);
-
         setSaveButtonDisabled(newValue.length < 1 || parseInt(newValue) === value);
     }, [newValue])
-
 
     return (
         <div className='blackout-overlay'>
@@ -57,7 +58,6 @@ const EditTenderValueModal = ({ item, handleCloseModal }) => {
             </div>
         </div>
     )
-
 }
 
-export default EditTenderValueModal
+export default EditTenderValueModal;

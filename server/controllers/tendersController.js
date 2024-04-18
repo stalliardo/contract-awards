@@ -5,7 +5,6 @@ const months = [
   'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September'
 ];
 
-
 exports.getTenders = async (req, res) => {
   try {
     const tenders = await Tender.find().exec();
@@ -15,6 +14,33 @@ exports.getTenders = async (req, res) => {
     }
 
     return res.status(200).json(tenders);
+  } catch (error) {
+    res.status(500).json({ message: "There was an error generating tenders data.", error })
+  }
+}
+
+exports.putTender = async (req, res) => {
+  try {
+    const { _id, month, newValue } = req.body;
+
+    console.log('id = ', _id);
+    console.log('month = ', month);
+    console.log('value = ', newValue);
+
+    const tender = await Tender.findById(_id);
+
+    const item = tender.items.find(item => item.month === month);
+
+    if (item) {
+      item.value = newValue;
+
+      // Save the updated document
+      await tender.save();
+
+      return res.status(201).json({message: "Item updated successfully"});
+    } else {
+      return { success: false, message: "Item not found for the specified month" };
+    }
   } catch (error) {
     res.status(500).json({ message: "There was an error generating tenders data.", error })
   }

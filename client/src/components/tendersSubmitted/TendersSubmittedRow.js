@@ -14,7 +14,7 @@ const TendersSubmittedRow = ({ data }) => {
             {
                 data.items.map((item, i) => {
                     return (
-                       <TendersSubmittedCell key={i} item={{...item, location: data.location}}/>
+                       <TendersSubmittedCell key={i} item={{...item, location: data.location, _id: data._id}}/>
                     )
                 })
             }

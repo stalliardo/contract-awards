@@ -10,6 +10,7 @@ const TendersSubmittedUkCoreTotalsRow = () => {
     const formattedTargets = awardsData.tendersSubmittedTargets.filter(target => target.location !== "Special Projects" && target.location !== "M&E");
     const monthlyTargetTotal = formattedTargets.reduce((prev, current) => parseInt(prev) + parseInt(current.targetValue), 0);
     const targetPercentageAcheived = generateTargetAcheivedPercentage(monthlyTargetTotal * 12, tenders.ukCumalitiveTotal);
+    const targetPercentageAcheivedColour = parseFloat(targetPercentageAcheived) >= 100 ? COLOURS.GREEN : COLOURS.RED;
 
     return (
         <tr className='bold-cells'>
@@ -23,7 +24,7 @@ const TendersSubmittedUkCoreTotalsRow = () => {
             <td>£{monthlyTargetTotal.toLocaleString()}</td>
             <td>£{(monthlyTargetTotal * 12).toLocaleString()}</td>
             <td>£{generateTargetAmountToDate((monthlyTargetTotal * 12), tenders.ukCumalitiveTotal).toLocaleString()}</td>
-            <td>{targetPercentageAcheived}%</td>
+            <td style={{color: targetPercentageAcheivedColour}}>{targetPercentageAcheived}%</td>
         </tr>
     )
 }

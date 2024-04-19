@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { generateTargetAcheivedPercentage, generateTargetAmountToDate } from '../../utils/financialTotals';
+import { COLOURS } from '../../utils/constants';
 
 const TendersSubmittedUkCoreTotalsRow = () => {
     const tenders = useSelector(state => state.tender);
@@ -8,16 +9,14 @@ const TendersSubmittedUkCoreTotalsRow = () => {
     
     const formattedTargets = awardsData.tendersSubmittedTargets.filter(target => target.location !== "Special Projects" && target.location !== "M&E");
     const monthlyTargetTotal = formattedTargets.reduce((prev, current) => parseInt(prev) + parseInt(current.targetValue), 0);
-
     const targetPercentageAcheived = generateTargetAcheivedPercentage(monthlyTargetTotal * 12, tenders.ukCumalitiveTotal);
 
     return (
-        // <td style={{color: data.ukCoreTotal >= ukTargetTotal ? COLOURS.GREEN : COLOURS.RED}}>
         <tr className='bold-cells'>
             <td>UK Core Total</td>
             {
                 tenders.ukCoreTotals.uk.map((total, i) => {
-                    return <td key={i}>£{(total.ukCoreTotal).toLocaleString()}</td>
+                    return <td style={{color: total.ukCoreTotal >= monthlyTargetTotal ? COLOURS.GREEN : COLOURS.RED}} key={i}>£{(total.ukCoreTotal).toLocaleString()}</td>
                 })
             }
             <td>£{(tenders.ukCumalitiveTotal).toLocaleString()}</td>

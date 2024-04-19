@@ -6,7 +6,6 @@ const TendersSubmittedCell = ({ item }) => {
     const [showModal, setShowModal] = useState(false);
 
     const onCloseModal = () => {
-        console.log('outer calose');
         setShowModal(false)
     }
 

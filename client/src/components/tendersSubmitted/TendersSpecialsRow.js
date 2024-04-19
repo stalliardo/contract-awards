@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
-import TendersSubmittedCell from './TendersSubmittedCell';
-import { useSelector } from 'react-redux';
+import React from 'react'
+import { useSelector } from 'react-redux'
 import { generateTargetAcheivedPercentage, generateTargetAmountToDate } from '../../utils/financialTotals';
+import TendersSubmittedCell from './TendersSubmittedCell';
 
-const TendersSubmittedRow = ({ data }) => {
+const TendersSpecialsRow = ({ data }) => {
     const tenders = useSelector(state => state.tender);
-    
     const targets = useSelector(state => state.awards.tendersSubmittedTargets);
-
     const cumalitiveTotal = tenders.cumalitiveTotals.find(total => total.location === data.location).sum;
 
     const extractedTendersTargets = () => {
@@ -19,17 +17,15 @@ const TendersSubmittedRow = ({ data }) => {
         return "0";
     }
 
-    const targetPercentageAcheived = generateTargetAcheivedPercentage(extractedTendersTargets() * 12, cumalitiveTotal);
-    // const targetPercentageAcheivedColour = parseFloat(targetPercentageAcheived) >= 100 ? COLOURS.GREEN : COLOURS.RED;
+    const targetPercentageAcheived = generateTargetAcheivedPercentage(parseInt(extractedTendersTargets()) * 12, cumalitiveTotal);
 
     return (
         <tr>
             <td>{data.location}</td>
             {
                 data.items.map((item, i) => {
-                    return (
-                       <TendersSubmittedCell key={i} item={{...item, location: data.location, _id: data._id}}/>
-                    )
+                    // return <td key={i}>{item.specialsTotal}</td>
+                    return <TendersSubmittedCell key={i} item={{...item, location: data.location, _id: data._id}}/>
                 })
             }
             {/* Cumalitive Column */}
@@ -50,4 +46,4 @@ const TendersSubmittedRow = ({ data }) => {
     )
 }
 
-export default TendersSubmittedRow;
+export default TendersSpecialsRow

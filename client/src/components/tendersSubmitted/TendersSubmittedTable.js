@@ -10,6 +10,7 @@ import TendersSubmittedRow from './TendersSubmittedRow';
 
 import { getMonthsInFinancialOrder } from '../../utils/DateUtils';
 import TendersSubmittedUkCoreTotalsRow from './TendersSubmittedUkCoreTotalsRow';
+import TendersSpecialsRow from './TendersSpecialsRow';
 
 const monthsInFinancialOrder = getMonthsInFinancialOrder();
 
@@ -74,38 +75,18 @@ const TendersSubmittedTable = ({data}) => {
                             })
                         }
                         <TendersSubmittedUkCoreTotalsRow />
+
+                        {
+                            originalLocations.map((location, index) => {
+                                if (location.name === "M&E" || location.name == "Special Projects") {
+                                    return <TendersSpecialsRow key={index} data={extractedDataForRow(location.name)}/>
+                                }
+                                return null;
+                            })
+                        }
+                       
                         <tr className='bold-cells'>
-                            {/* <td>UK Core Total</td> */}
-                            {/* {
-                                    awardsData.ukCoreTotals.map((data, index) => {
-                                        return <AwardsSummaryUKCoreTotalsRow data={data} key={index} ukTargetTotal={awardsData.ukTargetTotal} />
-                                    })
-                                } */}
-                            {/* <td>£{cumalitiveTotalsSum.toLocaleString()}</td> */}
-                            {/* <td>
-                                    £{awardsData.ukTargetTotal.toLocaleString()}
-                                </td>
-                                <td>
-                                    £{(awardsData.ukTargetTotal * 12).toLocaleString()}
-                                </td> */}
-                            {/* <td>£{generateTargetAmountToDate((awardsData.ukTargetTotal * 12), cumalitiveTotalsSum).toLocaleString()}</td> */}
-                            {/* <td style={{ color: generateTargetAcheivedPercentage(awardsData.ukTargetTotal * 12, cumalitiveTotalsSum) >= 100 ? COLOURS.GREEN : COLOURS.RED }}>
-                                    {generateTargetAcheivedPercentage(awardsData.ukTargetTotal * 12, cumalitiveTotalsSum)}%
-                                </td> */}
-                        </tr>
-                        {/* {
-                                specialLocations.map((location, index) => {
-                                    return <AwardsSummarySpecialsRow targetsData={awardsData.targets} filteredTotals={generateFilteredTotals(location)} cumalitiveTotal={generateCumalitiveTotals(location)} locationRef={location} key={index} />
-                                })
-                            } */}
-                        <tr className='bold-cells'>
-                            {/* <td>Total</td> */}
-                            {/* <AwardsSummaryTotalsRow
-                                    ukCoreTotals={awardsData.ukCoreTotals}
-                                    specialCoreTotals={awardsData.specialCoreTotals}
-                                    cumalativeTotals={cumalitiveTotalsSum}
-                                    ukAndSpecialTargetTotal={awardsData.ukAndSpecialTargetTotal}
-                                /> */}
+                           
                         </tr>
                     </tbody>
                 </table>

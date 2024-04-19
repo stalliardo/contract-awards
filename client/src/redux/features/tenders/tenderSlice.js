@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { addTender, getTenders } from './tenderThunk';
-import { generateCumalitiveTenderTotals, generateUKTenendersCumaltiveTotal, generateUkCoreTenderTotals } from '../../../utils/financialTotals';
+import { generateCumalitiveTenderTotals, generateSpecialCoreTotals, generateSpecialCumalitiveTotals, generateSpecialTargetTotals, generateUKTenendersCumaltiveTotal, generateUkCoreTenderTotals } from '../../../utils/financialTotals';
 
 const initialState = {
   data: [],
@@ -9,6 +9,7 @@ const initialState = {
   cumalitiveTotals: [],
   ukCumalitiveTotal: "",
   ukCoreTotals: [], // ie, the total for each month
+  specialCumalitiveTotals: [],
 };
 
 export const tenderSlice = createSlice({
@@ -28,12 +29,15 @@ export const tenderSlice = createSlice({
     builder.addCase(getTenders.fulfilled, (state, action) => {
       state.data = action.payload;
 
+      const ukCoreTotals = generateUkCoreTenderTotals(action.payload);
       const cumalitiveTotals = generateCumalitiveTenderTotals(action.payload); // The sum of each months totals for each location
       const ukCumalitiveTotalsTotal = generateUKTenendersCumaltiveTotal(cumalitiveTotals); // The sum of the uk cumalitive totals
+      // const specialCumalitiveTotals = generateSpecialCumalitiveTotals(cumalitiveTotals);
 
-      state.ukCoreTotals = generateUkCoreTenderTotals(action.payload);
+      state.ukCoreTotals = ukCoreTotals;
       state.cumalitiveTotals = cumalitiveTotals;
       state.ukCumalitiveTotal = ukCumalitiveTotalsTotal;
+      // state.specialCumalitiveTotals = specialCumalitiveTotals;
       state.loading = false;
     });
 

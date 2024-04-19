@@ -115,8 +115,13 @@ export const generateCumalitiveTenderTotals = (data) => {
 
 export const generateUKTenendersCumaltiveTotal = (data) => {
 
-    console.log('data coming ionto function = ', data);
     const filteredData = data.filter((item) => item.location !== "Special Projects" && item.location !== "M&E");
+
+    return filteredData.reduce((total, target) => parseInt(total) + parseInt(target.sum), 0);
+}
+
+export const  generateSpecialCumalitiveTotals = (data) => {
+    const filteredData = data.filter((item) => item.location === "Special Projects" || item.location === "M&E");
 
     return filteredData.reduce((total, target) => parseInt(total) + parseInt(target.sum), 0);
 }
@@ -148,8 +153,6 @@ export const generateTargetAcheivedPercentage = (annualAmount, cumalitiveTotal) 
 
     const targetToDate = generateTargetAmountToDate(annualAmount, cumalitiveTotal);
     const targetAchieved = 100 / targetToDate * cumalitiveTotal;
-
-    console.log('');
 
     if(targetAchieved < 1 && targetAchieved > 0) {
         return targetAchieved.toFixed(2);

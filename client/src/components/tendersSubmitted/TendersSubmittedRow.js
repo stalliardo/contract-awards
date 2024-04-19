@@ -6,11 +6,15 @@ const monthsInFinancialOrder = getMonthsInFinancialOrder();
 
 const TendersSubmittedRow = ({ data }) => {
     
-    // console.log('data from row = ', data);
+    const cumalitiveTotals = () => {
+        const sum = data.items.reduce((total, target) => total + target.value, 0);
+
+        return sum;
+    }
 
     return (
         <tr>
-            <td></td>
+            <td>{data.location}</td>
             {
                 data.items.map((item, i) => {
                     return (
@@ -18,6 +22,7 @@ const TendersSubmittedRow = ({ data }) => {
                     )
                 })
             }
+            <td>£{cumalitiveTotals().toLocaleString()}</td>
         </tr>
     )
 }

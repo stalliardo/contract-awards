@@ -11,7 +11,7 @@ const TendersSubmittedCell = ({ item }) => {
 
     return (
         <td>
-            <div className='tenders-cell' onClick={() => setShowModal(true)}>{item.value}</div>
+            <div className='tenders-cell' onClick={() => setShowModal(true)}>£{item.value.toLocaleString()}</div>
 
             {
                 showModal &&

@@ -37,11 +37,7 @@ export const tenderSlice = createSlice({
     });
 
     builder.addCase(addTender.fulfilled, (state, action) => {
-      console.log('tenders add fullfilled data = ', action.payload);
-
-      // TODO similar logic required as the core totals update to reflext the totals properly
       const { _id, month, newValue } = action.payload;
-
       const itemToEditIndex = state.data.findIndex((item) => item._id === _id);
 
       if (itemToEditIndex > -1) {
@@ -50,10 +46,8 @@ export const tenderSlice = createSlice({
         const updatedItemIndex = updatedArray[itemToEditIndex].items.findIndex((item) => item.month === month);
 
         if (updatedItemIndex > -1) {
-          // Update the value of the existing item
           updatedArray[itemToEditIndex].items[updatedItemIndex].value = newValue;
         } else {
-          // If the item doesn't exist, you may want to handle this case accordingly
           console.error("Item not found for the specified month");
         }
 

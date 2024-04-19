@@ -26,15 +26,9 @@ const TendersSubmittedTable = ({data}) => {
 
     const originalLocations = useSelector(state => state.location.data);
 
-    console.log('data passed in  =  ', data);
-
-
     const extractedDataForRow = (location) => {
         return data.find((item) => item.location === location);
     }
-
-
-
 
     return (
         <div className='awards-page-container'>

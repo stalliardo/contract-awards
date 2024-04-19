@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { addTender, getTenders } from './tenderThunk';
-import { generateCumalitiveTenderTotals, generateSpecialCoreTotals, generateSpecialCumalitiveTotals, generateSpecialTargetTotals, generateUKTenendersCumaltiveTotal, generateUkCoreTenderTotals } from '../../../utils/financialTotals';
+import { generateCumalitiveTenderTotals, generateSpecialCumalitiveTotals, generateUKTenendersCumaltiveTotal, generateUkCoreTenderTotals } from '../../../utils/financialTotals';
 
 const initialState = {
   data: [],
@@ -29,15 +29,7 @@ export const tenderSlice = createSlice({
     builder.addCase(getTenders.fulfilled, (state, action) => {
       state.data = action.payload;
 
-      const ukCoreTotals = generateUkCoreTenderTotals(action.payload);
-      const cumalitiveTotals = generateCumalitiveTenderTotals(action.payload); // The sum of each months totals for each location
-      const ukCumalitiveTotalsTotal = generateUKTenendersCumaltiveTotal(cumalitiveTotals); // The sum of the uk cumalitive totals
-      const specialCumalitiveTotals = generateSpecialCumalitiveTotals(cumalitiveTotals);
-
-      state.ukCoreTotals = ukCoreTotals;
-      state.cumalitiveTotals = cumalitiveTotals;
-      state.ukCumalitiveTotal = ukCumalitiveTotalsTotal;
-      state.specialCumalitiveTotals = specialCumalitiveTotals;
+      updateData(state, action.payload);
 
       state.loading = false;
     });
@@ -45,7 +37,6 @@ export const tenderSlice = createSlice({
     builder.addCase(getTenders.rejected, (state, action) => {
       state.loading = false;
     });
-
 
     builder.addCase(addTender.pending, (state, action) => {
       state.loading = true;
@@ -57,16 +48,16 @@ export const tenderSlice = createSlice({
 
       if (itemToEditIndex > -1) {
         const updatedArray = [...state.data];
-
         const updatedItemIndex = updatedArray[itemToEditIndex].items.findIndex((item) => item.month === month);
 
         if (updatedItemIndex > -1) {
-          updatedArray[itemToEditIndex].items[updatedItemIndex].value = newValue;
+          updatedArray[itemToEditIndex].items[updatedItemIndex].value = parseInt(newValue);
         } else {
           console.error("Item not found for the specified month");
         }
 
         state.data = updatedArray;
+        updateData(state, updatedArray);
       }
       state.loading = false;
     });
@@ -78,6 +69,18 @@ export const tenderSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setLoading } = tenderSlice.actions;
+export const { setLoading, buildData } = tenderSlice.actions;
 
 export default tenderSlice.reducer;
+
+const updateData = (state, newData) => {
+  const ukCoreTotals = generateUkCoreTenderTotals(newData);
+  const cumalitiveTotals = generateCumalitiveTenderTotals(newData); // The sum of each months totals for each location
+  const ukCumalitiveTotalsTotal = generateUKTenendersCumaltiveTotal(cumalitiveTotals); // The sum of the uk cumalitive totals
+  const specialCumalitiveTotals = generateSpecialCumalitiveTotals(cumalitiveTotals);
+
+  state.ukCoreTotals = ukCoreTotals;
+  state.cumalitiveTotals = cumalitiveTotals;
+  state.ukCumalitiveTotal = ukCumalitiveTotalsTotal;
+  state.specialCumalitiveTotals = specialCumalitiveTotals;
+}

@@ -49,7 +49,7 @@ const TendersSubmittedRow = ({ data }) => {
             <td>£{generateTargetAmountToDate((extractedTendersTargets()  * 12), cumalitiveTotals()).toLocaleString()}</td>
 
             {/* Target Acheived Column */}
-            <td>{targetPercentageAcheived}</td>
+            <td>{targetPercentageAcheived}%</td>
         </tr>
     )
 }

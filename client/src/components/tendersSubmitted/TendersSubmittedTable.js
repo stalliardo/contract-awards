@@ -1,19 +1,16 @@
 import React from 'react';
 
 import { useSelector } from 'react-redux';
-
 import './tenders-submitted.css';
 
 import { generateFinancialYearMonths } from '../../utils/DateUtils';
 import TendersSubmittedRow from './TendersSubmittedRow';
 
-
-import { getMonthsInFinancialOrder } from '../../utils/DateUtils';
 import TendersSubmittedUkCoreTotalsRow from './TendersSubmittedUkCoreTotalsRow';
 import TendersSpecialsRow from './TendersSpecialsRow';
 import TendersSummaryTotalsRow from './TendersSummaryTotalsRow';
-
-const monthsInFinancialOrder = getMonthsInFinancialOrder();
+import TendersSummaryMontlyPerformanceRow from './TendersSummaryMontlyPerformanceRow';
+import TenderSummaryCumalitivePerformanceRow from './TenderSummaryCumalitivePerformanceRow';
 
 const MonthsForTableHead = ({ k }) => {
     const months = generateFinancialYearMonths();
@@ -26,9 +23,9 @@ const MonthsForTableHead = ({ k }) => {
 }
 
 const TendersSubmittedTable = ({data}) => {
-
     const originalLocations = useSelector(state => state.location.data);
     const tenders = useSelector(state => state.tender);
+    const awards = useSelector(state => state.awards);
     
 
     const extractedDataForRow = (location) => {
@@ -102,7 +99,7 @@ const TendersSubmittedTable = ({data}) => {
                 <p>% T A = Percentage of Target Achieved (TBC)</p>
             </div>
 
-            {/* <div className='awards-page-table-container'>
+            <div className='awards-page-table-container'>
                     <h3>Company Performance</h3>
                     <table id="awards-table">
                         <thead>
@@ -114,7 +111,10 @@ const TendersSubmittedTable = ({data}) => {
                         <tbody>
                             <tr>
                                 <td>Plus/Minus</td>
-                                <AwardsSummaryMonthlyPerformanceRow monthlyCoreTotals={awardsData.ukAndSpecialCoreTotals} monthlyTargetTotal={awardsData.ukAndSpecialTargetTotal} />
+                                <TendersSummaryMontlyPerformanceRow 
+                                    monthlyCoreTotals={tenders.ukCoreTotals.all}
+                                    monthlyTargetTotal={awards.tendersSubmittedTargets.reduce((prev, current) => parseInt(prev) + parseInt(current.targetValue), 0)} 
+                                />
                             </tr>
                         </tbody>
                     </table>
@@ -131,19 +131,16 @@ const TendersSubmittedTable = ({data}) => {
                         <tbody>
                             <tr>
                                 <td>Plus/Minus</td>
-                                <AwardsSummaryCumalitivePerformanceRow monthlyCoreTotals={awardsData.ukAndSpecialCoreTotals} monthlyTargetTotal={awardsData.ukAndSpecialTargetTotal} />
+                                <TenderSummaryCumalitivePerformanceRow 
+                                   monthlyCoreTotals={tenders.ukCoreTotals.all}
+                                   monthlyTargetTotal={awards.tendersSubmittedTargets.reduce((prev, current) => parseInt(prev) + parseInt(current.targetValue), 0)} 
+                                />
                             </tr>
                         </tbody>
                     </table>
-                </div> */}
+                </div>
         </div>
     )
 }
 
 export default TendersSubmittedTable;
-
-
-// 1 - location and month cells are all inputs
-
-
-// Data:

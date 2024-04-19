@@ -63,16 +63,19 @@ export const generateUkCoreTotals = (data) => {
     return totals;
 }
 
+
 export const generateUkCoreTenderTotals = (data) => {
     const totals = {
         uk: [],
-        specials: []
+        specials: [],
+        all: [],
     };
     const monthsInFinancialOrder = getMonthsInFinancialOrder();
 
     monthsInFinancialOrder.forEach((month) => {
         let ukCoreTotal = 0;
         let specialsTotal = 0;
+        let allTotal = 0;
 
         data.forEach((d) => {
             d.items.forEach((item) => {
@@ -82,13 +85,15 @@ export const generateUkCoreTenderTotals = (data) => {
                     } else {
                         specialsTotal += item.value;
                     }
+
+                    allTotal += item.value;
                 }
             })
-           
         })
 
         totals.specials.push({ month, specialsTotal });
         totals.uk.push({ month, ukCoreTotal });
+        totals.all.push({month, sum: allTotal});
 
         ukCoreTotal = 0;
         specialsTotal = 0;

@@ -6,6 +6,8 @@ const initialState = {
   data: [],
   loading: true,
   error: null,
+  cumalitiveTotals: [],
+  ukCumalitiveTotal: "",
   ukCoreTotals: [], // ie, the total for each month
 };
 
@@ -16,7 +18,7 @@ export const tenderSlice = createSlice({
   reducers: {
     setLoading: (state, action) => {
       state.loading = action.payload;
-    }
+    },
   },
 
   extraReducers: (builder) => {

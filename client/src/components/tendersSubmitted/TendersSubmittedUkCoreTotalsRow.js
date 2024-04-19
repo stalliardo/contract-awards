@@ -2,10 +2,9 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 
 const TendersSubmittedUkCoreTotalsRow = () => {
-
     const tenders = useSelector(state => state.tender);
-
-    console.log('tenders = ', tenders);
+    const awardsData = useSelector(state => state.awards);
+    const monthlyTargetTotal = awardsData.tendersSubmittedTargets.reduce((prev, current) => parseInt(prev) + parseInt(current.targetValue), 0);
 
     return (
         // <td style={{color: data.ukCoreTotal >= ukTargetTotal ? COLOURS.GREEN : COLOURS.RED}}>
@@ -17,6 +16,7 @@ const TendersSubmittedUkCoreTotalsRow = () => {
                 })
             }
          <td>£{(tenders.ukCumalitiveTotal).toLocaleString()}</td>
+         <td>£{monthlyTargetTotal.toLocaleString()}</td>
         </tr>
       )
 }

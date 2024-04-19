@@ -11,6 +11,7 @@ import TendersSubmittedRow from './TendersSubmittedRow';
 import { getMonthsInFinancialOrder } from '../../utils/DateUtils';
 import TendersSubmittedUkCoreTotalsRow from './TendersSubmittedUkCoreTotalsRow';
 import TendersSpecialsRow from './TendersSpecialsRow';
+import TendersSummaryTotalsRow from './TendersSummaryTotalsRow';
 
 const monthsInFinancialOrder = getMonthsInFinancialOrder();
 
@@ -27,6 +28,8 @@ const MonthsForTableHead = ({ k }) => {
 const TendersSubmittedTable = ({data}) => {
 
     const originalLocations = useSelector(state => state.location.data);
+    const tenders = useSelector(state => state.tender);
+    
 
     const extractedDataForRow = (location) => {
         return data.find((item) => item.location === location);
@@ -85,9 +88,15 @@ const TendersSubmittedTable = ({data}) => {
                             })
                         }
                        
-                        <tr className='bold-cells'>
-                           
-                        </tr>
+                       <tr className='bold-cells'>
+                                <td>Total</td>
+                                <TendersSummaryTotalsRow
+                                    ukCoreTotals={tenders.ukCoreTotals.uk}
+                                    specialCoreTotals={tenders.ukCoreTotals.specials}
+                                    cumalativeTotals={parseInt(tenders.ukCumalitiveTotal) + parseInt(tenders.specialCumalitiveTotals)}
+                                    // ukAndSpecialTargetTotal={awardsData.ukAndSpecialTargetTotal}
+                                />
+                            </tr>
                     </tbody>
                 </table>
                 <p>% T A = Percentage of Target Achieved (TBC)</p>

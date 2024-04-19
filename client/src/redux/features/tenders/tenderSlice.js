@@ -9,7 +9,7 @@ const initialState = {
   cumalitiveTotals: [],
   ukCumalitiveTotal: "",
   ukCoreTotals: [], // ie, the total for each month
-  specialCumalitiveTotals: [],
+  specialCumalitiveTotals: "",
 };
 
 export const tenderSlice = createSlice({
@@ -32,12 +32,13 @@ export const tenderSlice = createSlice({
       const ukCoreTotals = generateUkCoreTenderTotals(action.payload);
       const cumalitiveTotals = generateCumalitiveTenderTotals(action.payload); // The sum of each months totals for each location
       const ukCumalitiveTotalsTotal = generateUKTenendersCumaltiveTotal(cumalitiveTotals); // The sum of the uk cumalitive totals
-      // const specialCumalitiveTotals = generateSpecialCumalitiveTotals(cumalitiveTotals);
+      const specialCumalitiveTotals = generateSpecialCumalitiveTotals(cumalitiveTotals);
 
       state.ukCoreTotals = ukCoreTotals;
       state.cumalitiveTotals = cumalitiveTotals;
       state.ukCumalitiveTotal = ukCumalitiveTotalsTotal;
-      // state.specialCumalitiveTotals = specialCumalitiveTotals;
+      state.specialCumalitiveTotals = specialCumalitiveTotals;
+
       state.loading = false;
     });
 

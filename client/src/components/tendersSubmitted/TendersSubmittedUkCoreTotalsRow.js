@@ -5,7 +5,10 @@ import { generateTargetAcheivedPercentage, generateTargetAmountToDate } from '..
 const TendersSubmittedUkCoreTotalsRow = () => {
     const tenders = useSelector(state => state.tender);
     const awardsData = useSelector(state => state.awards);
-    const monthlyTargetTotal = awardsData.tendersSubmittedTargets.reduce((prev, current) => parseInt(prev) + parseInt(current.targetValue), 0);
+    
+    const formattedTargets = awardsData.tendersSubmittedTargets.filter(target => target.location !== "Special Projects" && target.location !== "M&E");
+    const monthlyTargetTotal = formattedTargets.reduce((prev, current) => parseInt(prev) + parseInt(current.targetValue), 0);
+
     const targetPercentageAcheived = generateTargetAcheivedPercentage(monthlyTargetTotal * 12, tenders.ukCumalitiveTotal);
 
     return (

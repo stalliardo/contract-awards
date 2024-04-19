@@ -9,6 +9,7 @@ import TendersSubmittedRow from './TendersSubmittedRow';
 
 
 import { getMonthsInFinancialOrder } from '../../utils/DateUtils';
+import TendersSubmittedUkCoreTotalsRow from './TendersSubmittedUkCoreTotalsRow';
 
 const monthsInFinancialOrder = getMonthsInFinancialOrder();
 
@@ -72,6 +73,7 @@ const TendersSubmittedTable = ({data}) => {
                                 return null;
                             })
                         }
+                        <TendersSubmittedUkCoreTotalsRow />
                         <tr className='bold-cells'>
                             {/* <td>UK Core Total</td> */}
                             {/* {

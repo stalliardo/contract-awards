@@ -6,13 +6,13 @@ import { generateTargetAcheivedPercentage, generateTargetAmountToDate } from '..
 const TendersSubmittedRow = ({ data }) => {
 
     console.log('data = ', data);
+    const tenders = useSelector(state => state.tender);
     
     const targets = useSelector(state => state.awards.tendersSubmittedTargets);
 
-    const cumalitiveTotals = () => {
-        const sum = data.items.reduce((total, target) => parseInt(total) + parseInt(target.value), 0);
-        return sum;
-    }
+    const cumalitiveTotal = tenders.cumalitiveTotals.find(total => total.location === data.location).sum;
+
+    console.log('cumalitiveTotal = ', cumalitiveTotal);
 
     const extractedTendersTargets = () => {
         const foundTarget = targets.find(target => target.location === data.location);
@@ -23,7 +23,7 @@ const TendersSubmittedRow = ({ data }) => {
         return "0";
     }
 
-    const targetPercentageAcheived = generateTargetAcheivedPercentage(extractedTendersTargets() * 12, cumalitiveTotals());
+    const targetPercentageAcheived = generateTargetAcheivedPercentage(extractedTendersTargets() * 12, cumalitiveTotal);
     // const targetPercentageAcheivedColour = parseFloat(targetPercentageAcheived) >= 100 ? COLOURS.GREEN : COLOURS.RED;
 
     return (
@@ -37,7 +37,7 @@ const TendersSubmittedRow = ({ data }) => {
                 })
             }
             {/* Cumalitive Column */}
-            <td>£{cumalitiveTotals().toLocaleString()}</td>
+            <td>£{cumalitiveTotal.toLocaleString()}</td>
 
             {/* Monthly Target Column */}
             <td>£{extractedTendersTargets()}</td>
@@ -46,7 +46,7 @@ const TendersSubmittedRow = ({ data }) => {
             <td>£{(extractedTendersTargets() * 12).toLocaleString()}</td>
 
             {/* Target to Data Column*/}
-            <td>£{generateTargetAmountToDate((extractedTendersTargets()  * 12), cumalitiveTotals()).toLocaleString()}</td>
+            <td>£{generateTargetAmountToDate((extractedTendersTargets()  * 12), cumalitiveTotal).toLocaleString()}</td>
 
             {/* Target Acheived Column */}
             <td>{targetPercentageAcheived}%</td>

@@ -13,6 +13,7 @@ const initialState = {
   ukAndSpecialTargetTotal: 0,
   ukAndSpecialCoreTotals: [],
   targets: [],
+  tendersSubmittedTargets: [],
   locations: [],
   specialLocations: [],
   loading: true,
@@ -30,11 +31,18 @@ export const awardsSlice = createSlice({
   },
 
   extraReducers: (builder) => {
+    builder.addCase(fetchData.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchData.rejected, (state, action) => {
+      state.loading = false;
+    });
     builder.addCase(fetchData.fulfilled, (state, action) => {
       const generatedCoreTotals = generateCoreTotalsData(action.payload.awardsData);
       const generatedUKCoreTotals = generateUkCoreTotals(generatedCoreTotals);
 
       const filteredTargets = action.payload.targetsData.filter((target) => target.category === TARGET_CATEGORIES.CONTRACT_AWARDS);
+      const filteredTendersSumittedTargets = action.payload.targetsData.filter((target) => target.category === TARGET_CATEGORIES.TENDERS_SUBMITTED);
       const formattedLocations = action.payload.locationsData.map((location) => location.name);
       const filteredSpecialLocations = action.payload.locationsData.filter((location) => location.name === "M&E" || location.name === "Special Projects")
       const formattedSpecialTotals = filteredSpecialLocations.map((item) => item.name);
@@ -43,6 +51,7 @@ export const awardsSlice = createSlice({
       const generatedSpecialTargetTotals = generateSpecialTargetTotals(filteredTargets);
 
       state.targets = filteredTargets;
+      state.tendersSubmittedTargets = filteredTendersSumittedTargets;
       state.coreTotals = generatedCoreTotals;
       state.ukCoreTotals = generatedUKCoreTotals.uk;
       state.specialCoreTotals = generatedUKCoreTotals.specials;

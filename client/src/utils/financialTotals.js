@@ -91,6 +91,8 @@ export const generateTargetAcheivedPercentage = (annualAmount, cumalitiveTotal) 
     const targetToDate = generateTargetAmountToDate(annualAmount, cumalitiveTotal);
     const targetAchieved = 100 / targetToDate * cumalitiveTotal;
 
+    console.log('');
+
     if(targetAchieved < 1 && targetAchieved > 0) {
         return targetAchieved.toFixed(2);
     }

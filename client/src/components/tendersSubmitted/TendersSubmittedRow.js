@@ -1,16 +1,30 @@
 import React, { useState } from 'react';
-import { getMonthsInFinancialOrder } from '../../utils/DateUtils';
 import TendersSubmittedCell from './TendersSubmittedCell';
-
-const monthsInFinancialOrder = getMonthsInFinancialOrder();
+import { useSelector } from 'react-redux';
+import { generateTargetAcheivedPercentage, generateTargetAmountToDate } from '../../utils/financialTotals';
 
 const TendersSubmittedRow = ({ data }) => {
-    
-    const cumalitiveTotals = () => {
-        const sum = data.items.reduce((total, target) => total + target.value, 0);
 
+    console.log('data = ', data);
+    
+    const targets = useSelector(state => state.awards.tendersSubmittedTargets);
+
+    const cumalitiveTotals = () => {
+        const sum = data.items.reduce((total, target) => parseInt(total) + parseInt(target.value), 0);
         return sum;
     }
+
+    const extractedTendersTargets = () => {
+        const foundTarget = targets.find(target => target.location === data.location);
+
+        if(foundTarget){
+            return foundTarget.targetValue;
+        }
+        return "0";
+    }
+
+    const targetPercentageAcheived = generateTargetAcheivedPercentage(extractedTendersTargets() * 12, cumalitiveTotals());
+    // const targetPercentageAcheivedColour = parseFloat(targetPercentageAcheived) >= 100 ? COLOURS.GREEN : COLOURS.RED;
 
     return (
         <tr>
@@ -22,7 +36,20 @@ const TendersSubmittedRow = ({ data }) => {
                     )
                 })
             }
+            {/* Cumalitive Column */}
             <td>£{cumalitiveTotals().toLocaleString()}</td>
+
+            {/* Monthly Target Column */}
+            <td>£{extractedTendersTargets()}</td>
+
+            {/* Yearly Target Column */}
+            <td>£{(extractedTendersTargets() * 12).toLocaleString()}</td>
+
+            {/* Target to Data Column*/}
+            <td>£{generateTargetAmountToDate((extractedTendersTargets()  * 12), cumalitiveTotals()).toLocaleString()}</td>
+
+            {/* Target Acheived Column */}
+            <td>{targetPercentageAcheived}</td>
         </tr>
     )
 }

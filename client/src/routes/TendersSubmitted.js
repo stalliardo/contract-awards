@@ -3,6 +3,7 @@ import TendersSubmittedTable from '../components/tendersSubmitted/TendersSubmitt
 import Spinner from '../components/spinner/Spinner';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTenders } from '../redux/features/tenders/tenderThunk';
+import { fetchData } from '../redux/features/awards/awardsThunks';
 
 
 const TendersSubmitted = () => {
@@ -10,18 +11,29 @@ const TendersSubmitted = () => {
   // TODO get the tenders data, load into state and only get if not in state
 
   const dispatch = useDispatch();
-  const tenders = useSelector(state => state.tender);
 
-  console.log('tender data = ', tenders.data);
+  const originalLocations = useSelector((state) => state.location.data);
+  const tenders = useSelector(state => state.tender);
+  const awards = useSelector(state => state.awards);
+
 
   useEffect(() => {
     if(!tenders.data || !tenders.data.length) {
       console.log('effect called getting data.....');
-      dispatch(getTenders())
+      dispatch(getTenders()).then(() => {
+        console.log('then called from tenders');
+        // check if we need to get awards data also
+
+        if(!awards.targets.length) {
+          console.log('getting awards data');
+          dispatch(fetchData(originalLocations));
+        }
+      })
+
     }
   }, [])
 
-  if(!tenders.loading) {
+  if(!tenders.loading && !awards.loading) {
     return (
       <div className='awards-page-container'>
         <TendersSubmittedTable data={tenders.data}/>

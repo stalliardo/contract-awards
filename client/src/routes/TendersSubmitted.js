@@ -14,7 +14,6 @@ const TendersSubmitted = () => {
   const awards = useSelector(state => state.awards);
 
   useEffect(() => {
-    console.log('\nuseffectr called');
     if(!tenders.data || !tenders.data.length) {
       dispatch(getTenders()).then(() => {
         console.log('get tenders called');

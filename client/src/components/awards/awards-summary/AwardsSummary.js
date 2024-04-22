@@ -23,15 +23,15 @@ const MonthsForTableHead = ({k}) => {
 }
 
 const AwardsSummary = () => {
+    const dispatch = useDispatch();
     let cumalitiveTotalsSum = 0;
+    const authenticatedUser = useSelector(state => state.users.authenticatedUser);
 
     const awardsData = useSelector((state) => state.awards);
     const isLoading = useSelector((state) => state.awards.loading);
-    const locations = useSelector((state) => state.awards.locations);
+    const [locations, setLocations] = useState(authenticatedUser.locations)
     const originalLocations = useSelector((state) => state.location.data);
     const specialLocations = useSelector((state) => state.awards.specialLocations);
-
-    const dispatch = useDispatch();
 
     const [spinnerComplete, setSpinnerComplete] = useState(false);
     const showUI = !isLoading && spinnerComplete;
@@ -179,6 +179,3 @@ const AwardsSummary = () => {
     )
 }
 export default AwardsSummary;
-// NTH's
-
-// Can click a locations total value and be transistioned to the corresponing awards form

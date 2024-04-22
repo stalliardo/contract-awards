@@ -44,6 +44,7 @@ export const awardsSlice = createSlice({
       const filteredTargets = action.payload.targetsData.filter((target) => target.category === TARGET_CATEGORIES.CONTRACT_AWARDS);
       const filteredTendersSumittedTargets = action.payload.targetsData.filter((target) => target.category === TARGET_CATEGORIES.TENDERS_SUBMITTED);
       const formattedLocations = action.payload.locationsData.map((location) => location.name);
+
       const filteredSpecialLocations = action.payload.locationsData.filter((location) => location.name === "M&E" || location.name === "Special Projects")
       const formattedSpecialTotals = filteredSpecialLocations.map((item) => item.name);
 

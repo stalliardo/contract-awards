@@ -21,7 +21,7 @@ const Root = () => {
   return (
     <div className='root-page-awards-table'>
       {
-        locations.length ? <AwardsTable locations={locations} />
+        locations.length ? <AwardsTable locations={locations}/>
         : <div className='root-page-no-locations-message'>
           <p>Oops! It seems you haven't been assigned to any locations yet. Only directors, regional directors and site admins can allocate locations. Please reach out to the appropriate person for further assistance.</p>
         </div>

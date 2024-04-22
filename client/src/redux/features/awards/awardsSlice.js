@@ -38,8 +38,10 @@ export const awardsSlice = createSlice({
       state.loading = false;
     });
     builder.addCase(fetchData.fulfilled, (state, action) => {
-      const generatedCoreTotals = generateCoreTotalsData(action.payload.awardsData);
-      const generatedUKCoreTotals = generateUkCoreTotals(generatedCoreTotals);
+      const { authenticatedUser } = action.payload;
+
+      const generatedCoreTotals = generateCoreTotalsData(action.payload.awardsData, authenticatedUser);
+      const generatedUKCoreTotals = generateUkCoreTotals(generatedCoreTotals);  
 
       const filteredTargets = action.payload.targetsData.filter((target) => target.category === TARGET_CATEGORIES.CONTRACT_AWARDS);
       const filteredTendersSumittedTargets = action.payload.targetsData.filter((target) => target.category === TARGET_CATEGORIES.TENDERS_SUBMITTED);

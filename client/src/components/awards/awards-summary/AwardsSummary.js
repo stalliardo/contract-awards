@@ -29,7 +29,7 @@ const AwardsSummary = () => {
 
     const awardsData = useSelector((state) => state.awards);
     const isLoading = useSelector((state) => state.awards.loading);
-    const [locations, setLocations] = useState([...authenticatedUser.locations].sort());
+    const [locations, setLocations] = useState(authenticatedUser.locations ? [...authenticatedUser.locations].sort() : []);
     const originalLocations = useSelector((state) => state.location.data);
     const specialLocations = useSelector((state) => state.awards.specialLocations);
 
@@ -40,11 +40,13 @@ const AwardsSummary = () => {
         if (awardsData.coreTotals.length > 0) {
             setSpinnerComplete(true);
         } else {
-            dispatch(fetchData(originalLocations)).finally(() => {
+           if(authenticatedUser){
+            dispatch(fetchData({locationData: originalLocations, authenticatedUser})).finally(() => {
                 setTimeout(() => {
                     setSpinnerComplete(true);
                 }, 500);
             })
+           }
         }
     }, []);
 
@@ -123,8 +125,10 @@ const AwardsSummary = () => {
                                 </td>
                             </tr>
                             {
-                                specialLocations.map((location, index) => {
+                                locations.map((location, index) => {
+                                   if( location === "Special Projects" || location === "M&E") {
                                     return <AwardsSummarySpecialsRow targetsData={awardsData.targets} filteredTotals={generateFilteredTotals(location)} cumalitiveTotal={generateCumalitiveTotals(location)} locationRef={location} key={index} />
+                                   }
                                 })
                             }
                             <tr className='bold-cells'>

@@ -10,25 +10,31 @@ export const getCoreTotal = (items) => {
     return sum;
 }
 
-export const generateCoreTotalsData = (data) => {
+export const generateCoreTotalsData = (data, authenticatedUser) => {
     const summaryTableData = [];
+    const filteredData = [];
 
-    data.forEach((item) => {
-        let sum = 0;
-
-        if (item.items.length) {
-            item.items.forEach((i) => {
-                sum += parseInt(i.core);
-            })
-        }
-
-        summaryTableData.push({
-            location: item.location,
-            month: item.month,
-            sum
+    if (authenticatedUser.locations) {
+        authenticatedUser.locations.forEach((location) => {
+            filteredData.push(...data.filter(d => d.location === location));
         })
-    });
 
+        filteredData.forEach((item) => {
+            let sum = 0;
+
+            if (item.items.length) {
+                item.items.forEach((i) => {
+                    sum += parseInt(i.core);
+                })
+            }
+
+            summaryTableData.push({
+                location: item.location,
+                month: item.month,
+                sum
+            })
+        });
+    }
     return summaryTableData;
 }
 
@@ -93,7 +99,7 @@ export const generateUkCoreTenderTotals = (data) => {
 
         totals.specials.push({ month, specialsTotal });
         totals.uk.push({ month, ukCoreTotal });
-        totals.all.push({month, sum: allTotal});
+        totals.all.push({ month, sum: allTotal });
 
         ukCoreTotal = 0;
         specialsTotal = 0;
@@ -103,19 +109,19 @@ export const generateUkCoreTenderTotals = (data) => {
 }
 
 export const generateCumalitiveTenderTotals = (data) => {
-   const formattedData = [];
+    const formattedData = [];
 
-   data.forEach((d) => {
-    const obj = {location: d.location};
+    data.forEach((d) => {
+        const obj = { location: d.location };
 
-    const sum = d.items.reduce((prev, cur) => parseInt(prev) + parseInt(cur.value), 0);
+        const sum = d.items.reduce((prev, cur) => parseInt(prev) + parseInt(cur.value), 0);
 
-    obj.sum = sum;
+        obj.sum = sum;
 
-    formattedData.push(obj);
-   })
+        formattedData.push(obj);
+    })
 
-   return formattedData;
+    return formattedData;
 }
 
 export const generateUKTenendersCumaltiveTotal = (data) => {
@@ -125,7 +131,7 @@ export const generateUKTenendersCumaltiveTotal = (data) => {
     return filteredData.reduce((total, target) => parseInt(total) + parseInt(target.sum), 0);
 }
 
-export const  generateSpecialCumalitiveTotals = (data) => {
+export const generateSpecialCumalitiveTotals = (data) => {
     const filteredData = data.filter((item) => item.location === "Special Projects" || item.location === "M&E");
 
     return filteredData.reduce((total, target) => parseInt(total) + parseInt(target.sum), 0);
@@ -159,7 +165,7 @@ export const generateTargetAcheivedPercentage = (annualAmount, cumalitiveTotal) 
     const targetToDate = generateTargetAmountToDate(annualAmount, cumalitiveTotal);
     const targetAchieved = 100 / targetToDate * cumalitiveTotal;
 
-    if(targetAchieved < 1 && targetAchieved > 0) {
+    if (targetAchieved < 1 && targetAchieved > 0) {
         return targetAchieved.toFixed(2);
     }
 

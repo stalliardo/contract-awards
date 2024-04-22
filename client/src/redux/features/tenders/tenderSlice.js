@@ -80,7 +80,7 @@ export default tenderSlice.reducer;
 
 const updateData = (state, newData, authenticatedUser) => {
   const ukCoreTotals = generateUkCoreTenderTotals(newData, authenticatedUser);
-  const cumalitiveTotals = generateCumalitiveTenderTotals(newData); // The sum of each months totals for each location
+  const cumalitiveTotals = generateCumalitiveTenderTotals(newData, authenticatedUser); // The sum of each months totals for each location
   const ukCumalitiveTotalsTotal = generateUKTenendersCumaltiveTotal(cumalitiveTotals); // The sum of the uk cumalitive totals
   const specialCumalitiveTotals = generateSpecialCumalitiveTotals(cumalitiveTotals);
 

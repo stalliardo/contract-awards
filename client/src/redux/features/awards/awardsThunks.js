@@ -9,6 +9,8 @@ const fetchData = createAsyncThunk(
             const awards = await axios.get("/api/awards-diary/getAllAwards");
             const targets = await axios.get("/api/targets");
 
+            console.log('location data = ', locationData);
+
             if(locationData.length) {
                 return {targetsData: targets.data, awardsData: awards.data, locationsData: locationData, authenticatedUser};
             } else {

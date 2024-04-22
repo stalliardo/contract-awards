@@ -14,6 +14,8 @@ export const generateCoreTotalsData = (data, authenticatedUser) => {
     const summaryTableData = [];
     const filteredData = [];
 
+    console.log('authentiocated user = ', authenticatedUser);
+
     if (authenticatedUser.locations) {
         authenticatedUser.locations.forEach((location) => {
             filteredData.push(...data.filter(d => d.location === location));
@@ -71,8 +73,6 @@ export const generateUkCoreTotals = (data) => {
 
 
 export const generateUkCoreTenderTotals = (data, authenticatedUser) => {
-
-    console.log('authed user = ', authenticatedUser.locations);
     const totals = {
         uk: [],
         specials: [],
@@ -120,19 +120,24 @@ export const generateUkCoreTenderTotals = (data, authenticatedUser) => {
     return totals;
 }
 
-export const generateCumalitiveTenderTotals = (data) => {
+export const generateCumalitiveTenderTotals = (data, authenticatedUser) => {
+    const filteredData = [];
     const formattedData = [];
 
-    data.forEach((d) => {
-        const obj = { location: d.location };
+    if(authenticatedUser.locations){
+        authenticatedUser.locations.forEach((location) => {
+            filteredData.push(...data.filter(d => d.location === location));
+        })
 
-        const sum = d.items.reduce((prev, cur) => parseInt(prev) + parseInt(cur.value), 0);
-
-        obj.sum = sum;
-
-        formattedData.push(obj);
-    })
-
+        filteredData.forEach((d) => {
+            const obj = { location: d.location };
+            const sum = d.items.reduce((prev, cur) => parseInt(prev) + parseInt(cur.value), 0);
+    
+            obj.sum = sum;
+    
+            formattedData.push(obj);
+        })
+    }
     return formattedData;
 }
 

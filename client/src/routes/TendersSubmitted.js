@@ -4,6 +4,7 @@ import Spinner from '../components/spinner/Spinner';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTenders } from '../redux/features/tenders/tenderThunk';
 import { fetchData } from '../redux/features/awards/awardsThunks';
+import { setAuthenticatedUser } from '../redux/features/tenders/tenderSlice';
 
 const TendersSubmitted = () => {
   const dispatch = useDispatch();
@@ -11,15 +12,18 @@ const TendersSubmitted = () => {
   const originalLocations = useSelector((state) => state.location.data);
   const tenders = useSelector(state => state.tender);
   const awards = useSelector(state => state.awards);
+  const authenticatedUser = useSelector(state => state.users.authenticatedUser);
 
   useEffect(() => {
     if(!tenders.data || !tenders.data.length) {
-      dispatch(getTenders()).then(() => {
-        console.log('get tenders called');
-        if(!awards.targets.length) {
-          dispatch(fetchData(originalLocations));
-        }
-      })
+      if(authenticatedUser.locations){
+        dispatch(getTenders(authenticatedUser)).then(() => {
+          console.log('get tenders called');
+          if(!awards.targets.length) {
+            dispatch(fetchData(originalLocations));
+          }
+        })
+      }
     } else if(tenders.data.length) {
 
       console.log('else called buuliding data called');

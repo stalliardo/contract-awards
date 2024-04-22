@@ -70,7 +70,9 @@ export const generateUkCoreTotals = (data) => {
 }
 
 
-export const generateUkCoreTenderTotals = (data) => {
+export const generateUkCoreTenderTotals = (data, authenticatedUser) => {
+
+    console.log('authed user = ', authenticatedUser.locations);
     const totals = {
         uk: [],
         specials: [],
@@ -78,32 +80,42 @@ export const generateUkCoreTenderTotals = (data) => {
     };
     const monthsInFinancialOrder = getMonthsInFinancialOrder();
 
-    monthsInFinancialOrder.forEach((month) => {
-        let ukCoreTotal = 0;
-        let specialsTotal = 0;
-        let allTotal = 0;
+    const filteredData = [];
 
-        data.forEach((d) => {
-            d.items.forEach((item) => {
-                if (item.month === month) {
-                    if (d.location !== "Special Projects" && d.location !== "M&E") {
-                        ukCoreTotal += item.value;
-                    } else {
-                        specialsTotal += item.value;
-                    }
-
-                    allTotal += item.value;
-                }
-            })
+    if(authenticatedUser.locations) {
+        authenticatedUser.locations.forEach((location) => {
+            filteredData.push(...data.filter(d => d.location === location));
         })
 
-        totals.specials.push({ month, specialsTotal });
-        totals.uk.push({ month, ukCoreTotal });
-        totals.all.push({ month, sum: allTotal });
+        monthsInFinancialOrder.forEach((month) => {
+            let ukCoreTotal = 0;
+            let specialsTotal = 0;
+            let allTotal = 0;
+    
+            filteredData.forEach((d) => {
+                d.items.forEach((item) => {
+                    if (item.month === month) {
+                        if (d.location !== "Special Projects" && d.location !== "M&E") {
+                            ukCoreTotal += item.value;
+                        } else {
+                            specialsTotal += item.value;
+                        }
+    
+                        allTotal += item.value;
+                    }
+                })
+            })
+    
+            totals.specials.push({ month, specialsTotal });
+            totals.uk.push({ month, ukCoreTotal });
+            totals.all.push({ month, sum: allTotal });
+    
+            ukCoreTotal = 0;
+            specialsTotal = 0;
+        })
+    }
 
-        ukCoreTotal = 0;
-        specialsTotal = 0;
-    })
+    
 
     return totals;
 }

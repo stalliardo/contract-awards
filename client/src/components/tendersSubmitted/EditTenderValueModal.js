@@ -13,6 +13,7 @@ const EditTenderValueModal = ({ item, handleCloseModal }) => {
 
     const dispatch = useDispatch();
     const tenders = useSelector(state => state.tender);
+    const authenticatedUser = useSelector(state => state.users.authenticatedUser);
 
     const onEditValue = () => {
        const data = {
@@ -21,7 +22,7 @@ const EditTenderValueModal = ({ item, handleCloseModal }) => {
         _id
        }
 
-        dispatch(addTender(data));
+        dispatch(addTender({data, authenticatedUser}));
     }
 
     const onCloseModal = () => {

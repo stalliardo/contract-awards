@@ -29,7 +29,7 @@ const AwardsSummary = () => {
 
     const awardsData = useSelector((state) => state.awards);
     const isLoading = useSelector((state) => state.awards.loading);
-    const [locations, setLocations] = useState(authenticatedUser.locations)
+    const [locations, setLocations] = useState([...authenticatedUser.locations].sort());
     const originalLocations = useSelector((state) => state.location.data);
     const specialLocations = useSelector((state) => state.awards.specialLocations);
 

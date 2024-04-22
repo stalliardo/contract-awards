@@ -39,6 +39,8 @@ export const usersSlice = createSlice({
 
       state.authenticatedUser = updatedUser;
       state.data = users;
+
+      console.log('users = ', users);
       state.loading = false;
     });
 

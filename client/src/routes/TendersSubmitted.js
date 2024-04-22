@@ -4,7 +4,6 @@ import Spinner from '../components/spinner/Spinner';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTenders } from '../redux/features/tenders/tenderThunk';
 import { fetchData } from '../redux/features/awards/awardsThunks';
-import { buildData } from '../redux/features/tenders/tenderSlice';
 
 const TendersSubmitted = () => {
   const dispatch = useDispatch();

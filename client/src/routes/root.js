@@ -5,7 +5,6 @@ import { verifyToken } from '../redux/features/auth/authThunk';
 import { setIsAuthenticated, setLoading } from '../redux/features/auth/authSlice';
 import { clearAuthenticatedUserData, setLoading as setUsersLoading } from '../redux/features/users/usersSlice';
 import { fetchUsers } from '../redux/features/users/usersThunk';
-// import Spinner from '../../components/spinner/Spinner';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Spinner from '../components/spinner/Spinner';

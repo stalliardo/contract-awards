@@ -31,7 +31,7 @@ const TendersSubmitted = () => {
     }
 
 
-  }, [])
+  }, [tenders, awards])
 
   if(!tenders.loading && !awards.loading) {
     return (

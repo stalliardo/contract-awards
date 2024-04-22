@@ -11,6 +11,7 @@ import AwardsSummaryMonthlyPerformanceRow from './AwardsSummaryMonthlyPerformanc
 import { COLOURS } from '../../../utils/constants';
 import AwardsSummaryCumalitivePerformanceRow from './AwardsSummaryCumalitivePerformanceRow';
 import { generateFinancialYearMonths } from '../../../utils/DateUtils';
+import { useNavigate } from 'react-router-dom';
 
 const MonthsForTableHead = ({k}) => {
     const months = generateFinancialYearMonths();
@@ -32,21 +33,29 @@ const AwardsSummary = () => {
     const [locations, setLocations] = useState(authenticatedUser.locations ? [...authenticatedUser.locations].sort() : []);
     const originalLocations = useSelector((state) => state.location.data);
     const specialLocations = useSelector((state) => state.awards.specialLocations);
+    const navigate = useNavigate();
 
     const [spinnerComplete, setSpinnerComplete] = useState(false);
     const showUI = !isLoading && spinnerComplete;
 
     useEffect(() => {
-        if (awardsData.coreTotals.length > 0) {
-            setSpinnerComplete(true);
+
+        if(!authenticatedUser._id) {
+            navigate("/");
         } else {
-           if(authenticatedUser){
-            dispatch(fetchData({locationData: originalLocations, authenticatedUser})).finally(() => {
+            if (awardsData.coreTotals.length > 0) {
                 setTimeout(() => {
-                    setSpinnerComplete(true);
-                }, 500);
-            })
-           }
+                    setSpinnerComplete(true); // to fix the flash, added a delay
+                }, 750);
+            } else {
+               if(authenticatedUser){
+                dispatch(fetchData({locationData: originalLocations, authenticatedUser})).finally(() => {
+                    setTimeout(() => {
+                        setSpinnerComplete(true);
+                    }, 750);
+                })
+               }
+            }
         }
     }, []);
 

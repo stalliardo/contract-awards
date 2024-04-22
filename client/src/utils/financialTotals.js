@@ -63,6 +63,74 @@ export const generateUkCoreTotals = (data) => {
     return totals;
 }
 
+
+export const generateUkCoreTenderTotals = (data) => {
+    const totals = {
+        uk: [],
+        specials: [],
+        all: [],
+    };
+    const monthsInFinancialOrder = getMonthsInFinancialOrder();
+
+    monthsInFinancialOrder.forEach((month) => {
+        let ukCoreTotal = 0;
+        let specialsTotal = 0;
+        let allTotal = 0;
+
+        data.forEach((d) => {
+            d.items.forEach((item) => {
+                if (item.month === month) {
+                    if (d.location !== "Special Projects" && d.location !== "M&E") {
+                        ukCoreTotal += item.value;
+                    } else {
+                        specialsTotal += item.value;
+                    }
+
+                    allTotal += item.value;
+                }
+            })
+        })
+
+        totals.specials.push({ month, specialsTotal });
+        totals.uk.push({ month, ukCoreTotal });
+        totals.all.push({month, sum: allTotal});
+
+        ukCoreTotal = 0;
+        specialsTotal = 0;
+    })
+
+    return totals;
+}
+
+export const generateCumalitiveTenderTotals = (data) => {
+   const formattedData = [];
+
+   data.forEach((d) => {
+    const obj = {location: d.location};
+
+    const sum = d.items.reduce((prev, cur) => parseInt(prev) + parseInt(cur.value), 0);
+
+    obj.sum = sum;
+
+    formattedData.push(obj);
+   })
+
+   return formattedData;
+}
+
+export const generateUKTenendersCumaltiveTotal = (data) => {
+
+    const filteredData = data.filter((item) => item.location !== "Special Projects" && item.location !== "M&E");
+
+    return filteredData.reduce((total, target) => parseInt(total) + parseInt(target.sum), 0);
+}
+
+export const  generateSpecialCumalitiveTotals = (data) => {
+    const filteredData = data.filter((item) => item.location === "Special Projects" || item.location === "M&E");
+
+    return filteredData.reduce((total, target) => parseInt(total) + parseInt(target.sum), 0);
+}
+
 export const generateUKTargetTotals = (data) => {
     const filteredData = data.filter((item) => item.location !== "Special Projects" && item.location !== "M&E");
 

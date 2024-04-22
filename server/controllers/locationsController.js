@@ -3,6 +3,7 @@ const Location = require('../models/Location');
 
 exports.addLocation = async (req, res) => {
   try {
+    // TODO - when this is called and successful, will also need to generate more t=defaults for the tender data
     const newLocation = new Location(req.body);
     await newLocation.save();
     res.status(201).send(newLocation);

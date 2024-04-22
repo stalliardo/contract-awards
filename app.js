@@ -14,6 +14,7 @@ const userRoutes = require("./server/routes/userRoutes");
 const ADRoutes = require("./server/routes/ADRoutes");
 const targetRoutes = require("./server/routes/targetRoutes");
 const authenticationRoutes = require("./server/routes/AuthenticationRoutes");
+const tenderRoutes = require("./server/routes/tenderRoutes");
 
 const jwt = require("./server/utils/JWTUtils");
 
@@ -28,13 +29,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
     extended: true
 }));
-app.use("/api", awardsDiaryRoutes); // Will this cause issue with the "/api" call down the bottom
+app.use("/api", awardsDiaryRoutes);
 app.use("/api", awardsDiaryItemRoutes);
 app.use("/api", locationRoutes);
 app.use("/api", userRoutes);
 app.use("/api", ADRoutes);
 app.use("/api", targetRoutes);
 app.use("/api", authenticationRoutes);
+app.use("/api", tenderRoutes);
 
 const ADConfig = {
     url: `ldap://${process.env.DOMAIN_IP}:389`, // TODO see if i can use the secure LDAPS

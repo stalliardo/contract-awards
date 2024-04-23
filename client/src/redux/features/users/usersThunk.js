@@ -4,7 +4,7 @@ import { extractFirstAndLastName } from '../../../utils/stringUtils';
 import { ROLES } from '../../../utils/constants';
 
 const fetchUsers = createAsyncThunk(
-    'awards/fetchUsers',
+    'users/fetchUsers',
     async (fullName) => {
         try {
             const users = await axios.get("/api/users");
@@ -13,9 +13,6 @@ const fetchUsers = createAsyncThunk(
             if (users && locations) {
                 const name = extractFirstAndLastName(fullName);
                 const foundUser = users.data.find(user => user?.name.toLowerCase() === name.toLowerCase());
-
-                console.log('foundsuser = ', foundUser);
-                console.log('users = ', users);
 
                 if (foundUser.role === ROLES.CA01 && foundUser.locations.length < locations.data.length) {
                     const updatedUser = await axios.put(`/api/users/${foundUser._id}/locations`);
@@ -36,7 +33,7 @@ const fetchUsers = createAsyncThunk(
 )
 
 const addLocationToUser = createAsyncThunk(
-    'awards/addLocationToUser',
+    'users/addLocationToUser',
     async (data) => {
         try {
             const response = await axios.post("/api/users/location", data);
@@ -49,7 +46,7 @@ const addLocationToUser = createAsyncThunk(
 )
 
 const removeLocationFromUser = createAsyncThunk(
-    'awards/removeLocationFromUser',
+    'users/removeLocationFromUser',
     async (data) => {
         try {
             const response = await axios.delete(`/api/users/${data.userId}/location/${data.location}`);
@@ -61,7 +58,7 @@ const removeLocationFromUser = createAsyncThunk(
 )
 
 const addAllLocationsToUser = createAsyncThunk(
-    'awards/addAllLocationsToUser',
+    'users/addAllLocationsToUser',
     async (data) => {
         try {
             const response = await axios.put(`/api/users/${data.userId}/locations`);

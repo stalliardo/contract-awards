@@ -20,7 +20,7 @@ const TendersSubmitted = () => {
       if(authenticatedUser.locations){
         dispatch(getTenders(authenticatedUser)).then(() => {
           if(!awards.targets.length) {
-            dispatch(fetchData(originalLocations));
+            dispatch(fetchData({locationData: originalLocations, authenticatedUser}));
           }
         })
       } else {

@@ -38,21 +38,13 @@ exports.addLocationToUser = async (req, res) => {
 
 exports.addAllLocationsToUser = async (req, res) => {
   const { userId } = req.params;
-  // const { isDirector } = req.body;
-
-  console.log('add all locations to user called');
-
-
 
   try {
-
-    // get the user
     const user = await User.findById(userId);
 
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-
 
     const role = user.role;
     const usersLocations = user.locations;
@@ -79,16 +71,12 @@ exports.addAllLocationsToUser = async (req, res) => {
     }
 
     // Check if the user is a director...
-
     if(role === "CA01") {
-      console.log('User is a director');
-
-      // get the unique location and generate default data for that new location.
-
+      // Get the new locations
       const newLocations = locationNames.filter((location) => !usersLocations.includes(location));
 
       if(newLocations.length) {
-        // build the defaulkt data fpor the new locations
+        // Build the default data in the DB for the awardsDiary model for each new location
           await generateDataForGivenLocations(req, res, newLocations);
       }
     }
@@ -111,6 +99,3 @@ exports.removeLocationFromUser = async (req, res) => {
     res.status(500);
   }
 }
-
-// need to detect when a new location is being added by a director, cos this means its unique and its default values need setting
-// So when a new location is added (by a director) call a function that generates default data int eh awardsDiaries model

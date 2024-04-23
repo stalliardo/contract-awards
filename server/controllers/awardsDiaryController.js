@@ -137,9 +137,8 @@ exports.generateAllDataForYear = async (req, res) => {
   }
 }
 
+// Used when a director adds locations. Adds default data to the database
 exports.generateDataForGivenLocations = async (req, res, locations) => {
-
-  console.log('generateDataForGivenLocations called + locations passed in = ', locations);
   const locationAddedPromises = [];
   
   locations.forEach((location) => {

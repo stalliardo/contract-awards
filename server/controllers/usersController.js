@@ -1,6 +1,7 @@
 
 const User = require('../models/User');
 const Location = require('../models/Location');
+const { generateDataForGivenLocations } = require('./awardsDiaryController');
 
 exports.getUsers = async (req, res) => {
   try {
@@ -37,8 +38,25 @@ exports.addLocationToUser = async (req, res) => {
 
 exports.addAllLocationsToUser = async (req, res) => {
   const { userId } = req.params;
+  // const { isDirector } = req.body;
+
+  console.log('add all locations to user called');
+
+
 
   try {
+
+    // get the user
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+
+    const role = user.role;
+    const usersLocations = user.locations;
+
     // Get all locations from the database
     const locations = await Location.find().exec();
 
@@ -46,8 +64,8 @@ exports.addAllLocationsToUser = async (req, res) => {
       return res.status(404).json({ error: 'Locations not found' });
     }
 
-     // Extract the names of the locations
-     const locationNames = locations.map(location => location.name);
+    //  // Extract the names of the locations
+    const locationNames = locations.map(location => location.name);
 
     // Update the user document to add all locations
     const updatedUser = await User.findByIdAndUpdate(
@@ -58,6 +76,21 @@ exports.addAllLocationsToUser = async (req, res) => {
 
     if (!updatedUser) {
       return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Check if the user is a director...
+
+    if(role === "CA01") {
+      console.log('User is a director');
+
+      // get the unique location and generate default data for that new location.
+
+      const newLocations = locationNames.filter((location) => !usersLocations.includes(location));
+
+      if(newLocations.length) {
+        // build the defaulkt data fpor the new locations
+          await generateDataForGivenLocations(req, res, newLocations);
+      }
     }
 
     res.status(200).json(updatedUser); // Send the updated user document in the response
@@ -78,3 +111,6 @@ exports.removeLocationFromUser = async (req, res) => {
     res.status(500);
   }
 }
+
+// need to detect when a new location is being added by a director, cos this means its unique and its default values need setting
+// So when a new location is added (by a director) call a function that generates default data int eh awardsDiaries model

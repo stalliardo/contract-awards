@@ -115,24 +115,41 @@ exports.createAwardsDiariesForYear = async (req, res) => {
 
 exports.generateAllDataForYear = async (req, res) => {
   const locationAddedPromises = [];
-  
+
   // get the real locations stored in the db
-    const locations = await Location.find().exec();
+  const locations = await Location.find().exec();
 
-    if (!locations || locations.length === 0) {
-      return res.status(404).json({ error: 'Locations not found' });
-    }
+  if (!locations || locations.length === 0) {
+    return res.status(404).json({ error: 'Locations not found' });
+  }
 
-    locations.forEach((location) => {
-      locationAddedPromises.push(createAwardsDiariesForYearParentFunction(req, res, location.name));
-    })
+  locations.forEach((location) => {
+    locationAddedPromises.push(createAwardsDiariesForYearParentFunction(req, res, location.name));
+  })
 
   try {
     await Promise.all(locationAddedPromises);
-    res.status(201).send({message: "All records successfully created!"});
+    res.status(201).send({ message: "All records successfully created!" });
 
   } catch (error) {
     console.log('Error while calling promise.all from generateAllData: E : ', error);
     res.status(500).send(error);
-  } 
+  }
 }
+
+exports.generateDataForGivenLocations = async (req, res, locations) => {
+
+  console.log('generateDataForGivenLocations called + locations passed in = ', locations);
+  const locationAddedPromises = [];
+  
+  locations.forEach((location) => {
+    locationAddedPromises.push(createAwardsDiariesForYearParentFunction(req, res, location));
+  })
+
+  try {
+    await Promise.all(locationAddedPromises);
+  } catch (error) {
+    throw error;
+  }
+}
+

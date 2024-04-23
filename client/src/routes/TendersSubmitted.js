@@ -20,7 +20,8 @@ const TendersSubmitted = () => {
       if(authenticatedUser.locations){
         dispatch(getTenders(authenticatedUser)).then(() => {
           if(!awards.targets.length) {
-            dispatch(fetchData(originalLocations));
+            console.log('not targtes awards length called. shoul;d be getting aswards data');
+            dispatch(fetchData({locationData: originalLocations, authenticatedUser}));
           }
         })
       } else {

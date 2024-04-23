@@ -140,18 +140,24 @@ const Admin = () => {
         </div>
       </div>
 
-      <h3 id="targets-h3">Awards and Tender Targets</h3>
-
-      <div className='admin-targets-container'>
-        <div className='admin-targets-flex'>
-          <div className='admin-targets-flex-left'>
-            <TargetsTable tableTitle="Contract Awards Targets" data={targetAndLocationData} targetData={targetAndLocationData.awardsData} targetCategory={TARGET_CATEGORIES.CONTRACT_AWARDS}/>
-          </div>
-          <div className='admin-targets-flex-right'>
-            <TargetsTable tableTitle="Submitted Tenders Targets" data={targetAndLocationData} targetData={targetAndLocationData.tendersData} targetCategory={TARGET_CATEGORIES.TENDERS_SUBMITTED}/>
+      {
+        authenticatedUser.role === ROLES.CA01 ? 
+        <div>
+           <h3 id="targets-h3">Awards and Tender Targets</h3>
+            <div className='admin-targets-container'>
+              <div className='admin-targets-flex'>
+                <div className='admin-targets-flex-left'>
+                  <TargetsTable tableTitle="Contract Awards Targets" data={targetAndLocationData} targetData={targetAndLocationData.awardsData} targetCategory={TARGET_CATEGORIES.CONTRACT_AWARDS}/>
+                </div>
+                <div className='admin-targets-flex-right'>
+                <TargetsTable tableTitle="Submitted Tenders Targets" data={targetAndLocationData} targetData={targetAndLocationData.tendersData} targetCategory={TARGET_CATEGORIES.TENDERS_SUBMITTED}/>
+            </div>
           </div>
         </div>
-      </div>
+        </div>
+        : null
+      }
+
       <br/>
       <br/>
       <br/>

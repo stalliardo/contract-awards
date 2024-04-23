@@ -22,11 +22,8 @@ const Root = () => {
   const [hasLoaded, setHasLoaded] = useState(!auth.loading || !users.loading);
 
   useEffect(() => {
-    console.log('%c\n1: App entry called ', "color:red");
-
     const token = getTokenFromStorage();
     if (token && !users.authenticatedUser._id) {
-      console.log('top if called');
       dispatch(verifyToken(token)).unwrap().then(response => {
         const { status } = response;
         const { user } = response.data;
@@ -34,8 +31,6 @@ const Root = () => {
         if (status === 200) {
           dispatch(fetchUsers(user.username)).unwrap().then((res) => {
             const { locations:locationsLocal } = res;
-
-            console.log('locationsLocal = ', locationsLocal);
 
             dispatch(setLocationsInSlice(locationsLocal));
             dispatch(setIsAuthenticated(true));
@@ -47,11 +42,7 @@ const Root = () => {
         navigate("/auth");
       })
     } else if (token && users.authenticatedUser._id) {
-      console.log('else 1 called');
-
-
       if (users.authenticatedUser.locations.length) {
-        console.log('setting locations');
         const sortedLocations = [...users.authenticatedUser.locations].sort();
         setLocations(sortedLocations);
       } else {
@@ -61,15 +52,11 @@ const Root = () => {
       dispatch(setUsersLoading(false));
       navigate("/");
     } else {
-      console.log('bottom erkse calked');
       navigate("/auth");
-
     }
-
   }, [auth.isAuthenticated, users.authenticatedUser])
 
   if (hasLoaded && users.authenticatedUser._id) {
-    console.log('has loaded called');
     return (
       <div className='root-page-awards-table'>
         {

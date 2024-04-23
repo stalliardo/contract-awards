@@ -5,11 +5,8 @@ const fetchData = createAsyncThunk(
     'awards/fetchData',
     async ({locationData, authenticatedUser}) => {
         try {
-
             const awards = await axios.get("/api/awards-diary/getAllAwards");
             const targets = await axios.get("/api/targets");
-
-            console.log('location data = ', locationData);
 
             if(locationData.length) {
                 return {targetsData: targets.data, awardsData: awards.data, locationsData: locationData, authenticatedUser};
@@ -27,7 +24,6 @@ const fetchData = createAsyncThunk(
 const addData = createAsyncThunk(
     'awards/addData',
     async ({data, location, month}) => {
-        
         try {
             const response = await axios.post("/api/awards-diary/add-item", data);
             response.data.location = location;
@@ -44,7 +40,6 @@ const addData = createAsyncThunk(
 const editItem = createAsyncThunk(
     'awards/editItem',
     async ({data, location, month, previousCoreValue}) => {
-        
         try {
             const response = await axios.patch("/api/awards-diary/edit-item", data);
 

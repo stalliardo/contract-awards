@@ -66,7 +66,6 @@ const DevPage = () => {
     const onCheckToken = () => {
        const token = ""
         axios.get(`/api/auth/protected-route/${token}`).then((res) => {
-            console.log('res from check tokon = ', res);
         }).catch((error) => {
             console.log('error = ', error);
         })

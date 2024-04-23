@@ -14,8 +14,6 @@ export const generateCoreTotalsData = (data, authenticatedUser) => {
     const summaryTableData = [];
     const filteredData = [];
 
-    console.log('authentiocated user = ', authenticatedUser);
-
     if (authenticatedUser.locations) {
         authenticatedUser.locations.forEach((location) => {
             filteredData.push(...data.filter(d => d.location === location));
@@ -29,7 +27,6 @@ export const generateCoreTotalsData = (data, authenticatedUser) => {
                     sum += parseInt(i.core);
                 })
             }
-
             summaryTableData.push({
                 location: item.location,
                 month: item.month,

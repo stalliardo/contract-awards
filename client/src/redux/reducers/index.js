@@ -5,7 +5,7 @@ import authReducer from '../features/auth/authSlice';
 import locationReducer from '../features/locations/locationSlice'
 import tenderReducer from '../features/tenders/tenderSlice';
 
-const rootReducer = combineReducers({
+const combinedReducers = combineReducers({
   awards: awardsReducer,
   users: usersReducer,
   auth: authReducer,
@@ -13,4 +13,4 @@ const rootReducer = combineReducers({
   tender: tenderReducer
 });
 
-export default rootReducer;
+export default combinedReducers;

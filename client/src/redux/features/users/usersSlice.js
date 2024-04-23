@@ -27,6 +27,10 @@ export const usersSlice = createSlice({
 
     clearAuthenticatedUserData: (state) => {
       state.authenticatedUser = {};
+    },
+
+    logout: (state) => {
+      console.log('called log out');
     }
   },
 
@@ -114,6 +118,6 @@ export const usersSlice = createSlice({
   }
 })
 
-export const { setLoading, setSignedInUsersFullName, clearAuthenticatedUserData } = usersSlice.actions;
+export const { setLoading, setSignedInUsersFullName, clearAuthenticatedUserData, logout } = usersSlice.actions;
 
 export default usersSlice.reducer;

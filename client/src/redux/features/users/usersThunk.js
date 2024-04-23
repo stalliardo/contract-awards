@@ -73,6 +73,4 @@ const addAllLocationsToUser = createAsyncThunk(
     },
 )
 
-
-
 export { fetchUsers, addLocationToUser, removeLocationFromUser, addAllLocationsToUser }

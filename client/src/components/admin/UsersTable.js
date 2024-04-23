@@ -56,7 +56,6 @@ const UsersTable = ({ availableLocations }) => {
                                     <tr>
                                         <th>Name</th>
                                         <th>Role</th>
-                                        <th>Permissions</th>
                                         <th>Locations</th>
                                     </tr>
                                 </thead>

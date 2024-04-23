@@ -89,7 +89,6 @@ const UsersTableRow = ({ data, availableLocations }) => {
         <tr>
             <td>{data.name}</td>
             <td>{formattedRole(data.role)}</td>
-            <td>Required???</td>
             <td>
                 <div className='users-table-locations-container' >
                     <p>{data.locations.length}/{availableLocations.length}</p>

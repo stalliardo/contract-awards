@@ -1,4 +1,5 @@
 const AwardsDiary = require('../models/AwardsDiary');
+const Location = require('../models/Location');
 
 const months = [
   'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September'
@@ -113,12 +114,18 @@ exports.createAwardsDiariesForYear = async (req, res) => {
 }
 
 exports.generateAllDataForYear = async (req, res) => {
-  // loop each location
   const locationAddedPromises = [];
+  
+  // get the real locations stored in the db
+    const locations = await Location.find().exec();
 
-  Object.values(LOCATIONS).forEach((location) => {
-    locationAddedPromises.push(createAwardsDiariesForYearParentFunction(req, res, location))
-  })
+    if (!locations || locations.length === 0) {
+      return res.status(404).json({ error: 'Locations not found' });
+    }
+
+    locations.forEach((location) => {
+      locationAddedPromises.push(createAwardsDiariesForYearParentFunction(req, res, location.name));
+    })
 
   try {
     await Promise.all(locationAddedPromises);

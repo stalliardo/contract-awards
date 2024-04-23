@@ -30,7 +30,7 @@ export const usersSlice = createSlice({
     },
 
     logout: (state) => {
-      console.log('called log out');
+      // This will be caught in the index.js file to trigger a state wipe
     }
   },
 

@@ -15,8 +15,12 @@ const fetchUsers = createAsyncThunk(
                 const foundUser = users.data.find(user => user?.name.toLowerCase() === name.toLowerCase());
 
                 if (foundUser.role === ROLES.CA01 && foundUser.locations.length < locations.data.length) {
+                    console.log('length discrepancy called');
                     const updatedUser = await axios.put(`/api/users/${foundUser._id}/locations`);
-                    return { users: users.data, updatedUser };
+
+                    if(updatedUser) {
+                        return { users: users.data, updatedUser: updatedUser.data, locations: locations.data };
+                    }
                 }
 
                 return { users: users.data, locations: locations.data, updatedUser: foundUser }

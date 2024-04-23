@@ -1,4 +1,5 @@
 const AwardsDiary = require('../models/AwardsDiary');
+const Location = require('../models/Location');
 
 const months = [
   'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September'
@@ -113,19 +114,41 @@ exports.createAwardsDiariesForYear = async (req, res) => {
 }
 
 exports.generateAllDataForYear = async (req, res) => {
-  // loop each location
   const locationAddedPromises = [];
 
-  Object.values(LOCATIONS).forEach((location) => {
-    locationAddedPromises.push(createAwardsDiariesForYearParentFunction(req, res, location))
+  // get the real locations stored in the db
+  const locations = await Location.find().exec();
+
+  if (!locations || locations.length === 0) {
+    return res.status(404).json({ error: 'Locations not found' });
+  }
+
+  locations.forEach((location) => {
+    locationAddedPromises.push(createAwardsDiariesForYearParentFunction(req, res, location.name));
   })
 
   try {
     await Promise.all(locationAddedPromises);
-    res.status(201).send({message: "All records successfully created!"});
+    res.status(201).send({ message: "All records successfully created!" });
 
   } catch (error) {
     console.log('Error while calling promise.all from generateAllData: E : ', error);
     res.status(500).send(error);
-  } 
+  }
 }
+
+// Used when a director adds locations. Adds default data to the database
+exports.generateDataForGivenLocations = async (req, res, locations) => {
+  const locationAddedPromises = [];
+  
+  locations.forEach((location) => {
+    locationAddedPromises.push(createAwardsDiariesForYearParentFunction(req, res, location));
+  })
+
+  try {
+    await Promise.all(locationAddedPromises);
+  } catch (error) {
+    throw error;
+  }
+}
+

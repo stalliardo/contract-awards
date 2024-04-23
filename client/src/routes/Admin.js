@@ -212,7 +212,7 @@ export default Admin;
     // Once rebuilt load the app - ????
     // Set the memebers data into state to be used across the app - DONE
     // Then in the admin page the table will be populated by the memeber array in the store - DONE
-    // Will also need a way to determine who is the logged in user -> serparte Authentication feature and state object "auth"               TODO
+    // Will also need a way to determine who is the logged in user -> serparte Authentication feature and state object "auth"               DONE
     // updating the values in the admin page will update the values in the database -> wont effect the LDAP groups - DONE
 
   // Locations for the members in the users table

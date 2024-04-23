@@ -14,7 +14,6 @@ const UsersTableRow = ({ data, availableLocations }) => {
     const [selectedLocation, setSelectedLocation] = useState({});
     const [addAllButtonDisabled, setAddAllButtonDisabled] = useState(false);
     const [filteredLocations, setFilteredLocations] = useState([]);
-
     const authenticatedUser = useSelector(state => state.users.authenticatedUser);
 
     useEffect(() => {
@@ -67,6 +66,9 @@ const UsersTableRow = ({ data, availableLocations }) => {
 
     const onSaveLocationClicked = () => {
         dispatch(addLocationToUser({ location: selectedLocation.name, userId: data._id }));
+
+        setSaveButtonDisabled(true);
+        setSelectedLocation({});
     }
 
     const onAddAllLocationsClicked = () => {
@@ -113,10 +115,10 @@ const UsersTableRow = ({ data, availableLocations }) => {
                                                         removeButtonDisabled = false;
                                                     }
 
-                                                    return <li className='' key={index}>
+                                                    return <li key={index}>
                                                         {location}
                                                         <button disabled={removeButtonDisabled} onClick={() => onRemoveLocationClicked(location)} className='red'>Remove</button>
-                                                    </li>
+                                                        </li>
                                                 }) :
                                                 <div className='users-table-locations-dropdown-container-no-locations-container'>
                                                     <p>0</p>
@@ -132,7 +134,7 @@ const UsersTableRow = ({ data, availableLocations }) => {
                                                 :
                                                 <>
                                                     <h4>Add New Location</h4>
-                                                    <SelectMenu menuItems={filteredLocations} placeholder={"Locations"} handleItemSelection={onLocationSelected} />
+                                                    <SelectMenu menuItems={filteredLocations} placeholder="Locations" handleItemSelection={onLocationSelected} />
                                                     {authenticatedUser.role === ROLES.CA01 ?
                                                         <div className='users-table-display-locations-buttons add-all'>
                                                             <button disabled={addAllButtonDisabled} onClick={onAddAllLocationsClicked}>Save / Add All</button>

@@ -2,9 +2,7 @@ import React from 'react';
 import './navbar.css';
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import { setIsAuthenticated } from '../../redux/features/auth/authSlice';
-import { removeTokenFromStorage } from '../../utils/localStorageUtils';
-import { clearAuthenticatedUserData } from '../../redux/features/users/usersSlice';
+import { logout } from '../../redux/features/users/usersSlice';
 import { ROLES } from '../../utils/constants';
 
 const Navbar = () => {
@@ -15,9 +13,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const handleSignOut = () => {
-    dispatch(setIsAuthenticated(false));
-    dispatch(clearAuthenticatedUserData())
-    removeTokenFromStorage();
+    dispatch(logout())
     navigate("/auth");
   }
 

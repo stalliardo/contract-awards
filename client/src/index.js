@@ -5,8 +5,17 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 import { configureStore } from '@reduxjs/toolkit';
-import rootReducer from './redux/reducers/';
+import combinedReducers from './redux/reducers/';
 import { Provider } from 'react-redux';
+
+const rootReducer = (state, action) => {
+  if(action.type === "users/logout") {
+    console.log('LOG out called');
+    return combinedReducers(undefined, action)
+  }
+
+  return combinedReducers(state, action)
+}
 
 const store = configureStore({
   reducer: rootReducer

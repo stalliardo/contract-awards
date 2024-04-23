@@ -10,11 +10,9 @@ const getConfig = () => {
     }
 }
 
-exports.getADUsers = async (req, res) => {
-
-
-    // TODO - Am currently checking wheter the lengths differ to determine changes in the data, but what if a user is added to a different folder ie from CA01 to CA02?
-
+//TODO renmae 
+exports.handleADUsers = async (req, res) => {
+    console.log('\nhandleADUsersCalled');
     try {
         const ADConfig = getConfig();
         const AD = new ActiveDirectory(ADConfig);
@@ -161,3 +159,15 @@ exports.retrieveUsersForGroup = async (req, res) => {
         return res.status(500).send({ message: "An error occured" });
     }
 }
+
+
+// Scenarios: 
+    // A user is moved from one folder to another CA03(user level) => CA02(RD level)
+    // Issue: the app will have idea that the change has taken place so will still think the user has the previous access level
+    // Handling Options: 
+        // A - Will have to change their folder access in Active Directory anyway so do we jump in the app and call a function?
+        // B - The app runs the large handleADUsers function above everytime a user enters the app?
+
+        // Option A:
+            // Will need the hidden site admin section / route to hold the ui and logic for this
+            // Functions for adding a user, removing a user and moving a user required. although the handleADUsers function handles adding and removing but needs testing

@@ -20,6 +20,9 @@ export const tenderSlice = createSlice({
     setLoading: (state, action) => {
       state.loading = action.payload;
     },
+    setAuthenticatedUser: (state, action) => {
+      state.authenticatedUser = action.payload;
+    },
   },
 
   extraReducers: (builder) => {
@@ -27,9 +30,9 @@ export const tenderSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(getTenders.fulfilled, (state, action) => {
-      state.data = action.payload;
+      state.data = action.payload.tenders;
 
-      updateData(state, action.payload);
+      updateData(state, action.payload.tenders, action.payload.authenticatedUser);
 
       state.loading = false;
     });
@@ -43,7 +46,9 @@ export const tenderSlice = createSlice({
     });
 
     builder.addCase(addTender.fulfilled, (state, action) => {
-      const { _id, month, newValue } = action.payload;
+      const { _id, month, newValue } = action.payload.data;
+      const authenticatedUser = action.payload.authenticatedUser;
+
       const itemToEditIndex = state.data.findIndex((item) => item._id === _id);
 
       if (itemToEditIndex > -1) {
@@ -57,7 +62,7 @@ export const tenderSlice = createSlice({
         }
 
         state.data = updatedArray;
-        updateData(state, updatedArray);
+        updateData(state, updatedArray, authenticatedUser);
       }
       state.loading = false;
     });
@@ -69,13 +74,13 @@ export const tenderSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setLoading, buildData } = tenderSlice.actions;
+export const { setLoading, buildData, setAuthenticatedUser } = tenderSlice.actions;
 
 export default tenderSlice.reducer;
 
-const updateData = (state, newData) => {
-  const ukCoreTotals = generateUkCoreTenderTotals(newData);
-  const cumalitiveTotals = generateCumalitiveTenderTotals(newData); // The sum of each months totals for each location
+const updateData = (state, newData, authenticatedUser) => {
+  const ukCoreTotals = generateUkCoreTenderTotals(newData, authenticatedUser);
+  const cumalitiveTotals = generateCumalitiveTenderTotals(newData, authenticatedUser); // The sum of each months totals for each location
   const ukCumalitiveTotalsTotal = generateUKTenendersCumaltiveTotal(cumalitiveTotals); // The sum of the uk cumalitive totals
   const specialCumalitiveTotals = generateSpecialCumalitiveTotals(cumalitiveTotals);
 

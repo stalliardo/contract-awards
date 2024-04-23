@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useSelector } from 'react-redux';
 import './tenders-submitted.css';
@@ -24,9 +24,11 @@ const MonthsForTableHead = ({ k }) => {
 
 const TendersSubmittedTable = ({data}) => {
     const originalLocations = useSelector(state => state.location.data);
+    const authenticatedUser = useSelector(state => state.users.authenticatedUser);
+    const [locations, setLocations] = useState([...authenticatedUser.locations].sort());
+
     const tenders = useSelector(state => state.tender);
     const awards = useSelector(state => state.awards);
-    
 
     const extractedDataForRow = (location) => {
         return data.find((item) => item.location === location);
@@ -66,10 +68,10 @@ const TendersSubmittedTable = ({data}) => {
                     <tbody>
 
                         {
-                            originalLocations.map((location, index) => {
-                                if (location.name !== "M&E" && location.name !== "Special Projects") {
+                            locations.map((location, index) => {
+                                if (location !== "M&E" && location !== "Special Projects") {
                                     // return <AwardsSummaryCoreTotalsRow targetsData={awardsData.targets} filteredTotals={generateFilteredTotals(location)} cumalitiveTotal={generateCumalitiveTotals(location)} locationRef={location} key={index} />
-                                    return <TendersSubmittedRow key={index} data={extractedDataForRow(location.name)}/>
+                                    return <TendersSubmittedRow key={index} data={extractedDataForRow(location)}/>
                                 }
                                 return null;
                             })
@@ -77,9 +79,9 @@ const TendersSubmittedTable = ({data}) => {
                         <TendersSubmittedUkCoreTotalsRow />
 
                         {
-                            originalLocations.map((location, index) => {
-                                if (location.name === "M&E" || location.name == "Special Projects") {
-                                    return <TendersSpecialsRow key={index} data={extractedDataForRow(location.name)}/>
+                            locations.map((location, index) => {
+                                if (location === "M&E" || location === "Special Projects") {
+                                    return <TendersSpecialsRow key={index} data={extractedDataForRow(location)}/>
                                 }
                                 return null;
                             })

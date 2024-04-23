@@ -10,25 +10,33 @@ export const getCoreTotal = (items) => {
     return sum;
 }
 
-export const generateCoreTotalsData = (data) => {
+export const generateCoreTotalsData = (data, authenticatedUser) => {
     const summaryTableData = [];
+    const filteredData = [];
 
-    data.forEach((item) => {
-        let sum = 0;
+    console.log('authentiocated user = ', authenticatedUser);
 
-        if (item.items.length) {
-            item.items.forEach((i) => {
-                sum += parseInt(i.core);
-            })
-        }
-
-        summaryTableData.push({
-            location: item.location,
-            month: item.month,
-            sum
+    if (authenticatedUser.locations) {
+        authenticatedUser.locations.forEach((location) => {
+            filteredData.push(...data.filter(d => d.location === location));
         })
-    });
 
+        filteredData.forEach((item) => {
+            let sum = 0;
+
+            if (item.items.length) {
+                item.items.forEach((i) => {
+                    sum += parseInt(i.core);
+                })
+            }
+
+            summaryTableData.push({
+                location: item.location,
+                month: item.month,
+                sum
+            })
+        });
+    }
     return summaryTableData;
 }
 
@@ -64,7 +72,7 @@ export const generateUkCoreTotals = (data) => {
 }
 
 
-export const generateUkCoreTenderTotals = (data) => {
+export const generateUkCoreTenderTotals = (data, authenticatedUser) => {
     const totals = {
         uk: [],
         specials: [],
@@ -72,50 +80,65 @@ export const generateUkCoreTenderTotals = (data) => {
     };
     const monthsInFinancialOrder = getMonthsInFinancialOrder();
 
-    monthsInFinancialOrder.forEach((month) => {
-        let ukCoreTotal = 0;
-        let specialsTotal = 0;
-        let allTotal = 0;
+    const filteredData = [];
 
-        data.forEach((d) => {
-            d.items.forEach((item) => {
-                if (item.month === month) {
-                    if (d.location !== "Special Projects" && d.location !== "M&E") {
-                        ukCoreTotal += item.value;
-                    } else {
-                        specialsTotal += item.value;
-                    }
-
-                    allTotal += item.value;
-                }
-            })
+    if(authenticatedUser.locations) {
+        authenticatedUser.locations.forEach((location) => {
+            filteredData.push(...data.filter(d => d.location === location));
         })
 
-        totals.specials.push({ month, specialsTotal });
-        totals.uk.push({ month, ukCoreTotal });
-        totals.all.push({month, sum: allTotal});
+        monthsInFinancialOrder.forEach((month) => {
+            let ukCoreTotal = 0;
+            let specialsTotal = 0;
+            let allTotal = 0;
+    
+            filteredData.forEach((d) => {
+                d.items.forEach((item) => {
+                    if (item.month === month) {
+                        if (d.location !== "Special Projects" && d.location !== "M&E") {
+                            ukCoreTotal += item.value;
+                        } else {
+                            specialsTotal += item.value;
+                        }
+    
+                        allTotal += item.value;
+                    }
+                })
+            })
+    
+            totals.specials.push({ month, specialsTotal });
+            totals.uk.push({ month, ukCoreTotal });
+            totals.all.push({ month, sum: allTotal });
+    
+            ukCoreTotal = 0;
+            specialsTotal = 0;
+        })
+    }
 
-        ukCoreTotal = 0;
-        specialsTotal = 0;
-    })
+    
 
     return totals;
 }
 
-export const generateCumalitiveTenderTotals = (data) => {
-   const formattedData = [];
+export const generateCumalitiveTenderTotals = (data, authenticatedUser) => {
+    const filteredData = [];
+    const formattedData = [];
 
-   data.forEach((d) => {
-    const obj = {location: d.location};
+    if(authenticatedUser.locations){
+        authenticatedUser.locations.forEach((location) => {
+            filteredData.push(...data.filter(d => d.location === location));
+        })
 
-    const sum = d.items.reduce((prev, cur) => parseInt(prev) + parseInt(cur.value), 0);
-
-    obj.sum = sum;
-
-    formattedData.push(obj);
-   })
-
-   return formattedData;
+        filteredData.forEach((d) => {
+            const obj = { location: d.location };
+            const sum = d.items.reduce((prev, cur) => parseInt(prev) + parseInt(cur.value), 0);
+    
+            obj.sum = sum;
+    
+            formattedData.push(obj);
+        })
+    }
+    return formattedData;
 }
 
 export const generateUKTenendersCumaltiveTotal = (data) => {
@@ -125,7 +148,7 @@ export const generateUKTenendersCumaltiveTotal = (data) => {
     return filteredData.reduce((total, target) => parseInt(total) + parseInt(target.sum), 0);
 }
 
-export const  generateSpecialCumalitiveTotals = (data) => {
+export const generateSpecialCumalitiveTotals = (data) => {
     const filteredData = data.filter((item) => item.location === "Special Projects" || item.location === "M&E");
 
     return filteredData.reduce((total, target) => parseInt(total) + parseInt(target.sum), 0);
@@ -159,7 +182,7 @@ export const generateTargetAcheivedPercentage = (annualAmount, cumalitiveTotal) 
     const targetToDate = generateTargetAmountToDate(annualAmount, cumalitiveTotal);
     const targetAchieved = 100 / targetToDate * cumalitiveTotal;
 
-    if(targetAchieved < 1 && targetAchieved > 0) {
+    if (targetAchieved < 1 && targetAchieved > 0) {
         return targetAchieved.toFixed(2);
     }
 

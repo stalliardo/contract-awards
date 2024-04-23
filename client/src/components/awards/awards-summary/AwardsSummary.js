@@ -11,6 +11,7 @@ import AwardsSummaryMonthlyPerformanceRow from './AwardsSummaryMonthlyPerformanc
 import { COLOURS } from '../../../utils/constants';
 import AwardsSummaryCumalitivePerformanceRow from './AwardsSummaryCumalitivePerformanceRow';
 import { generateFinancialYearMonths } from '../../../utils/DateUtils';
+import { useNavigate } from 'react-router-dom';
 
 const MonthsForTableHead = ({k}) => {
     const months = generateFinancialYearMonths();
@@ -23,28 +24,38 @@ const MonthsForTableHead = ({k}) => {
 }
 
 const AwardsSummary = () => {
+    const dispatch = useDispatch();
     let cumalitiveTotalsSum = 0;
+    const authenticatedUser = useSelector(state => state.users.authenticatedUser);
 
     const awardsData = useSelector((state) => state.awards);
     const isLoading = useSelector((state) => state.awards.loading);
-    const locations = useSelector((state) => state.awards.locations);
+    const [locations, setLocations] = useState(authenticatedUser.locations ? [...authenticatedUser.locations].sort() : []);
     const originalLocations = useSelector((state) => state.location.data);
     const specialLocations = useSelector((state) => state.awards.specialLocations);
-
-    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const [spinnerComplete, setSpinnerComplete] = useState(false);
     const showUI = !isLoading && spinnerComplete;
 
     useEffect(() => {
-        if (awardsData.coreTotals.length > 0) {
-            setSpinnerComplete(true);
+
+        if(!authenticatedUser._id) {
+            navigate("/");
         } else {
-            dispatch(fetchData(originalLocations)).finally(() => {
+            if (awardsData.coreTotals.length > 0) {
                 setTimeout(() => {
-                    setSpinnerComplete(true);
-                }, 500);
-            })
+                    setSpinnerComplete(true); // to fix the flash, added a delay
+                }, 750);
+            } else {
+               if(authenticatedUser){
+                dispatch(fetchData({locationData: originalLocations, authenticatedUser})).finally(() => {
+                    setTimeout(() => {
+                        setSpinnerComplete(true);
+                    }, 750);
+                })
+               }
+            }
         }
     }, []);
 
@@ -123,8 +134,10 @@ const AwardsSummary = () => {
                                 </td>
                             </tr>
                             {
-                                specialLocations.map((location, index) => {
+                                locations.map((location, index) => {
+                                   if( location === "Special Projects" || location === "M&E") {
                                     return <AwardsSummarySpecialsRow targetsData={awardsData.targets} filteredTotals={generateFilteredTotals(location)} cumalitiveTotal={generateCumalitiveTotals(location)} locationRef={location} key={index} />
+                                   }
                                 })
                             }
                             <tr className='bold-cells'>
@@ -179,6 +192,3 @@ const AwardsSummary = () => {
     )
 }
 export default AwardsSummary;
-// NTH's
-
-// Can click a locations total value and be transistioned to the corresponing awards form

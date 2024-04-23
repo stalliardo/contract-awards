@@ -9,7 +9,7 @@ export const locationSlice = createSlice({
   initialState,
   reducers: {
 
-    setLocations: (state, action) => {
+    setLocationsInSlice: (state, action) => {
       state.data = action.payload;
     },
 
@@ -27,6 +27,6 @@ export const locationSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setLoading, setLocations } = locationSlice.actions;
+export const { setLoading, setLocationsInSlice } = locationSlice.actions;
 
 export default locationSlice.reducer;

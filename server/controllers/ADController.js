@@ -106,9 +106,7 @@ exports.handleADUsers = async (req, res) => {
                 }
             }
         }
-
         return res.status(200);
-
     } catch (error) {
         return res.status(500).send({ message: "An error occured", error });
     }
@@ -125,11 +123,9 @@ exports.userExists = async (req, res) => {
                 console.log('ERROR: ' + JSON.stringify(err));
                 return res.status(500).send({ message: "An error occured" });
             }
-
             if (exists) {
                 return res.status(200).send({ message: "The user was found" });
             }
-
             return res.status(404).send({ message: "The user was not found" });
         })
     } catch (error) {
@@ -148,11 +144,9 @@ exports.retrieveUsersForGroup = async (req, res) => {
                 console.log('ERROR: ' + JSON.stringify(err));
                 return res.status(500).send({ message: "An error occured" });
             }
-
             if (users) {
                 return res.status(200).send({ message: "Users found", users });
             }
-
             return res.status(404).send({ message: "No users found" });
         })
     } catch (error) {

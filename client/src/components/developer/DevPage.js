@@ -9,7 +9,6 @@ const DevPage = () => {
     const user = useSelector((state) => state.users);
 
     const onAddAwardsClicked = () => {
-        // pass some data as an object via axios
         const awardsdata = {
             year: "2024",
             month: "March",
@@ -77,17 +76,16 @@ const DevPage = () => {
 
     const onGenerateTendersSubmittedData = () => {
         axios.post("/api/tenders/generate-initial-data");
-
     }
 
     const onGenerateDataForNewLocation = () => {
         axios.post("/api/tenders/generate-data-for-new-location", {location: "Bristol"});
-
     }
 
     return (
         <div className='dev-page-container'>
-            <h2>Test Page</h2>
+            <h2>Site Administrator Functions:</h2>
+            <p>Authorized personnel only. Misuse can result in application errors and data loss.</p>
             <div className='dev-functions-container'>
                 <div className='dev-awards-functions-container'>
                     <h3>Awards functions</h3>
@@ -111,3 +109,11 @@ const DevPage = () => {
 }
 
 export default DevPage;
+
+
+// functions required for site-admins
+    // The ability to set the database name?
+    // Create the default data for the year ie awards and tenders
+    // Add or Remove users via their AD group
+    // Change a users group / role. eg, they are moved from one folder in AD to another. This can be done using the mongodb compass software also
+    

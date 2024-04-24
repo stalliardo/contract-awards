@@ -165,3 +165,7 @@ exports.retrieveUsersForGroup = async (req, res) => {
         // Option A:
             // Will need the hidden site admin section / route to hold the ui and logic for this
             // Functions for adding a user, removing a user and moving a user required. although the handleADUsers function handles adding and removing but needs testing
+
+
+    // TODO's 
+        // Make sure these endpoints use the token check middleware

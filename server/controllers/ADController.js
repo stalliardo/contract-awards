@@ -45,7 +45,7 @@ exports.updateADUsers = async (req, res) => {
 
                         if(!matchingUser) {
                             // new user to be added
-                            item.operation = "Add";
+                            itemToAdd.operation = "Add";
                         }
 
                         itemToAdd.firstName = item.givenName,
@@ -85,6 +85,8 @@ exports.updateADUsers = async (req, res) => {
         if(formattedData.length) {
             for(let i = 0; i < formattedData.length; i++){
                 for(let x = 0; x < formattedData[i].items.length; x++) {
+
+                    console.log('formattedData[i].items = ', formattedData[i].items[x]);
                     if(formattedData[i].items[x].operation === "Add") {
                         console.log('Add operation called');
                         const newRole = formattedData[i].groupName;

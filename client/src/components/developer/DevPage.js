@@ -7,38 +7,51 @@ import { useSelector } from 'react-redux';
 const functionCardData = [
     {
         title: "Generate all data for new financial year",
-        description: "This is function is only to be called once at the start of the financial year. It will generate all the default data so the app can render tables with default values.",
+        description: "This function is only to be called once at the start of the financial year. It will generate all the default data so the app can render tables with default values.",
         buttonText: "Generate Default Data"
     },
     {
         title: "Generate all data for new financial year",
-        description: "This is function is only to be called once at the start of the financial year. It will generate all the default data so the app can render tables with default values.",
+        description: "This function is only to be called once at the start of the financial year. It will generate all the default data so the app can render tables with default values.",
         buttonText: "Generate Default Data"
     },
     {
         title: "Generate all data for new financial year",
-        description: "This is function is only to be called once at the start of the financial year. It will generate all the default data so the app can render tables with default values.",
+        description: "This function is only to be called once at the start of the financial year. It will generate all the default data so the app can render tables with default values.",
         buttonText: "Generate Default Data"
     },
     {
         title: "Generate all data for new financial year",
-        description: "This is function is only to be called once at the start of the financial year. It will generate all the default data so the app can render tables with default values.",
+        description: "This function is only to be called once at the start of the financial year. It will generate all the default data so the app can render tables with default values.",
         buttonText: "Generate Default Data"
     },
     {
         title: "Generate all data for new financial year",
-        description: "This is function is only to be called once at the start of the financial year. It will generate all the default data so the app can render tables with default values.",
+        description: "This function is only to be called once at the start of the financial year. It will generate all the default data so the app can render tables with default values.",
         buttonText: "Generate Default Data"
     },
 ]
 
-const DevFunctionCard = ({title, description, buttonText}) => {
+const confirmationcallback = (text) => {
+    const confirmation = window.confirm(text);
+
+    return confirmation;
+}
+
+const DevFunctionCard = ({ title, description, buttonText, clickHandler }) => {
+
+    const handleClick = () => {
+        if(confirmationcallback(`Are you sure you want to call the "${buttonText}" function?`)) {
+            clickHandler();
+        }
+    }
+
     return (
         <div className='dev-function-card'>
             <h3>{title}</h3>
             <p>{description}</p>
             <div>
-                <button>{buttonText}</button>
+                <button onClick={handleClick}>{buttonText}</button>
             </div>
         </div>
     )
@@ -120,8 +133,15 @@ const DevPage = () => {
     }
 
     const onGenerateDataForNewLocation = () => {
-        axios.post("/api/tenders/generate-data-for-new-location", {location: "Bristol"});
+        axios.post("/api/tenders/generate-data-for-new-location", { location: "Bristol" });
     }
+
+    
+
+    const onclickHanlder = () => {
+        console.log('hankder called');
+    }
+
 
     return (
         <div className='dev-page-container'>
@@ -132,13 +152,17 @@ const DevPage = () => {
             <div className='dev-functions-container'>
 
 
-                {
-                    functionCardData.map((cardData) => {
+                <DevFunctionCard title={functionCardData[0].title} description={functionCardData[0].description} buttonText={functionCardData[0].buttonText} clickHandler={onclickHanlder} />
+                <DevFunctionCard title={functionCardData[1].title} description={functionCardData[1].description} buttonText={functionCardData[1].buttonText} clickHandler={onclickHanlder} />
+                <DevFunctionCard title={functionCardData[2].title} description={functionCardData[2].description} buttonText={functionCardData[2].buttonText} clickHandler={onclickHanlder} />
+
+
+                {/* {
+                    functionCardData.map((cardData, index) => {
                         return (
-                            <DevFunctionCard title={cardData.title} description={cardData.description} buttonText={cardData.buttonText}/>
                         )
                     })
-                }
+                } */}
 
 
                 {/* <div className='dev-awards-functions-container'>
@@ -161,9 +185,8 @@ export default DevPage;
 
 
 // functions required for site-admins
-    // The ability to set the database name?
-    // Create the default data for the year ie awards and tenders
-    // Add or Remove users via their AD group
-    // Change a users group / role. eg, they are moved from one folder in AD to another. This can be done using the mongodb compass software also
-    // When a director adds a new location the default tenders data also needs to be updated using the "generate-data-for-new-location" endpoint
-    
+// The ability to set the database name?
+// Create the default data for the year ie awards and tenders
+// Add or Remove users via their AD group
+// Change a users group / role. eg, they are moved from one folder in AD to another. This can be done using the mongodb compass software also
+// When a director adds a new location the default tenders data also needs to be updated using the "generate-data-for-new-location" endpoint

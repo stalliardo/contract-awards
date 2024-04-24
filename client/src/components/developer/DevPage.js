@@ -36,7 +36,7 @@ const confirmationcallback = (text) => {
     return confirmation;
 }
 
-const DevFunctionCard = ({ title, description, buttonText, clickHandler, isLoading }) => {
+const DevFunctionCard = ({ title, description, buttonText, clickHandler, isLoading, loadingText }) => {
     const handleClick = () => {
         if (confirmationcallback(`Are you sure you want to call the "${buttonText}" function?`)) {
             clickHandler();
@@ -46,7 +46,7 @@ const DevFunctionCard = ({ title, description, buttonText, clickHandler, isLoadi
     return (
         <div className='dev-function-card'>
             {
-                isLoading ? <div className='dev-spinner'><Spinner /></div> :
+                isLoading ? <div className='dev-spinner'><Spinner/></div> :
                     <>
                         <h3>{title}</h3>
                         <p>{description}</p>
@@ -60,16 +60,27 @@ const DevFunctionCard = ({ title, description, buttonText, clickHandler, isLoadi
 }
 
 const DevPage = () => {
-
-
     const [isGeneratingAllData, setIsGeneratingAllData] = useState(false);
 
-    const generateAllDataForYear = () => {
+    const generateAllDataForYear = async () => {
         console.log('called');
+        setIsGeneratingAllData(true);
 
-        axios.get("/api/awards-diary/generateAllData").then((response) => {
 
-        }).catch((error) => console.log('Error getting location data - ', error))
+        try {
+            // generate all awards data...
+            await axios.get("/api/awards-diary/generateAllData");
+
+            // generate all tenders data...
+            await axios.post("/api/tenders/generate-initial-data");
+
+        } catch (error) {
+            console.log('Error from gnenerateAllData: ', error);
+        } finally {
+            setTimeout(() => {
+                setIsGeneratingAllData(false);
+            }, 1250);
+        }
     }
 
 
@@ -98,6 +109,7 @@ const DevPage = () => {
                     buttonText={functionCardData[0].buttonText} 
                     clickHandler={generateAllDataForYear} 
                     isLoading={isGeneratingAllData}
+                    loadingText="Generating Data..."
                 />
                 <DevFunctionCard title={functionCardData[1].title} description={functionCardData[1].description} buttonText={functionCardData[1].buttonText} clickHandler={onclickHanlder} />
                 <DevFunctionCard title={functionCardData[2].title} description={functionCardData[2].description} buttonText={functionCardData[2].buttonText} clickHandler={onclickHanlder} />

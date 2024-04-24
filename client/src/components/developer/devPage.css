@@ -18,15 +18,16 @@
 .dev-functions-container {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
     flex-wrap: wrap;
 
     .dev-function-card {
-        width: 400px;
-        height: 200px;
+        margin-right: 20px;
+        width: 450px;
+        height: 240px;
         border: 1px solid grey;
         border-radius: 4px;
-        padding: 10px 10px 20px;
+        padding: 10px 20px 20px;
         margin-top: 20px;
 
         h3 {

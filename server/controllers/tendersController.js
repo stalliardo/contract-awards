@@ -68,9 +68,9 @@ exports.generateDataForNewLocation = async (req, res) => {
   }
 }
 
-exports.generateInitialData = async (req, res, locationsArray) => {
+exports.generateInitialData = async (req, res) => {
   try {
-    const locations = locationsArray || await Location.find().exec();
+    const locations = await Location.find().exec();
     const promises = [];
 
     if (!locations || locations.length === 0) {
@@ -110,6 +110,7 @@ exports.generateTenderDataForLocation = async (req, res, location) => {
     await Promise.all(promises);
 
   } catch (error) {
+    console.log('error generating tender data = ', error);
     throw error;
   }
 }

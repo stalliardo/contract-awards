@@ -2,6 +2,13 @@
     margin-top: 120px;
     h1 {
         text-align: center;
+        margin-bottom: 8px;
+    }
+
+    p {
+        /* margin-top: 2px; */
+        text-align: center;
+        margin-bottom: 28px;
     }
 }
 

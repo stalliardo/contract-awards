@@ -6,17 +6,12 @@ const MenuItem = ({ value, handleClick }) => {
 }
 
 const SelectMenu = ({ value, label, name, handleItemSelection, menuItems, placeholder, allSettingPlaceholder = true }) => {
-
-
-  useEffect(() => {
-    console.log('placehodler changed and is now: ', placeholder);
-  }, [placeholder])
-
-
   const [isOpen, setIsOpen] = useState(false);
   const [defaultValue, setDefaultValue] = useState(placeholder);
 
-
+  useEffect(() => {
+    setDefaultValue(placeholder);
+  }, [placeholder])
 
   const toggleIsOpen = () => {
     setIsOpen((prev) => !prev);

@@ -113,8 +113,6 @@ const AwardsTable = ({ locations }) => {
     }
 
     const onLocationSelected = ({ value }) => {
-        console.log('valuie = ', value);
-        queryParams.delete("location")
         setLocation(value);
     }
 

@@ -42,6 +42,8 @@ const Auth = () => {
     }).catch((e) => {
       if(e.response.data.error === "Invalid Credentials") {
         setErrorText(e.response.data.error)
+      } else {
+        setErrorText("An error occured. Please try again later. If the issue persists, contact your system administrator.")
       }
     })
   }

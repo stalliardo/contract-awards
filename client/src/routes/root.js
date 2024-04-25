@@ -50,7 +50,7 @@ const Root = () => {
       }
       dispatch(setLoading(false));
       dispatch(setUsersLoading(false));
-      navigate("/");
+      // navigate("/");
     } else {
       navigate("/auth");
     }

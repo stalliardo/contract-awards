@@ -33,18 +33,21 @@ const AwardsTable = ({ locations }) => {
 
     const locationOptions = generateLocationOptionsForSelectMenu(locations);
     const locationHelper = useLocation();
+
     const queryParams = new URLSearchParams(locationHelper.search);
-    const locationParam = queryParams.get("location");
-    const monthParam = queryParams.get("month");
+    let locationParam = queryParams.get("location");
+    let monthParam = queryParams.get("month");
+
+    useEffect(() => {
+        if (locationParam && monthParam) {
+            setLocation(capitalizeFirstLetter(locationParam));
+            setMonth(capitalizeFirstLetter(monthParam));
+        }
+    }, [])
 
     useEffect(() => {
         if (!isLoading) {
             setIsLoading(true);
-        }
-
-        if (locationParam && monthParam) {
-            setLocation(capitalizeFirstLetter(locationParam));
-            setMonth(capitalizeFirstLetter(monthParam));
         }
 
         let encodedLocation = encodeURIComponent(location);
@@ -124,7 +127,7 @@ const AwardsTable = ({ locations }) => {
                     <SelectMenu placeholder={location} menuItems={locationOptions} handleItemSelection={onLocationSelected} />
                 </div>
                 <div className='awards-table-select'>
-                    <SelectMenu placeholder={month} menuItems={dateOptions} handleItemSelection={onMonthSelected} allSettingPlaceholder={false} />
+                    <SelectMenu placeholder={month} menuItems={dateOptions} handleItemSelection={onMonthSelected} />
                 </div>
             </div>
             <div className='awards-page-table-container'>
@@ -170,14 +173,14 @@ const AwardsTable = ({ locations }) => {
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td className='last-cell'>Total: £{coreSum.toFixed(2)}</td>
+                                    <td className='last-cell'>Total: £{coreSum.toLocaleString()}</td>
                                     <td></td>
                                     <td></td>
                                 </tr>
                             </tbody>
                         </table>
                         : <div className='awards-table-no-data-container'>
-                            <h3>No awards found for {month}. Enter one below.</h3>
+                            <h3>No awards found for {location}-{month}. Enter one below.</h3>
                             <FirstAwardsEntry awardsTableId={filteredData._id} location={filteredData.location} onItemAdded={itemAdded} month={month} />
                         </div>
                 }

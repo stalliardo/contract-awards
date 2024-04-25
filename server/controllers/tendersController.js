@@ -22,13 +22,7 @@ exports.getTenders = async (req, res) => {
 exports.putTender = async (req, res) => {
   try {
     const { _id, month, newValue } = req.body;
-
-    console.log('id = ', _id);
-    console.log('month = ', month);
-    console.log('value = ', newValue);
-
     const tender = await Tender.findById(_id);
-
     const item = tender.items.find(item => item.month === month);
 
     if (item) {

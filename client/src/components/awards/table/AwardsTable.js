@@ -114,6 +114,7 @@ const AwardsTable = ({ locations }) => {
     }
 
     const onMonthSelected = ({ value }) => {
+        console.log('on month selected called');
         setMonth(extractMonthFromString(value));
     }
 
@@ -124,7 +125,7 @@ const AwardsTable = ({ locations }) => {
                     <SelectMenu placeholder={location} menuItems={locationOptions} handleItemSelection={onLocationSelected} />
                 </div>
                 <div className='awards-table-select'>
-                    <SelectMenu placeholder={month} menuItems={dateOptions} handleItemSelection={onMonthSelected} allSettingPlaceholder={false} />
+                    <SelectMenu placeholder={month} menuItems={dateOptions} handleItemSelection={onMonthSelected} />
                 </div>
             </div>
             <div className='awards-page-table-container'>

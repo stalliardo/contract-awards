@@ -68,11 +68,9 @@ exports.generateDataForNewLocation = async (req, res) => {
   }
 }
 
-// This function is only to be ran once. This will loop all the locations in the datbase and generate default values for each location and each month
-// SITE ADMIN ONLY
-exports.generateInitialData = async (req, res) => {
+exports.generateInitialData = async (req, res, locationsArray) => {
   try {
-    const locations = await Location.find().exec();
+    const locations = locationsArray || await Location.find().exec();
     const promises = [];
 
     if (!locations || locations.length === 0) {
@@ -95,5 +93,23 @@ exports.generateInitialData = async (req, res) => {
     })
   } catch (error) {
     res.status(500).json({ message: "There was an error generating tenders data.", error })
+  }
+}
+
+exports.generateTenderDataForLocation = async (req, res, location) => {
+  try {
+    const promises = [];
+
+    const data = { location: location, items: [] };
+    months.forEach((month) => {
+      data.items.push({ month, value: 0 })
+    })
+    const newTender = new Tender(data);
+    promises.push(newTender.save());
+
+    await Promise.all(promises);
+
+  } catch (error) {
+    throw error;
   }
 }

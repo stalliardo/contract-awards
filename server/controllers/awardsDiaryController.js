@@ -1,5 +1,6 @@
 const AwardsDiary = require('../models/AwardsDiary');
 const Location = require('../models/Location');
+const { generateInitialData, generateTenderDataForLocation } = require('./tendersController');
 
 const months = [
   'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September'
@@ -143,6 +144,7 @@ exports.generateDataForGivenLocations = async (req, res, locations) => {
   
   locations.forEach((location) => {
     locationAddedPromises.push(createAwardsDiariesForYearParentFunction(req, res, location));
+    locationAddedPromises.push(generateTenderDataForLocation(req, res, location))
   })
 
   try {

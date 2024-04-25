@@ -34,7 +34,7 @@ const Navbar = () => {
               <Link to="/awards-form">Awards</Link>
               <Link to="/awards-summary">Awards Summary</Link>
               <Link to="/tenders-submitted">Tenders Submitted</Link>
-              <Link to="/dev">Dev</Link>
+              <Link to="/site-admin">Dev</Link>
               <a>{authenticatedUser?.name}</a>
             </>
             :

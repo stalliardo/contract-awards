@@ -41,7 +41,7 @@ const router = createBrowserRouter([
         element: <AwardsSummary />
       },
       {
-        path: "/dev",
+        path: "/site-admin",
         element: <DevPage />
       }
     ]

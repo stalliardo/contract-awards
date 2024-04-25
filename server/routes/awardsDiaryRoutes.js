@@ -17,6 +17,6 @@ router.get('/awards-diary/getAllAwards', awardsDiaryController.getAllAwards);
 
 // below need locking down TODO
 router.post('/awards-diary/add-year', awardsDiaryController.createAwardsDiariesForYear);
-router.get("/awards-diary/generateALLData", awardsDiaryController.generateAllDataForYear);
+router.get("/awards-diary/generateAllData", awardsDiaryController.generateAllDataForYear);
 
 module.exports = router;

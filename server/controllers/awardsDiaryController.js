@@ -6,20 +6,17 @@ const months = [
   'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September'
 ];
 
-const LOCATIONS = {
-  AVONMOUTH: "Avonmouth",
-  AWE: "AWE",
-  BASINGSTOKE: "Basingstoke",
-  BIRMINGHAM: "Birmingham",
-  EASTERN: "Eastern",
-  FELTHAM: "Feltham",
-  GLASGOW: "Glasgow",
-  LEEDS: "Leeds",
-  LONDON: "London",
-  MANCHESTER: "Manchester",
-  NEWCASTLE: "Newcastle",
-  SPECIAL_PROJECTS: "Special Projects",
-  M_AND_E: "M&E"
+
+// Function to get the financial year based on the current date
+function getFinancialYear() {
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth(); // 0 = January, 1 = February, ..., 11 = December
+
+  // If the current month is October or later, return the current year
+  // Otherwise, return the previous year
+  const financialYearStartMonth = 9; // October (index-based)
+  return currentMonth >= financialYearStartMonth ? currentYear : currentYear - 1;
 }
 
 exports.createAwardsDiary = async (req, res) => {
@@ -85,13 +82,14 @@ const createAwardsDiariesForYearParentFunction = async (req, res, location) => {
   const promises = [];
   const data = []; // for storing the AwardsDiary instances
 
+  const currentFinancialYear = getFinancialYear();
   let counter = 0;
 
   try {
     months.forEach(async (month) => {
       data.push(new AwardsDiary({
         location: location || req.body.location,
-        year: counter < 3 ? 2023 : 2024,
+        year: currentFinancialYear + (counter >= 3 ? 1 : 0), // If counter < 3, it's current financial year, otherwise the next. old mehtod -> counter < 3 ? 2023 : 2024,
         month
       }))
       // await awardsDiary.save();
@@ -157,4 +155,3 @@ exports.generateDataForGivenLocations = async (req, res, locations) => {
     throw error;
   }
 }
-

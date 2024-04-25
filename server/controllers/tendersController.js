@@ -90,7 +90,9 @@ exports.generateInitialData = async (req, res) => {
       promises.push(newTender.save());
     })
 
-    await Promise.all(promises);
+    await Promise.all(promises).then(() => {
+      res.status(201).json({message: "All tenders added successfully"});
+    })
   } catch (error) {
     res.status(500).json({ message: "There was an error generating tenders data.", error })
   }

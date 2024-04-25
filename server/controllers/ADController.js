@@ -10,9 +10,8 @@ const getConfig = () => {
     }
 }
 
-//TODO renmae 
-exports.handleADUsers = async (req, res) => {
-    console.log('\nhandleADUsersCalled');
+exports.updateADUsers = async (req, res) => {
+    console.log('\nupdateADUsersCalled');
     try {
         const ADConfig = getConfig();
         const AD = new ActiveDirectory(ADConfig);
@@ -25,7 +24,7 @@ exports.handleADUsers = async (req, res) => {
         }
 
         const formattedData = [];
-        let userLengthFromAD = 0;
+        const mongoUsers = await Users.find().exec();
 
         if (usersDataFromAD.length) {
             usersDataFromAD.forEach((userItem) => {
@@ -34,81 +33,85 @@ exports.handleADUsers = async (req, res) => {
 
                 if (userItem.items.length) {
                     userItem.items.forEach((item) => {
-                        formattedObject.items.push({
-                            firstName: item.givenName,
-                            lastName: item.sn,
-                            fullName: item.displayName,
-                        })
+                        const itemToAdd = {};
+                        const matchingUser = mongoUsers.find(mUser => mUser.name === item.displayName);
+
+                        if(matchingUser) {
+                            if(matchingUser.role !== userItem.groupName) {
+                                // the role has changed since last sync
+                                itemToAdd.operation = "Update"
+                            }
+                        }
+
+                        if(!matchingUser) {
+                            // new user to be added
+                            itemToAdd.operation = "Add";
+                        }
+
+                        itemToAdd.firstName = item.givenName,
+                        itemToAdd.lastName = item.sn,
+                        itemToAdd.fullName = item.displayName
+                        
+                        formattedObject.items.push(itemToAdd);
                     });
                 }
                 formattedData.push(formattedObject);
             })
+        } else {
+            return res.status(404).send({ message: "No users found in active directory" });
+        }
 
-            formattedData.forEach((d) => {
-                d.items.forEach((i) => {
-                    // Get the length of the users to used in the following conditional statements
-                    userLengthFromAD++;
+        const extractedUserNames = [];
+
+        if(formattedData.length) {
+            formattedData.forEach((fData) => {
+                fData.items.forEach((item) => {
+                    extractedUserNames.push(item.fullName);
                 })
             })
         }
 
-        const allUsers = await Users.find().exec();
+        if(mongoUsers.length >= usersDataFromAD.length) {
+            for(let i = 0; i < mongoUsers.length; i++) {
+                const staleUser = !extractedUserNames.includes(mongoUsers[i].name);
 
-        if(userLengthFromAD !== allUsers.length) {
-            if(allUsers.length) {
-                if(allUsers.length > userLengthFromAD){
-                    // Someone was removed
-                    const namesFromAd = [];
-                    for(let i = 0; i < formattedData.length; i++) {
-                        for(let x = 0; x < formattedData[i].items.length; x++) {
-                            const fullName = formattedData[i].items[x].fullName;
-                            namesFromAd.push(fullName);
-                        }
-                    }
-
-                    for(let i = 0; i < allUsers.length; i++) {
-                        const matchingUser = namesFromAd.find((user) => user === allUsers[i].name);
-                        if(!matchingUser){
-                            //  Remove the old record from the Database...
-                            await Users.findByIdAndDelete(allUsers[i]._id);
-                            console.log('Removing ' + allUsers[i].name + " from the database");
-                        }
-                    }
-
-                } else if(allUsers.length < userLengthFromAD) {
-                    // Someone was added
-                    for(let i = 0; i < formattedData.length; i++) {
-                        const groupName = formattedData[i].groupName;
-    
-                        for(let x = 0; x < formattedData[i].items.length; x++) {
-                            const fullName = formattedData[i].items[x].fullName;
-                            const newItem = allUsers.find((user) => user.name === fullName);
-
-                            if(!newItem) {
-                                const newUser = new Users({name: fullName, role: groupName});
-                                await newUser.save();
-                                console.log('Added new user: ', fullName);
-                            }
-                        }
-                    }
+                if(staleUser){
+                    console.log('Deleting stale user: ', mongoUsers[i].name);
+                    await Users.findByIdAndDelete(mongoUsers[i]._id);
                 }
-            } else {
-                for(let i = 0; i < formattedData.length; i++) {
-                    const groupName = formattedData[i].groupName;
+            }
+        }
 
-                    for(let x = 0; x < formattedData[i].items.length; x++) {
+        if(formattedData.length) {
+            for(let i = 0; i < formattedData.length; i++){
+                for(let x = 0; x < formattedData[i].items.length; x++) {
+
+                    console.log('formattedData[i].items = ', formattedData[i].items[x]);
+                    if(formattedData[i].items[x].operation === "Add") {
+                        console.log('Add operation called');
+                        const newRole = formattedData[i].groupName;
                         const fullName = formattedData[i].items[x].fullName;
 
-                        const newUser = new Users({name: fullName, role: groupName});
+                        const newUser = new Users({name: fullName, role: newRole});
                         await newUser.save();
-                        console.log('New user ' + fullName + " added!");
+                    }
+
+                    if(formattedData[i].items[x].operation === "Update") {
+                        console.log('Update operation called');
+
+                        const newRole = formattedData[i].groupName;
+                        const userId = mongoUsers.find(user => user.name === formattedData[i].items[x].fullName)._id;
+
+                        await Users.updateOne({ _id: userId }, { $set: { role: newRole } });
                     }
                 }
             }
         }
-        return res.status(200);
+
+        console.log('bottom called');
+        return res.status(200).send({message: "Successfully updated users!"});
     } catch (error) {
-        return res.status(500).send({ message: "An error occured", error });
+        return res.status(500).send({ error: "An error occured. Error: " + error });
     }
 }
 
@@ -160,8 +163,23 @@ exports.retrieveUsersForGroup = async (req, res) => {
     // Issue: the app will have idea that the change has taken place so will still think the user has the previous access level
     // Handling Options: 
         // A - Will have to change their folder access in Active Directory anyway so do we jump in the app and call a function?
-        // B - The app runs the large handleADUsers function above everytime a user enters the app?
+        // B - The app runs the large updateADUsers function above everytime a user enters the app?
 
         // Option A:
             // Will need the hidden site admin section / route to hold the ui and logic for this
-            // Functions for adding a user, removing a user and moving a user required. although the handleADUsers function handles adding and removing but needs testing
+            // Functions for adding a user, removing a user and moving a user required. although the updateADUsers function handles adding and removing but needs testing
+
+
+    // TODO's 
+        // Make sure these endpoints use the token check middleware
+
+
+
+    // if(userLengthFromAD !== mongoUsers.length) <- noty sufficient
+    // better mothod required that checks for discrepencies between the ad data returned and the data returned from mongo
+    // For each user in mongo check their role then...
+        // check if a user with that name also is in the ad data returned
+        // if there is a match but the roles differ                                                             ****************** UPDATE THAT USER *********************
+        // if the user has is not in the data retuened from ad then have been remoed from the group             ****************** DELETE THAT USER *********************
+        // if the user is found but the role is the same do nothing
+        // will still first need toi check if a user has been added ie adlength > mongoUsers

@@ -37,7 +37,7 @@ const AwardsTableRow = ({data, onItemDeleted, onItemEdited, location, month}) =>
                 <td>{data.programme}</td>
                 <td>{data.contractor}</td>
                 <td>{data.region}</td>
-                <td>{data.core}</td>
+                <td>£{(parseInt(data.core)).toLocaleString()}</td>
     
                 <td className='table-actions-cell'>
                     <button className='table-actions-cell' onClick={onEditClicked}>Edit</button>

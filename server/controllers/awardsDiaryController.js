@@ -141,12 +141,16 @@ exports.generateAllDataForYear = async (req, res) => {
 // Used when a director adds locations. Adds default data to the database
 exports.generateDataForGivenLocations = async (req, res, locations) => {
   const locationAddedPromises = [];
-  
-  locations.forEach((location) => {
-    locationAddedPromises.push(createAwardsDiariesForYearParentFunction(req, res, location));
-    locationAddedPromises.push(generateTenderDataForLocation(req, res, location));
-  })
 
+  for(let i = 0; i < locations.length; i++) {
+    const locationExists = await AwardsDiary.findOne({location: locations[i]})
+
+    if(!locationExists){
+      locationAddedPromises.push(createAwardsDiariesForYearParentFunction(req, res, locations[i]));
+      locationAddedPromises.push(generateTenderDataForLocation(req, res, locations[i]));
+    }
+  }
+  
   try {
     await Promise.all(locationAddedPromises);
   } catch (error) {

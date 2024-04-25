@@ -180,7 +180,7 @@ const AwardsTable = ({ locations }) => {
                             </tbody>
                         </table>
                         : <div className='awards-table-no-data-container'>
-                            <h3>No awards found for {month}. Enter one below.</h3>
+                            <h3>No awards found for {location}-{month}. Enter one below.</h3>
                             <FirstAwardsEntry awardsTableId={filteredData._id} location={filteredData.location} onItemAdded={itemAdded} month={month} />
                         </div>
                 }

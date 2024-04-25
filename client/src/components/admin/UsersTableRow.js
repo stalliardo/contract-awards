@@ -50,6 +50,16 @@ const UsersTableRow = ({ data, availableLocations }) => {
         if (groupName === ROLES.CA03) return "User";
     }
 
+    const editButtonDisabled = () => {
+        if (authenticatedUser.role === ROLES.CA01) {
+            if (data.name === authenticatedUser.name || data.role === ROLES.CA01) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     const onViewLocationsClicked = () => {
         setshowLocationsDropdown(true);
     }
@@ -94,7 +104,7 @@ const UsersTableRow = ({ data, availableLocations }) => {
             <td>
                 <div className='users-table-locations-container' >
                     <p>{data.locations.length}/{availableLocations.length}</p>
-                    <button onClick={onViewLocationsClicked}>Edit</button>
+                    <button disabled={editButtonDisabled()} onClick={onViewLocationsClicked}>Edit</button>
                 </div>
                 {
                     showLocationsDropdown &&
@@ -118,7 +128,7 @@ const UsersTableRow = ({ data, availableLocations }) => {
                                                     return <li key={index}>
                                                         {location}
                                                         <button disabled={removeButtonDisabled} onClick={() => onRemoveLocationClicked(location)} className='red'>Remove</button>
-                                                        </li>
+                                                    </li>
                                                 }) :
                                                 <div className='users-table-locations-dropdown-container-no-locations-container'>
                                                     <p>0</p>
@@ -160,3 +170,8 @@ const UsersTableRow = ({ data, availableLocations }) => {
 }
 
 export default UsersTableRow;
+
+
+// edit button enabled for director when...
+// 1 - it is not their account
+// 2 - it is not another tier 1 user

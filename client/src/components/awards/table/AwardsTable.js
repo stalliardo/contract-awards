@@ -171,7 +171,7 @@ const AwardsTable = ({ locations }) => {
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td className='last-cell'>Total: £{coreSum.toFixed(2)}</td>
+                                    <td className='last-cell'>Total: £{coreSum.toLocaleString()}</td>
                                     <td></td>
                                     <td></td>
                                 </tr>

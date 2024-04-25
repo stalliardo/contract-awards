@@ -42,6 +42,7 @@ const Root = () => {
         navigate("/auth");
       })
     } else if (token && users.authenticatedUser._id) {
+      console.log('use effect root called');
       if (users.authenticatedUser.locations.length) {
         const sortedLocations = [...users.authenticatedUser.locations].sort();
         setLocations(sortedLocations);
@@ -50,7 +51,7 @@ const Root = () => {
       }
       dispatch(setLoading(false));
       dispatch(setUsersLoading(false));
-      navigate("/");
+      // navigate("/");
     } else {
       navigate("/auth");
     }

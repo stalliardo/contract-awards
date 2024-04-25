@@ -46,13 +46,13 @@ const AwardsSummary = () => {
             if (awardsData.coreTotals.length > 0) {
                 setTimeout(() => {
                     setSpinnerComplete(true); // to fix the flash, added a delay
-                }, 750);
+                }, 500);
             } else {
                if(authenticatedUser){
                 dispatch(fetchData({locationData: originalLocations, authenticatedUser})).finally(() => {
                     setTimeout(() => {
                         setSpinnerComplete(true);
-                    }, 750);
+                    }, 500);
                 })
                }
             }

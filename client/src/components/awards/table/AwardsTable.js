@@ -37,12 +37,19 @@ const AwardsTable = ({ locations }) => {
     const locationParam = queryParams.get("location");
     const monthParam = queryParams.get("month");
 
+    // BUG -> Clicking a cell in the awardssummary table no longer navigates correctly. Seems to default to the same doc
+    // when landing on page via clicking table cell need to also set the select menus values to reflect the params
+
     useEffect(() => {
         if (!isLoading) {
             setIsLoading(true);
         }
 
+        console.log('above param called + deets = ', locationParam, " ", monthParam);
+
         if (locationParam && monthParam) {
+
+            console.log('if params called');
             setLocation(capitalizeFirstLetter(locationParam));
             setMonth(capitalizeFirstLetter(monthParam));
         }

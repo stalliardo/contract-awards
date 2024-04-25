@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './select-menu.css';
 
 const MenuItem = ({ value, handleClick }) => {
@@ -6,8 +6,17 @@ const MenuItem = ({ value, handleClick }) => {
 }
 
 const SelectMenu = ({ value, label, name, handleItemSelection, menuItems, placeholder, allSettingPlaceholder = true }) => {
+
+
+  useEffect(() => {
+    console.log('placehodler changed and is now: ', placeholder);
+  }, [placeholder])
+
+
   const [isOpen, setIsOpen] = useState(false);
   const [defaultValue, setDefaultValue] = useState(placeholder);
+
+
 
   const toggleIsOpen = () => {
     setIsOpen((prev) => !prev);

@@ -33,25 +33,21 @@ const AwardsTable = ({ locations }) => {
 
     const locationOptions = generateLocationOptionsForSelectMenu(locations);
     const locationHelper = useLocation();
-    const queryParams = new URLSearchParams(locationHelper.search);
-    const locationParam = queryParams.get("location");
-    const monthParam = queryParams.get("month");
 
-    // BUG -> Clicking a cell in the awardssummary table no longer navigates correctly. Seems to default to the same doc
-    // when landing on page via clicking table cell need to also set the select menus values to reflect the params
+    const queryParams = new URLSearchParams(locationHelper.search);
+    let locationParam = queryParams.get("location");
+    let monthParam = queryParams.get("month");
+
+    useEffect(() => {
+        if (locationParam && monthParam) {
+            setLocation(capitalizeFirstLetter(locationParam));
+            setMonth(capitalizeFirstLetter(monthParam));
+        }
+    }, [])
 
     useEffect(() => {
         if (!isLoading) {
             setIsLoading(true);
-        }
-
-        console.log('above param called + deets = ', locationParam, " ", monthParam);
-
-        if (locationParam && monthParam) {
-
-            console.log('if params called');
-            setLocation(capitalizeFirstLetter(locationParam));
-            setMonth(capitalizeFirstLetter(monthParam));
         }
 
         let encodedLocation = encodeURIComponent(location);
@@ -117,11 +113,12 @@ const AwardsTable = ({ locations }) => {
     }
 
     const onLocationSelected = ({ value }) => {
+        console.log('valuie = ', value);
+        queryParams.delete("location")
         setLocation(value);
     }
 
     const onMonthSelected = ({ value }) => {
-        console.log('on month selected called');
         setMonth(extractMonthFromString(value));
     }
 

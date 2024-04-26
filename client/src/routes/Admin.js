@@ -129,6 +129,7 @@ const Admin = () => {
               <div className='blackout-overlay'>
                  <div className='admin-modal'>
                   <h3>Add Location</h3>
+                  <p>If the location doesn't display right away in either the awards or tenders table, you may need to refresh the page.</p>
                   <input type='text' value={location} onChange={handleChange}/>
                   <div className='admin-modal-buttons'>
                     <button className='green' onClick={onAddLocation} disabled={saveButtonDisabled}>

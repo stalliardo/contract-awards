@@ -1,15 +1,21 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import '../awards/table/awardsTable.css';
 import LocationsCheckboxItem from './LocationsCheckboxItem';
 import { ROLES } from '../../utils/constants';
 
 const AddLocationsCheckboxContainer = ({locations, authenticatedUser}) => {
+    const [locationsWithCheck, setLocationsWithCheck] = useState([])
 
-    console.log('locations = ', locations);
+    useEffect(() => {
+        const formattedLocations = locations.map((location) => ({...location, checked: true}));
+        setLocationsWithCheck(formattedLocations)
+        console.log('fomr = ', formattedLocations);
+    }, [locationsWithCheck])
+
   return (
     <div className='checkbox-container'>
         {
-            locations.map((location, index) => {
+            locationsWithCheck.map((location, index) => {
                 return <LocationsCheckboxItem key={index} location={location}/>
             })
         }
@@ -17,7 +23,6 @@ const AddLocationsCheckboxContainer = ({locations, authenticatedUser}) => {
         {
             authenticatedUser.role === ROLES.CA01 &&
             <div className='checkbox-buttons'>
-                {/* <div className='checkbox-spacer'></div> */}
                 <div>
                 <button>Add All</button>
                 </div>

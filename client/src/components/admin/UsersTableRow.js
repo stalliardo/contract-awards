@@ -3,7 +3,7 @@ import SelectMenu from '../selectMenu/SelectMenu';
 
 import '../awards/table/awardsTable.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { addAllLocationsToUser, addLocationToUser, removeLocationFromUser } from '../../redux/features/users/usersThunk';
+import { addAllLocationsToUser, addLocationToUser, addProvidedLocationsToUser, removeLocationFromUser } from '../../redux/features/users/usersThunk';
 import { ROLES } from '../../utils/constants';
 import AddLocationsCheckboxContainer from './AddLocationsCheckboxContainer';
 
@@ -13,6 +13,7 @@ const UsersTableRow = ({ data, availableLocations }) => {
     const [showLocationsDropdown, setshowLocationsDropdown] = useState(false);
     const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
     const [selectedLocation, setSelectedLocation] = useState({});
+    const [selectedLocations, setSelectedLocations] = useState([]); // -< test
     const [addAllButtonDisabled, setAddAllButtonDisabled] = useState(false);
     const [filteredLocations, setFilteredLocations] = useState([]);
     const authenticatedUser = useSelector(state => state.users.authenticatedUser);
@@ -76,7 +77,10 @@ const UsersTableRow = ({ data, availableLocations }) => {
     }
 
     const onSaveLocationClicked = () => {
-        dispatch(addLocationToUser({ location: selectedLocation.name, userId: data._id }));
+        // dispatch(addLocationToUser({ location: selectedLocation.name, userId: data._id }));
+
+        console.log('selected locations = ', selectedLocations);
+        dispatch(addProvidedLocationsToUser({ userId: data._id, locations: selectedLocations }));
 
         setSaveButtonDisabled(true);
         setSelectedLocation({});
@@ -96,6 +100,25 @@ const UsersTableRow = ({ data, availableLocations }) => {
         if (confirmation) {
             dispatch(removeLocationFromUser({ location, userId: data._id }));
         }
+    }
+
+    const saveButtonDisabledHandler = (locations) => {
+        console.log('save button disabled handler called + disbaled = ', locations);
+
+        // loop the locations provided
+        // if all checked call the onAddAllLocationsClicked function
+        // else for part checked do i loop this dispatch(addLocationToUser({ location: selectedLocation.name, userId: data._id })); could try
+
+        // first check if all are checked
+        // const allLocationsAreChecked = !locations.find(location => location.checked === false);
+
+        setSelectedLocations(locations);
+
+
+        
+        // if(allLocationsAreChecked) {
+        //     // below function needs testing....
+        // }
     }
 
     return (
@@ -153,13 +176,13 @@ const UsersTableRow = ({ data, availableLocations }) => {
                                                         : null
                                                     } */}
 
-                                                    <AddLocationsCheckboxContainer locations={filteredLocations} authenticatedUser={authenticatedUser}/>
+                                                    <AddLocationsCheckboxContainer locations={filteredLocations} authenticatedUser={authenticatedUser} saveButtonDisabledHandler={saveButtonDisabledHandler}/>
                                                 </>
                                         }
                                     </div>
 
                                     <div className='users-table-display-locations-buttons cancel'>
-                                        <button disabled={saveButtonDisabled} onClick={onSaveLocationClicked}>Save / Add One</button>
+                                        <button disabled={false} onClick={onSaveLocationClicked}>Save / Add One</button>
                                         <button onClick={onCancelClicked}>Close</button>
                                     </div>
                                 </div>

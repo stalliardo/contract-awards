@@ -1,20 +1,18 @@
 import React, { useState } from 'react'
 import '../awards/table/awardsTable.css';
 
-const LocationsCheckboxItem = ({location}) => {
+const LocationsCheckboxItem = ({location, onChecked}) => {
 
     const [itemChecked, setItemChecked] = useState(false);
 
-    const handleOnChange = (e) => {
-        console.log('changed called');
-
-        setItemChecked((prevState) => !prevState);
-    }
+    // const handleOnChange = (e) => {
+    //     onChecked
+    // }
 
   return (
     <div className='location-checkbox-item'>
         <label>{location.name}</label>
-        <input type='checkbox' checked={location.checked} onChange={handleOnChange}/>
+        <input type='checkbox' checked={location.checked} onChange={() => onChecked(location)}/>
     </div>
   )
 }

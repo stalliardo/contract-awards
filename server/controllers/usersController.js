@@ -16,6 +16,29 @@ exports.getUsers = async (req, res) => {
   }
 }
 
+exports.addProvidedLocationsToUser = async (req, res) => {
+  const { userId } = req.params;
+  const { locations } = req.body;
+
+  try {
+    // Add multiple locations to the user's 'locations' array
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $addToSet: { locations: { $each: locations } } }, // $addToSet with $each to add multiple items
+      { new: true } // Return the updated document after the update
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.status(200).json(updatedUser); // Return the updated user document
+  } catch (error) {
+    console.error('Error adding locations to user:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
 exports.addLocationToUser = async (req, res) => {
   const { userId, location } = req.body;
 

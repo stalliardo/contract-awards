@@ -131,6 +131,34 @@
         font-size: 20px;
         margin-top: 0;
     }
+
+    .checkbox-container {
+        border: 1px solid red;
+        height: 100%;
+
+        .checkbox-buttons {
+            display: flex;
+            justify-content: flex-end;
+        }
+    }
+
+    .location-checkbox-item {
+        border: 1px solid green;
+
+        display: flex;
+        padding: 8px;
+
+        justify-content: space-between;
+        align-items: center;
+
+        input {
+            width: fit-content;
+        }
+    }
+
+    .location-checkbox-item:not(:nth-child(1)) {
+        margin-top: 10px;
+    }
 }
 
 .users-table-display-locations-buttons {

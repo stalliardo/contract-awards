@@ -5,6 +5,7 @@ import '../awards/table/awardsTable.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { addAllLocationsToUser, addLocationToUser, removeLocationFromUser } from '../../redux/features/users/usersThunk';
 import { ROLES } from '../../utils/constants';
+import AddLocationsCheckboxContainer from './AddLocationsCheckboxContainer';
 
 const UsersTableRow = ({ data, availableLocations }) => {
     const dispatch = useDispatch();
@@ -82,7 +83,7 @@ const UsersTableRow = ({ data, availableLocations }) => {
     }
 
     const onAddAllLocationsClicked = () => {
-        const confirmation = window.confirm("Are you sure you want to add ALL locations?");
+        const confirmation = window.confirm(`Are you sure you want to give ${data.name} access to all locations?`);
 
         if (confirmation) {
             dispatch(addAllLocationsToUser({ userId: data._id }));
@@ -143,14 +144,16 @@ const UsersTableRow = ({ data, availableLocations }) => {
                                                 <p id='all-assigned'>{data.name} has all locations assigned</p>
                                                 :
                                                 <>
-                                                    <h4>Add New Location</h4>
+                                                    {/* <h4>Add New Location</h4>
                                                     <SelectMenu menuItems={filteredLocations} placeholder="Locations" handleItemSelection={onLocationSelected} />
                                                     {authenticatedUser.role === ROLES.CA01 ?
                                                         <div className='users-table-display-locations-buttons add-all'>
                                                             <button disabled={addAllButtonDisabled} onClick={onAddAllLocationsClicked}>Save / Add All</button>
                                                         </div>
                                                         : null
-                                                    }
+                                                    } */}
+
+                                                    <AddLocationsCheckboxContainer locations={filteredLocations} authenticatedUser={authenticatedUser}/>
                                                 </>
                                         }
                                     </div>

@@ -10,7 +10,7 @@ const AddLocationsCheckboxContainer = ({locations, authenticatedUser, saveButton
         const formattedLocations = locations.map((location) => ({...location, checked: false}));
 
         setLocationsWithCheck(formattedLocations)
-    }, []);
+    }, [locations]);
 
     const setAllChecked = () => {
         const newLocations = [...locationsWithCheck];
@@ -38,7 +38,6 @@ const AddLocationsCheckboxContainer = ({locations, authenticatedUser, saveButton
                 return <LocationsCheckboxItem key={index} location={location} onChecked={onChecked}/>
             })
         }
-
         {
             authenticatedUser.role === ROLES.CA01 &&
             <div className='checkbox-buttons'>
@@ -51,4 +50,4 @@ const AddLocationsCheckboxContainer = ({locations, authenticatedUser, saveButton
   )
 }
 
-export default AddLocationsCheckboxContainer
+export default AddLocationsCheckboxContainer;

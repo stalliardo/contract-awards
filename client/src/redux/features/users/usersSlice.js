@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchUsers, addLocationToUser, removeLocationFromUser, addAllLocationsToUser
+import { fetchUsers, addLocationToUser, removeLocationFromUser, addAllLocationsToUser, addProvidedLocationsToUser
  } from '../users/usersThunk';
 import { extractFirstAndLastName } from '../../../utils/stringUtils';
 
@@ -55,9 +55,6 @@ export const usersSlice = createSlice({
       state.loading = false;
       const updatedUser = action.payload;
 
-      // TODO below is broken
-      // state.authenticatedUser = updatedUser;
-
       // replace the user in the existing array
       const userToReplaceIndex = state.data.findIndex(user => user._id === updatedUser._id);
 
@@ -78,8 +75,25 @@ export const usersSlice = createSlice({
 
       const updatedUser = action.payload;
 
-      // TODO below is broken
-      // state.authenticatedUser = updatedUser;
+      // replace the user in the existing array
+      const userToReplaceIndex = state.data.findIndex(user => user._id === updatedUser._id);
+
+      if (userToReplaceIndex > -1) {
+        // Create a new array updatedArray using the spread operator (...state.data) to maintain immutability.
+        const updatedArray = [...state.data];
+        updatedArray[userToReplaceIndex] = updatedUser;
+        state.data = updatedArray;
+      }
+    });
+
+    builder.addCase(addProvidedLocationsToUser.pending, (state, action) => {
+      state.loading = true;
+    });
+
+    builder.addCase(addProvidedLocationsToUser.fulfilled, (state, action) => {
+      state.loading = false;
+
+      const updatedUser = action.payload;
 
       // replace the user in the existing array
       const userToReplaceIndex = state.data.findIndex(user => user._id === updatedUser._id);
@@ -92,22 +106,14 @@ export const usersSlice = createSlice({
       }
     });
 
-    builder.addCase(removeLocationFromUser.pending, (state, action) => {
-      // state.loading = true;
+    builder.addCase(addProvidedLocationsToUser.rejected, (state, action) => {
+      state.loading = false;
     });
 
     builder.addCase(removeLocationFromUser.fulfilled, (state, action) => {
-      // state.loading = false;
-
-      
       const updatedUser = action.payload.user;
-      
-      // TODO below is broken
-      // state.authenticatedUser = updatedUser;
-
       // replace the user in the existing array
       const userToReplaceIndex = state.data.findIndex(user => user._id === updatedUser._id);
-
       if (userToReplaceIndex > -1) {
         // Create a new array updatedArray using the spread operator (...state.data) to maintain immutability.
         const updatedArray = [...state.data];

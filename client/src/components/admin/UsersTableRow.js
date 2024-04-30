@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import SelectMenu from '../selectMenu/SelectMenu';
 
 import '../awards/table/awardsTable.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { addAllLocationsToUser, addLocationToUser, addProvidedLocationsToUser, removeLocationFromUser } from '../../redux/features/users/usersThunk';
+import { addAllLocationsToUser, addProvidedLocationsToUser, removeLocationFromUser } from '../../redux/features/users/usersThunk';
 import { ROLES } from '../../utils/constants';
 import AddLocationsCheckboxContainer from './AddLocationsCheckboxContainer';
 
@@ -43,7 +42,6 @@ const UsersTableRow = ({ data, availableLocations }) => {
         const filteredLocs = permittedLocationsForCurrentUser.filter(location => !data.locations.includes(location.name));
 
         setFilteredLocations(filteredLocs);
-
     }, [data.locations, availableLocations])
 
     const formattedRole = (groupName) => {
@@ -63,28 +61,21 @@ const UsersTableRow = ({ data, availableLocations }) => {
     }
 
     const onViewLocationsClicked = () => {
-        document.body.style.overflow = 'hidden'; 
+        document.body.style.overflow = 'hidden';
         setshowLocationsDropdown(true);
     }
 
     const onCancelClicked = () => {
-        document.body.style.overflow = 'auto'; 
+        document.body.style.overflow = 'auto';
         setshowLocationsDropdown(false);
         setSelectedLocation({});
         setSaveButtonDisabled(true);
     }
 
-    const onLocationSelected = (location) => {
-        setSelectedLocation(location);
-    }
-
     const onSaveLocationClicked = () => {
         const checkedLocations = selectedLocations.filter(location => location.checked === true).map(location => location.name);
-
         dispatch(addProvidedLocationsToUser({ userId: data._id, locations: checkedLocations }));
-
-        setSaveButtonDisabled(true);
-        setSelectedLocation({});
+        onCancelClicked();
     }
 
     const onAddAllLocationsClicked = () => {
@@ -153,21 +144,9 @@ const UsersTableRow = ({ data, availableLocations }) => {
                                             addAllButtonDisabled ?
                                                 <p id='all-assigned'>{data.name} has all locations assigned</p>
                                                 :
-                                                <>
-                                                    {/* <h4>Add New Location</h4>
-                                                    <SelectMenu menuItems={filteredLocations} placeholder="Locations" handleItemSelection={onLocationSelected} />
-                                                    {authenticatedUser.role === ROLES.CA01 ?
-                                                        <div className='users-table-display-locations-buttons add-all'>
-                                                            <button disabled={addAllButtonDisabled} onClick={onAddAllLocationsClicked}>Save / Add All</button>
-                                                        </div>
-                                                        : null
-                                                    } */}
-
-                                                    <AddLocationsCheckboxContainer locations={filteredLocations} authenticatedUser={authenticatedUser} saveButtonDisabledHandler={saveButtonDisabledHandler}/>
-                                                </>
+                                                <AddLocationsCheckboxContainer locations={filteredLocations} authenticatedUser={authenticatedUser} saveButtonDisabledHandler={saveButtonDisabledHandler} />
                                         }
                                     </div>
-
                                     <div className='users-table-display-locations-buttons cancel'>
                                         <button disabled={saveButtonDisabled} onClick={onSaveLocationClicked}>Save Locations</button>
                                         <button onClick={onCancelClicked}>Close</button>

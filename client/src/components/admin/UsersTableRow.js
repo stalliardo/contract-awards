@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import SelectMenu from '../selectMenu/SelectMenu';
 
 import '../awards/table/awardsTable.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { addAllLocationsToUser, addLocationToUser, removeLocationFromUser } from '../../redux/features/users/usersThunk';
+import { addAllLocationsToUser, addProvidedLocationsToUser, removeLocationFromUser } from '../../redux/features/users/usersThunk';
 import { ROLES } from '../../utils/constants';
+import AddLocationsCheckboxContainer from './AddLocationsCheckboxContainer';
 
 const UsersTableRow = ({ data, availableLocations }) => {
     const dispatch = useDispatch();
@@ -12,6 +12,7 @@ const UsersTableRow = ({ data, availableLocations }) => {
     const [showLocationsDropdown, setshowLocationsDropdown] = useState(false);
     const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
     const [selectedLocation, setSelectedLocation] = useState({});
+    const [selectedLocations, setSelectedLocations] = useState([]); // -< test
     const [addAllButtonDisabled, setAddAllButtonDisabled] = useState(false);
     const [filteredLocations, setFilteredLocations] = useState([]);
     const authenticatedUser = useSelector(state => state.users.authenticatedUser);
@@ -41,7 +42,6 @@ const UsersTableRow = ({ data, availableLocations }) => {
         const filteredLocs = permittedLocationsForCurrentUser.filter(location => !data.locations.includes(location.name));
 
         setFilteredLocations(filteredLocs);
-
     }, [data.locations, availableLocations])
 
     const formattedRole = (groupName) => {
@@ -61,28 +61,25 @@ const UsersTableRow = ({ data, availableLocations }) => {
     }
 
     const onViewLocationsClicked = () => {
+        document.body.style.overflow = 'hidden';
         setshowLocationsDropdown(true);
     }
 
     const onCancelClicked = () => {
+        document.body.style.overflow = 'auto';
         setshowLocationsDropdown(false);
         setSelectedLocation({});
         setSaveButtonDisabled(true);
     }
 
-    const onLocationSelected = (location) => {
-        setSelectedLocation(location);
-    }
-
     const onSaveLocationClicked = () => {
-        dispatch(addLocationToUser({ location: selectedLocation.name, userId: data._id }));
-
-        setSaveButtonDisabled(true);
-        setSelectedLocation({});
+        const checkedLocations = selectedLocations.filter(location => location.checked === true).map(location => location.name);
+        dispatch(addProvidedLocationsToUser({ userId: data._id, locations: checkedLocations }));
+        onCancelClicked();
     }
 
     const onAddAllLocationsClicked = () => {
-        const confirmation = window.confirm("Are you sure you want to add ALL locations?");
+        const confirmation = window.confirm(`Are you sure you want to give ${data.name} access to all locations?`);
 
         if (confirmation) {
             dispatch(addAllLocationsToUser({ userId: data._id }));
@@ -95,6 +92,11 @@ const UsersTableRow = ({ data, availableLocations }) => {
         if (confirmation) {
             dispatch(removeLocationFromUser({ location, userId: data._id }));
         }
+    }
+
+    const saveButtonDisabledHandler = (locations) => {
+        setSelectedLocations(locations);
+        setSaveButtonDisabled(!locations.find(location => location.checked === true))
     }
 
     return (
@@ -137,26 +139,16 @@ const UsersTableRow = ({ data, availableLocations }) => {
                                     </ul>
                                 </div>
                                 <div className='users-table-display-locations-container'>
-                                    <div>
+                                    <div id='scroller'>
                                         {
                                             addAllButtonDisabled ?
                                                 <p id='all-assigned'>{data.name} has all locations assigned</p>
                                                 :
-                                                <>
-                                                    <h4>Add New Location</h4>
-                                                    <SelectMenu menuItems={filteredLocations} placeholder="Locations" handleItemSelection={onLocationSelected} />
-                                                    {authenticatedUser.role === ROLES.CA01 ?
-                                                        <div className='users-table-display-locations-buttons add-all'>
-                                                            <button disabled={addAllButtonDisabled} onClick={onAddAllLocationsClicked}>Save / Add All</button>
-                                                        </div>
-                                                        : null
-                                                    }
-                                                </>
+                                                <AddLocationsCheckboxContainer locations={filteredLocations} authenticatedUser={authenticatedUser} saveButtonDisabledHandler={saveButtonDisabledHandler} />
                                         }
                                     </div>
-
                                     <div className='users-table-display-locations-buttons cancel'>
-                                        <button disabled={saveButtonDisabled} onClick={onSaveLocationClicked}>Save / Add One</button>
+                                        <button disabled={saveButtonDisabled} onClick={onSaveLocationClicked}>Save Locations</button>
                                         <button onClick={onCancelClicked}>Close</button>
                                     </div>
                                 </div>
@@ -170,8 +162,3 @@ const UsersTableRow = ({ data, availableLocations }) => {
 }
 
 export default UsersTableRow;
-
-
-// edit button enabled for director when...
-// 1 - it is not their account
-// 2 - it is not another tier 1 user

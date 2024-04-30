@@ -80,7 +80,7 @@ const addProvidedLocationsToUser = createAsyncThunk(
 
         console.log('data.locations = ', data.locations); // here
         try {
-            const response = await axios.put(`/api/users/${data.userId}/add-provided-locations`, data.locations);
+            const response = await axios.put(`/api/users/${data.userId}/add-provided-locations`, {locations: data.locations});
             return response.data;
         } catch (error) {
             console.log('catch called + error: ', error);

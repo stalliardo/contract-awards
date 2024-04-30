@@ -79,8 +79,11 @@ const UsersTableRow = ({ data, availableLocations }) => {
     const onSaveLocationClicked = () => {
         // dispatch(addLocationToUser({ location: selectedLocation.name, userId: data._id }));
 
-        console.log('selected locations = ', selectedLocations);
-        dispatch(addProvidedLocationsToUser({ userId: data._id, locations: selectedLocations }));
+        const checkedLocations = selectedLocations.filter(location => location.checked === true).map(location => location.name);
+
+
+        console.log('selected locations = ', checkedLocations);
+        dispatch(addProvidedLocationsToUser({ userId: data._id, locations: checkedLocations }));
 
         setSaveButtonDisabled(true);
         setSelectedLocation({});

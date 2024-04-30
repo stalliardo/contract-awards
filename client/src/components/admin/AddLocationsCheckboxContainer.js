@@ -43,7 +43,7 @@ const AddLocationsCheckboxContainer = ({locations, authenticatedUser, saveButton
             authenticatedUser.role === ROLES.CA01 &&
             <div className='checkbox-buttons'>
                 <div>
-                <button onClick={setAllChecked}>Add All</button>
+                <button onClick={setAllChecked}>Select All</button>
                 </div>
             </div>
         }

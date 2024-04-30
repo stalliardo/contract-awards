@@ -77,12 +77,8 @@ const UsersTableRow = ({ data, availableLocations }) => {
     }
 
     const onSaveLocationClicked = () => {
-        // dispatch(addLocationToUser({ location: selectedLocation.name, userId: data._id }));
-
         const checkedLocations = selectedLocations.filter(location => location.checked === true).map(location => location.name);
 
-
-        console.log('selected locations = ', checkedLocations);
         dispatch(addProvidedLocationsToUser({ userId: data._id, locations: checkedLocations }));
 
         setSaveButtonDisabled(true);
@@ -106,22 +102,8 @@ const UsersTableRow = ({ data, availableLocations }) => {
     }
 
     const saveButtonDisabledHandler = (locations) => {
-        console.log('save button disabled handler called + disbaled = ', locations);
-
-        // loop the locations provided
-        // if all checked call the onAddAllLocationsClicked function
-        // else for part checked do i loop this dispatch(addLocationToUser({ location: selectedLocation.name, userId: data._id })); could try
-
-        // first check if all are checked
-        // const allLocationsAreChecked = !locations.find(location => location.checked === false);
-
         setSelectedLocations(locations);
-
-
-        
-        // if(allLocationsAreChecked) {
-        //     // below function needs testing....
-        // }
+        setSaveButtonDisabled(!locations.find(location => location.checked === true))
     }
 
     return (
@@ -185,7 +167,7 @@ const UsersTableRow = ({ data, availableLocations }) => {
                                     </div>
 
                                     <div className='users-table-display-locations-buttons cancel'>
-                                        <button disabled={false} onClick={onSaveLocationClicked}>Save / Add One</button>
+                                        <button disabled={saveButtonDisabled} onClick={onSaveLocationClicked}>Save Locations</button>
                                         <button onClick={onCancelClicked}>Close</button>
                                     </div>
                                 </div>
@@ -199,8 +181,3 @@ const UsersTableRow = ({ data, availableLocations }) => {
 }
 
 export default UsersTableRow;
-
-
-// edit button enabled for director when...
-// 1 - it is not their account
-// 2 - it is not another tier 1 user

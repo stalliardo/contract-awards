@@ -78,7 +78,6 @@ const addProvidedLocationsToUser = createAsyncThunk(
     'users/addProvidedLocationsToUser',
     async (data) => {
 
-        console.log('data.locations = ', data.locations); // here
         try {
             const response = await axios.put(`/api/users/${data.userId}/add-provided-locations`, {locations: data.locations});
             return response.data;

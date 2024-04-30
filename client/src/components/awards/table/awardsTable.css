@@ -110,13 +110,13 @@
     border-left: 1px solid gray;
     width: 60%;
     padding-left: 20px;
-    padding-right: 20px;
+    /* padding-right: 20px; */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     max-height: 500px;
 
-    overflow-y: auto;
+
     
     h4 {
         text-align: center;
@@ -131,19 +131,22 @@
         }
     }
 
+    #scroller {
+        overflow-y: scroll;
+    }
+
     p#all-assigned {
         font-size: 20px;
         margin-top: 0;
     }
 
     .checkbox-container {
-        margin-left: -8px;
-        
+        margin-left: -12px;
         height: fit-content;
-
 
         .checkbox-buttons {
             margin-top: 4px;
+            margin-right: 10px;
             display: flex;
             justify-content: flex-end;
         }
@@ -152,6 +155,8 @@
     .location-checkbox-item {
         border: 1px solid dimgrey;
         border-radius: 3px;
+        width: 90%;
+        margin: auto;
 
         display: flex;
         padding: 6px 8px;

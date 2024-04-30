@@ -186,4 +186,9 @@ input {
   width: 100vw;
   height: 100vw;
   /* display: none; */
+
 }
+
+/* body {
+  overflow: hidden;
+} */

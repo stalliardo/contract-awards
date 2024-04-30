@@ -63,10 +63,12 @@ const UsersTableRow = ({ data, availableLocations }) => {
     }
 
     const onViewLocationsClicked = () => {
+        document.body.style.overflow = 'hidden'; 
         setshowLocationsDropdown(true);
     }
 
     const onCancelClicked = () => {
+        document.body.style.overflow = 'auto'; 
         setshowLocationsDropdown(false);
         setSelectedLocation({});
         setSaveButtonDisabled(true);
@@ -146,7 +148,7 @@ const UsersTableRow = ({ data, availableLocations }) => {
                                     </ul>
                                 </div>
                                 <div className='users-table-display-locations-container'>
-                                    <div>
+                                    <div id='scroller'>
                                         {
                                             addAllButtonDisabled ?
                                                 <p id='all-assigned'>{data.name} has all locations assigned</p>

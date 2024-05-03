@@ -38,7 +38,7 @@ const TendersSubmittedTable = ({ data }) => {
     return (
         <div className='awards-page-container'>
             <div className='awards-page-table-container'>
-                <h3>Contract Awards Summary (TBC)</h3>
+                <h3>Tenders Submitted Summary</h3>
                 <table id="awards-table" className='awards-summary-table'>
                     <thead>
                         <tr>

@@ -8,6 +8,7 @@ const tenderItemSchama = new mongoose.Schema({
 
 const tendersSchema = new mongoose.Schema({
     location: { type: String, required: true },
+    financialYear: { type: String, required: true },
     items: [tenderItemSchama]
 });
 

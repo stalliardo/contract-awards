@@ -91,6 +91,7 @@ const createAwardsDiariesForYearParentFunction = async (req, res, location, fina
         location: location || req.body.location,
         year: currentFinancialYear + (counter >= 3 ? 1 : 0), // If counter < 3, it's current financial year, otherwise the next. old mehtod -> counter < 3 ? 2023 : 2024,
         financialYear: financialYearString,
+
         month
       }))
       // await awardsDiary.save();
@@ -120,6 +121,7 @@ exports.generateAllDataForYear = async (req, res) => {
   const locations = await Location.find().exec();
   const currentFinancialYear = getFinancialYear();
   const financialYearString = getFinancialYearString();
+
 
   if (!locations || locations.length === 0) {
     return res.status(404).json({ error: 'Locations not found' });
@@ -197,3 +199,4 @@ exports.generateDataForGivenLocations = async (req, res, locations) => {
   // }).exec();
 
   // for queries
+

@@ -77,6 +77,7 @@ exports.generateInitialData = async (req, res) => {
 
     locations.forEach((location) => {
       const data = { location: location.name, financialYear: financialYearString, items: [] };
+
       months.forEach((month) => {
         data.items.push({ month, value: 0 })
       })
@@ -98,8 +99,8 @@ exports.generateTenderDataForLocation = async (req, res, location) => {
   try {
     const promises = [];
     const financialYearString = getFinancialYearString();
-
     const data = { location: location, financialYear: financialYearString, items: [] };
+    
     months.forEach((month) => {
       data.items.push({ month, value: 0 })
     })

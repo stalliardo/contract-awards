@@ -5,7 +5,6 @@ const { getFinancialYearString } = require('../utils/DateUtils');
 exports.addTarget = async (req, res) => {
   try {
     const { id } = req.body;
-
     const data = {...req.body};
     data.financialYear = getFinancialYearString();
 
@@ -21,6 +20,7 @@ exports.addTarget = async (req, res) => {
     } else {
       // If no ID is provided, create a new target
       const newTarget = new Target(data);
+
       await newTarget.save();
       return res.status(201).json(newTarget);
     }
@@ -31,6 +31,7 @@ exports.addTarget = async (req, res) => {
 
 exports.getTargets = async (req, res) => {
   // TODO will need to amend this to get only the targets for the request financial year
+
   try {
     // Find all Locations records
     const targets = await Target.find().exec();

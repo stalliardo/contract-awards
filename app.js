@@ -57,7 +57,7 @@ app.post("/login", (req, res) => {
 
     
     // Dev mode auth below
-    return res.json({message: "Authetication Successful", token});
+    // return res.json({message: "Authetication Successful", token});
 
     ad.authenticate(username, password, function (err, auth) {
         if (err) {

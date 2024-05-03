@@ -196,5 +196,3 @@ exports.generateDataForGivenLocations = async (req, res, locations) => {
   //   location, // Query for the specific location
   //   financialYear, // Query for the specific financial year
   // }).exec();
-
-  // for queries

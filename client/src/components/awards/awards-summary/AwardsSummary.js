@@ -8,7 +8,7 @@ import AwardsSummarySpecialsRow from './AwardsSummarySpecialsRow';
 import { generateTargetAcheivedPercentage, generateTargetAmountToDate } from '../../../utils/financialTotals';
 import AwardsSummaryTotalsRow from './AwardsSummaryTotalsRow';
 import AwardsSummaryMonthlyPerformanceRow from './AwardsSummaryMonthlyPerformanceRow';
-import { COLOURS } from '../../../utils/constants';
+import { COLOURS, ROLES } from '../../../utils/constants';
 import AwardsSummaryCumalitivePerformanceRow from './AwardsSummaryCumalitivePerformanceRow';
 import { generateFinancialYearMonths } from '../../../utils/DateUtils';
 import { useNavigate } from 'react-router-dom';
@@ -46,13 +46,13 @@ const AwardsSummary = () => {
             if (awardsData.coreTotals.length > 0) {
                 setTimeout(() => {
                     setSpinnerComplete(true); // to fix the flash, added a delay
-                }, 750);
+                }, 500);
             } else {
                if(authenticatedUser){
                 dispatch(fetchData({locationData: originalLocations, authenticatedUser})).finally(() => {
                     setTimeout(() => {
                         setSpinnerComplete(true);
-                    }, 750);
+                    }, 500);
                 })
                }
             }
@@ -77,7 +77,7 @@ const AwardsSummary = () => {
             :
             <div className='awards-page-container'>
                 <div className='awards-page-table-container'>
-                    <h3>Contract Awards Summary (TBC)</h3>
+                    <h3>Contract Awards Summary</h3>
                     <table id="awards-table" className='awards-summary-table'>
                         <thead>
                             <tr>
@@ -154,7 +154,10 @@ const AwardsSummary = () => {
                     <p>% T A = Percentage of Target Achieved (TBC)</p>
                 </div>
 
-                <div className='awards-page-table-container'>
+                {
+                    authenticatedUser.role === ROLES.CA01 &&
+                    <>
+                    <div className='awards-page-table-container'>
                     <h3>Company Performance</h3>
                     <table id="awards-table">
                         <thead>
@@ -188,6 +191,9 @@ const AwardsSummary = () => {
                         </tbody>
                     </table>
                 </div>
+                    </>
+                }
+               
             </div>
     )
 }

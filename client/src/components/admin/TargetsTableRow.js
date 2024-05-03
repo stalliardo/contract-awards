@@ -83,7 +83,6 @@ const TargtesTableRow = ({ location, target, targetCategory, data }) => {
                 <td>
                     <div className='blackout-overlay'>
                         <div className='admin-modal'>
-                            <h3>TEMP text generated basde on adding or editing</h3>
                             <input type='number' value={targetState.targetValue} onChange={handleChange} />
                             <div className='admin-modal-buttons'>
                                 <button className='green' onClick={onSetTargetClicked} disabled={saveButtonDisabled}>

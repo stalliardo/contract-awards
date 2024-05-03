@@ -42,6 +42,8 @@ const Auth = () => {
     }).catch((e) => {
       if(e.response.data.error === "Invalid Credentials") {
         setErrorText(e.response.data.error)
+      } else {
+        setErrorText("An error occured. Please try again later. If the issue persists, contact your system administrator.")
       }
     })
   }
@@ -54,6 +56,7 @@ const Auth = () => {
   return (
     <div className='auth-container'>
         <h1>Authentication</h1>
+        <p>Please log in with your wingate credentials using the first.last format.</p>
 
         <form className='auth-form-container' onSubmit={login}>
           <input type='text' name="username" placeholder='John.Smith' onChange={handleChange}/> 

@@ -2,9 +2,7 @@ import React from 'react';
 import './navbar.css';
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import { setIsAuthenticated } from '../../redux/features/auth/authSlice';
-import { removeTokenFromStorage } from '../../utils/localStorageUtils';
-import { clearAuthenticatedUserData } from '../../redux/features/users/usersSlice';
+import { logout } from '../../redux/features/users/usersSlice';
 import { ROLES } from '../../utils/constants';
 
 const Navbar = () => {
@@ -15,9 +13,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const handleSignOut = () => {
-    dispatch(setIsAuthenticated(false));
-    dispatch(clearAuthenticatedUserData())
-    removeTokenFromStorage();
+    dispatch(logout())
     navigate("/auth");
   }
 
@@ -28,7 +24,6 @@ const Navbar = () => {
           auth.isAuthenticated ?
             authenticatedUser.locations?.length ?
             <>
-              <a onClick={handleSignOut}>Sign Out</a>
               {
                 authenticatedUser.role === ROLES.CA01 || authenticatedUser.role === ROLES.CA02 ?
                 <Link to="/admin">Admin</Link>
@@ -38,8 +33,8 @@ const Navbar = () => {
               <Link to="/awards-form">Awards</Link>
               <Link to="/awards-summary">Awards Summary</Link>
               <Link to="/tenders-submitted">Tenders Submitted</Link>
-              <Link to="/dev">Dev</Link>
-              <a>{authenticatedUser?.name}</a>
+              {/* <Link to="/site-admin">Dev</Link> */}
+              <a onClick={handleSignOut}>Sign Out</a>
             </>
             :
             <>

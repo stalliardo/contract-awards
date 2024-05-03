@@ -10,11 +10,8 @@ const getConfig = () => {
     }
 }
 
-exports.getADUsers = async (req, res) => {
-
-
-    // TODO - Am currently checking wheter the lengths differ to determine changes in the data, but what if a user is added to a different folder ie from CA01 to CA02?
-
+exports.updateADUsers = async (req, res) => {
+    console.log('\nupdateADUsersCalled');
     try {
         const ADConfig = getConfig();
         const AD = new ActiveDirectory(ADConfig);
@@ -27,7 +24,7 @@ exports.getADUsers = async (req, res) => {
         }
 
         const formattedData = [];
-        let userLengthFromAD = 0;
+        const mongoUsers = await Users.find().exec();
 
         if (usersDataFromAD.length) {
             usersDataFromAD.forEach((userItem) => {
@@ -36,83 +33,82 @@ exports.getADUsers = async (req, res) => {
 
                 if (userItem.items.length) {
                     userItem.items.forEach((item) => {
-                        formattedObject.items.push({
-                            firstName: item.givenName,
-                            lastName: item.sn,
-                            fullName: item.displayName,
-                        })
+                        const itemToAdd = {};
+                        const matchingUser = mongoUsers.find(mUser => mUser.name === item.displayName);
+
+                        if(matchingUser) {
+                            if(matchingUser.role !== userItem.groupName) {
+                                // the role has changed since last sync
+                                itemToAdd.operation = "Update"
+                            }
+                        }
+                        if(!matchingUser) {
+                            // new user to be added
+                            itemToAdd.operation = "Add";
+                        }
+
+                        itemToAdd.firstName = item.givenName,
+                        itemToAdd.lastName = item.sn,
+                        itemToAdd.fullName = item.displayName
+                        
+                        formattedObject.items.push(itemToAdd);
                     });
                 }
                 formattedData.push(formattedObject);
             })
+        } else {
+            return res.status(404).send({ message: "No users found in active directory" });
+        }
+        const extractedUserNames = [];
 
-            formattedData.forEach((d) => {
-                d.items.forEach((i) => {
-                    // Get the length of the users to used in the following conditional statements
-                    userLengthFromAD++;
+        if(formattedData.length) {
+            formattedData.forEach((fData) => {
+                fData.items.forEach((item) => {
+                    extractedUserNames.push(item.fullName);
                 })
             })
         }
 
-        const allUsers = await Users.find().exec();
+        if(mongoUsers.length >= usersDataFromAD.length) {
+            for(let i = 0; i < mongoUsers.length; i++) {
+                const staleUser = !extractedUserNames.includes(mongoUsers[i].name);
 
-        if(userLengthFromAD !== allUsers.length) {
-            if(allUsers.length) {
-                if(allUsers.length > userLengthFromAD){
-                    // Someone was removed
-                    const namesFromAd = [];
-                    for(let i = 0; i < formattedData.length; i++) {
-                        for(let x = 0; x < formattedData[i].items.length; x++) {
-                            const fullName = formattedData[i].items[x].fullName;
-                            namesFromAd.push(fullName);
-                        }
-                    }
-
-                    for(let i = 0; i < allUsers.length; i++) {
-                        const matchingUser = namesFromAd.find((user) => user === allUsers[i].name);
-                        if(!matchingUser){
-                            //  Remove the old record from the Database...
-                            await Users.findByIdAndDelete(allUsers[i]._id);
-                            console.log('Removing ' + allUsers[i].name + " from the database");
-                        }
-                    }
-
-                } else if(allUsers.length < userLengthFromAD) {
-                    // Someone was added
-                    for(let i = 0; i < formattedData.length; i++) {
-                        const groupName = formattedData[i].groupName;
-    
-                        for(let x = 0; x < formattedData[i].items.length; x++) {
-                            const fullName = formattedData[i].items[x].fullName;
-                            const newItem = allUsers.find((user) => user.name === fullName);
-
-                            if(!newItem) {
-                                const newUser = new Users({name: fullName, role: groupName});
-                                await newUser.save();
-                                console.log('Added new user: ', fullName);
-                            }
-                        }
-                    }
+                if(staleUser){
+                    console.log('Deleting stale user: ', mongoUsers[i].name);
+                    await Users.findByIdAndDelete(mongoUsers[i]._id);
                 }
-            } else {
-                for(let i = 0; i < formattedData.length; i++) {
-                    const groupName = formattedData[i].groupName;
+            }
+        }
 
-                    for(let x = 0; x < formattedData[i].items.length; x++) {
+        if(formattedData.length) {
+            for(let i = 0; i < formattedData.length; i++){
+                for(let x = 0; x < formattedData[i].items.length; x++) {
+
+                    console.log('formattedData[i].items = ', formattedData[i].items[x]);
+                    if(formattedData[i].items[x].operation === "Add") {
+                        console.log('Add operation called');
+                        const newRole = formattedData[i].groupName;
                         const fullName = formattedData[i].items[x].fullName;
 
-                        const newUser = new Users({name: fullName, role: groupName});
+                        const newUser = new Users({name: fullName, role: newRole});
                         await newUser.save();
-                        console.log('New user ' + fullName + " added!");
+                    }
+
+                    if(formattedData[i].items[x].operation === "Update") {
+                        console.log('Update operation called');
+
+                        const newRole = formattedData[i].groupName;
+                        const userId = mongoUsers.find(user => user.name === formattedData[i].items[x].fullName)._id;
+
+                        await Users.updateOne({ _id: userId }, { $set: { role: newRole } });
                     }
                 }
             }
         }
 
-        return res.status(200);
-
+        return res.status(200).send({message: "Successfully updated users!"});
     } catch (error) {
-        return res.status(500).send({ message: "An error occured", error });
+        return res.status(500).send({ error: "An error occured. Error: " + error });
     }
 }
 
@@ -127,11 +123,9 @@ exports.userExists = async (req, res) => {
                 console.log('ERROR: ' + JSON.stringify(err));
                 return res.status(500).send({ message: "An error occured" });
             }
-
             if (exists) {
                 return res.status(200).send({ message: "The user was found" });
             }
-
             return res.status(404).send({ message: "The user was not found" });
         })
     } catch (error) {
@@ -150,11 +144,9 @@ exports.retrieveUsersForGroup = async (req, res) => {
                 console.log('ERROR: ' + JSON.stringify(err));
                 return res.status(500).send({ message: "An error occured" });
             }
-
             if (users) {
                 return res.status(200).send({ message: "Users found", users });
             }
-
             return res.status(404).send({ message: "No users found" });
         })
     } catch (error) {

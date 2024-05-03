@@ -7,14 +7,11 @@ import { useNavigate } from 'react-router-dom';
 const monthsInFinancialOrder = getMonthsInFinancialOrder();
 
 const AwardsSummaryCoreTotalsRow = ({ targetsData, cumalitiveTotal, locationRef, filteredTotals }) => {
-    // TODO - does this need to extracted out into a util?
     const navigate = useNavigate();
 
     const handleTotalClicked = (month) => {
-        // strange bug, when clicking this and then returning to the summary page the totals are being adjusted????/
         navigate(`/awards-form?location=${locationRef}&month=${month}`);
     }
-
 
     const formattedTargetValue = () => {
         const validTarget = targetsData.find((t) => t.location === locationRef);

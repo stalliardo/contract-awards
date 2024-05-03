@@ -22,13 +22,7 @@ exports.getTenders = async (req, res) => {
 exports.putTender = async (req, res) => {
   try {
     const { _id, month, newValue } = req.body;
-
-    console.log('id = ', _id);
-    console.log('month = ', month);
-    console.log('value = ', newValue);
-
     const tender = await Tender.findById(_id);
-
     const item = tender.items.find(item => item.month === month);
 
     if (item) {
@@ -68,8 +62,6 @@ exports.generateDataForNewLocation = async (req, res) => {
   }
 }
 
-// This function is only to be ran once. This will loop all the locations in the datbase and generate default values for each location and each month
-// SITE ADMIN ONLY
 exports.generateInitialData = async (req, res) => {
   try {
     const locations = await Location.find().exec();
@@ -90,8 +82,29 @@ exports.generateInitialData = async (req, res) => {
       promises.push(newTender.save());
     })
 
-    await Promise.all(promises);
+    await Promise.all(promises).then(() => {
+      res.status(201).json({message: "All tenders added successfully"});
+    })
   } catch (error) {
     res.status(500).json({ message: "There was an error generating tenders data.", error })
+  }
+}
+
+exports.generateTenderDataForLocation = async (req, res, location) => {
+  try {
+    const promises = [];
+
+    const data = { location: location, items: [] };
+    months.forEach((month) => {
+      data.items.push({ month, value: 0 })
+    })
+    const newTender = new Tender(data);
+    promises.push(newTender.save());
+
+    await Promise.all(promises);
+
+  } catch (error) {
+    console.log('error generating tender data = ', error);
+    throw error;
   }
 }

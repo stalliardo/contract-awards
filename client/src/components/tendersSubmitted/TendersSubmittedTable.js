@@ -11,6 +11,7 @@ import TendersSpecialsRow from './TendersSpecialsRow';
 import TendersSummaryTotalsRow from './TendersSummaryTotalsRow';
 import TendersSummaryMontlyPerformanceRow from './TendersSummaryMontlyPerformanceRow';
 import TenderSummaryCumalitivePerformanceRow from './TenderSummaryCumalitivePerformanceRow';
+import { ROLES } from '../../utils/constants';
 
 const MonthsForTableHead = ({ k }) => {
     const months = generateFinancialYearMonths();
@@ -22,7 +23,7 @@ const MonthsForTableHead = ({ k }) => {
     return cells
 }
 
-const TendersSubmittedTable = ({data}) => {
+const TendersSubmittedTable = ({ data }) => {
     const originalLocations = useSelector(state => state.location.data);
     const authenticatedUser = useSelector(state => state.users.authenticatedUser);
     const [locations, setLocations] = useState([...authenticatedUser.locations].sort());
@@ -37,7 +38,7 @@ const TendersSubmittedTable = ({data}) => {
     return (
         <div className='awards-page-container'>
             <div className='awards-page-table-container'>
-                <h3>Contract Awards Summary (TBC)</h3>
+                <h3>Tenders Submitted Summary</h3>
                 <table id="awards-table" className='awards-summary-table'>
                     <thead>
                         <tr>
@@ -71,7 +72,7 @@ const TendersSubmittedTable = ({data}) => {
                             locations.map((location, index) => {
                                 if (location !== "M&E" && location !== "Special Projects") {
                                     // return <AwardsSummaryCoreTotalsRow targetsData={awardsData.targets} filteredTotals={generateFilteredTotals(location)} cumalitiveTotal={generateCumalitiveTotals(location)} locationRef={location} key={index} />
-                                    return <TendersSubmittedRow key={index} data={extractedDataForRow(location)}/>
+                                    return <TendersSubmittedRow key={index} data={extractedDataForRow(location)} />
                                 }
                                 return null;
                             })
@@ -81,66 +82,71 @@ const TendersSubmittedTable = ({data}) => {
                         {
                             locations.map((location, index) => {
                                 if (location === "M&E" || location === "Special Projects") {
-                                    return <TendersSpecialsRow key={index} data={extractedDataForRow(location)}/>
+                                    return <TendersSpecialsRow key={index} data={extractedDataForRow(location)} />
                                 }
                                 return null;
                             })
                         }
-                       
-                       <tr className='bold-cells'>
-                                <td>Total</td>
-                                <TendersSummaryTotalsRow
-                                    ukCoreTotals={tenders.ukCoreTotals.uk}
-                                    specialCoreTotals={tenders.ukCoreTotals.specials}
-                                    cumalativeTotals={parseInt(tenders.ukCumalitiveTotal) + parseInt(tenders.specialCumalitiveTotals)}
-                                    // ukAndSpecialTargetTotal={awardsData.ukAndSpecialTargetTotal}
-                                />
-                            </tr>
+
+                        <tr className='bold-cells'>
+                            <td>Total</td>
+                            <TendersSummaryTotalsRow
+                                ukCoreTotals={tenders.ukCoreTotals.uk}
+                                specialCoreTotals={tenders.ukCoreTotals.specials}
+                                cumalativeTotals={parseInt(tenders.ukCumalitiveTotal) + parseInt(tenders.specialCumalitiveTotals)}
+                            // ukAndSpecialTargetTotal={awardsData.ukAndSpecialTargetTotal}
+                            />
+                        </tr>
                     </tbody>
                 </table>
                 <p>% T A = Percentage of Target Achieved (TBC)</p>
             </div>
 
-            <div className='awards-page-table-container'>
-                    <h3>Company Performance</h3>
-                    <table id="awards-table">
-                        <thead>
-                            <tr>
-                                <th>Month</th>
-                                <MonthsForTableHead k="2"/>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Plus/Minus</td>
-                                <TendersSummaryMontlyPerformanceRow 
-                                    monthlyCoreTotals={tenders.ukCoreTotals.all}
-                                    monthlyTargetTotal={awards.tendersSubmittedTargets.reduce((prev, current) => parseInt(prev) + parseInt(current.targetValue), 0)} 
-                                />
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            {
+                authenticatedUser.role === ROLES.CA01 &&
+                <>
+                    <div className='awards-page-table-container'>
+                        <h3>Company Performance</h3>
+                        <table id="awards-table">
+                            <thead>
+                                <tr>
+                                    <th>Month</th>
+                                    <MonthsForTableHead k="2" />
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Plus/Minus</td>
+                                    <TendersSummaryMontlyPerformanceRow
+                                        monthlyCoreTotals={tenders.ukCoreTotals.all}
+                                        monthlyTargetTotal={awards.tendersSubmittedTargets.reduce((prev, current) => parseInt(prev) + parseInt(current.targetValue), 0)}
+                                    />
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-                <div className='awards-page-table-container'>
-                    <table id="awards-table">
-                        <thead>
-                            <tr>
-                                <th>Cumalitive</th>
-                                <MonthsForTableHead k="3"/>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Plus/Minus</td>
-                                <TenderSummaryCumalitivePerformanceRow 
-                                   monthlyCoreTotals={tenders.ukCoreTotals.all}
-                                   monthlyTargetTotal={awards.tendersSubmittedTargets.reduce((prev, current) => parseInt(prev) + parseInt(current.targetValue), 0)} 
-                                />
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                    <div className='awards-page-table-container'>
+                        <table id="awards-table">
+                            <thead>
+                                <tr>
+                                    <th>Cumalitive</th>
+                                    <MonthsForTableHead k="3" />
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Plus/Minus</td>
+                                    <TenderSummaryCumalitivePerformanceRow
+                                        monthlyCoreTotals={tenders.ukCoreTotals.all}
+                                        monthlyTargetTotal={awards.tendersSubmittedTargets.reduce((prev, current) => parseInt(prev) + parseInt(current.targetValue), 0)}
+                                    />
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </>
+            }
         </div>
     )
 }

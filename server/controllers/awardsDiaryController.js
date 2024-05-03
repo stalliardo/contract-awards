@@ -1,23 +1,22 @@
 const AwardsDiary = require('../models/AwardsDiary');
+const Location = require('../models/Location');
+const { generateTenderDataForLocation } = require('./tendersController');
 
 const months = [
   'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September'
 ];
 
-const LOCATIONS = {
-  AVONMOUTH: "Avonmouth",
-  AWE: "AWE",
-  BASINGSTOKE: "Basingstoke",
-  BIRMINGHAM: "Birmingham",
-  EASTERN: "Eastern",
-  FELTHAM: "Feltham",
-  GLASGOW: "Glasgow",
-  LEEDS: "Leeds",
-  LONDON: "London",
-  MANCHESTER: "Manchester",
-  NEWCASTLE: "Newcastle",
-  SPECIAL_PROJECTS: "Special Projects",
-  M_AND_E: "M&E"
+
+// Function to get the financial year based on the current date
+function getFinancialYear() {
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth(); // 0 = January, 1 = February, ..., 11 = December
+
+  // If the current month is October or later, return the current year
+  // Otherwise, return the previous year
+  const financialYearStartMonth = 9; // October (index-based)
+  return currentMonth >= financialYearStartMonth ? currentYear : currentYear - 1;
 }
 
 exports.createAwardsDiary = async (req, res) => {
@@ -83,13 +82,14 @@ const createAwardsDiariesForYearParentFunction = async (req, res, location) => {
   const promises = [];
   const data = []; // for storing the AwardsDiary instances
 
+  const currentFinancialYear = getFinancialYear();
   let counter = 0;
 
   try {
     months.forEach(async (month) => {
       data.push(new AwardsDiary({
         location: location || req.body.location,
-        year: counter < 3 ? 2023 : 2024,
+        year: currentFinancialYear + (counter >= 3 ? 1 : 0), // If counter < 3, it's current financial year, otherwise the next. old mehtod -> counter < 3 ? 2023 : 2024,
         month
       }))
       // await awardsDiary.save();
@@ -113,19 +113,45 @@ exports.createAwardsDiariesForYear = async (req, res) => {
 }
 
 exports.generateAllDataForYear = async (req, res) => {
-  // loop each location
   const locationAddedPromises = [];
 
-  Object.values(LOCATIONS).forEach((location) => {
-    locationAddedPromises.push(createAwardsDiariesForYearParentFunction(req, res, location))
+  // get the real locations stored in the db
+  const locations = await Location.find().exec();
+
+  if (!locations || locations.length === 0) {
+    return res.status(404).json({ error: 'Locations not found' });
+  }
+
+  locations.forEach((location) => {
+    locationAddedPromises.push(createAwardsDiariesForYearParentFunction(req, res, location.name));
   })
 
   try {
     await Promise.all(locationAddedPromises);
-    res.status(201).send({message: "All records successfully created!"});
+    res.status(201).send({ message: "All records successfully created!" });
 
   } catch (error) {
     console.log('Error while calling promise.all from generateAllData: E : ', error);
     res.status(500).send(error);
-  } 
+  }
+}
+
+// Used when a director adds locations. Adds default data to the database
+exports.generateDataForGivenLocations = async (req, res, locations) => {
+  const locationAddedPromises = [];
+
+  for(let i = 0; i < locations.length; i++) {
+    const locationExists = await AwardsDiary.findOne({location: locations[i]})
+
+    if(!locationExists){
+      locationAddedPromises.push(createAwardsDiariesForYearParentFunction(req, res, locations[i]));
+      locationAddedPromises.push(generateTenderDataForLocation(req, res, locations[i]));
+    }
+  }
+  
+  try {
+    await Promise.all(locationAddedPromises);
+  } catch (error) {
+    throw error;
+  }
 }

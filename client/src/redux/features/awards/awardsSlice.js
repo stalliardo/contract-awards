@@ -28,6 +28,11 @@ export const awardsSlice = createSlice({
     setLoading: (state, action) => {
       state.loading = action.payload
     },
+
+    resetState: (state) => {
+      state.coreTotals = [];
+      state = initialState; 
+    }
   },
 
   extraReducers: (builder) => {
@@ -124,6 +129,6 @@ export const awardsSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setLoading, getData } = awardsSlice.actions;
+export const { setLoading, getData, resetState } = awardsSlice.actions;
 
 export default awardsSlice.reducer;

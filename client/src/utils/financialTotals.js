@@ -68,7 +68,6 @@ export const generateUkCoreTotals = (data) => {
     return totals;
 }
 
-
 export const generateUkCoreTenderTotals = (data, authenticatedUser) => {
     const totals = {
         uk: [],
@@ -111,8 +110,6 @@ export const generateUkCoreTenderTotals = (data, authenticatedUser) => {
             specialsTotal = 0;
         })
     }
-
-    
 
     return totals;
 }

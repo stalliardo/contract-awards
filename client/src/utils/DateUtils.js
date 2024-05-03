@@ -82,3 +82,46 @@ export const getDaysSinceOct01 = () => {
     return daysDifference;
 
 }
+
+// Function to get the current financial year in the format "23/24"
+export const getCurrentFinancialYear = () =>  {
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth(); // 0 for January, 11 for December
+  
+    if (currentMonth >= 9) {
+      // October (9) or later is the start of a new financial year
+      const startYear = currentYear;
+      const endYear = currentYear + 1;
+      return `${startYear.toString().slice(-2)}/${endYear.toString().slice(-2)}`;
+    } else {
+      // Before October, we're still in the previous financial year
+      const startYear = currentYear - 1;
+      const endYear = currentYear;
+      return `${startYear.toString().slice(-2)}/${endYear.toString().slice(-2)}`;
+    }
+  }
+
+  // Function to generate a list of financial year strings
+  export const generateFinancialYearOptions = (baseYear = '23/24') => {
+    const currentFinancialYear = getCurrentFinancialYear();
+  
+    const startYear = parseInt(currentFinancialYear.slice(0, 2), 10);
+    const endYear = parseInt(currentFinancialYear.slice(3, 5), 10);
+  
+    const baseStartYear = parseInt(baseYear.slice(0, 2), 10);
+    const baseEndYear = parseInt(baseYear.slice(3, 5), 10);
+  
+    const financialYears = [];
+    let currentStart = startYear;
+    let currentEnd = endYear;
+  
+    while (currentStart >= baseStartYear) {
+      financialYears.push(`${currentStart.toString().padStart(2, '0')}/${currentEnd.toString().padStart(2, '0')}`);
+      currentStart -= 1;
+      currentEnd -= 1;
+    }
+  
+    return financialYears.reverse(); // Optional: Reverse to display in chronological order
+  }
+  

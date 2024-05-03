@@ -8,7 +8,7 @@ import AwardsSummarySpecialsRow from './AwardsSummarySpecialsRow';
 import { generateTargetAcheivedPercentage, generateTargetAmountToDate } from '../../../utils/financialTotals';
 import AwardsSummaryTotalsRow from './AwardsSummaryTotalsRow';
 import AwardsSummaryMonthlyPerformanceRow from './AwardsSummaryMonthlyPerformanceRow';
-import { COLOURS } from '../../../utils/constants';
+import { COLOURS, ROLES } from '../../../utils/constants';
 import AwardsSummaryCumalitivePerformanceRow from './AwardsSummaryCumalitivePerformanceRow';
 import { generateFinancialYearMonths } from '../../../utils/DateUtils';
 import { useNavigate } from 'react-router-dom';
@@ -154,7 +154,10 @@ const AwardsSummary = () => {
                     <p>% T A = Percentage of Target Achieved (TBC)</p>
                 </div>
 
-                <div className='awards-page-table-container'>
+                {
+                    authenticatedUser.role === ROLES.CA01 &&
+                    <>
+                    <div className='awards-page-table-container'>
                     <h3>Company Performance</h3>
                     <table id="awards-table">
                         <thead>
@@ -188,6 +191,9 @@ const AwardsSummary = () => {
                         </tbody>
                     </table>
                 </div>
+                    </>
+                }
+               
             </div>
     )
 }

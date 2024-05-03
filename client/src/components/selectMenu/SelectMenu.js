@@ -24,6 +24,7 @@ const SelectMenu = ({ value, label, name, handleItemSelection, menuItems, placeh
     }
 
     handleItemSelection(item);
+
   }
 
   return (

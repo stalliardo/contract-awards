@@ -19,7 +19,6 @@ const tenderRoutes = require("./server/routes/tenderRoutes");
 const jwt = require("./server/utils/JWTUtils");
 
 const { generateTableForYear } = require("./server/utils/AwardsDiaryUtils");
-
 require('dotenv').config()
 
 const app = express();

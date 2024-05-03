@@ -12,6 +12,7 @@ const rootReducer = (state, action) => {
   if(action.type === "users/logout") {
     console.log('LOG out called');
     return combinedReducers(undefined, action)
+
   }
 
   return combinedReducers(state, action)

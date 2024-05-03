@@ -24,7 +24,6 @@ const Navbar = () => {
           auth.isAuthenticated ?
             authenticatedUser.locations?.length ?
             <>
-              <a onClick={handleSignOut}>Sign Out</a>
               {
                 authenticatedUser.role === ROLES.CA01 || authenticatedUser.role === ROLES.CA02 ?
                 <Link to="/admin">Admin</Link>
@@ -35,7 +34,7 @@ const Navbar = () => {
               <Link to="/awards-summary">Awards Summary</Link>
               <Link to="/tenders-submitted">Tenders Submitted</Link>
               {/* <Link to="/site-admin">Dev</Link> */}
-              <a>{authenticatedUser?.name}</a>
+              <a onClick={handleSignOut}>Sign Out</a>
             </>
             :
             <>

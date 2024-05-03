@@ -1,22 +1,17 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './select-menu.css';
-
-const menuOptions = [
-  {value: "Oct-23"},
-  {value: "Nov-23"},
-  {value: "Dec-23"},
-  {value: "Jan-24"},
-  {value: "Feb-24"},
-  {value: "Mar-24"},
-]
 
 const MenuItem = ({ value, handleClick }) => {
   return <div className="item" onClick={handleClick}>{value}</div>
 }
 
-const SelectMenu = ({ value, label, name, handleChange, menuItems, placeholder }) => {
+const SelectMenu = ({ value, label, name, handleItemSelection, menuItems, placeholder, allSettingPlaceholder = true }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [defaultValue, setDefaultValue] = useState(placeholder);
+
+  useEffect(() => {
+    setDefaultValue(placeholder);
+  }, [placeholder])
 
   const toggleIsOpen = () => {
     setIsOpen((prev) => !prev);
@@ -24,9 +19,12 @@ const SelectMenu = ({ value, label, name, handleChange, menuItems, placeholder }
 
   const handleMenuItemSelected = (item) => {
     setIsOpen(false);
-    setDefaultValue(item.value);
-    // TODO update table data based off of selection
-    // TODO update table date / title 
+    if(allSettingPlaceholder){
+      setDefaultValue(item.value);
+    }
+
+    handleItemSelection(item);
+
   }
 
   return (
@@ -37,7 +35,7 @@ const SelectMenu = ({ value, label, name, handleChange, menuItems, placeholder }
       </div>
       <div className={`select-menu-dropdown-container ${isOpen ? "open" : ""}`}>
         {
-          menuOptions.map((item, index) => (
+          menuItems.map((item, index) => (
             <MenuItem  value={item.value} key={index} handleClick={() => handleMenuItemSelected(item)}/>
           ))
         }

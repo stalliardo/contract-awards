@@ -2,39 +2,48 @@ import React, { useEffect, useState } from 'react'
 import './auth.css' 
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { addTokenToStorage, getTokenFromStorage } from '../../utils/localStorageUtils';
+import { useDispatch } from 'react-redux';
+import { setIsAuthenticated } from '../../redux/features/auth/authSlice';
 
 const Auth = () => {
-  useEffect(() => {
-    console.log('getting env var = ', process.env.REACT_APP_TEST);
-    axios.get("/api");
-  }, [])
-
   const initialFormData = {username: "", password: ""};
   const [formData, setFormData] = useState(initialFormData);
   const [errorText, setErrorText] = useState("");
 
+  const [logInButtonDisabled, setLogInButtonDisabled] = useState(true);
+
+  useEffect(() => {
+    if(formData.username.length > 2 && formData.password.length > 5) {
+      setLogInButtonDisabled(false);
+    } else {
+      setLogInButtonDisabled(true);
+    }
+  }, [formData])
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const login = (e) => {
     e.preventDefault();
 
     // TODO add disabled state to buttons
-    console.log('login called + formdata = ', formData);
-
     axios.post("/login", {
       username: formData.username,
       password: formData.password
     }).then((res) => {  
-      console.log('post login success + res = ', res);
-      navigate("/contract-form");
+      const token = res.data.token;
+
+      addTokenToStorage(token);
+      dispatch(setIsAuthenticated(true));
+      navigate("/");
 
       setErrorText("");
     }).catch((e) => {
-      console.log('Error posting login data = ', e);
-      console.log('e.response', e.response.data.error);
-
       if(e.response.data.error === "Invalid Credentials") {
         setErrorText(e.response.data.error)
+      } else {
+        setErrorText("An error occured. Please try again later. If the issue persists, contact your system administrator.")
       }
     })
   }
@@ -46,16 +55,17 @@ const Auth = () => {
 
   return (
     <div className='auth-container'>
-        <h1>Contract Awards Authentication</h1>
+        <h1>Authentication</h1>
+        <p>Please log in with your wingate credentials using the first.last format.</p>
 
         <form className='auth-form-container' onSubmit={login}>
           <input type='text' name="username" placeholder='John.Smith' onChange={handleChange}/> 
           <input type='password' name="password" placeholder='Password' onChange={handleChange}/> 
-          <button>Log In</button>
+          <button disabled={logInButtonDisabled}>Log In</button>
           {errorText ? <p>{errorText}</p> : null}
         </form>
     </div>
   )
 }
 
-export default Auth
+export default Auth;

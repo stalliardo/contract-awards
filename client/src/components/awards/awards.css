@@ -1,5 +1,4 @@
 .awards-page-container {
-    /* border: 1px solid red; */
     width: 90%;
     margin: 20px auto;
     height: fit-content;
@@ -9,18 +8,40 @@
     }
 }
 
-.awards-select-menu-container {
-    /* border: 1px solid green; */
-    width: 300px;
+.awards-page-title-and-button {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.awards-page-title-and-button.admin {
+    h3 {
+        margin-top: 0;
+    }
+}
+
+.awards-page-location-select-container {
+    width: 20%;
+    margin: 60px auto 0;
     height: 30px;
 }
 
+.awards-select-menu-container {
+    width: 20%;
+    height: 30px;
+    margin-top: 40px;
+}
+
 .awards-page-table-container {
-    /* border: 1px solid blue; */
     width: 100%;
-    /* TODO */
     height: fit-content; 
-    margin: 20px auto;
+    margin: 10px auto;
+
+    h3 {
+        
+        margin: 40px 0 0;
+    }
 
     table {
         margin-top: 6px;
@@ -34,13 +55,20 @@
         display: flex;
         flex-direction: column;
         text-align: center;
+      
+        h3 {
+            margin: 0 0 10px 0;
+        }
     }
 
     .cumulative-totals-m-a {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-    }
 
-    
+        div {
+            text-align: center;
+        }
+    }   
+
 }

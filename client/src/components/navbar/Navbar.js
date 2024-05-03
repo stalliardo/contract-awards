@@ -4,6 +4,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../redux/features/users/usersSlice';
 import { ROLES } from '../../utils/constants';
+import SelectMenu from '../selectMenu/SelectMenu';
+import { generateFinancialYearOptions } from '../../utils/DateUtils';
+
+const menuItems = generateFinancialYearOptions().map((item) => ({value: item}));
 
 const Navbar = () => {
   const auth = useSelector(state => state.auth);
@@ -17,6 +21,10 @@ const Navbar = () => {
     navigate("/auth");
   }
 
+  const onFinancialYearSelected = (year) => {
+    console.log('year = ', year);
+  }
+
   return (
     <nav className='navbar-container'>
       <div className='nav-end-container'>
@@ -24,6 +32,12 @@ const Navbar = () => {
           auth.isAuthenticated ?
             authenticatedUser.locations?.length ?
             <>
+              {
+                authenticatedUser.role === ROLES.CA01 &&
+                <div className='navbar-select-container'>
+                  <SelectMenu placeholder={menuItems[menuItems.length - 1].value} menuItems={menuItems} handleItemSelection={onFinancialYearSelected} />
+                </div>
+              }
               {
                 authenticatedUser.role === ROLES.CA01 || authenticatedUser.role === ROLES.CA02 ?
                 <Link to="/admin">Admin</Link>
@@ -33,7 +47,9 @@ const Navbar = () => {
               <Link to="/awards-form">Awards</Link>
               <Link to="/awards-summary">Awards Summary</Link>
               <Link to="/tenders-submitted">Tenders Submitted</Link>
-              {/* <Link to="/site-admin">Dev</Link> */}
+
+              
+
               <a onClick={handleSignOut}>Sign Out</a>
             </>
             :

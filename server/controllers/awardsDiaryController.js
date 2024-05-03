@@ -1,5 +1,6 @@
 const AwardsDiary = require('../models/AwardsDiary');
 const Location = require('../models/Location');
+const { getFinancialYearString } = require('../utils/DateUtils');
 const { generateTenderDataForLocation } = require('./tendersController');
 
 const months = [
@@ -78,11 +79,10 @@ exports.getAllAwardsDiary = async (req, res) => {
   }
 };
 
-const createAwardsDiariesForYearParentFunction = async (req, res, location) => {
+const createAwardsDiariesForYearParentFunction = async (req, res, location, financialYearString, currentFinancialYear) => {
   const promises = [];
   const data = []; // for storing the AwardsDiary instances
 
-  const currentFinancialYear = getFinancialYear();
   let counter = 0;
 
   try {
@@ -90,6 +90,7 @@ const createAwardsDiariesForYearParentFunction = async (req, res, location) => {
       data.push(new AwardsDiary({
         location: location || req.body.location,
         year: currentFinancialYear + (counter >= 3 ? 1 : 0), // If counter < 3, it's current financial year, otherwise the next. old mehtod -> counter < 3 ? 2023 : 2024,
+        financialYear: financialYearString,
         month
       }))
       // await awardsDiary.save();
@@ -117,13 +118,15 @@ exports.generateAllDataForYear = async (req, res) => {
 
   // get the real locations stored in the db
   const locations = await Location.find().exec();
+  const currentFinancialYear = getFinancialYear();
+  const financialYearString = getFinancialYearString();
 
   if (!locations || locations.length === 0) {
     return res.status(404).json({ error: 'Locations not found' });
   }
 
   locations.forEach((location) => {
-    locationAddedPromises.push(createAwardsDiariesForYearParentFunction(req, res, location.name));
+    locationAddedPromises.push(createAwardsDiariesForYearParentFunction(req, res, location.name, financialYearString, currentFinancialYear));
   })
 
   try {
@@ -139,12 +142,14 @@ exports.generateAllDataForYear = async (req, res) => {
 // Used when a director adds locations. Adds default data to the database
 exports.generateDataForGivenLocations = async (req, res, locations) => {
   const locationAddedPromises = [];
+  const currentFinancialYear = getFinancialYear();
+  const financialYearString = getFinancialYearString();
 
   for(let i = 0; i < locations.length; i++) {
     const locationExists = await AwardsDiary.findOne({location: locations[i]})
 
     if(!locationExists){
-      locationAddedPromises.push(createAwardsDiariesForYearParentFunction(req, res, locations[i]));
+      locationAddedPromises.push(createAwardsDiariesForYearParentFunction(req, res, locations[i], financialYearString, currentFinancialYear));
       locationAddedPromises.push(generateTenderDataForLocation(req, res, locations[i]));
     }
   }

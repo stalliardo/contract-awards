@@ -31,7 +31,6 @@ exports.addTarget = async (req, res) => {
 
 exports.getTargets = async (req, res) => {
   // TODO will need to amend this to get only the targets for the request financial year
-
   try {
     // Find all Locations records
     const targets = await Target.find().exec();

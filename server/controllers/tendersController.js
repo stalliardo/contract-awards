@@ -2,6 +2,7 @@ const Tender = require("../models/Tenders");
 const Location = require("../models/Location");
 const { getFinancialYearString } = require("../utils/DateUtils");
 
+
 const months = [
   'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September'
 ];
@@ -100,7 +101,7 @@ exports.generateTenderDataForLocation = async (req, res, location) => {
     const promises = [];
     const financialYearString = getFinancialYearString();
     const data = { location: location, financialYear: financialYearString, items: [] };
-    
+
     months.forEach((month) => {
       data.items.push({ month, value: 0 })
     })

@@ -35,6 +35,7 @@ const Navbar = () => {
               {
                 authenticatedUser.role === ROLES.CA01 &&
                 <div className='navbar-select-container'>
+                  {/* the below menu.items.length wont work, need to get the current financial year and use that as default */}
                   <SelectMenu placeholder={menuItems[menuItems.length - 1].value} menuItems={menuItems} handleItemSelection={onFinancialYearSelected} />
                 </div>
               }

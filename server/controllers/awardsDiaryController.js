@@ -155,3 +155,40 @@ exports.generateDataForGivenLocations = async (req, res, locations) => {
     throw error;
   }
 }
+
+// Database Rebuild....
+  // Admin Director can view previous years but cannot edit previous years.
+  // Concerns: 
+    // How is the data generated on ther frontend?
+    // Will loading previous years use current data like locations, users, targets etc
+    // Locations:
+      // Could be an issue as the locations are used by the frontend when the data is being calculated
+      // So if an old year is selected the awardsdiary totals will be generated using the current locations from the database???
+
+  // Models that will require structre change:
+    // 1 - awardsDiaries
+    // 2 - targets
+    // 3 - tenders
+    // awardsdiariItems will not need changing as they are associated with a awardsDiary on creation (test)
+
+  // Will need to generate this: const financialYear = '2324';
+  // And add it everywhere its needed so:
+    // 1 - add it to awardsDiary docs
+    // 2 - Add it to target docs
+    // 3 - Add it to tenders docs
+
+  //   const awardsDiarySchema = new mongoose.Schema({
+  //     year: {type: String, required: true},
+  //     financialYear: {type: String, required: true}
+  //     month: { type: String, required: true },
+  //     location: { type: String, required: true },
+  //     items: [{ type: mongoose.Schema.Types.ObjectId, ref: 'AwardsDiaryItem' }]
+  // });
+
+  // Will then use:
+  // const awardsForLocation = await AwardsDiary.find({
+  //   location, // Query for the specific location
+  //   financialYear, // Query for the specific financial year
+  // }).exec();
+
+  // for queries

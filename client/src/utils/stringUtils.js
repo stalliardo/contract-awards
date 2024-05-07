@@ -14,3 +14,7 @@ export const extractFirstAndLastName = (email) => {
 
     return firstName + " " + lastName;
 }
+
+export const removeSlashFromyearString = (str) => {
+    return str.split("/").join("");
+}

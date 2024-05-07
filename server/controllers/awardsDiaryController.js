@@ -34,23 +34,34 @@ exports.createAwardsDiary = async (req, res) => {
 
 // Return all record for current year based on location
 exports.getAwardsForLocation = async (req, res) => {
-  const { location } = req.query;
+  const { location, financialYear } = req.query;
+
+  console.log('Financial year from location get:', financialYear);
 
   try {
-    // Find all AwardsDiary records for the given location
-    const awardsForLocation = await AwardsDiary.find({ location }).exec();
-    // const awardsForLocation = await AwardsDiary.find({ location: { $regex: new RegExp('^' + location + '$', 'i') } }).exec();
+    // Build the query object
+    const query = {};
 
+    if (location) {
+      query.location = { $regex: new RegExp('^' + location + '$', 'i') }; // Case-insensitive match
+    }
+
+    if (financialYear) {
+      query.financialYear = financialYear; // Exact match
+    }
+
+    // Find AwardsDiary records that match the location and financialYear
+    const awardsForLocation = await AwardsDiary.find(query).exec();
 
     // Populate the 'items' field for each AwardsDiary record
     await AwardsDiary.populate(awardsForLocation, { path: 'items' });
 
-    res.status(201).send(awardsForLocation);
+    res.status(200).json(awardsForLocation); // Return successful GET response
   } catch (error) {
-    res.status(400);
-    console.log('Error getting all records for location: ', error);
+    console.error('Error getting records for location:', error);
+    res.status(500).json({ error: 'Internal server error' }); // Return server error
   }
-}
+};
 
 // Return all record for current year based on location
 exports.getAllAwards = async (req, res) => {

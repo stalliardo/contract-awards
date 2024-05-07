@@ -2,23 +2,18 @@ import React from 'react';
 import './navbar.css';
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../../redux/features/users/usersSlice';
+import { logout, setSelectedFinancialYear } from '../../redux/features/users/usersSlice';
 import { ROLES } from '../../utils/constants';
 import SelectMenu from '../selectMenu/SelectMenu';
 import { generateFinancialYearOptions, getFinancialYearString } from '../../utils/DateUtils';
-import { removeSlashFromyearString } from '../../utils/stringUtils';
+import { addSlashToYearString, removeSlashFromyearString } from '../../utils/stringUtils';
 
-const menuItems = generateFinancialYearOptions().map((item) => ({value: item}));
-
-const yearString = getFinancialYearString();
-
-removeSlashFromyearString(menuItems[0].value)
-
-console.log('ys = ', yearString);
+const menuItems = generateFinancialYearOptions().map((item) => ({value: addSlashToYearString(item)}));
 
 const Navbar = () => {
   const auth = useSelector(state => state.auth);
   const authenticatedUser = useSelector(state => state.users.authenticatedUser);
+  const selectedFinancialYear = useSelector(state => state.users.selectedFinancialYear);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -29,6 +24,9 @@ const Navbar = () => {
   }
 
   const onFinancialYearSelected = (year) => {
+
+    dispatch(setSelectedFinancialYear(removeSlashFromyearString(year.value)));
+
     console.log('year = ', year);
   }
 
@@ -43,7 +41,7 @@ const Navbar = () => {
                 authenticatedUser.role === ROLES.CA01 &&
                 <div className='navbar-select-container'>
                   {/* the below menu.items.length wont work, need to get the current financial year and use that as default */}
-                  <SelectMenu placeholder={menuItems[0].value} menuItems={menuItems} handleItemSelection={onFinancialYearSelected} />
+                  <SelectMenu placeholder={addSlashToYearString(selectedFinancialYear)} menuItems={menuItems} handleItemSelection={onFinancialYearSelected} />
                 </div>
               }
               {
@@ -78,6 +76,10 @@ const Navbar = () => {
 }
 
 export default Navbar;
+
+// TODOs
+  // - Select menu should only be available on the admin page?
+  // - Select menu onClick will display a notification modal
 
 // Will Load the current year by default
 // The selectmenu options will contain all options from 23/24 so 23/24, 24/25, 25/26 etc

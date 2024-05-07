@@ -51,7 +51,7 @@ const AwardsTable = ({ locations }) => {
         }
 
         let encodedLocation = encodeURIComponent(location);
-        let url = `/api/awards-diary/location?location=${encodedLocation}`
+        let url = `/api/awards-diary/location?location=${encodedLocation}&financialYear=${user.selectedFinancialYear}`
 
         axios.get(url).then((response) => {
             const filteredLocationData = response.data.find((item) => item.month === month);

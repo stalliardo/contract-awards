@@ -118,7 +118,7 @@ export const getCurrentFinancialYear = () =>  {
     let currentEnd = endYear;
   
     while (currentStart >= baseStartYear) {
-      financialYears.push(`${currentStart.toString().padStart(2, '0')}/${currentEnd.toString().padStart(2, '0')}`);
+      financialYears.push(`${currentStart.toString().padStart(2, '0')}${currentEnd.toString().padStart(2, '0')}`);
       currentStart -= 1;
       currentEnd -= 1;
     }

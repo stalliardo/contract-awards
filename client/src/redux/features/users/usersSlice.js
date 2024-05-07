@@ -31,6 +31,11 @@ export const usersSlice = createSlice({
       state.authenticatedUser = {};
     },
 
+    setSelectedFinancialYear: (state, action) => {
+
+      state.selectedFinancialYear = action.payload;
+    },
+
     logout: (state) => {
       // This will be caught in the index.js file to trigger a state wipe
     }
@@ -126,6 +131,6 @@ export const usersSlice = createSlice({
   }
 })
 
-export const { setLoading, setSignedInUsersFullName, clearAuthenticatedUserData, logout } = usersSlice.actions;
+export const { setLoading, setSignedInUsersFullName, clearAuthenticatedUserData, logout, setSelectedFinancialYear } = usersSlice.actions;
 
 export default usersSlice.reducer;

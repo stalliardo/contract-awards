@@ -37,3 +37,41 @@
         width: 100px;
     }
 }
+
+.navbar-modal {
+    position: fixed;
+    height: fit-content;
+    width: 30%;
+    top: 50vh;
+    left: 50vw;
+    transform: translate(-50%, -50%);
+    background-color: rgb(255, 255, 255);
+    padding: 8px 12px;
+    border: 2px solid grey;
+    border-radius: 4px;
+
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+
+    h3 {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    p {
+        margin-top: 2px;
+        text-align: center;
+    }
+
+    .admin-modal-buttons {
+        display: flex;
+        width: 60%;
+        margin: 10px auto;
+        justify-content: space-between;
+    }
+
+    button {
+        width: 40%;
+    }
+}

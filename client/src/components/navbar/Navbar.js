@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './navbar.css';
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,13 +7,28 @@ import { ROLES } from '../../utils/constants';
 import SelectMenu from '../selectMenu/SelectMenu';
 import { generateFinancialYearOptions, getFinancialYearString } from '../../utils/DateUtils';
 import { addSlashToYearString, removeSlashFromyearString } from '../../utils/stringUtils';
+import YearChangeWarningModal from './YearChangeWarningModal';
 
-const menuItems = generateFinancialYearOptions().map((item) => ({value: addSlashToYearString(item)}));
+const tempItems = [
+  "2122",
+  "2223",
+  "2324",
+  "2425",
+  "2526",
+  "2627",
+]
+
+const menuItems = tempItems.map((item) => ({value: addSlashToYearString(item)}));
+// const menuItems = generateFinancialYearOptions().map((item) => ({value: addSlashToYearString(item)}));
 
 const Navbar = () => {
   const auth = useSelector(state => state.auth);
   const authenticatedUser = useSelector(state => state.users.authenticatedUser);
   const selectedFinancialYear = useSelector(state => state.users.selectedFinancialYear);
+
+  const [selectedYear, setselectedYear] = useState("");
+
+  const [showWarningModal, setShowWarningModal] = useState(true);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -25,9 +40,18 @@ const Navbar = () => {
 
   const onFinancialYearSelected = (year) => {
 
-    dispatch(setSelectedFinancialYear(removeSlashFromyearString(year.value)));
+    // dispatch(setSelectedFinancialYear(removeSlashFromyearString(year.value)));
 
-    console.log('year = ', year);
+    // console.log('year = ', year);
+
+    // display a modal
+    setselectedYear(year);
+    setShowWarningModal(true);
+    
+  }
+
+  const onProceed = () => {
+    console.log('selected = ', selectedYear);
   }
 
   return (
@@ -71,6 +95,11 @@ const Navbar = () => {
             null
         }
       </div>
+
+      {
+        showWarningModal &&
+        <YearChangeWarningModal onClose={() => setShowWarningModal(false)} onProceed={onProceed}/>
+      }
     </nav>
   )
 }
@@ -105,3 +134,9 @@ export default Navbar;
 // Stage 2 - Check what edit operations require:
   // When updating / editing an item, will the year be required?
   // If updating / edinting then no ^, the year should already be set
+
+// Next issue is the locations. Say in year 2324 there are 6 locations and data is set to each of these nice
+  // Then, five years later there are now 20 locations again, fine, but.. what happends when a user loads the data from 5 years ago there will only be 5 locations saved but there will be 20 locations in the db....
+
+
+  // And what if an old location no longer exists? It wont be displayed in the table at all

@@ -89,4 +89,17 @@ export default Navbar;
     // B - Set the financialYear in state so any page changes where data is reloaded loads the correct data
     // C - Will need to detect if in edit or readOnly mode and disbable certain actions if in readonly mode
     // D - Will need to format the string 23/24 to 2324 so this can be used to filter by financial year - So when user clicks Select menu item - convert using the removeSlashFromyearString this can then be used to query the year in the db
-    
+
+
+// Stage 1 - Current year, adding to state and passing year tom fetch api calls:
+  // - App Loads, user is authed, then user data is fetched from fetchUsers
+  // When loaded the AwardsTable loads the locaiton data via let url = `/api/awards-diary/location?location=${encodedLocation}`
+  // When entering awardsSummary route: the data is fetcvhed from two locations
+    // 1 - for the awardsData: /api/awards-diary/getAllAwards
+    // 2 - for the targets data: /api/targets
+  // All that needs to happen is to pass the year "2324" along with any request that gets year dependant data.
+  // Frontend needs to know if the year selected from the navbar select memu is the current year or not then set the readOnly flag based on that.
+
+// Stage 2 - Check what edit operations require:
+  // When updating / editing an item, will the year be required?
+  // If updating / edinting then no ^, the year should already be set

@@ -8,6 +8,7 @@ const months = [
 ];
 
 exports.getTenders = async (req, res) => {
+    // TODO get via financialYear
   try {
     const tenders = await Tender.find().exec();
 

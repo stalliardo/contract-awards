@@ -63,22 +63,26 @@ exports.getAwardsForLocation = async (req, res) => {
   }
 };
 
-// Return all record for current year based on location
 exports.getAllAwards = async (req, res) => {
+  const financialYear = req.query.year;
+
+  if (!financialYear) {
+    return res.status(400).json({ error: 'Financial year is required.' }); // 400 Bad Request
+  }
 
   try {
-    // Find all AwardsDiary records for the given location
-    const allAwards = await AwardsDiary.find().exec();
+    // Find all AwardsDiary records matching the financial year
+    const allAwards = await AwardsDiary.find({ financialYear }).exec();
 
     // Populate the 'items' field for each AwardsDiary record
     await AwardsDiary.populate(allAwards, { path: 'items' });
 
-    res.status(201).send(allAwards);
+    res.status(200).json(allAwards); // Successful GET response
   } catch (error) {
-    res.status(400);
-    console.log('Error getting all records for location: ', error);
+    console.error('Error getting all records for financial year:', error);
+    res.status(500).json({ error: 'Internal server error' }); // Return server error on failure
   }
-}
+};
 
 exports.getAllAwardsDiary = async (req, res) => {
   console.log('CALLED');

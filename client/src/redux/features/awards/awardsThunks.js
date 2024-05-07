@@ -6,7 +6,7 @@ const fetchData = createAsyncThunk(
     async ({locationData, authenticatedUser}) => {
         try {
             const awards = await axios.get("/api/awards-diary/getAllAwards");
-            const targets = await axios.get("/api/targets");
+            const targets = await axios.get(`/api/targets/?year=2324`);
 
             if(locationData.length) {
                 return {targetsData: targets.data, awardsData: awards.data, locationsData: locationData, authenticatedUser};

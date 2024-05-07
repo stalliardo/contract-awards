@@ -51,7 +51,9 @@ const Admin = () => {
   useEffect(() => {
       if(authenticatedUser.role === ROLES.CA01 || authenticatedUser.role === ROLES.CA02 ) {
         setLocationsRetrieved(originalLocations);
-        axios.get("/api/targets").then((res) => {
+
+        // TODO the year below needs to come from state
+        axios.get(`/api/targets/?year=2324`).then((res) => {
           setTargetDataRetrieved(res.data);
           buildData(originalLocations, res.data);
         }).catch((error) => {

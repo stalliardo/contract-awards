@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './navbar.css';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, setSelectedFinancialYear } from '../../redux/features/users/usersSlice';
 import { ROLES } from '../../utils/constants';
@@ -30,10 +30,13 @@ const Navbar = () => {
 
   const [selectedYear, setselectedYear] = useState("");
 
-  const [showWarningModal, setShowWarningModal] = useState(true);
+  const [showWarningModal, setShowWarningModal] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const showSelectMenu = location.pathname === "/admin";
 
   const handleSignOut = () => {
     dispatch(logout())
@@ -72,8 +75,11 @@ const Navbar = () => {
               {
                 authenticatedUser.role === ROLES.CA01 &&
                 <div className='navbar-select-container'>
-                  {/* the below menu.items.length wont work, need to get the current financial year and use that as default */}
-                  <SelectMenu placeholder={addSlashToYearString(selectedFinancialYear)} menuItems={menuItems} handleItemSelection={onFinancialYearSelected} />
+                  {/* Select menu should only be visible when the route is /admin */}
+                  {
+                    showSelectMenu &&
+                    <SelectMenu placeholder={addSlashToYearString(selectedFinancialYear)} menuItems={menuItems} handleItemSelection={onFinancialYearSelected} />
+                  }
                 </div>
               }
               {

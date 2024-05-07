@@ -8,6 +8,8 @@ import SelectMenu from '../selectMenu/SelectMenu';
 import { generateFinancialYearOptions, getFinancialYearString } from '../../utils/DateUtils';
 import { addSlashToYearString, removeSlashFromyearString } from '../../utils/stringUtils';
 import YearChangeWarningModal from './YearChangeWarningModal';
+import { resetState } from '../../redux/features/awards/awardsSlice';
+import { resetTenderState } from '../../redux/features/tenders/tenderSlice';
 
 const tempItems = [
   "2122",
@@ -52,6 +54,12 @@ const Navbar = () => {
 
   const onProceed = () => {
     console.log('selected = ', selectedYear);
+    dispatch(setSelectedFinancialYear(removeSlashFromyearString(selectedYear.value)));
+    dispatch(resetState());
+    dispatch(resetTenderState());
+
+    // states cleared, now load new data based on the selectedyear
+  
   }
 
   return (

@@ -14,11 +14,12 @@ const TendersSubmitted = () => {
   const tenders = useSelector(state => state.tender);
   const awards = useSelector(state => state.awards);
   const authenticatedUser = useSelector(state => state.users.authenticatedUser);
+  const selectedFinancialYear = useSelector(state => state.users.selectedFinancialYear);
 
   useEffect(() => {
     if(!tenders.data || !tenders.data.length) {
       if(authenticatedUser.locations){
-        dispatch(getTenders(authenticatedUser)).then(() => {
+        dispatch(getTenders({authenticatedUser, selectedFinancialYear})).then(() => {
           if(!awards.targets.length) {
             dispatch(fetchData({locationData: originalLocations, authenticatedUser}));
           }

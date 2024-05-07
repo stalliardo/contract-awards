@@ -12,6 +12,7 @@ import { COLOURS, ROLES } from '../../../utils/constants';
 import AwardsSummaryCumalitivePerformanceRow from './AwardsSummaryCumalitivePerformanceRow';
 import { generateFinancialYearMonths } from '../../../utils/DateUtils';
 import { useNavigate } from 'react-router-dom';
+import { removeSlashFromyearString } from '../../../utils/stringUtils';
 
 const MonthsForTableHead = ({k}) => {
     const months = generateFinancialYearMonths();
@@ -27,7 +28,7 @@ const AwardsSummary = () => {
     const dispatch = useDispatch();
     let cumalitiveTotalsSum = 0;
     const authenticatedUser = useSelector(state => state.users.authenticatedUser);
-
+    const selectedFinancialYear = useSelector(state => state.users.selectedFinancialYear);
     const awardsData = useSelector((state) => state.awards);
     const isLoading = useSelector((state) => state.awards.loading);
     const [locations, setLocations] = useState(authenticatedUser.locations ? [...authenticatedUser.locations].sort() : []);
@@ -49,7 +50,7 @@ const AwardsSummary = () => {
                 }, 500);
             } else {
                if(authenticatedUser){
-                dispatch(fetchData({locationData: originalLocations, authenticatedUser})).finally(() => {
+                dispatch(fetchData({locationData: originalLocations, authenticatedUser, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear)})).finally(() => {
                     setTimeout(() => {
                         setSpinnerComplete(true);
                     }, 500);

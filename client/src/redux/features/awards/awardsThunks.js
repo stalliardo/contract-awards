@@ -3,10 +3,10 @@ import axios from 'axios';
 
 const fetchData = createAsyncThunk(
     'awards/fetchData',
-    async ({locationData, authenticatedUser}) => {
+    async ({locationData, authenticatedUser, selectedFinancialYear}) => {
         try {
             const awards = await axios.get("/api/awards-diary/getAllAwards");
-            const targets = await axios.get(`/api/targets/?year=2324`);
+            const targets = await axios.get(`/api/targets/?year=${selectedFinancialYear}`);
 
             if(locationData.length) {
                 return {targetsData: targets.data, awardsData: awards.data, locationsData: locationData, authenticatedUser};

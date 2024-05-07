@@ -2,12 +2,14 @@ import { createSlice } from '@reduxjs/toolkit';
 import { fetchUsers, addLocationToUser, removeLocationFromUser, addAllLocationsToUser, addProvidedLocationsToUser
  } from '../users/usersThunk';
 import { extractFirstAndLastName } from '../../../utils/stringUtils';
+import { generateFinancialYearOptions } from '../../../utils/DateUtils';
 
 const initialState = {
   data: [],
   authenticatedUser: {
     fullName: ""
   },
+  selectedFinancialYear: generateFinancialYearOptions()[0], // <- default to the current eg, 23/24
   loading: false,
   error: null
 };

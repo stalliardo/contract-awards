@@ -8,6 +8,7 @@ import UsersTable from '../components/admin/UsersTable';
 import TargetsTable from '../components/admin/TargetsTable';
 import { ROLES, TARGET_CATEGORIES } from '../utils/constants';
 import { useSelector } from 'react-redux';
+import { removeSlashFromyearString } from '../utils/stringUtils';
 
 const Admin = () => {
   const [location, setLocation] = useState("");
@@ -22,6 +23,7 @@ const Admin = () => {
   const navigate = useNavigate();
 
   const authenticatedUser = useSelector(state => state.users.authenticatedUser);
+  const selectedFinancialYear = useSelector(state => state.users.selectedFinancialYear);
   const originalLocations = useSelector(state => state.location.data);
 
   const buildData = (locations, targets) => {
@@ -53,7 +55,7 @@ const Admin = () => {
         setLocationsRetrieved(originalLocations);
 
         // TODO the year below needs to come from state
-        axios.get(`/api/targets/?year=2324`).then((res) => {
+        axios.get(`/api/targets/?year=${removeSlashFromyearString(selectedFinancialYear)}`).then((res) => {
           setTargetDataRetrieved(res.data);
           buildData(originalLocations, res.data);
         }).catch((error) => {

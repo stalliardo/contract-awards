@@ -20,6 +20,7 @@ function capitalizeFirstLetter(str) {
 
 const AwardsTable = ({ locations }) => {
     const user = useSelector(state => state.users);
+    const isCurrentFinancialYear = user.isCurrentFinancialYear;
 
     const currentMonth = getCurrentMonth();
     const [filteredData, setFilteredData] = useState({ items: [] });
@@ -135,6 +136,7 @@ const AwardsTable = ({ locations }) => {
                     <h3>{location} {filteredData.month}-{filteredData.year}</h3>
 
                     {filteredData.items.length ?
+                      isCurrentFinancialYear &&  
                         <button onClick={() => setShowAddRow(true)}>
                             Add Row
                         </button>
@@ -159,7 +161,7 @@ const AwardsTable = ({ locations }) => {
                                 {
                                     filteredData.items && filteredData.items.length ?
                                         filteredData.items.map((data) => (
-                                            <AwardsTableRow data={data} key={data._id} onItemDeleted={itemDeleted} onItemEdited={onItemEdited} location={location} month={month} />
+                                            <AwardsTableRow data={data} key={data._id} onItemDeleted={itemDeleted} onItemEdited={onItemEdited} location={location} month={month} isCurrentFinancialYear={isCurrentFinancialYear}/>
                                         ))
                                         : null
                                 }

@@ -161,3 +161,5 @@ export default Navbar;
 
 
   // And what if an old location no longer exists? It wont be displayed in the table at all
+
+  // Disable warning when a user slecets the current year from the selectmenu

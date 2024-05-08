@@ -41,16 +41,17 @@ const AwardsTableRow = ({ data, onItemDeleted, onItemEdited, location, month, is
 
                 {
                     isCurrentFinancialYear ?
-                    <div>
-                        <td className='table-actions-cell'>
-                            <button className='table-actions-cell' onClick={onEditClicked}>Edit</button>
-                        </td>
-                        <td className='table-actions-cell'>
-                            <button className='table-actions-cell red' onClick={onDeleteClicked}>Delete</button>
-                        </td>
-                    </div>
-                    :
-                    <div id='awards-table-row-readonly'>Read Only</div>
+
+                        <>
+                            <td className='table-actions-cell'>
+                                <button className='table-actions-cell' onClick={onEditClicked}>Edit</button>
+                            </td>
+                            <td className='table-actions-cell'>
+                                <button className='table-actions-cell red' onClick={onDeleteClicked}>Delete</button>
+                            </td>
+                        </>
+                        :
+                        <div id='awards-table-row-readonly'>Read Only</div>
                 }
             </tr>
         )

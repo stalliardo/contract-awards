@@ -23,11 +23,7 @@ export const usersSlice = createSlice({
     setLoading: (state, action) => {
       state.loading = action.payload
     },
-
-    // isCurrentFinancialYear: (state) => {
-    //   return state.selectedFinancialYear === 
-    // },
-
+    
     setSignedInUsersFullName: (state, action) => {
       state.authenticatedUser.fullName = extractFirstAndLastName(action.payload);
     },

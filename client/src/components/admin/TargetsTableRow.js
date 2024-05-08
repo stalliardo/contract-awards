@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Spinner from '../spinner/Spinner';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 const TargtesTableRow = ({ location, target, targetCategory, data }) => {
     const [showModal, setShowModal] = useState(false);
@@ -9,6 +10,8 @@ const TargtesTableRow = ({ location, target, targetCategory, data }) => {
 
     const [targetState, setTargetState] = useState(target);
     const [prevTargetState, setPrevTargetState] = useState({});
+
+    const isCurrentFinancialYear = useSelector(state => state.users.isCurrentFinancialYear);
 
     useEffect(() => {
         setSaveButtonDisabled(!targetState?.targetValue?.length > 0);
@@ -77,7 +80,12 @@ const TargtesTableRow = ({ location, target, targetCategory, data }) => {
             <td>{location.name}</td>
             <td>£{targetState !== undefined ? targetState.targetValue : 0}</td>
             <td>
-                <button onClick={onShowModal}>{targetState?.targetValue === "" || targetState?.targetValue === "" ? "Add" : "Edit"}</button>
+                {
+                    isCurrentFinancialYear ? 
+                    <button onClick={onShowModal}>{targetState?.targetValue === "" || targetState?.targetValue === "" ? "Add" : "Edit"}</button>
+                    :
+                    <span>Read Only</span>
+                }
             </td>
 
             {

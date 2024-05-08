@@ -36,7 +36,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const showSelectMenu = location.pathname === "/admin";
+  const showSelectMenu = location.pathname === "/admin" && authenticatedUser.role === ROLES.CA01;
 
   const handleSignOut = () => {
     dispatch(logout())
@@ -57,9 +57,14 @@ const Navbar = () => {
 
   const onProceed = () => {
     console.log('selected = ', selectedYear);
+    setShowWarningModal(false);
     dispatch(setSelectedFinancialYear(removeSlashFromyearString(selectedYear.value)));
     dispatch(resetState());
     dispatch(resetTenderState());
+
+    navigate("/admin");
+
+
 
     // states cleared, now load new data based on the selectedyear
   
@@ -78,7 +83,9 @@ const Navbar = () => {
                   {/* Select menu should only be visible when the route is /admin */}
                   {
                     showSelectMenu &&
-                    <SelectMenu placeholder={addSlashToYearString(selectedFinancialYear)} menuItems={menuItems} handleItemSelection={onFinancialYearSelected} />
+                    <>  
+                      <SelectMenu placeholder={addSlashToYearString(selectedFinancialYear)} menuItems={menuItems} handleItemSelection={onFinancialYearSelected} />
+                    </>
                   }
                 </div>
               }

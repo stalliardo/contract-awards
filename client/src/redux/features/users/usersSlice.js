@@ -1,15 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchUsers, addLocationToUser, removeLocationFromUser, addAllLocationsToUser, addProvidedLocationsToUser
  } from '../users/usersThunk';
-import { extractFirstAndLastName } from '../../../utils/stringUtils';
-import { generateFinancialYearOptions } from '../../../utils/DateUtils';
+import { extractFirstAndLastName, removeSlashFromyearString } from '../../../utils/stringUtils';
+import { generateFinancialYearOptions, getCurrentFinancialYear } from '../../../utils/DateUtils';
 
 const initialState = {
   data: [],
   authenticatedUser: {
     fullName: ""
   },
-  selectedFinancialYear: generateFinancialYearOptions()[0], // <- default to the current eg, 23/24
+  selectedFinancialYear: generateFinancialYearOptions()[0], // <- default to the current eg, 23/24,
+  isCurrentFinancialYear: true,
   loading: false,
   error: null
 };
@@ -23,6 +24,10 @@ export const usersSlice = createSlice({
       state.loading = action.payload
     },
 
+    // isCurrentFinancialYear: (state) => {
+    //   return state.selectedFinancialYear === 
+    // },
+
     setSignedInUsersFullName: (state, action) => {
       state.authenticatedUser.fullName = extractFirstAndLastName(action.payload);
     },
@@ -34,6 +39,7 @@ export const usersSlice = createSlice({
     setSelectedFinancialYear: (state, action) => {
 
       state.selectedFinancialYear = action.payload;
+      state.isCurrentFinancialYear = removeSlashFromyearString(getCurrentFinancialYear()) === action.payload;
     },
 
     logout: (state) => {

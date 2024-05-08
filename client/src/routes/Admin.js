@@ -26,18 +26,23 @@ const Admin = () => {
   const selectedFinancialYear = useSelector(state => state.users.selectedFinancialYear);
   const originalLocations = useSelector(state => state.location.data);
 
+  const isCurrentFinancialYear = useSelector(state => state.users.isCurrentFinancialYear);
+
+  console.log('iscurrentFin = ', isCurrentFinancialYear);
+
+
   const buildData = (locations, targets) => {
     const formattedTargetData = [];
 
     locations.forEach((location) => {
-      const targetDataToAdd = targets.filter(target => target.location === location.name );
-      let data = {locationData: {...location}};
-      if(targetDataToAdd.length) {
+      const targetDataToAdd = targets.filter(target => target.location === location.name);
+      let data = { locationData: { ...location } };
+      if (targetDataToAdd.length) {
         targetDataToAdd.forEach((dataItem) => {
-          if(dataItem.category === TARGET_CATEGORIES.CONTRACT_AWARDS) {
+          if (dataItem.category === TARGET_CATEGORIES.CONTRACT_AWARDS) {
             data.awardsData = dataItem
-          } 
-          if(dataItem.category === TARGET_CATEGORIES.TENDERS_SUBMITTED) {
+          }
+          if (dataItem.category === TARGET_CATEGORIES.TENDERS_SUBMITTED) {
             data.tendersData = dataItem
           }
         })
@@ -51,15 +56,15 @@ const Admin = () => {
   }
 
   useEffect(() => {
-      if(authenticatedUser.role === ROLES.CA01 || authenticatedUser.role === ROLES.CA02 ) {
-        setLocationsRetrieved(originalLocations);
-
-        // TODO the year below needs to come from state
-        axios.get(`/api/targets/?year=${removeSlashFromyearString(selectedFinancialYear)}`).then((res) => {
-          setTargetDataRetrieved(res.data);
-          buildData(originalLocations, res.data);
-        }).catch((error) => {
-          console.log('Error getting targets. Error: ', error);
+    setIsLoading(true);
+    if (authenticatedUser.role === ROLES.CA01 || authenticatedUser.role === ROLES.CA02) {
+      setLocationsRetrieved(originalLocations);
+      axios.get(`/api/targets/?year=${removeSlashFromyearString(selectedFinancialYear)}`).then((res) => {
+        console.log('use effect triggered + datra = ', res.data);
+        setTargetDataRetrieved(res.data);
+        buildData(originalLocations, res.data);
+      }).catch((error) => {
+        console.log('Error getting targets. Error: ', error);
       }).finally(() => {
         setTimeout(() => {
           setIsLoading(false);
@@ -67,8 +72,8 @@ const Admin = () => {
       })
     } else {
       navigate("/");
-    }     
-  }, [])
+    }
+  }, [selectedFinancialYear])
 
   useEffect(() => {
     setSaveButtonDisabled(location.length < 1);
@@ -77,13 +82,13 @@ const Admin = () => {
   const onAddLocation = () => {
     setIsSaving(true);
 
-    axios.post("/api/location/add-item", {name: location}).then((response) => {
+    axios.post("/api/location/add-item", { name: location }).then((response) => {
       const newArray = [...locationsRetrieved];
-      newArray.push({name: location});
+      newArray.push({ name: location });
 
       setLocationsRetrieved(newArray);
 
-      if(authenticatedUser.role === ROLES.CA01) {
+      if (authenticatedUser.role === ROLES.CA01) {
         // ^ Should always be as add location button is only available at this level
         console.log('authed role called... generateing data now.....');
         axios.put(`/api/users/${authenticatedUser._id}/locations`).then(() => {
@@ -113,70 +118,70 @@ const Admin = () => {
 
       {
         isLoading ? <div className='spinner-container-page'><Spinner classes="page" /></div> :
-        <>
-          <div className='admin-top-container'>
-        <div className='admin-current-locations-container'>
-            <h3>Current Locations: ({locationsRetrieved.length})</h3>
-            <ul>
-              {
-                locationsRetrieved.map((location, index) => {
-                  return <ol key={index}>{location.name}</ol>
-                })
-              }
-            </ul>
-           {  authenticatedUser.role === ROLES.CA01 ?
-             <button onClick={() => setShowAddNewLocation(true)}>Add Location</button> 
-             : null
-           }
-            {
-              showAddNewLocation ? 
-              <div className='blackout-overlay'>
-                 <div className='admin-modal'>
-                  <h3>Add Location</h3>
-                  <p>If the location doesn't display right away in either the awards or tenders table, you may need to refresh the page.</p>
-                  <input type='text' value={location} onChange={handleChange}/>
-                  <div className='admin-modal-buttons'>
-                    <button className='green' onClick={onAddLocation} disabled={saveButtonDisabled}>
-                      {isSaving ? <div className='spinner-button'><Spinner classes="button"/></div> : "Save"}
-                    </button>
-                    <button onClick={onCloseAddLocationModal}>Close</button>
-                  </div>
-                </div> 
+          <>
+            <div className='admin-top-container'>
+              <div className='admin-current-locations-container'>
+                <h3>Current Locations: ({locationsRetrieved.length})</h3>
+                <ul>
+                  {
+                    locationsRetrieved.map((location, index) => {
+                      return <ol key={index}>{location.name}</ol>
+                    })
+                  }
+                </ul>
+                {authenticatedUser.role === ROLES.CA01 ?
+                  <button onClick={() => setShowAddNewLocation(true)}>Add Location</button>
+                  : null
+                }
+                {
+                  showAddNewLocation ?
+                    <div className='blackout-overlay'>
+                      <div className='admin-modal'>
+                        <h3>Add Location</h3>
+                        <p>If the location doesn't display right away in either the awards or tenders table, you may need to refresh the page.</p>
+                        <input type='text' value={location} onChange={handleChange} />
+                        <div className='admin-modal-buttons'>
+                          <button className='green' onClick={onAddLocation} disabled={saveButtonDisabled}>
+                            {isSaving ? <div className='spinner-button'><Spinner classes="button" /></div> : "Save"}
+                          </button>
+                          <button onClick={onCloseAddLocationModal}>Close</button>
+                        </div>
+                      </div>
+                    </div>
+                    : null
+                }
               </div>
-            : null
-            }
-        </div>
-        <div className='admin-members-container'>
-          <UsersTable availableLocations={locationsRetrieved}/>
-        </div>
-      </div>
-
-      {
-        authenticatedUser.role === ROLES.CA01 ? 
-        <div>
-           <h3 id="targets-h3">Awards and Tender Targets</h3>
-            <div className='admin-targets-container'>
-              <div className='admin-targets-flex'>
-                <div className='admin-targets-flex-left'>
-                  <TargetsTable tableTitle="Contract Awards Targets" data={targetAndLocationData} targetData={targetAndLocationData.awardsData} targetCategory={TARGET_CATEGORIES.CONTRACT_AWARDS}/>
-                </div>
-                <div className='admin-targets-flex-right'>
-                <TargetsTable tableTitle="Submitted Tenders Targets" data={targetAndLocationData} targetData={targetAndLocationData.tendersData} targetCategory={TARGET_CATEGORIES.TENDERS_SUBMITTED}/>
+              <div className='admin-members-container'>
+                <UsersTable availableLocations={locationsRetrieved} />
+              </div>
             </div>
-          </div>
-        </div>
-        </div>
-        : null
-      }
 
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-        </>
-    }
+            {
+              authenticatedUser.role === ROLES.CA01 ?
+                <div>
+                  <h3 id="targets-h3">Awards and Tender Targets</h3>
+                  <div className='admin-targets-container'>
+                    <div className='admin-targets-flex'>
+                      <div className='admin-targets-flex-left'>
+                        <TargetsTable tableTitle="Contract Awards Targets" data={targetAndLocationData} targetData={targetAndLocationData.awardsData} targetCategory={TARGET_CATEGORIES.CONTRACT_AWARDS} />
+                      </div>
+                      <div className='admin-targets-flex-right'>
+                        <TargetsTable tableTitle="Submitted Tenders Targets" data={targetAndLocationData} targetData={targetAndLocationData.tendersData} targetCategory={TARGET_CATEGORIES.TENDERS_SUBMITTED} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                : null
+            }
+
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+          </>
+      }
     </div>
   )
 }
@@ -184,6 +189,5 @@ const Admin = () => {
 export default Admin;
 
 // Data rebuild
-  // Will need a way to allow the admin to select which financial years they want to look through
-  // how will i know hwickh years are available?
-  
+// Will need a way to allow the admin to select which financial years they want to look through
+// how will i know hwickh years are available?

@@ -7,6 +7,8 @@ const monthsInOrder = [
 ];
 
 export const generateFinancialYearMonths = () => {
+    // needs to be based on the selected year TODO
+
     const monthsForTable = [];
     const currentMonth = new Date().getMonth() + 1; // Get the current month (1-indexed)
     const currentYear = new Date().getFullYear();

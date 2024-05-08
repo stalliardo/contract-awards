@@ -83,6 +83,10 @@ const DevPage = () => {
         }
     }
 
+    const generateTenders = async () => {
+        await axios.post("/api/tenders/generate-initial-data");
+    }
+
     return (
         <div className='dev-page-container'>
             <h2>Site Administrator Functions:</h2>
@@ -102,6 +106,8 @@ const DevPage = () => {
                     clickHandler={onUpdateADUsers}
                 />
             </div>
+
+            <button onClick={generateTenders}>generate data</button>
         </div>
     )
 }

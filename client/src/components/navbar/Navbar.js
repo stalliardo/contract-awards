@@ -65,6 +65,10 @@ const Navbar = () => {
 
   return (
     <nav className='navbar-container'>
+      <div className='logo-container'>
+        <img src={`${process.env.PUBLIC_URL}/wingate-logo.jpg`} width={100}/>
+        <h5>Contract Awards</h5>
+      </div>
       <div className='nav-end-container'>
         {
           auth.isAuthenticated ?
@@ -78,8 +82,14 @@ const Navbar = () => {
                     <>  
                       <SelectMenu allSettingPlaceholder={false} placeholder={addSlashToYearString(selectedFinancialYear)} menuItems={menuItems} handleItemSelection={onFinancialYearSelected} />
                     </>
+                    
                   }
                 </div>
+              }
+
+              {
+                !showSelectMenu &&
+                  <span>FY: {addSlashToYearString(selectedFinancialYear)}</span>
               }
               {
                 authenticatedUser.role === ROLES.CA01 || authenticatedUser.role === ROLES.CA02 ?

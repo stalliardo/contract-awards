@@ -32,9 +32,7 @@ const TendersSubmitted = () => {
 
   if(!tenders.loading && !awards.loading) {
     return (
-      <div className='awards-page-container'>
         <TendersSubmittedTable data={tenders.data}/>
-      </div>
     )
   } else {
     return <div style={{marginTop: "150px"}} className='spinner-container'><Spinner text="Generating tenders table..." classes="page"/></div>

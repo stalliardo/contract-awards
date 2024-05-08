@@ -60,12 +60,27 @@ const AwardsSummary = () => {
         }
     }, []);
 
+    useEffect(() => {
+        console.log('locations = ', locations);
+    }, [selectedFinancialYear])
+
     const generateFilteredTotals = (location) => {
-        return awardsData.coreTotals.filter((totals) => totals.location === location)
+        const totals = awardsData.coreTotals.filter((totals) => totals.location === location)
+        if(totals.length === 0) {
+            console.log('zero detected');
+            return null;
+        }
+
+        return totals;
     }
 
     const generateCumalitiveTotals = (location) => {
         const filteredTotals = generateFilteredTotals(location);
+
+        if(filteredTotals === null) {
+            return null;
+        }
+
         const sum = filteredTotals.reduce((total, currentItem) => total + currentItem.sum, 0);
 
         cumalitiveTotalsSum += sum;
@@ -109,7 +124,7 @@ const AwardsSummary = () => {
                         <tbody>
                             {
                                 locations.map((location, index) => {
-                                    if (location !== "M&E" && location !== "Special Projects") {
+                                    if (location !== "M&E" && location !== "Special Projects" && generateFilteredTotals(location)) {
                                         return <AwardsSummaryCoreTotalsRow targetsData={awardsData.targets} filteredTotals={generateFilteredTotals(location)} cumalitiveTotal={generateCumalitiveTotals(location)} locationRef={location} key={index} />
                                     }
                                     return null;

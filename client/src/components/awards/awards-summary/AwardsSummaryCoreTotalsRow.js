@@ -40,6 +40,7 @@ const AwardsSummaryCoreTotalsRow = ({ targetsData, cumalitiveTotal, locationRef,
             <td>{locationRef}</td>
             {
                 monthsInFinancialOrder.map((month, index) => {
+                    if(!filteredTotals) return;
                     const total = filteredTotals.find((total) => total.month === month).sum;
                     const target = parseInt(formattedTargetValue());
                     const colour =  total >= target ? COLOURS.GREEN : COLOURS.RED;

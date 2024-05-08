@@ -12,27 +12,29 @@ import TendersSummaryTotalsRow from './TendersSummaryTotalsRow';
 import TendersSummaryMontlyPerformanceRow from './TendersSummaryMontlyPerformanceRow';
 import TenderSummaryCumalitivePerformanceRow from './TenderSummaryCumalitivePerformanceRow';
 import { ROLES } from '../../utils/constants';
-
-const MonthsForTableHead = ({ k }) => {
-    const months = generateFinancialYearMonths();
-
-    const cells = months.map((month, i) => {
-        return <th key={`${k} ${i}`}>{month}</th>
-    })
-
-    return cells
-}
+import { addSlashToYearString } from '../../utils/stringUtils';
 
 const TendersSubmittedTable = ({ data }) => {
     const originalLocations = useSelector(state => state.location.data);
     const authenticatedUser = useSelector(state => state.users.authenticatedUser);
     const [locations, setLocations] = useState([...authenticatedUser.locations].sort());
+    const selectedFinancialYear = useSelector(state => state.users.selectedFinancialYear);
 
     const tenders = useSelector(state => state.tender);
     const awards = useSelector(state => state.awards);
 
     const extractedDataForRow = (location) => {
         return data.find((item) => item.location === location);
+    }
+
+    const MonthsForTableHead = ({k}) => {
+        const months = generateFinancialYearMonths(addSlashToYearString(selectedFinancialYear));
+        
+        const cells = months.map((month, i) => {
+            return <th key={`${k} ${i}`}>{month}</th>
+        })
+        
+        return cells
     }
 
     return (

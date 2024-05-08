@@ -12,17 +12,7 @@ import { COLOURS, ROLES } from '../../../utils/constants';
 import AwardsSummaryCumalitivePerformanceRow from './AwardsSummaryCumalitivePerformanceRow';
 import { generateFinancialYearMonths } from '../../../utils/DateUtils';
 import { useNavigate } from 'react-router-dom';
-import { removeSlashFromyearString } from '../../../utils/stringUtils';
-
-const MonthsForTableHead = ({k}) => {
-    const months = generateFinancialYearMonths();
-    
-    const cells = months.map((month, i) => {
-        return <th key={`${k} ${i}`}>{month}</th>
-    })
-    
-    return cells
-}
+import { addSlashToYearString, removeSlashFromyearString } from '../../../utils/stringUtils';
 
 const AwardsSummary = () => {
     const dispatch = useDispatch();
@@ -38,6 +28,16 @@ const AwardsSummary = () => {
 
     const [spinnerComplete, setSpinnerComplete] = useState(false);
     const showUI = !isLoading && spinnerComplete;
+
+    const MonthsForTableHead = ({k}) => {
+        const months = generateFinancialYearMonths(addSlashToYearString(selectedFinancialYear));
+        
+        const cells = months.map((month, i) => {
+            return <th key={`${k} ${i}`}>{month}</th>
+        })
+        
+        return cells
+    }
 
     useEffect(() => {
 

@@ -32,7 +32,6 @@ const TendersSubmitted = () => {
       }
     }
     if(tenders.data.length > 0) {
-      console.log('setting isloading');
       setIsLoading(true);
 
       setTimeout(() => {

@@ -26,11 +26,6 @@ const Admin = () => {
   const selectedFinancialYear = useSelector(state => state.users.selectedFinancialYear);
   const originalLocations = useSelector(state => state.location.data);
 
-  const isCurrentFinancialYear = useSelector(state => state.users.isCurrentFinancialYear);
-
-  console.log('iscurrentFin = ', isCurrentFinancialYear);
-
-
   const buildData = (locations, targets) => {
     const formattedTargetData = [];
 
@@ -60,7 +55,6 @@ const Admin = () => {
     if (authenticatedUser.role === ROLES.CA01 || authenticatedUser.role === ROLES.CA02) {
       setLocationsRetrieved(originalLocations);
       axios.get(`/api/targets/?year=${removeSlashFromyearString(selectedFinancialYear)}`).then((res) => {
-        console.log('use effect triggered + datra = ', res.data);
         setTargetDataRetrieved(res.data);
         buildData(originalLocations, res.data);
       }).catch((error) => {
@@ -89,8 +83,6 @@ const Admin = () => {
       setLocationsRetrieved(newArray);
 
       if (authenticatedUser.role === ROLES.CA01) {
-        // ^ Should always be as add location button is only available at this level
-        console.log('authed role called... generateing data now.....');
         axios.put(`/api/users/${authenticatedUser._id}/locations`).then(() => {
           onCloseAddLocationModal();
           buildData(newArray, targetDataRetrieved);
@@ -115,7 +107,6 @@ const Admin = () => {
   return (
     <div className='admin-page-container'>
       <h3 id="admin-page-top-h3">Available Locations and Assigned Users</h3>
-
       {
         isLoading ? <div className='spinner-container-page'><Spinner classes="page" /></div> :
           <>
@@ -187,7 +178,3 @@ const Admin = () => {
 }
 
 export default Admin;
-
-// Data rebuild
-// Will need a way to allow the admin to select which financial years they want to look through
-// how will i know hwickh years are available?

@@ -31,6 +31,42 @@ export const awardsSlice = createSlice({
 
     resetState: (state) => {
       return initialState;
+    },
+
+    updateTargets: (state, action) => {
+      const { category } = action.payload;
+
+      if(category === "contract-awards") {
+        const targetIndex = state.targets.findIndex(target => target._id === action.payload._id);
+
+        if (targetIndex > -1) {
+        const updatedArray = [...state.targets];
+        updatedArray[targetIndex] = action.payload;
+
+        state.targets = updatedArray;
+      } else {
+        state.targets.push(action.payload);
+      }
+
+      } else if( category === "tenders-submitted") {
+        const targetIndex = state.tendersSubmittedTargets.findIndex(target => target._id === action.payload._id);
+
+        if (targetIndex > -1) {
+        const updatedArray = [...state.tendersSubmittedTargets];
+        updatedArray[targetIndex] = action.payload;
+
+        state.tendersSubmittedTargets = updatedArray;
+      } else {
+        state.tendersSubmittedTargets.push(action.payload);
+      }
+      }
+
+      const generatedUkTargetTotal = generateUKTargetTotals(state.targets);
+      const generatedSpecialTargetTotals = generateSpecialTargetTotals(state.targets);
+
+      state.ukTargetTotal = generatedUkTargetTotal;
+      state.specialsTargetTotal = generatedSpecialTargetTotals;
+      state.ukAndSpecialTargetTotal = generatedUkTargetTotal + generatedSpecialTargetTotals;
     }
   },
 
@@ -45,7 +81,7 @@ export const awardsSlice = createSlice({
       const { authenticatedUser } = action.payload;
 
       const generatedCoreTotals = generateCoreTotalsData(action.payload.awardsData, authenticatedUser);
-      const generatedUKCoreTotals = generateUkCoreTotals(generatedCoreTotals);  
+      const generatedUKCoreTotals = generateUkCoreTotals(generatedCoreTotals);
 
       const filteredTargets = action.payload.targetsData.filter((target) => target.category === TARGET_CATEGORIES.CONTRACT_AWARDS);
       const filteredTendersSumittedTargets = action.payload.targetsData.filter((target) => target.category === TARGET_CATEGORIES.TENDERS_SUBMITTED);
@@ -149,6 +185,6 @@ export const awardsSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setLoading, getData, resetState } = awardsSlice.actions;
+export const { setLoading, getData, resetState, updateTargets } = awardsSlice.actions;
 
 export default awardsSlice.reducer;

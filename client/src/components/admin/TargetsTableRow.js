@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import Spinner from '../spinner/Spinner';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateTargets } from '../../redux/features/awards/awardsSlice';
 
 const TargtesTableRow = ({ location, target, targetCategory, data }) => {
     const [showModal, setShowModal] = useState(false);
@@ -12,6 +13,8 @@ const TargtesTableRow = ({ location, target, targetCategory, data }) => {
     const [prevTargetState, setPrevTargetState] = useState({});
 
     const isCurrentFinancialYear = useSelector(state => state.users.isCurrentFinancialYear);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         setSaveButtonDisabled(!targetState?.targetValue?.length > 0);
@@ -51,6 +54,10 @@ const TargtesTableRow = ({ location, target, targetCategory, data }) => {
             }
 
             const targetAdded = await axios.put("/api/target", targetPostData);
+
+            // once added, dispatch a function that changes the data either by adding to the awards.targets or editing an exisiting one
+
+            dispatch(updateTargets(targetAdded.data));
 
             setTargetState({
                 ...targetState,

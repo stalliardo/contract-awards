@@ -62,7 +62,7 @@ const Auth = () => {
           <input type='text' name="username" placeholder='John.Smith' onChange={handleChange}/> 
           <input type='password' name="password" placeholder='Password' onChange={handleChange}/> 
           <button disabled={logInButtonDisabled}>Log In</button>
-          {errorText ? <p>{errorText}</p> : null}
+          {errorText ? <p id='error-text'>{errorText}</p> : null}
         </form>
     </div>
   )

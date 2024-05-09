@@ -22,6 +22,7 @@ const Root = () => {
   const [hasLoaded, setHasLoaded] = useState(!auth.loading || !users.loading);
 
   useEffect(() => {
+    console.log('use ffect called');
     const token = getTokenFromStorage();
     if (token && !users.authenticatedUser._id) {
       dispatch(verifyToken(token)).unwrap().then(response => {

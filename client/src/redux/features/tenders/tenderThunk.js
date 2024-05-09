@@ -3,10 +3,10 @@ import axios from 'axios';
 
 const getTenders = createAsyncThunk(
     'tender/get',
-    async (authenticatedUser, {rejectWithValue}) => {
+    async ({authenticatedUser, selectedFinancialYear}, {rejectWithValue}) => {
         
         try {
-            const tenders = await axios.get(`/api/tenders`);
+            const tenders = await axios.get(`/api/tenders/?year=${selectedFinancialYear}`);
             return {tenders: tenders.data, authenticatedUser};
         } catch (error) {
             return rejectWithValue(error);

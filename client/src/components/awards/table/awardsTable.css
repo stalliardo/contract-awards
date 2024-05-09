@@ -15,6 +15,11 @@
     justify-content: space-between;
 }
 
+#awards-table-row-readonly {
+    font-size: 18px;
+    margin: 5px 0 0 20px;
+}
+
 .awards-table-select {
     width: 48%;
 }

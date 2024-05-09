@@ -3,14 +3,23 @@ import { getMonthsInFinancialOrder } from '../../../utils/DateUtils';
 import { generateTargetAcheivedPercentage, generateTargetAmountToDate } from '../../../utils/financialTotals';
 import { COLOURS } from '../../../utils/constants';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const monthsInFinancialOrder = getMonthsInFinancialOrder();
 
 const AwardsSummaryCoreTotalsRow = ({ targetsData, cumalitiveTotal, locationRef, filteredTotals }) => {
     const navigate = useNavigate();
+    const isCurrentFinancialYear = useSelector(state => state.users.isCurrentFinancialYear);
 
-    const handleTotalClicked = (month) => {
-        navigate(`/awards-form?location=${locationRef}&month=${month}`);
+    const handleTotalClicked = (month, total) => {
+        if(isCurrentFinancialYear){
+            navigate(`/awards-form?location=${locationRef}&month=${month}`);
+            return;
+        }
+
+        if(total !== 0 ) {
+            navigate(`/awards-form?location=${locationRef}&month=${month}`);
+        }
     }
 
     const formattedTargetValue = () => {
@@ -31,11 +40,12 @@ const AwardsSummaryCoreTotalsRow = ({ targetsData, cumalitiveTotal, locationRef,
             <td>{locationRef}</td>
             {
                 monthsInFinancialOrder.map((month, index) => {
+                    if(!filteredTotals) return;
                     const total = filteredTotals.find((total) => total.month === month).sum;
                     const target = parseInt(formattedTargetValue());
                     const colour =  total >= target ? COLOURS.GREEN : COLOURS.RED;
 
-                    return <td className='navigation-cell' onClick={() => handleTotalClicked(month)} style={{color: colour}} key={index}>£{total.toLocaleString()}</td>
+                    return <td className='navigation-cell' onClick={() => handleTotalClicked(month, total)} style={{color: colour}} key={index}>£{total.toLocaleString()}</td>
                 })
             }
 

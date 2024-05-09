@@ -12,22 +12,13 @@ import { COLOURS, ROLES } from '../../../utils/constants';
 import AwardsSummaryCumalitivePerformanceRow from './AwardsSummaryCumalitivePerformanceRow';
 import { generateFinancialYearMonths } from '../../../utils/DateUtils';
 import { useNavigate } from 'react-router-dom';
-
-const MonthsForTableHead = ({k}) => {
-    const months = generateFinancialYearMonths();
-    
-    const cells = months.map((month, i) => {
-        return <th key={`${k} ${i}`}>{month}</th>
-    })
-    
-    return cells
-}
+import { addSlashToYearString, removeSlashFromyearString } from '../../../utils/stringUtils';
 
 const AwardsSummary = () => {
     const dispatch = useDispatch();
     let cumalitiveTotalsSum = 0;
     const authenticatedUser = useSelector(state => state.users.authenticatedUser);
-
+    const selectedFinancialYear = useSelector(state => state.users.selectedFinancialYear);
     const awardsData = useSelector((state) => state.awards);
     const isLoading = useSelector((state) => state.awards.loading);
     const [locations, setLocations] = useState(authenticatedUser.locations ? [...authenticatedUser.locations].sort() : []);
@@ -38,8 +29,17 @@ const AwardsSummary = () => {
     const [spinnerComplete, setSpinnerComplete] = useState(false);
     const showUI = !isLoading && spinnerComplete;
 
-    useEffect(() => {
+    const MonthsForTableHead = ({k}) => {
+        const months = generateFinancialYearMonths(addSlashToYearString(selectedFinancialYear));
+        
+        const cells = months.map((month, i) => {
+            return <th key={`${k} ${i}`}>{month}</th>
+        })
+        
+        return cells
+    }
 
+    useEffect(() => {
         if(!authenticatedUser._id) {
             navigate("/");
         } else {
@@ -49,7 +49,7 @@ const AwardsSummary = () => {
                 }, 500);
             } else {
                if(authenticatedUser){
-                dispatch(fetchData({locationData: originalLocations, authenticatedUser})).finally(() => {
+                dispatch(fetchData({locationData: originalLocations, authenticatedUser, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear)})).finally(() => {
                     setTimeout(() => {
                         setSpinnerComplete(true);
                     }, 500);
@@ -60,11 +60,22 @@ const AwardsSummary = () => {
     }, []);
 
     const generateFilteredTotals = (location) => {
-        return awardsData.coreTotals.filter((totals) => totals.location === location)
+        const totals = awardsData.coreTotals.filter((totals) => totals.location === location)
+        if(totals.length === 0) {
+            console.log('zero detected');
+            return null;
+        }
+
+        return totals;
     }
 
     const generateCumalitiveTotals = (location) => {
         const filteredTotals = generateFilteredTotals(location);
+
+        if(filteredTotals === null) {
+            return null;
+        }
+
         const sum = filteredTotals.reduce((total, currentItem) => total + currentItem.sum, 0);
 
         cumalitiveTotalsSum += sum;
@@ -108,7 +119,7 @@ const AwardsSummary = () => {
                         <tbody>
                             {
                                 locations.map((location, index) => {
-                                    if (location !== "M&E" && location !== "Special Projects") {
+                                    if (location !== "M&E" && location !== "Special Projects" && generateFilteredTotals(location)) {
                                         return <AwardsSummaryCoreTotalsRow targetsData={awardsData.targets} filteredTotals={generateFilteredTotals(location)} cumalitiveTotal={generateCumalitiveTotals(location)} locationRef={location} key={index} />
                                     }
                                     return null;
@@ -151,7 +162,7 @@ const AwardsSummary = () => {
                             </tr>
                         </tbody>
                     </table>
-                    <p>% T A = Percentage of Target Achieved (TBC)</p>
+                    <p>T A = Percentage of Target Achieved</p>
                 </div>
 
                 {

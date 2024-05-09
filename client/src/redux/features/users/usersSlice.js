@@ -1,13 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchUsers, addLocationToUser, removeLocationFromUser, addAllLocationsToUser, addProvidedLocationsToUser
  } from '../users/usersThunk';
-import { extractFirstAndLastName } from '../../../utils/stringUtils';
+import { extractFirstAndLastName, removeSlashFromyearString } from '../../../utils/stringUtils';
+import { generateFinancialYearOptions, getCurrentFinancialYear } from '../../../utils/DateUtils';
 
 const initialState = {
   data: [],
   authenticatedUser: {
     fullName: ""
   },
+  selectedFinancialYear: generateFinancialYearOptions()[0], // <- default to the current eg, 23/24,
+  isCurrentFinancialYear: true,
   loading: false,
   error: null
 };
@@ -20,13 +23,19 @@ export const usersSlice = createSlice({
     setLoading: (state, action) => {
       state.loading = action.payload
     },
-
+    
     setSignedInUsersFullName: (state, action) => {
       state.authenticatedUser.fullName = extractFirstAndLastName(action.payload);
     },
 
     clearAuthenticatedUserData: (state) => {
       state.authenticatedUser = {};
+    },
+
+    setSelectedFinancialYear: (state, action) => {
+
+      state.selectedFinancialYear = action.payload;
+      state.isCurrentFinancialYear = removeSlashFromyearString(getCurrentFinancialYear()) === action.payload;
     },
 
     logout: (state) => {
@@ -124,6 +133,6 @@ export const usersSlice = createSlice({
   }
 })
 
-export const { setLoading, setSignedInUsersFullName, clearAuthenticatedUserData, logout } = usersSlice.actions;
+export const { setLoading, setSignedInUsersFullName, clearAuthenticatedUserData, logout, setSelectedFinancialYear } = usersSlice.actions;
 
 export default usersSlice.reducer;

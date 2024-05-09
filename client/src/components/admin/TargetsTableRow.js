@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import Spinner from '../spinner/Spinner';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 const TargtesTableRow = ({ location, target, targetCategory, data }) => {
-
     const [showModal, setShowModal] = useState(false);
     const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
 
-    const [targetState, setTargetState] = useState(target || {targetValue: ""});
+    const [targetState, setTargetState] = useState(target);
     const [prevTargetState, setPrevTargetState] = useState({});
-    // const [newTargetValue, setNewTargetValue] = useState(targetState.targetValue || "");
+
+    const isCurrentFinancialYear = useSelector(state => state.users.isCurrentFinancialYear);
 
     useEffect(() => {
-        setSaveButtonDisabled(!targetState.targetValue?.length > 0);
-    }, [targetState.targetValue])
+        setSaveButtonDisabled(!targetState?.targetValue?.length > 0);
+    }, [targetState?.targetValue])
 
     const handleChange = (e) => {
         setTargetState({
@@ -22,6 +23,10 @@ const TargtesTableRow = ({ location, target, targetCategory, data }) => {
             targetValue: e.target.value
         })
     }
+
+    useEffect(() => {
+        setTargetState(target);
+    }, [target])
 
     const onSetTargetClicked = async () => {
 
@@ -73,9 +78,14 @@ const TargtesTableRow = ({ location, target, targetCategory, data }) => {
     return (
         <tr id='admin-targets-tr'>
             <td>{location.name}</td>
-            <td>£{targetState.targetValue !== "" ? targetState.targetValue : 0}</td>
+            <td>£{targetState !== undefined ? targetState.targetValue : 0}</td>
             <td>
-                <button onClick={onShowModal}>{targetState.targetValue === "" || targetState.targetValue === "" ? "Add" : "Edit"}</button>
+                {
+                    isCurrentFinancialYear ? 
+                    <button onClick={onShowModal}>{targetState?.targetValue === "" || targetState?.targetValue === "" ? "Add" : "Edit"}</button>
+                    :
+                    <span>Read Only</span>
+                }
             </td>
 
             {
@@ -83,7 +93,7 @@ const TargtesTableRow = ({ location, target, targetCategory, data }) => {
                 <td>
                     <div className='blackout-overlay'>
                         <div className='admin-modal'>
-                            <input type='number' value={targetState.targetValue} onChange={handleChange} />
+                            <input type='number' value={targetState?.targetValue} onChange={handleChange} />
                             <div className='admin-modal-buttons'>
                                 <button className='green' onClick={onSetTargetClicked} disabled={saveButtonDisabled}>
                                     {isSaving ? <div className='spinner-button'><Spinner classes="button" /></div> : "Save"}
@@ -100,5 +110,4 @@ const TargtesTableRow = ({ location, target, targetCategory, data }) => {
 
 export default TargtesTableRow;
 
-
-// only set the value once the button has been pressed (save). cuurrently entering a value adds that to the celleven when closing the model
+// TODO - Disable editing when not the currentYear

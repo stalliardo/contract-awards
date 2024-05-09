@@ -30,8 +30,7 @@ export const awardsSlice = createSlice({
     },
 
     resetState: (state) => {
-      state.coreTotals = [];
-      state = initialState; 
+      return initialState;
     }
   },
 

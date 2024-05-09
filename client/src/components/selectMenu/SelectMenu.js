@@ -35,9 +35,9 @@ const SelectMenu = ({ value, label, name, handleItemSelection, menuItems, placeh
       </div>
       <div className={`select-menu-dropdown-container ${isOpen ? "open" : ""}`}>
         {
-          menuItems.map((item, index) => (
-            <MenuItem  value={item.value} key={index} handleClick={() => handleMenuItemSelected(item)}/>
-          ))
+          menuItems.map((item, index) => {
+            if(item.value !== defaultValue) return <MenuItem  value={item.value} key={index} handleClick={() => handleMenuItemSelected(item)}/>
+          })
         }
       </div>
     </div>

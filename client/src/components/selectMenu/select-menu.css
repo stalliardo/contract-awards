@@ -1,6 +1,9 @@
 .select-menu {
    border: 1px solid grey;
    border-radius: 4px;
+   position: relative;
+
+   z-index: 10;
 
    p {
     margin: 0;
@@ -25,10 +28,11 @@
 
    .select-menu-dropdown-container {
       background-color: rgb(255, 255, 255);
-      position: relative;
+      position: absolute;
       display: none;
       height: fit-content;
       border: 1px solid lightgray;
+      z-index: 10;
 
       .item {
         padding: 4px;
@@ -46,6 +50,7 @@
 
    .select-menu-dropdown-container.open {
       display: block;
-      top: 10px;
+      top: 28px;
+      width: 99%;
    }
 }

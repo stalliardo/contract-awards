@@ -1,6 +1,6 @@
 .awards-page-container {
     width: 90%;
-    margin: 20px auto;
+    margin: 80px auto;
     height: fit-content;
 
     h3 {
@@ -9,7 +9,7 @@
 }
 
 .awards-page-title-and-button {
-
+    
     display: flex;
     justify-content: space-between;
     align-items: flex-end;

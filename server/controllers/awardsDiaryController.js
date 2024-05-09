@@ -7,7 +7,6 @@ const months = [
   'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September'
 ];
 
-
 // Function to get the financial year based on the current date
 function getFinancialYear() {
   const now = new Date();

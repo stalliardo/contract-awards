@@ -8,8 +8,6 @@ exports.addTarget = async (req, res) => {
     const data = { ...req.body };
     data.financialYear = getFinancialYearString();
 
-    console.log('data = ', data);
-
     if (id) {
       // If an ID is provided, update the existing target
       const updatedTarget = await Target.findByIdAndUpdate(id, req.body, { new: true });

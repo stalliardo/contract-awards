@@ -31,6 +31,24 @@ export const awardsSlice = createSlice({
 
     resetState: (state) => {
       return initialState;
+    },
+
+    updateTargets: (state, action) => {
+      // Works but the Total isnt being updated
+
+      console.log('action payload = ', action.payload);
+      const targetIndex = state.targets.findIndex(target => target._id === action.payload._id);
+
+      if(targetIndex > -1) {
+        console.log('one was found');
+        const updatedArray = [...state.targets];
+        updatedArray[targetIndex] = action.payload;
+
+        state.targets = updatedArray;
+      } else {
+        console.log('pushing');
+        state.targets.push(action.payload);
+      }
     }
   },
 
@@ -149,6 +167,6 @@ export const awardsSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setLoading, getData, resetState } = awardsSlice.actions;
+export const { setLoading, getData, resetState, updateTargets } = awardsSlice.actions;
 
 export default awardsSlice.reducer;

@@ -40,7 +40,6 @@ const AwardsSummary = () => {
     }
 
     useEffect(() => {
-
         if(!authenticatedUser._id) {
             navigate("/");
         } else {
@@ -59,10 +58,6 @@ const AwardsSummary = () => {
             }
         }
     }, []);
-
-    useEffect(() => {
-        console.log('locations = ', locations);
-    }, [selectedFinancialYear])
 
     const generateFilteredTotals = (location) => {
         const totals = awardsData.coreTotals.filter((totals) => totals.location === location)

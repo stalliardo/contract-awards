@@ -12,6 +12,11 @@
         width: 24%;
         margin: 10px auto;
     }
+
+    p#error-text {
+        width: 100%;
+        margin-top: 20px;
+    }
 }
 
 .auth-form-container {

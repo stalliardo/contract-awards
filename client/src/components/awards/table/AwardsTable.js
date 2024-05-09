@@ -9,7 +9,7 @@ import FirstAwardsEntry from '../../forms/FirstAwardsEntry';
 import SelectMenu from '../../selectMenu/SelectMenu';
 
 import { getCoreTotal } from '../../../utils/financialTotals';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import './awardsTable.css';
 import '../../awards/awards.css';
@@ -34,6 +34,8 @@ const AwardsTable = ({ locations }) => {
 
     const locationOptions = generateLocationOptionsForSelectMenu(locations);
     const locationHelper = useLocation();
+
+    const dispatch = useDispatch();
 
     const queryParams = new URLSearchParams(locationHelper.search);
     let locationParam = queryParams.get("location");

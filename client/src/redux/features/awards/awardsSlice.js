@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { addData, editItem, fetchData } from './awardsThunks';
+import { addData, deleteItem, editItem, fetchData } from './awardsThunks';
 import { generateCoreTotalsData, generateUKTargetTotals, generateUkCoreTotals, generateSpecialTargetTotals } from '../../../utils/financialTotals';
 import { TARGET_CATEGORIES } from '../../../utils/constants';
 
@@ -115,6 +115,27 @@ export const awardsSlice = createSlice({
 
             updatedArray[itemToUpdateIndex].sum += parseInt(difference);
           }
+          state.coreTotals = updatedArray;
+
+          const generatedUKCoreTotals = generateUkCoreTotals(updatedArray);
+          state.ukCoreTotals = generatedUKCoreTotals.uk;
+        }
+      }
+
+      state.loading = false;
+    })
+
+    builder.addCase(deleteItem.fulfilled, (state, action) => {
+      const { location, month, value } = action.payload;
+
+      if (state.coreTotals.length) {
+        const itemToUpdateIndex = state.coreTotals.findIndex(item => item.location === location && item.month === month);
+
+        if (itemToUpdateIndex > -1) {
+          const updatedArray = [...state.coreTotals];
+
+          updatedArray[itemToUpdateIndex].sum -= parseInt(value);
+
           state.coreTotals = updatedArray;
 
           const generatedUKCoreTotals = generateUkCoreTotals(updatedArray);

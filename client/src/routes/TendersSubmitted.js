@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import TendersSubmittedTable from '../components/tendersSubmitted/TendersSubmittedTable';
 import Spinner from '../components/spinner/Spinner';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,6 +15,7 @@ const TendersSubmitted = () => {
   const awards = useSelector(state => state.awards);
   const authenticatedUser = useSelector(state => state.users.authenticatedUser);
   const selectedFinancialYear = useSelector(state => state.users.selectedFinancialYear);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if(!tenders.data || !tenders.data.length) {
@@ -28,9 +29,17 @@ const TendersSubmitted = () => {
         navigate("/");
       }
     }
+    if(tenders.data.length > 0) {
+      console.log('setting isloading');
+      setIsLoading(true);
+
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
+    }
   }, [tenders, awards])
 
-  if(!tenders.loading && !awards.loading) {
+  if(!tenders.loading && !awards.loading && !isLoading) {
     return (
         <TendersSubmittedTable data={tenders.data}/>
     )

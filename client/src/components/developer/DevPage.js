@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import "./devPage.css";
 import Spinner from '../spinner/Spinner';
+import { getTokenFromStorage } from '../../utils/localStorageUtils';
+import { useNavigate } from 'react-router-dom';
 
 const functionCardData = [
     {
@@ -49,6 +51,16 @@ const DevFunctionCard = ({ title, description, buttonText, clickHandler, isLoadi
 }
 
 const DevPage = () => {
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = getTokenFromStorage();
+        if(!token) {
+            navigate("/auth");        
+        }
+    }, [])
+
     const [isGeneratingAllData, setIsGeneratingAllData] = useState(false);
     const [isUpdatingUsers, setIsUpdatingUsers] = useState(false);
 

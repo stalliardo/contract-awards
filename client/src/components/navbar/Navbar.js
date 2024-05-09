@@ -12,17 +12,17 @@ import { resetState } from '../../redux/features/awards/awardsSlice';
 import { resetTenderState } from '../../redux/features/tenders/tenderSlice';
 import { removeTokenFromStorage } from '../../utils/localStorageUtils';
 
-const tempItems = [
-  "2122",
-  "2223",
-  "2324",
-  "2425",
-  "2526",
-  "2627",
-]
+// const tempItems = [
+//   "2122",
+//   "2223",
+//   "2324",
+//   "2425",
+//   "2526",
+//   "2627",
+// ]
 
-const menuItems = tempItems.map((item) => ({value: addSlashToYearString(item)}));
-// const menuItems = generateFinancialYearOptions().map((item) => ({value: addSlashToYearString(item)}));
+// const menuItems = tempItems.map((item) => ({value: addSlashToYearString(item)}));
+const menuItems = generateFinancialYearOptions().map((item) => ({value: addSlashToYearString(item)}));
 
 const Navbar = () => {
   const auth = useSelector(state => state.auth);
@@ -46,7 +46,6 @@ const Navbar = () => {
   }
 
   const onFinancialYearSelected = (year) => {
-
     setselectedYear(year);
     setShowWarningModal(true);
   }

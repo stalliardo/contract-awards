@@ -39,7 +39,7 @@ export const awardsSlice = createSlice({
       console.log('action payload = ', action.payload);
       const targetIndex = state.targets.findIndex(target => target._id === action.payload._id);
 
-      if(targetIndex > -1) {
+      if (targetIndex > -1) {
         console.log('one was found');
         const updatedArray = [...state.targets];
         updatedArray[targetIndex] = action.payload;
@@ -49,6 +49,17 @@ export const awardsSlice = createSlice({
         console.log('pushing');
         state.targets.push(action.payload);
       }
+
+      const filteredTargets = state.targets.filter((target) => target.category === TARGET_CATEGORIES.CONTRACT_AWARDS);
+      const filteredTendersSumittedTargets = state.targets.filter((target) => target.category === TARGET_CATEGORIES.TENDERS_SUBMITTED);
+
+      const generatedUkTargetTotal = generateUKTargetTotals(filteredTargets);
+      const generatedSpecialTargetTotals = generateSpecialTargetTotals(filteredTargets);
+
+      state.ukTargetTotal = generatedUkTargetTotal;
+      state.tendersSubmittedTargets = filteredTendersSumittedTargets;
+      state.specialsTargetTotal = generatedSpecialTargetTotals;
+      state.ukAndSpecialTargetTotal = generatedUkTargetTotal + generatedSpecialTargetTotals;
     }
   },
 
@@ -63,7 +74,7 @@ export const awardsSlice = createSlice({
       const { authenticatedUser } = action.payload;
 
       const generatedCoreTotals = generateCoreTotalsData(action.payload.awardsData, authenticatedUser);
-      const generatedUKCoreTotals = generateUkCoreTotals(generatedCoreTotals);  
+      const generatedUKCoreTotals = generateUkCoreTotals(generatedCoreTotals);
 
       const filteredTargets = action.payload.targetsData.filter((target) => target.category === TARGET_CATEGORIES.CONTRACT_AWARDS);
       const filteredTendersSumittedTargets = action.payload.targetsData.filter((target) => target.category === TARGET_CATEGORIES.TENDERS_SUBMITTED);

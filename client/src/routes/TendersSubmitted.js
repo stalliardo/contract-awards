@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getTenders } from '../redux/features/tenders/tenderThunk';
 import { fetchData } from '../redux/features/awards/awardsThunks';
 import {useNavigate} from 'react-router-dom';
+import { removeSlashFromyearString } from '../utils/stringUtils';
 
 const TendersSubmitted = () => {
   const dispatch = useDispatch();
@@ -22,7 +23,8 @@ const TendersSubmitted = () => {
       if(authenticatedUser.locations){
         dispatch(getTenders({authenticatedUser, selectedFinancialYear})).then(() => {
           if(!awards.targets.length) {
-            dispatch(fetchData({locationData: originalLocations, authenticatedUser}));
+            console.log('fetch called');
+            dispatch(fetchData({locationData: originalLocations, authenticatedUser, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear)}));
           }
         })
       } else {

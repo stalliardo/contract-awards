@@ -34,30 +34,37 @@ export const awardsSlice = createSlice({
     },
 
     updateTargets: (state, action) => {
-      // Works but the Total isnt being updated
+      const { category } = action.payload;
 
-      console.log('action payload = ', action.payload);
-      const targetIndex = state.targets.findIndex(target => target._id === action.payload._id);
+      if(category === "contract-awards") {
+        const targetIndex = state.targets.findIndex(target => target._id === action.payload._id);
 
-      if (targetIndex > -1) {
-        console.log('one was found');
+        if (targetIndex > -1) {
         const updatedArray = [...state.targets];
         updatedArray[targetIndex] = action.payload;
 
         state.targets = updatedArray;
       } else {
-        console.log('pushing');
         state.targets.push(action.payload);
       }
 
-      const filteredTargets = state.targets.filter((target) => target.category === TARGET_CATEGORIES.CONTRACT_AWARDS);
-      const filteredTendersSumittedTargets = state.targets.filter((target) => target.category === TARGET_CATEGORIES.TENDERS_SUBMITTED);
+      } else if( category === "tenders-submitted") {
+        const targetIndex = state.tendersSubmittedTargets.findIndex(target => target._id === action.payload._id);
 
-      const generatedUkTargetTotal = generateUKTargetTotals(filteredTargets);
-      const generatedSpecialTargetTotals = generateSpecialTargetTotals(filteredTargets);
+        if (targetIndex > -1) {
+        const updatedArray = [...state.tendersSubmittedTargets];
+        updatedArray[targetIndex] = action.payload;
+
+        state.tendersSubmittedTargets = updatedArray;
+      } else {
+        state.tendersSubmittedTargets.push(action.payload);
+      }
+      }
+
+      const generatedUkTargetTotal = generateUKTargetTotals(state.targets);
+      const generatedSpecialTargetTotals = generateSpecialTargetTotals(state.targets);
 
       state.ukTargetTotal = generatedUkTargetTotal;
-      state.tendersSubmittedTargets = filteredTendersSumittedTargets;
       state.specialsTargetTotal = generatedSpecialTargetTotals;
       state.ukAndSpecialTargetTotal = generatedUkTargetTotal + generatedSpecialTargetTotals;
     }

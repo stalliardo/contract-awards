@@ -101,7 +101,7 @@ const TendersSubmittedTable = ({ data }) => {
                         </tr>
                     </tbody>
                 </table>
-                <p>% T A = Percentage of Target Achieved (TBC)</p>
+                <p>T A = Percentage of Target Achieved</p>
             </div>
 
             {

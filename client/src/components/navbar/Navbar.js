@@ -10,6 +10,7 @@ import { addSlashToYearString, removeSlashFromyearString } from '../../utils/str
 import YearChangeWarningModal from './YearChangeWarningModal';
 import { resetState } from '../../redux/features/awards/awardsSlice';
 import { resetTenderState } from '../../redux/features/tenders/tenderSlice';
+import { removeTokenFromStorage } from '../../utils/localStorageUtils';
 
 const tempItems = [
   "2122",
@@ -39,7 +40,8 @@ const Navbar = () => {
   const showSelectMenu = location.pathname === "/admin" && authenticatedUser.role === ROLES.CA01;
 
   const handleSignOut = () => {
-    dispatch(logout())
+    dispatch(logout());
+    removeTokenFromStorage();
     navigate("/auth");
   }
 

@@ -1,20 +1,19 @@
 import React, { useState } from 'react';
 import AwardsTableAddRow from './AwardsTableAddRow';
 
-import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { deleteItem } from '../../../redux/features/awards/awardsThunks';
 
 const AwardsTableRow = ({ data, onItemDeleted, onItemEdited, location, month, isCurrentFinancialYear }) => {
-
     const [isEditing, setIsEditing] = useState(false);
-    const onDeleteClicked = () => {
+    const dispatch = useDispatch();
+
+    const onDeleteClicked = async () => {
         const confirmation = window.confirm("Are you sure you want to delete this item?");
 
         if (confirmation) {
-            axios.delete(`/api/awards-diary/${data.awardsDiary}/items/${data._id}`).then((response) => {
-                onItemDeleted(data._id);
-            }).catch((error) => {
-                console.log('Error deleting Item. Error: ', error);
-            })
+            await dispatch(deleteItem({data, location, month, value: data.core}));
+            onItemDeleted(data._id);
         }
     }
 

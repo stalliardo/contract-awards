@@ -55,4 +55,22 @@ const editItem = createAsyncThunk(
     },
 )
 
-export { fetchData, addData, editItem }
+const deleteItem = createAsyncThunk(
+    'awards/deleteItem',
+    async ({data, location, month, value}) => {
+        try {
+            const response = await axios.delete(`/api/awards-diary/${data.awardsDiary}/items/${data._id}`);
+
+            response.data.location = location;
+            response.data.month = month;
+            response.data.value = value;
+
+            return response.data;
+        } catch (error) {
+            console.log('catch called + error: ', error);
+            throw Error("There was an error deleting the data.")
+        }
+    },
+)
+
+export { fetchData, addData, editItem, deleteItem }

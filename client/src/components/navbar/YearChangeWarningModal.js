@@ -5,7 +5,7 @@ import Spinner from '../spinner/Spinner';
 import { useDispatch, useSelector } from 'react-redux';
 import { addTender } from '../../redux/features/tenders/tenderThunk';
 
-const YearChangeWarningModal = ({onClose, onProceed}) => {
+const YearChangeWarningModal = ({ onClose, onProceed }) => {
 
     const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
 
@@ -16,8 +16,7 @@ const YearChangeWarningModal = ({onClose, onProceed}) => {
     return (
         <div className='blackout-overlay'>
             <div className='navbar-modal'>
-
-                {/* TODO Improve the below */}
+                
                 <h3>Warning!</h3>
                 <p>You are about to view historic data. The data displayed will be readonly. Any required changes will need to be handled by a system administrator.</p>
                 

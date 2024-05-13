@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logout, setSelectedFinancialYear } from '../../redux/features/users/usersSlice';
 import { ROLES } from '../../utils/constants';
 import SelectMenu from '../selectMenu/SelectMenu';
-import { generateFinancialYearOptions, getFinancialYearString } from '../../utils/DateUtils';
+import { generateFinancialYearOptions, getCurrentFinancialYear, getFinancialYearString } from '../../utils/DateUtils';
 import { addSlashToYearString, removeSlashFromyearString } from '../../utils/stringUtils';
 import YearChangeWarningModal from './YearChangeWarningModal';
 import { resetState } from '../../redux/features/awards/awardsSlice';
@@ -22,7 +22,7 @@ import { removeTokenFromStorage } from '../../utils/localStorageUtils';
 // ]
 
 // const menuItems = tempItems.map((item) => ({value: addSlashToYearString(item)}));
-const menuItems = generateFinancialYearOptions().map((item) => ({value: addSlashToYearString(item)}));
+const menuItems = generateFinancialYearOptions().map((item) => ({ value: addSlashToYearString(item) }));
 
 const Navbar = () => {
   const auth = useSelector(state => state.auth);
@@ -30,7 +30,7 @@ const Navbar = () => {
   const selectedFinancialYear = useSelector(state => state.users.selectedFinancialYear);
 
   const [selectedYear, setselectedYear] = useState("");
-
+  const [hasSelectedCurrentFinancialYear, setHasSelectedCurrentFinancialYear] = useState(false);
   const [showWarningModal, setShowWarningModal] = useState(false);
 
   const dispatch = useDispatch();
@@ -45,11 +45,22 @@ const Navbar = () => {
     navigate("/auth");
   }
 
+  useEffect(() => {
+    if(selectedYear){
+      if (hasSelectedCurrentFinancialYear) {
+        onProceed();
+      } else {
+        console.log('else called');
+        setShowWarningModal(true);
+      }
+    }
+  }, [selectedYear]);
+
   const onFinancialYearSelected = (year) => {
+    setHasSelectedCurrentFinancialYear(getCurrentFinancialYear() === year.value);
     setselectedYear(year);
-    setShowWarningModal(true);
   }
-  
+
   const onProceed = () => {
     setShowWarningModal(false);
     dispatch(setSelectedFinancialYear(removeSlashFromyearString(selectedYear.value)));
@@ -67,59 +78,57 @@ const Navbar = () => {
   return (
     <nav className='navbar-container'>
       <div className='logo-container'>
-        <img src={`${process.env.PUBLIC_URL}/wingate-logo.jpg`} width={100}/>
+        <img src={`${process.env.PUBLIC_URL}/wingate-logo.jpg`} width={100} />
         <h5>Contract Awards</h5>
       </div>
       <div className='nav-end-container'>
         {
           auth.isAuthenticated ?
             authenticatedUser.locations?.length ?
-            <>
-              {
-                authenticatedUser.role === ROLES.CA01 &&
-                <div className='navbar-select-container'>
-                  {
-                    showSelectMenu &&
-                    <>  
-                      <SelectMenu allSettingPlaceholder={false} placeholder={addSlashToYearString(selectedFinancialYear)} menuItems={menuItems} handleItemSelection={onFinancialYearSelected} />
-                    </>
-                    
-                  }
-                </div>
-              }
+              <>
+                {
+                  authenticatedUser.role === ROLES.CA01 &&
+                  <div className='navbar-select-container'>
+                    {
+                      showSelectMenu &&
+                      <>
+                        <SelectMenu allSettingPlaceholder={false} placeholder={addSlashToYearString(selectedFinancialYear)} menuItems={menuItems} handleItemSelection={onFinancialYearSelected} />
+                      </>
+                    }
+                  </div>
+                }
 
-              {
-                !showSelectMenu &&
+                {
+                  !showSelectMenu &&
                   <span>FY: {addSlashToYearString(selectedFinancialYear)}</span>
-              }
-              {
-                authenticatedUser.role === ROLES.CA01 || authenticatedUser.role === ROLES.CA02 ?
-                <Link to="/admin">Admin</Link>
-                :
-                null
-              }
-              <Link to="/awards-form">Awards</Link>
-              <Link to="/awards-summary">Awards Summary</Link>
-              <Link to="/tenders-submitted">Tenders Submitted</Link>
-              <a onClick={handleSignOut}>Sign Out</a>
-            </>
-            :
-            <>
-              <a onClick={handleSignOut}>Sign Out</a>
-              {
-                authenticatedUser.role === ROLES.CA01 ?
-                  <Link to="/admin">Admin</Link>
-                  : null
-              }
-            </>
+                }
+                {
+                  authenticatedUser.role === ROLES.CA01 || authenticatedUser.role === ROLES.CA02 ?
+                    <Link to="/admin">Admin</Link>
+                    :
+                    null
+                }
+                <Link to="/awards-form">Awards</Link>
+                <Link to="/awards-summary">Awards Summary</Link>
+                <Link to="/tenders-submitted">Tenders Submitted</Link>
+                <a onClick={handleSignOut}>Sign Out</a>
+              </>
+              :
+              <>
+                <a onClick={handleSignOut}>Sign Out</a>
+                {
+                  authenticatedUser.role === ROLES.CA01 ?
+                    <Link to="/admin">Admin</Link>
+                    : null
+                }
+              </>
             :
             null
         }
       </div>
-
       {
         showWarningModal &&
-        <YearChangeWarningModal onClose={onClose} onProceed={onProceed}/>
+        <YearChangeWarningModal onClose={onClose} onProceed={onProceed} />
       }
     </nav>
   )

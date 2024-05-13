@@ -35,8 +35,6 @@ exports.createAwardsDiary = async (req, res) => {
 exports.getAwardsForLocation = async (req, res) => {
   const { location, financialYear } = req.query;
 
-  console.log('Financial year from location get:', financialYear);
-
   try {
     // Build the query object
     const query = {};

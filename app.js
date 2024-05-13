@@ -56,23 +56,23 @@ app.post("/login", (req, res) => {
 
     
     // Dev mode auth below
-    // return res.json({message: "Authetication Successful", token});
+    return res.json({message: "Authetication Successful", token});
 
-    ad.authenticate(username, password, function (err, auth) {
-        if (err) {
-            return res.status(401).json({ error: "Invalid Credentials" })
-        }
+    // ad.authenticate(username, password, function (err, auth) {
+    //     if (err) {
+    //         return res.status(401).json({ error: "Invalid Credentials" })
+    //     }
 
-        if (auth) {
-            console.log('LDAP Authentication successful!');
-            return res.json({message: "Authetication Successful", token});
-        }
+    //     if (auth) {
+    //         console.log('LDAP Authentication successful!');
+    //         return res.json({message: "Authetication Successful", token});
+    //     }
 
-        else {
-            console.log('Authentication failed!');
-            return res.status(500).json({ error: "Authentication failed" })
-        }
-    })
+    //     else {
+    //         console.log('Authentication failed!');
+    //         return res.status(500).json({ error: "Authentication failed" })
+    //     }
+    // })
 })
 
 app.get("/api", (req, res) => {

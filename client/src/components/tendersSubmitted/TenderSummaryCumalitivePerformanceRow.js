@@ -31,7 +31,7 @@ const TenderSummaryCumalitivePerformanceRow = ({monthlyCoreTotals, monthlyTarget
     const totals = generateTotals(monthlyCoreTotals, monthlyTargetTotal);
 
     return totals.map((total, i) => {
-      return <td key={i} style={{color: parseInt(total.sum) >= 0 ? COLOURS.GREEN : COLOURS.RED}}>
+      return <td key={i} style={{color: parseInt(total.sum) > 0 ? COLOURS.GREEN : COLOURS.RED}}>
         £{(total.sum).toLocaleString()}
         </td>
     })

@@ -90,7 +90,7 @@ export const generateDateOptionsForSelectMenu = (financialYearFromDiary) => {
         monthString = counter < 3 ? `${month}-${isYearEven ? (parseInt(financialYearFromDiary) - 1) : financialYearFromDiary}` : `${month}-${isYearEven ? financialYearFromDiary : (parseInt(financialYearFromDiary) + 1)}`;
         counter++;
 
-        return { value: monthString }
+        return { value: month }
     })
 }
 
@@ -135,8 +135,8 @@ export const getCurrentFinancialYear = () =>  {
   }
 
   // Function to generate a list of financial year strings
-  export const generateFinancialYearOptions = (baseYear = '23/24') => {
-    // export const generateFinancialYearOptions = (baseYear = '19/20') => {
+  // export const generateFinancialYearOptions = (baseYear = '23/24') => {
+    export const generateFinancialYearOptions = (baseYear = '22/23') => {
     const currentFinancialYear = getCurrentFinancialYear();
   
     const startYear = parseInt(currentFinancialYear.slice(0, 2), 10);

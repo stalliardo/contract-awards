@@ -13,6 +13,7 @@
     min-width: 600px;
     min-width: 650px;
     justify-content: space-between;
+    margin-bottom: 40px;
 }
 
 #awards-table-row-readonly {

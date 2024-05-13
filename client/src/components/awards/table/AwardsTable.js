@@ -43,6 +43,8 @@ const AwardsTable = ({ locations }) => {
 
     useEffect(() => {
         if (locationParam && monthParam) {
+            if(locationParam === "MandE") locationParam = "M&E";
+
             setLocation(capitalizeFirstLetter(locationParam));
             setMonth(capitalizeFirstLetter(monthParam));
         }
@@ -134,8 +136,9 @@ const AwardsTable = ({ locations }) => {
                 </div>
             </div>
             <div className='awards-page-table-container'>
-                <div className='awards-page-title-and-button'>
-                    <h3>{location} {filteredData.month}-{filteredData.year}</h3>
+                <div className='awards-page-title-and-button' style={{marginBottom: "20px", alignItems: "center", height: "40px"}}>
+                    {/* <h3>{location} {filteredData.month}-{filteredData.year}</h3> */}
+                    <div></div>
 
                     {filteredData.items.length ?
                       isCurrentFinancialYear &&  

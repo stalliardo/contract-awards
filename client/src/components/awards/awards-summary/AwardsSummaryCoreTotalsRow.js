@@ -61,7 +61,7 @@ const AwardsSummaryCoreTotalsRow = ({ targetsData, cumalitiveTotal, locationRef,
                 £{(formattedTargetValue() * 12).toLocaleString()}
             </td>
             {/* New Target amount to date column */}
-            <td>£{generateTargetAmountToDate(formattedTargetValue() * 12, cumalitiveTotal).toLocaleString()}</td>
+            <td>£{Math.round(generateTargetAmountToDate(formattedTargetValue() * 12, cumalitiveTotal)).toLocaleString()}</td>
 
             {/* // TODO below value */}
             <td style={{color: targetPercentageAcheivedColour}}>{targetPercentageAcheived}%</td>

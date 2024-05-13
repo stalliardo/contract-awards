@@ -162,12 +162,11 @@ export const generateSpecialTargetTotals = (data) => {
 
 export const generateTargetAmountToDate = (annualAmount) => {
     if (annualAmount === 0) return 0;
-
     const daysSinceOct01 = getDaysSinceOct01();
-    const dailyAmount = Math.round(annualAmount / 365);
+    const dailyAmount = annualAmount / 365;
     const targetAmountTodate = dailyAmount * daysSinceOct01;
 
-    return targetAmountTodate;
+    return Math.trunc(targetAmountTodate);
 }
 
 export const generateTargetAcheivedPercentage = (annualAmount, cumalitiveTotal) => {
@@ -177,8 +176,8 @@ export const generateTargetAcheivedPercentage = (annualAmount, cumalitiveTotal) 
     const targetAchieved = 100 / targetToDate * cumalitiveTotal;
 
     if (targetAchieved < 1 && targetAchieved > 0) {
-        return targetAchieved.toFixed(2);
+        return Math.trunc(targetAchieved);
     }
-
-    return targetAchieved.toFixed(2)
+   
+    return Math.trunc(targetAchieved);
 }

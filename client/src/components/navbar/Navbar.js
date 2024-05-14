@@ -103,7 +103,7 @@ const Navbar = () => {
                   <span>FY: {addSlashToYearString(selectedFinancialYear)}</span>
                 }
                 {
-                  authenticatedUser.role === ROLES.CA01 || authenticatedUser.role === ROLES.CA02 ?
+                  authenticatedUser.role === ROLES.CA01 ?
                     <Link to="/admin">Admin</Link>
                     :
                     null

@@ -51,6 +51,10 @@ const Admin = () => {
   }
 
   useEffect(() => {
+    if(authenticatedUser.role !== ROLES.CA01) {
+      navigate("/");
+    }
+
     setIsLoading(true);
     if (authenticatedUser.role === ROLES.CA01 || authenticatedUser.role === ROLES.CA02) {
       setLocationsRetrieved(originalLocations);

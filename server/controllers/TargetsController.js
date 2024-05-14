@@ -5,11 +5,9 @@ const { getFinancialYearString } = require('../utils/DateUtils');
 exports.addTarget = async (req, res) => {
   try {
     const { id } = req.body;
-    const data = {...req.body};
+    const data = { ...req.body };
     data.financialYear = getFinancialYearString();
 
-    console.log('data = ', data);
-    
     if (id) {
       // If an ID is provided, update the existing target
       const updatedTarget = await Target.findByIdAndUpdate(id, req.body, { new: true });
@@ -30,14 +28,19 @@ exports.addTarget = async (req, res) => {
 }
 
 exports.getTargets = async (req, res) => {
-  // TODO will need to amend this to get only the targets for the request financial year
-  try {
-    // Find all Locations records
-    const targets = await Target.find().exec();
+  const financialYear = req.query.year; // Retrieve financial year from query parameter
 
-    res.status(201).send(targets);
+  try {
+    let targets;
+
+    if (financialYear) {
+      // If a financial year is specified, filter by it
+      targets = await Target.find({ financialYear }).exec();
+    }
+
+    res.status(200).send(targets); // Use status 200 for successful GET requests
   } catch (error) {
-    res.status(400);
-    console.log('Error getting targets: ', error);
+    console.error('Error getting targets:', error);
+    res.status(500).json({ message: 'Internal server error' }); // Use status 500 for server errors
   }
 }

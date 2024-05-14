@@ -50,10 +50,7 @@ var ad = new ActiveDirectory(ADConfig);
 app.post("/login", (req, res) => {
     const username = `${req.body.username}@DAZCORP.COM`;
     const password = req.body.password;
-
-
     const token = jwt.generateJWT(username);
-
     
     // Dev mode auth below
     // return res.json({message: "Authetication Successful", token});

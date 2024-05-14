@@ -9,7 +9,7 @@ import FirstAwardsEntry from '../../forms/FirstAwardsEntry';
 import SelectMenu from '../../selectMenu/SelectMenu';
 
 import { getCoreTotal } from '../../../utils/financialTotals';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import './awardsTable.css';
 import '../../awards/awards.css';
@@ -20,6 +20,7 @@ function capitalizeFirstLetter(str) {
 
 const AwardsTable = ({ locations }) => {
     const user = useSelector(state => state.users);
+    const isCurrentFinancialYear = user.isCurrentFinancialYear;
 
     const currentMonth = getCurrentMonth();
     const [filteredData, setFilteredData] = useState({ items: [] });
@@ -34,12 +35,16 @@ const AwardsTable = ({ locations }) => {
     const locationOptions = generateLocationOptionsForSelectMenu(locations);
     const locationHelper = useLocation();
 
+    const dispatch = useDispatch();
+
     const queryParams = new URLSearchParams(locationHelper.search);
     let locationParam = queryParams.get("location");
     let monthParam = queryParams.get("month");
 
     useEffect(() => {
         if (locationParam && monthParam) {
+            if(locationParam === "MandE") locationParam = "M&E";
+
             setLocation(capitalizeFirstLetter(locationParam));
             setMonth(capitalizeFirstLetter(monthParam));
         }
@@ -51,7 +56,7 @@ const AwardsTable = ({ locations }) => {
         }
 
         let encodedLocation = encodeURIComponent(location);
-        let url = `/api/awards-diary/location?location=${encodedLocation}`
+        let url = `/api/awards-diary/location?location=${encodedLocation}&financialYear=${user.selectedFinancialYear}`
 
         axios.get(url).then((response) => {
             const filteredLocationData = response.data.find((item) => item.month === month);
@@ -131,10 +136,12 @@ const AwardsTable = ({ locations }) => {
                 </div>
             </div>
             <div className='awards-page-table-container'>
-                <div className='awards-page-title-and-button'>
-                    <h3>{location} {filteredData.month}-{filteredData.year}</h3>
+                <div className='awards-page-title-and-button' style={{marginBottom: "20px", alignItems: "center", height: "40px"}}>
+                    {/* <h3>{location} {filteredData.month}-{filteredData.year}</h3> */}
+                    <div></div>
 
                     {filteredData.items.length ?
+                      isCurrentFinancialYear &&  
                         <button onClick={() => setShowAddRow(true)}>
                             Add Row
                         </button>
@@ -159,7 +166,7 @@ const AwardsTable = ({ locations }) => {
                                 {
                                     filteredData.items && filteredData.items.length ?
                                         filteredData.items.map((data) => (
-                                            <AwardsTableRow data={data} key={data._id} onItemDeleted={itemDeleted} onItemEdited={onItemEdited} location={location} month={month} />
+                                            <AwardsTableRow data={data} key={data._id} onItemDeleted={itemDeleted} onItemEdited={onItemEdited} location={location} month={month} isCurrentFinancialYear={isCurrentFinancialYear}/>
                                         ))
                                         : null
                                 }

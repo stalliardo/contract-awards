@@ -2,8 +2,7 @@ import React from 'react'
 import TargetsTableRow from './TargetsTableRow';
 import { TARGET_CATEGORIES } from '../../utils/constants';
 
-const TargetsTable = ({ locations, tableTitle, targetData, data, targetCategory }) => {
-
+const TargetsTable = ({ tableTitle, data, targetCategory }) => {
     return (
         <div className='awards-table-container'>
             <div className='awards-page-table-container'>

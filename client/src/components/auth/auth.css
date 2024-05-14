@@ -9,6 +9,13 @@
         /* margin-top: 2px; */
         text-align: center;
         margin-bottom: 28px;
+        width: 24%;
+        margin: 10px auto;
+    }
+
+    p#error-text {
+        width: 100%;
+        margin-top: 20px;
     }
 }
 
@@ -17,7 +24,7 @@
     border-radius: 6px;
     padding: 20px;
     height: fit-content;
-    width: 430px;
+    width: 20%;
     margin: auto;
     display: flex;
     flex-direction: column;

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { addData, editItem, fetchData } from './awardsThunks';
+import { addData, deleteItem, editItem, fetchData } from './awardsThunks';
 import { generateCoreTotalsData, generateUKTargetTotals, generateUkCoreTotals, generateSpecialTargetTotals } from '../../../utils/financialTotals';
 import { TARGET_CATEGORIES } from '../../../utils/constants';
 
@@ -30,8 +30,43 @@ export const awardsSlice = createSlice({
     },
 
     resetState: (state) => {
-      state.coreTotals = [];
-      state = initialState; 
+      return initialState;
+    },
+
+    updateTargets: (state, action) => {
+      const { category } = action.payload;
+
+      if(category === "contract-awards") {
+        const targetIndex = state.targets.findIndex(target => target._id === action.payload._id);
+
+        if (targetIndex > -1) {
+        const updatedArray = [...state.targets];
+        updatedArray[targetIndex] = action.payload;
+
+        state.targets = updatedArray;
+      } else {
+        state.targets.push(action.payload);
+      }
+
+      } else if( category === "tenders-submitted") {
+        const targetIndex = state.tendersSubmittedTargets.findIndex(target => target._id === action.payload._id);
+
+        if (targetIndex > -1) {
+        const updatedArray = [...state.tendersSubmittedTargets];
+        updatedArray[targetIndex] = action.payload;
+
+        state.tendersSubmittedTargets = updatedArray;
+      } else {
+        state.tendersSubmittedTargets.push(action.payload);
+      }
+      }
+
+      const generatedUkTargetTotal = generateUKTargetTotals(state.targets);
+      const generatedSpecialTargetTotals = generateSpecialTargetTotals(state.targets);
+
+      state.ukTargetTotal = generatedUkTargetTotal;
+      state.specialsTargetTotal = generatedSpecialTargetTotals;
+      state.ukAndSpecialTargetTotal = generatedUkTargetTotal + generatedSpecialTargetTotals;
     }
   },
 
@@ -46,7 +81,7 @@ export const awardsSlice = createSlice({
       const { authenticatedUser } = action.payload;
 
       const generatedCoreTotals = generateCoreTotalsData(action.payload.awardsData, authenticatedUser);
-      const generatedUKCoreTotals = generateUkCoreTotals(generatedCoreTotals);  
+      const generatedUKCoreTotals = generateUkCoreTotals(generatedCoreTotals);
 
       const filteredTargets = action.payload.targetsData.filter((target) => target.category === TARGET_CATEGORIES.CONTRACT_AWARDS);
       const filteredTendersSumittedTargets = action.payload.targetsData.filter((target) => target.category === TARGET_CATEGORIES.TENDERS_SUBMITTED);
@@ -125,10 +160,31 @@ export const awardsSlice = createSlice({
 
       state.loading = false;
     })
+
+    builder.addCase(deleteItem.fulfilled, (state, action) => {
+      const { location, month, value } = action.payload;
+
+      if (state.coreTotals.length) {
+        const itemToUpdateIndex = state.coreTotals.findIndex(item => item.location === location && item.month === month);
+
+        if (itemToUpdateIndex > -1) {
+          const updatedArray = [...state.coreTotals];
+
+          updatedArray[itemToUpdateIndex].sum -= parseInt(value);
+
+          state.coreTotals = updatedArray;
+
+          const generatedUKCoreTotals = generateUkCoreTotals(updatedArray);
+          state.ukCoreTotals = generatedUKCoreTotals.uk;
+        }
+      }
+
+      state.loading = false;
+    })
   }
 })
 
 // Action creators are generated for each case reducer function
-export const { setLoading, getData, resetState } = awardsSlice.actions;
+export const { setLoading, getData, resetState, updateTargets } = awardsSlice.actions;
 
 export default awardsSlice.reducer;

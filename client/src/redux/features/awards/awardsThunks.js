@@ -3,10 +3,10 @@ import axios from 'axios';
 
 const fetchData = createAsyncThunk(
     'awards/fetchData',
-    async ({locationData, authenticatedUser}) => {
+    async ({locationData, authenticatedUser, selectedFinancialYear}) => {
         try {
-            const awards = await axios.get("/api/awards-diary/getAllAwards");
-            const targets = await axios.get("/api/targets");
+            const awards = await axios.get(`/api/awards-diary/getAllAwards/?year=${selectedFinancialYear}`);
+            const targets = await axios.get(`/api/targets/?year=${selectedFinancialYear}`);
 
             if(locationData.length) {
                 return {targetsData: targets.data, awardsData: awards.data, locationsData: locationData, authenticatedUser};
@@ -55,4 +55,22 @@ const editItem = createAsyncThunk(
     },
 )
 
-export { fetchData, addData, editItem }
+const deleteItem = createAsyncThunk(
+    'awards/deleteItem',
+    async ({data, location, month, value}) => {
+        try {
+            const response = await axios.delete(`/api/awards-diary/${data.awardsDiary}/items/${data._id}`);
+
+            response.data.location = location;
+            response.data.month = month;
+            response.data.value = value;
+
+            return response.data;
+        } catch (error) {
+            console.log('catch called + error: ', error);
+            throw Error("There was an error deleting the data.")
+        }
+    },
+)
+
+export { fetchData, addData, editItem, deleteItem }

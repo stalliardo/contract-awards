@@ -23,6 +23,9 @@ export const tenderSlice = createSlice({
     setAuthenticatedUser: (state, action) => {
       state.authenticatedUser = action.payload;
     },
+    resetTenderState: () => {
+      return initialState;
+    }
   },
 
   extraReducers: (builder) => {
@@ -74,7 +77,7 @@ export const tenderSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setLoading, buildData, setAuthenticatedUser } = tenderSlice.actions;
+export const { setLoading, buildData, setAuthenticatedUser, resetTenderState } = tenderSlice.actions;
 
 export default tenderSlice.reducer;
 

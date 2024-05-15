@@ -74,6 +74,7 @@ export const awardsSlice = createSlice({
       const locations = action.payload;
 
       const exportData = {
+        locations,
         nonSpecialRows: {coreTotals: [], cumalitiveTotals: [], targets: []},
         specialRows: {coreTotals: [], cumalitiveTotals: [], targets: []},
         ukCoreTotalRow: {coreTotals: state.ukCoreTotals, cumalativeTotals: 0, targets: state.ukTargetTotal},
@@ -124,13 +125,13 @@ export const awardsSlice = createSlice({
       const specialTargets = targetsArray.filter((item) => item.location === "M&E" || item.location === "Special Projects");
       const specials = cTotals.filter(item => item.location === "M&E" || item.location === "Special Projects");
 
-      exportData.nonSpecialRows.coreTotals.push(nonSpecials);
-      exportData.nonSpecialRows.cumalitiveTotals.push(nonSpecialCumalitiveTotals);
-      exportData.nonSpecialRows.targets.push(nonSpecialTargets);
+      exportData.nonSpecialRows.coreTotals.push(...nonSpecials);
+      exportData.nonSpecialRows.cumalitiveTotals.push(...nonSpecialCumalitiveTotals);
+      exportData.nonSpecialRows.targets.push(...nonSpecialTargets);
       
-      exportData.specialRows.coreTotals.push(specials);
-      exportData.specialRows.cumalitiveTotals.push(specialsCumalitiveTotals);
-      exportData.specialRows.targets.push(specialTargets); // <- todo
+      exportData.specialRows.coreTotals.push(...specials);
+      exportData.specialRows.cumalitiveTotals.push(...specialsCumalitiveTotals);
+      exportData.specialRows.targets.push(...specialTargets); // <- todo
       
       exportData.ukCoreTotalRow.cumalativeTotals = ukCoreTotalsSum;
       exportData.totalsRow.cumalativeTotals = ukAndSpecialCoreTotalsSum;

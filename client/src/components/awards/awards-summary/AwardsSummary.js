@@ -97,7 +97,7 @@ const AwardsSummary = () => {
         if(!awardsData.exportData) {
             console.log('no data');
         } else {
-            exportToCSV("", selectedFinancialYear)
+            exportToCSV(awardsData.exportData, selectedFinancialYear)
         }
     }, [awardsData.exportData])
 

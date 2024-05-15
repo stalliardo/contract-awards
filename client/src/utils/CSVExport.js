@@ -20,13 +20,16 @@ export const exportToCSV = (data, selectedFinancialYear) => {
 
     console.log('headers = ', headers);
 
-    console.log('datata = ', data.nonSpecialRows.coreTotals);
 
     csvRows.push(headers.join(","));
-    data.locations.forEach((location) => {
+    data.locations.forEach((location, index) => {
         const rowItems = data.nonSpecialRows.coreTotals.filter((item) => item.location === location.name);
         const rowSums = rowItems.map(item => item.sum);
-        const items = [location.name, ...rowSums]
+        const cumalativeTotalsSingle = data.nonSpecialRows.cumalitiveTotals[index]?.cumalitiveTotal
+
+        const items = [location.name, ...rowSums, cumalativeTotalsSingle];
+
+        console.log('items = ', items);
         csvRows.push(items.join(","));
     })
 

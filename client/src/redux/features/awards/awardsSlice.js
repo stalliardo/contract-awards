@@ -18,7 +18,7 @@ const initialState = {
   specialLocations: [],
   loading: true,
   error: null,
-  generatedExportData: {}
+  generatedExportData: null
 };
 
 export const awardsSlice = createSlice({

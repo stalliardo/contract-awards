@@ -14,6 +14,7 @@ import { generateFinancialYearMonths } from '../../../utils/DateUtils';
 import { useNavigate } from 'react-router-dom';
 import { addSlashToYearString, removeSlashFromyearString } from '../../../utils/stringUtils';
 import { generateExportData } from '../../../redux/features/awards/awardsSlice';
+import { exportToCSV } from '../../../utils/CSVExport';
 
 const AwardsSummary = () => {
     const dispatch = useDispatch();
@@ -84,11 +85,20 @@ const AwardsSummary = () => {
     }
 
     const onExportCSV = () => {
-        dispatch(generateExportData(originalLocations));
+        const confirmation = window.confirm("Are you sure you want to generate CSV data for the awards summary?")
+        if(confirmation) {
+            dispatch(generateExportData(originalLocations));
+        }
     }
 
     useEffect(() => {
         console.log('ue export data = ', awardsData.exportData);
+
+        if(!awardsData.exportData) {
+            console.log('no data');
+        } else {
+            exportToCSV("", selectedFinancialYear)
+        }
     }, [awardsData.exportData])
 
     return (

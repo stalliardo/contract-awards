@@ -1,16 +1,6 @@
 import { generateFinancialYearMonths } from "./DateUtils";
 import { addSlashToYearString } from "./stringUtils";
 
-// const MonthsForTableHead = (selectedFinancialYear) => {
-//     const months = generateFinancialYearMonths(addSlashToYearString(selectedFinancialYear));
-
-//     const cells = months.map((month, i) => {
-//         return <th>{month}</th>
-//     })
-
-//     return cells
-// }
-
 export const exportToCSV = (data, selectedFinancialYear) => {
     const csvRows = [];
 
@@ -25,9 +15,10 @@ export const exportToCSV = (data, selectedFinancialYear) => {
     data.locations.forEach((location, index) => {
         const rowItems = data.nonSpecialRows.coreTotals.filter((item) => item.location === location.name);
         const rowSums = rowItems.map(item => item.sum);
-        const cumalativeTotalsSingle = data.nonSpecialRows.cumalitiveTotals[index]?.cumalitiveTotal
-
-        const items = [location.name, ...rowSums, cumalativeTotalsSingle];
+        const cumalativeTotalsSingle = data.nonSpecialRows.cumalitiveTotals[index]?.cumalitiveTotal;
+        const monthTarget = parseInt(data.nonSpecialRows.targets.find((item) => item.location === location.name)?.monthTarget);
+        const yearlyTarget = monthTarget * 12;
+        const items = [location.name, ...rowSums, cumalativeTotalsSingle, monthTarget, yearlyTarget];
 
         console.log('items = ', items);
         csvRows.push(items.join(","));

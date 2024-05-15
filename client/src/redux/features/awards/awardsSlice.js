@@ -75,15 +75,13 @@ export const awardsSlice = createSlice({
 
       const exportData = {
         nonSpecialRows: {coreTotals: [], cumalitiveTotals: [], targets: []},
-        ukcoreTotalRow: [],
         specialRows: {coreTotals: [], cumalitiveTotals: [], targets: []},
-        totalsRow: []
+        ukCoreTotalRow: {coreTotals: state.ukCoreTotals, cumalativeTotals: 0, targets: state.ukTargetTotal},
+        totalsRow: {coreTotals: state.ukAndSpecialCoreTotals, cumalativeTotals: 0, targets: state.ukAndSpecialTargetTotal}
       }
 
-
-      const cTotals = [...state.coreTotals];
-      const targets = [...state.targets];
-
+      const cTotals = state.coreTotals; // TODO changeto none mutations
+      const targets =  state.targets;
 
       const cumalativeTotals = [];
       const targetsArray = [];
@@ -104,39 +102,40 @@ export const awardsSlice = createSlice({
           }
         })
 
-
-
         cumalativeTotals.push(cumalitiveTotalObject);
         targetsArray.push(targetObject);
+      })
+
+      let ukCoreTotalsSum = 0;
+      state.ukCoreTotals.forEach((total) => {
+        ukCoreTotalsSum += total.ukCoreTotal;
+      });
+
+      let ukAndSpecialCoreTotalsSum = 0;
+      state.ukAndSpecialCoreTotals.forEach((total) => {
+        ukAndSpecialCoreTotalsSum += total.sum;
       })
 
       const nonSpecialCumalitiveTotals = cumalativeTotals.filter((item) => item.location !== "M&E" && item.location !== "Special Projects");
       const nonSpecialTargets = targetsArray.filter((item) => item.location !== "M&E" && item.location !== "Special Projects");
       const nonSpecials = cTotals.filter(item => item.location !== "M&E" && item.location !== "Special Projects");
       
-      
       const specialsCumalitiveTotals = cumalativeTotals.filter((item) => item.location === "M&E" || item.location === "Special Projects");
       const specialTargets = targetsArray.filter((item) => item.location === "M&E" || item.location === "Special Projects");
       const specials = cTotals.filter(item => item.location === "M&E" || item.location === "Special Projects");
 
-
-
-
       exportData.nonSpecialRows.coreTotals.push(nonSpecials);
       exportData.nonSpecialRows.cumalitiveTotals.push(nonSpecialCumalitiveTotals);
       exportData.nonSpecialRows.targets.push(nonSpecialTargets);
-
+      
       exportData.specialRows.coreTotals.push(specials);
       exportData.specialRows.cumalitiveTotals.push(specialsCumalitiveTotals);
       exportData.specialRows.targets.push(specialTargets); // <- todo
-
-
-
-
+      
+      exportData.ukCoreTotalRow.cumalativeTotals = ukCoreTotalsSum;
+      exportData.totalsRow.cumalativeTotals = ukAndSpecialCoreTotalsSum;
 
       state.exportData = exportData;
-
-    
     }
   },
 

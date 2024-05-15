@@ -17,7 +17,8 @@ const initialState = {
   locations: [],
   specialLocations: [],
   loading: true,
-  error: null
+  error: null,
+  generatedExportData: {}
 };
 
 export const awardsSlice = createSlice({
@@ -67,6 +68,69 @@ export const awardsSlice = createSlice({
       state.ukTargetTotal = generatedUkTargetTotal;
       state.specialsTargetTotal = generatedSpecialTargetTotals;
       state.ukAndSpecialTargetTotal = generatedUkTargetTotal + generatedSpecialTargetTotals;
+    },
+
+    generateExportData: (state, action) => {
+      const locations = action.payload;
+
+      const exportData = {
+        nonSpecialRows: {coreTotals: [], cumalitiveTotals: [], targets: []},
+        ukcoreTotalRow: [],
+        specialRows: [],
+        totalsRow: []
+      }
+
+
+      const cTotals = [...state.coreTotals];
+      const targets = [...state.targets];
+
+      const nonSpecials = cTotals.filter(item => item.location !== "M&E" && item.location !== "Special Projects");
+      const cumalativeTotals = [];
+      const targetsArray = [];
+
+      locations.forEach((location) => {
+        const cumalitiveTotalObject = {location: location.name, cumalitiveTotal: 0};
+        const targetObject = {location: location.name, monthTarget: 0, toDate: 0}
+
+        const filteredLocations = cTotals.filter((item) => item.location === location.name);
+        
+        filteredLocations.forEach((item) => {
+          cumalitiveTotalObject.cumalitiveTotal += item.sum;
+        })
+
+        targets.forEach((target) => {
+          if(target.location === location.name && target.category === "contract-awards"){
+            targetObject.monthTarget = target.targetValue
+          }
+        })
+
+
+
+        cumalativeTotals.push(cumalitiveTotalObject);
+        targetsArray.push(targetObject);
+      })
+
+      const nonSpecialCumalitiveTotals = cumalativeTotals.filter((item) => item.location !== "M&E" && item.location !== "Special Projects");
+      const nonSpecialTargets = targetsArray.filter((item) => item.location !== "M&E" && item.location !== "Special Projects");
+
+
+
+      exportData.nonSpecialRows.coreTotals.push(nonSpecials);
+      exportData.nonSpecialRows.cumalitiveTotals.push(nonSpecialCumalitiveTotals);
+      exportData.nonSpecialRows.targets.push(nonSpecialTargets);
+    
+
+
+
+
+      const specials = cTotals.filter(item => item.location === "M&E" && item.location === "Special Projects");
+
+
+      exportData.specialRows.push(nonSpecials);
+
+      state.exportData = exportData;
+
+    
     }
   },
 
@@ -185,6 +249,51 @@ export const awardsSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setLoading, getData, resetState, updateTargets } = awardsSlice.actions;
+export const { setLoading, getData, resetState, updateTargets, generateExportData } = awardsSlice.actions;
 
 export default awardsSlice.reducer;
+
+
+
+const exportDataFormat = {
+  nonSpecialRows: [
+    [
+      {
+        location: "AWE",
+        month:  "Oct",
+        coreTotal: "1000"
+      },
+      {
+        location: "AWE",
+        month:  "Nov",
+        coreTotal: "1000"
+      },
+      {
+        location: "AWE",
+        cumalitiveTotal:  "10,000",
+        monthTarget:  "2000",
+        yearTarget:  "24000",
+        targetToDate: "15,000",
+        targetAcheived: "80%",
+        coreTotal: "1000"
+      },
+      // ...
+    ], 
+    [
+      {
+        location: "Avonmouth",
+        month:  "Oct",
+        coreTotal: "1000"
+      },
+      {
+        location: "Avonmouth",
+        month:  "Nov",
+        coreTotal: "1000"
+      },
+      // ...
+    ], 
+  ],
+  ukCoreTotalRow: {},
+  specialRows: [],
+  totalRow: {}
+}

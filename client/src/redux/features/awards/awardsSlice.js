@@ -76,7 +76,7 @@ export const awardsSlice = createSlice({
       const exportData = {
         nonSpecialRows: {coreTotals: [], cumalitiveTotals: [], targets: []},
         ukcoreTotalRow: [],
-        specialRows: [],
+        specialRows: {coreTotals: [], cumalitiveTotals: [], targets: []},
         totalsRow: []
       }
 
@@ -84,7 +84,7 @@ export const awardsSlice = createSlice({
       const cTotals = [...state.coreTotals];
       const targets = [...state.targets];
 
-      const nonSpecials = cTotals.filter(item => item.location !== "M&E" && item.location !== "Special Projects");
+
       const cumalativeTotals = [];
       const targetsArray = [];
 
@@ -112,21 +112,27 @@ export const awardsSlice = createSlice({
 
       const nonSpecialCumalitiveTotals = cumalativeTotals.filter((item) => item.location !== "M&E" && item.location !== "Special Projects");
       const nonSpecialTargets = targetsArray.filter((item) => item.location !== "M&E" && item.location !== "Special Projects");
+      const nonSpecials = cTotals.filter(item => item.location !== "M&E" && item.location !== "Special Projects");
+      
+      
+      const specialsCumalitiveTotals = cumalativeTotals.filter((item) => item.location === "M&E" || item.location === "Special Projects");
+      const specialTargets = targetsArray.filter((item) => item.location === "M&E" || item.location === "Special Projects");
+      const specials = cTotals.filter(item => item.location === "M&E" || item.location === "Special Projects");
+
 
 
 
       exportData.nonSpecialRows.coreTotals.push(nonSpecials);
       exportData.nonSpecialRows.cumalitiveTotals.push(nonSpecialCumalitiveTotals);
       exportData.nonSpecialRows.targets.push(nonSpecialTargets);
-    
+
+      exportData.specialRows.coreTotals.push(specials);
+      exportData.specialRows.cumalitiveTotals.push(specialsCumalitiveTotals);
+      exportData.specialRows.targets.push(specialTargets); // <- todo
 
 
 
 
-      const specials = cTotals.filter(item => item.location === "M&E" && item.location === "Special Projects");
-
-
-      exportData.specialRows.push(nonSpecials);
 
       state.exportData = exportData;
 

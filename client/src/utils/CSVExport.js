@@ -1,4 +1,5 @@
 import { generateFinancialYearMonths } from "./DateUtils";
+import { generateTargetAcheivedPercentage, generateTargetAmountToDate } from "./financialTotals";
 import { addSlashToYearString } from "./stringUtils";
 
 export const exportToCSV = (data, selectedFinancialYear) => {
@@ -18,9 +19,19 @@ export const exportToCSV = (data, selectedFinancialYear) => {
         const cumalativeTotalsSingle = data.nonSpecialRows.cumalitiveTotals[index]?.cumalitiveTotal;
         const monthTarget = parseInt(data.nonSpecialRows.targets.find((item) => item.location === location.name)?.monthTarget);
         const yearlyTarget = monthTarget * 12;
-        const items = [location.name, ...rowSums, cumalativeTotalsSingle, monthTarget, yearlyTarget];
+
+
+
+        const targetAmountTodate = Math.round(generateTargetAmountToDate(yearlyTarget, cumalativeTotalsSingle))
+        const targetPercentageAcheived = generateTargetAcheivedPercentage( yearlyTarget, cumalativeTotalsSingle);
+        console.log('targetAmountTodate = ', typeof(targetAmountTodate));
+
+        const items = [location.name, ...rowSums, cumalativeTotalsSingle, monthTarget, yearlyTarget, targetAmountTodate, targetPercentageAcheived];
 
         console.log('items = ', items);
+
+
+
         csvRows.push(items.join(","));
     })
 

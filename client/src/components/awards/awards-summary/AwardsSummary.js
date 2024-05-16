@@ -13,6 +13,8 @@ import AwardsSummaryCumalitivePerformanceRow from './AwardsSummaryCumalitivePerf
 import { generateFinancialYearMonths } from '../../../utils/DateUtils';
 import { useNavigate } from 'react-router-dom';
 import { addSlashToYearString, removeSlashFromyearString } from '../../../utils/stringUtils';
+import { generateExportData } from '../../../redux/features/awards/awardsSlice';
+import { exportToCSV, generateCSVString } from '../../../utils/CSVExport';
 
 const AwardsSummary = () => {
     const dispatch = useDispatch();
@@ -82,13 +84,24 @@ const AwardsSummary = () => {
         return sum;
     }
 
+    const onExportCSV = () => {
+        const confirmation = window.confirm("Are you sure you want to generate CSV data for the awards summary?")
+        dispatch(generateExportData(originalLocations));
+
+        if(confirmation) {
+            generateCSVString(awardsData.exportData, selectedFinancialYear);
+        }
+    }
+    
     return (
         !showUI ?
             <div className='spinner-container-page'><Spinner classes="page" text="Generating Summary Table...." /></div>
             :
             <div className='awards-page-container'>
                 <div className='awards-page-table-container'>
-                    <h3>Contract Awards Summary</h3>
+                    <div style={{display: "flex", justifyContent: "space-between", alignItems: "flex-end"}}>
+                        <h3>Contract Awards Summary</h3>
+                        <button onClick={onExportCSV}>Export CSV</button></div>
                     <table id="awards-table" className='awards-summary-table'>
                         <thead>
                             <tr>

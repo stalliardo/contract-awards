@@ -42,7 +42,7 @@ export const exportToCSV = (data, selectedFinancialYear) => {
     const csvFile = new Blob([csvString], { type: 'text/csv' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(csvFile);
-    link.download = 'company_tenders.csv';
+    link.download = 'contract_awards.csv';
     // link.click();
 }
 

@@ -18,7 +18,7 @@ const initialState = {
   specialLocations: [],
   loading: true,
   error: null,
-  generatedExportData: null
+  exportData: null
 };
 
 export const awardsSlice = createSlice({
@@ -139,6 +139,10 @@ export const awardsSlice = createSlice({
       exportData.totalsRow.cumalativeTotals = ukAndSpecialCoreTotalsSum;
 
       state.exportData = exportData;
+    },
+
+    clearExportData: (state, action) => {
+      state.exportData = null;
     }
   },
 
@@ -257,51 +261,6 @@ export const awardsSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setLoading, getData, resetState, updateTargets, generateExportData } = awardsSlice.actions;
+export const { setLoading, getData, resetState, updateTargets, generateExportData, clearExportData } = awardsSlice.actions;
 
 export default awardsSlice.reducer;
-
-
-
-const exportDataFormat = {
-  nonSpecialRows: [
-    [
-      {
-        location: "AWE",
-        month:  "Oct",
-        coreTotal: "1000"
-      },
-      {
-        location: "AWE",
-        month:  "Nov",
-        coreTotal: "1000"
-      },
-      {
-        location: "AWE",
-        cumalitiveTotal:  "10,000",
-        monthTarget:  "2000",
-        yearTarget:  "24000",
-        targetToDate: "15,000",
-        targetAcheived: "80%",
-        coreTotal: "1000"
-      },
-      // ...
-    ], 
-    [
-      {
-        location: "Avonmouth",
-        month:  "Oct",
-        coreTotal: "1000"
-      },
-      {
-        location: "Avonmouth",
-        month:  "Nov",
-        coreTotal: "1000"
-      },
-      // ...
-    ], 
-  ],
-  ukCoreTotalRow: {},
-  specialRows: [],
-  totalRow: {}
-}

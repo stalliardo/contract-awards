@@ -13,7 +13,7 @@ import AwardsSummaryCumalitivePerformanceRow from './AwardsSummaryCumalitivePerf
 import { generateFinancialYearMonths } from '../../../utils/DateUtils';
 import { useNavigate } from 'react-router-dom';
 import { addSlashToYearString, removeSlashFromyearString } from '../../../utils/stringUtils';
-import { generateExportData } from '../../../redux/features/awards/awardsSlice';
+import { clearExportData, generateExportData } from '../../../redux/features/awards/awardsSlice';
 import { exportToCSV, generateCSVString } from '../../../utils/CSVExport';
 
 const AwardsSummary = () => {
@@ -85,13 +85,18 @@ const AwardsSummary = () => {
     }
 
     const onExportCSV = () => {
-        const confirmation = window.confirm("Are you sure you want to generate CSV data for the awards summary?")
         dispatch(generateExportData(originalLocations));
-
-        if(confirmation) {
-            generateCSVString(awardsData.exportData, selectedFinancialYear);
-        }
     }
+
+    useEffect(() => {
+        if(awardsData.exportData) {
+            const confirmation = window.confirm("Are you sure you want to generate CSV data for the awards summary?");
+            if(confirmation) {
+                generateCSVString(awardsData.exportData, selectedFinancialYear);
+            }
+            dispatch(clearExportData());
+        }
+    }, [awardsData.exportData])
     
     return (
         !showUI ?

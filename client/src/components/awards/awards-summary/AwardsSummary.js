@@ -14,7 +14,7 @@ import { generateFinancialYearMonths } from '../../../utils/DateUtils';
 import { useNavigate } from 'react-router-dom';
 import { addSlashToYearString, removeSlashFromyearString } from '../../../utils/stringUtils';
 import { generateExportData } from '../../../redux/features/awards/awardsSlice';
-import { exportToCSV } from '../../../utils/CSVExport';
+import { exportToCSV, generateCSVString } from '../../../utils/CSVExport';
 
 const AwardsSummary = () => {
     const dispatch = useDispatch();
@@ -86,21 +86,13 @@ const AwardsSummary = () => {
 
     const onExportCSV = () => {
         const confirmation = window.confirm("Are you sure you want to generate CSV data for the awards summary?")
+        dispatch(generateExportData(originalLocations));
+
         if(confirmation) {
-            dispatch(generateExportData(originalLocations));
+            generateCSVString(awardsData.exportData, selectedFinancialYear);
         }
     }
-
-    useEffect(() => {
-        console.log('ue export data = ', awardsData.exportData);
-
-        if(!awardsData.exportData) {
-            console.log('no data');
-        } else {
-            exportToCSV(awardsData.exportData, selectedFinancialYear)
-        }
-    }, [awardsData.exportData])
-
+    
     return (
         !showUI ?
             <div className='spinner-container-page'><Spinner classes="page" text="Generating Summary Table...." /></div>

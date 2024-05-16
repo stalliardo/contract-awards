@@ -2,7 +2,17 @@ import { generateFinancialYearMonths, getMonthsInFinancialOrder } from "./DateUt
 import { generateTargetAcheivedPercentage, generateTargetAmountToDate } from "./financialTotals";
 import { addSlashToYearString } from "./stringUtils";
 
-export const exportToCSV = (data, selectedFinancialYear) => {
+export const downloadCSVFile = (csvString) => {
+    // Create and trigger download
+    const csvFile = new Blob([csvString], { type: 'text/csv' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(csvFile);
+    link.download = 'contract_awards.csv';
+    link.click();
+    window.alert("CSV successfully generated and downloaded!");
+}
+
+export const generateCSVString = (data, selectedFinancialYear) => {
     const csvRows = [];
     const months = generateFinancialYearMonths(addSlashToYearString(selectedFinancialYear));
     const headers = ["location", ...months, "Cumalitive Totals", "Monthly Target", "Yearly Target", "Target to Date", "%TA"]
@@ -33,7 +43,6 @@ export const exportToCSV = (data, selectedFinancialYear) => {
 
     const ukCoreTotalRow = data.ukCoreTotalRow.coreTotals;
     console.log('ukCoreTotalRow = ', ukCoreTotalRow);
-    
 
     // Create a mutable copy of the array as it is frozen
     let mutableUkCoreTotalRow = [...ukCoreTotalRow];
@@ -67,11 +76,28 @@ export const exportToCSV = (data, selectedFinancialYear) => {
         });
 
         const rowSums = rowItems.map((item) => item.sum);
-
-
         const items = [location, ...rowSums, cumalativeTotalsSingle, monthTarget, yearlyTarget, targetAmountTodate, targetPercentageAcheived];
         csvRows.push(items.join(","));
     })
+
+    const totalRow = data.totalsRow.coreTotals;
+
+    // Create a mutable copy of the array as it is frozen
+    let mutableTotalRow = [...totalRow];
+
+    // Sort the mutable array based on the custom order
+    mutableTotalRow.sort((a, b) => {
+        return monthsInFinancialOrder.indexOf(a.month) - monthsInFinancialOrder.indexOf(b.month);
+    });
+
+    const Totals = mutableTotalRow.map(item => item.sum);
+    const totalCumalitive = data.totalsRow.cumalativeTotals;
+    const totalTarget = data.totalsRow.targets;
+    const totalYearlyTarget = totalTarget * 12;
+    const targetAmountTodate = Math.round(generateTargetAmountToDate(totalYearlyTarget, totalCumalitive))
+    const targetPercentageAcheived = generateTargetAcheivedPercentage(totalYearlyTarget, totalCumalitive);
+
+    csvRows.push(["Total", ...Totals, totalCumalitive, totalTarget, totalYearlyTarget, targetAmountTodate, targetPercentageAcheived])
 
     csvRows.push("");
     csvRows.push("Company Performance Monthly");
@@ -84,13 +110,5 @@ export const exportToCSV = (data, selectedFinancialYear) => {
     // Create CSV string
     const csvString = csvRows.join('\n');
 
-    console.log('csv string = ', csvString);
-
-    // Create and trigger download
-    const csvFile = new Blob([csvString], { type: 'text/csv' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(csvFile);
-    link.download = 'contract_awards.csv';
-    // link.click();
+    downloadCSVFile(csvString)
 }
-

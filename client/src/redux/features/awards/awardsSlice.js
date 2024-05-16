@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { addData, deleteItem, editItem, fetchData } from './awardsThunks';
-import { generateCoreTotalsData, generateUKTargetTotals, generateUkCoreTotals, generateSpecialTargetTotals } from '../../../utils/financialTotals';
+import { generateCoreTotalsData, generateUKTargetTotals, generateUkCoreTotals, generateSpecialTargetTotals, generateCompanyPerformanceCumalitiveTotals } from '../../../utils/financialTotals';
 import { TARGET_CATEGORIES } from '../../../utils/constants';
 
 const initialState = {
@@ -78,7 +78,9 @@ export const awardsSlice = createSlice({
         nonSpecialRows: {coreTotals: [], cumalitiveTotals: [], targets: []},
         specialRows: {coreTotals: [], cumalitiveTotals: [], targets: []},
         ukCoreTotalRow: {coreTotals: state.ukCoreTotals, cumalativeTotals: 0, targets: state.ukTargetTotal},
-        totalsRow: {coreTotals: state.ukAndSpecialCoreTotals, cumalativeTotals: 0, targets: state.ukAndSpecialTargetTotal}
+        totalsRow: {coreTotals: state.ukAndSpecialCoreTotals, cumalativeTotals: 0, targets: state.ukAndSpecialTargetTotal},
+        companyPerformanceMothlyRow: state.ukAndSpecialCoreTotals.map((total) => total.sum - state.ukAndSpecialTargetTotal),
+        companyPerformanceCumalitiveRow: generateCompanyPerformanceCumalitiveTotals(state.ukAndSpecialCoreTotals, state.ukAndSpecialTargetTotal).map((item) => item.sum)
       }
 
       const cTotals = state.coreTotals; // TODO changeto none mutations

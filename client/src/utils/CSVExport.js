@@ -11,28 +11,48 @@ export const exportToCSV = (data, selectedFinancialYear) => {
     csvRows.push(headers.join(","));
 
     data.locations.forEach((location, index) => {
-        if(location.name !== "M&E" && location.name !== "Special Projects"){
+        if (location.name !== "M&E" && location.name !== "Special Projects") {
             const rowItems = data.nonSpecialRows.coreTotals.filter((item) => item.location === location.name);
 
-        // sort the data so it always comes back in the correct financial order  
-        rowItems.sort((a, b) => {
-            return monthsInFinancialOrder.indexOf(a.month) - monthsInFinancialOrder.indexOf(b.month);
-        });
+            // sort the data so it always comes back in the correct financial order  
+            rowItems.sort((a, b) => {
+                return monthsInFinancialOrder.indexOf(a.month) - monthsInFinancialOrder.indexOf(b.month);
+            });
 
-        const rowSums = rowItems.map(item => item.sum);
-        const cumalativeTotalsSingle = data.nonSpecialRows.cumalitiveTotals[index]?.cumalitiveTotal;
-        const monthTarget = parseInt(data.nonSpecialRows.targets.find((item) => item.location === location.name)?.monthTarget);
-        const yearlyTarget = monthTarget * 12;
-        const targetAmountTodate = Math.round(generateTargetAmountToDate(yearlyTarget, cumalativeTotalsSingle))
-        const targetPercentageAcheived = generateTargetAcheivedPercentage(yearlyTarget, cumalativeTotalsSingle);
-        const items = [location.name, ...rowSums, cumalativeTotalsSingle, monthTarget, yearlyTarget, targetAmountTodate, targetPercentageAcheived];
+            const rowSums = rowItems.map(item => item.sum);
+            const cumalativeTotalsSingle = data.nonSpecialRows.cumalitiveTotals[index]?.cumalitiveTotal;
+            const monthTarget = parseInt(data.nonSpecialRows.targets.find((item) => item.location === location.name)?.monthTarget);
+            const yearlyTarget = monthTarget * 12;
+            const targetAmountTodate = Math.round(generateTargetAmountToDate(yearlyTarget, cumalativeTotalsSingle));
+            const targetPercentageAcheived = generateTargetAcheivedPercentage(yearlyTarget, cumalativeTotalsSingle);
+            const items = [location.name, ...rowSums, cumalativeTotalsSingle, monthTarget, yearlyTarget, targetAmountTodate, targetPercentageAcheived];
 
-        csvRows.push(items.join(","));
+            csvRows.push(items.join(","));
         }
     })
 
-    const specialLocations = data.specialRows.cumalitiveTotals.map((item) => item.location);
+    const ukCoreTotalRow = data.ukCoreTotalRow.coreTotals;
+    console.log('ukCoreTotalRow = ', ukCoreTotalRow);
+    
 
+    // Create a mutable copy of the array as it is frozen
+    let mutableUkCoreTotalRow = [...ukCoreTotalRow];
+
+    // Sort the mutable array based on the custom order
+    mutableUkCoreTotalRow.sort((a, b) => {
+        return monthsInFinancialOrder.indexOf(a.month) - monthsInFinancialOrder.indexOf(b.month);
+    });
+
+    const ukCoreTotals = mutableUkCoreTotalRow.map(item => item.ukCoreTotal);
+    const ukCoreTotalCumalitive = data.ukCoreTotalRow.cumalativeTotals;
+    const ukCoreTotalTarget = data.ukCoreTotalRow.targets;
+    const ukCoreTotalYearlyTarget = ukCoreTotalTarget * 12;
+    const ukCoreTargetAmountTodate = Math.round(generateTargetAmountToDate(ukCoreTotalYearlyTarget, ukCoreTotalCumalitive))
+    const ukCoreTargetPercentageAcheived = generateTargetAcheivedPercentage(ukCoreTotalYearlyTarget, ukCoreTotalCumalitive);
+
+    csvRows.push(["UK Core Total", ...ukCoreTotals, data.ukCoreTotalRow.cumalativeTotals, ukCoreTotalTarget, ukCoreTotalYearlyTarget, ukCoreTargetAmountTodate, ukCoreTargetPercentageAcheived])
+
+    const specialLocations = data.specialRows.cumalitiveTotals.map((item) => item.location);
     specialLocations.forEach((location, index) => {
         const rowItems = data.specialRows.coreTotals.filter((item) => item.location === location);
         const cumalativeTotalsSingle = data.specialRows.cumalitiveTotals[index]?.cumalitiveTotal;

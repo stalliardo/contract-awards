@@ -53,8 +53,18 @@ export const exportToCSV = (data, selectedFinancialYear) => {
         csvRows.push(items.join(","));
     })
 
+    csvRows.push("");
+    csvRows.push("Company Performance Monthly");
+    csvRows.push([" ", ...data.companyPerformanceMothlyRow].join(","));
+
+    csvRows.push("");
+    csvRows.push("Company Performance Cumalitive");
+    csvRows.push([" ", ...data.companyPerformanceCumalitiveRow].join(","));
+
     // Create CSV string
     const csvString = csvRows.join('\n');
+
+    console.log('csv string = ', csvString);
 
     // Create and trigger download
     const csvFile = new Blob([csvString], { type: 'text/csv' });

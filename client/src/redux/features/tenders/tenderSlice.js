@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { addTender, getTenders } from './tenderThunk';
-import { generateCumalitiveTenderTotals, generateSpecialCumalitiveTotals, generateUKTenendersCumaltiveTotal, generateUkCoreTenderTotals } from '../../../utils/financialTotals';
+import { generateCumalitiveTenderTotals, generateSpecialCumalitiveTotals, generateTargetAcheivedPercentage, generateTargetAmountToDate, generateUKTenendersCumaltiveTotal, generateUkCoreTenderTotals } from '../../../utils/financialTotals';
 
 const initialState = {
   data: [],
@@ -10,6 +10,7 @@ const initialState = {
   ukCumalitiveTotal: "",
   ukCoreTotals: [], // ie, the total for each month
   specialCumalitiveTotals: "",
+  exportData: null
 };
 
 export const tenderSlice = createSlice({
@@ -25,6 +26,32 @@ export const tenderSlice = createSlice({
     },
     resetTenderState: () => {
       return initialState;
+    },
+    generateExportData: (state, action) => {
+      const locations = action.payload.locations;
+      const targets = action.payload.targets;
+      const eData = [];
+
+      locations.forEach((location) => {
+        const dataItem = state.data.find(item => item.location === location.name);
+        const cumalativeTotal = state.cumalitiveTotals.find(item => item.location === location.name);
+        const target = parseInt(targets.find(target => target.location === location.name)?.targetValue) || 0;
+        const yearlyTarget = target * 12;
+        const targetToDate = Math.round(generateTargetAmountToDate(yearlyTarget, cumalativeTotal));
+        let targetAcheived = generateTargetAcheivedPercentage(yearlyTarget, cumalativeTotal);
+
+        if(isNaN(targetAcheived)) {
+          targetAcheived = 0;
+        }
+
+        eData.push({location: location.name, items: [...dataItem.items], cumalitiveTotal: cumalativeTotal.sum, monthTarget: target, yearlyTarget, targetToDate, targetAcheived});
+      })
+
+      state.exportData = eData;
+    },
+
+    clearExportData: (state, action) => {
+      state.exportData = null;
     }
   },
 
@@ -77,7 +104,7 @@ export const tenderSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setLoading, buildData, setAuthenticatedUser, resetTenderState } = tenderSlice.actions;
+export const { setLoading, buildData, setAuthenticatedUser, resetTenderState, generateExportData, clearExportData } = tenderSlice.actions;
 
 export default tenderSlice.reducer;
 

@@ -2,12 +2,12 @@ import { generateFinancialYearMonths, getMonthsInFinancialOrder } from "./DateUt
 import { generateTargetAcheivedPercentage, generateTargetAmountToDate } from "./financialTotals";
 import { addSlashToYearString } from "./stringUtils";
 
-export const downloadCSVFile = (csvString) => {
+export const downloadCSVFile = (csvString, fileName) => {
     // Create and trigger download
     const csvFile = new Blob([csvString], { type: 'text/csv' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(csvFile);
-    link.download = 'contract_awards.csv';
+    link.download = `${fileName}.csv`;
     link.click();
     window.alert("CSV successfully generated and downloaded!");
 }
@@ -56,7 +56,7 @@ export const generateCSVString = (data, selectedFinancialYear) => {
     const ukCoreTotalCumalitive = data.ukCoreTotalRow.cumalativeTotals;
     const ukCoreTotalTarget = data.ukCoreTotalRow.targets;
     const ukCoreTotalYearlyTarget = ukCoreTotalTarget * 12;
-    const ukCoreTargetAmountTodate = Math.round(generateTargetAmountToDate(ukCoreTotalYearlyTarget, ukCoreTotalCumalitive))
+    const ukCoreTargetAmountTodate = Math.round(generateTargetAmountToDate(ukCoreTotalYearlyTarget, ukCoreTotalCumalitive));
     const ukCoreTargetPercentageAcheived = generateTargetAcheivedPercentage(ukCoreTotalYearlyTarget, ukCoreTotalCumalitive);
 
     csvRows.push(["UK Core Total", ...ukCoreTotals, data.ukCoreTotalRow.cumalativeTotals, ukCoreTotalTarget, ukCoreTotalYearlyTarget, ukCoreTargetAmountTodate, ukCoreTargetPercentageAcheived])
@@ -110,5 +110,36 @@ export const generateCSVString = (data, selectedFinancialYear) => {
     // Create CSV string
     const csvString = csvRows.join('\n');
 
-    downloadCSVFile(csvString)
+    downloadCSVFile(csvString, "contract-awards");
+}
+
+
+export const generateCSVForTenders = (data, selectedFinancialYear) => {
+    const csvRows = [];
+    const months = generateFinancialYearMonths(addSlashToYearString(selectedFinancialYear));
+    const headers = ["location", ...months, "Cumalitive Totals", "Monthly Target", "Yearly Target", "Target to Date", "%TA"]
+    const monthsInFinancialOrder = getMonthsInFinancialOrder();
+
+    csvRows.push(headers.join(","));
+
+
+    data.forEach((item) => {
+        console.log('item passed in = ', item);
+        const formattedItems = [...item.items];
+
+        formattedItems.sort((a, b) => {
+            return monthsInFinancialOrder.indexOf(a.month) - monthsInFinancialOrder.indexOf(b.month);
+        });
+
+        const coreValueRow = formattedItems.map(item => item.value);
+        csvRows.push([item.location, ...coreValueRow, item.cumalitiveTotal, item.monthTarget, item.yearlyTarget, item.targetToDate, item.targetAcheived].join(','))
+    })
+
+
+
+    const csvString = csvRows.join('\n');
+    console.log('string = ', csvString);
+
+    // downloadCSVFile(csvString, "tenders-submitted");
+
 }

@@ -31,18 +31,18 @@ const AwardsSummary = () => {
     const [spinnerComplete, setSpinnerComplete] = useState(false);
     const showUI = !isLoading && spinnerComplete;
 
-    const MonthsForTableHead = ({k}) => {
+    const MonthsForTableHead = ({ k }) => {
         const months = generateFinancialYearMonths(addSlashToYearString(selectedFinancialYear));
-        
+
         const cells = months.map((month, i) => {
             return <th key={`${k} ${i}`}>{month}</th>
         })
-        
+
         return cells
     }
 
     useEffect(() => {
-        if(!authenticatedUser._id) {
+        if (!authenticatedUser._id) {
             navigate("/");
         } else {
             if (awardsData.coreTotals.length > 0) {
@@ -50,20 +50,20 @@ const AwardsSummary = () => {
                     setSpinnerComplete(true); // to fix the flash, added a delay
                 }, 500);
             } else {
-               if(authenticatedUser){
-                dispatch(fetchData({locationData: originalLocations, authenticatedUser, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear)})).finally(() => {
-                    setTimeout(() => {
-                        setSpinnerComplete(true);
-                    }, 500);
-                })
-               }
+                if (authenticatedUser) {
+                    dispatch(fetchData({ locationData: originalLocations, authenticatedUser, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear) })).finally(() => {
+                        setTimeout(() => {
+                            setSpinnerComplete(true);
+                        }, 500);
+                    })
+                }
             }
         }
     }, []);
 
     const generateFilteredTotals = (location) => {
         const totals = awardsData.coreTotals.filter((totals) => totals.location === location)
-        if(totals.length === 0) {
+        if (totals.length === 0) {
             console.log('zero detected');
             return null;
         }
@@ -74,7 +74,7 @@ const AwardsSummary = () => {
     const generateCumalitiveTotals = (location) => {
         const filteredTotals = generateFilteredTotals(location);
 
-        if(filteredTotals === null) {
+        if (filteredTotals === null) {
             return null;
         }
 
@@ -89,29 +89,30 @@ const AwardsSummary = () => {
     }
 
     useEffect(() => {
-        if(awardsData.exportData) {
+        if (awardsData.exportData) {
             const confirmation = window.confirm("Are you sure you want to generate CSV data for the awards summary?");
-            if(confirmation) {
+            if (confirmation) {
                 generateCSVString(awardsData.exportData, selectedFinancialYear);
             }
             dispatch(clearExportData());
         }
     }, [awardsData.exportData])
-    
+
     return (
         !showUI ?
             <div className='spinner-container-page'><Spinner classes="page" text="Generating Summary Table...." /></div>
             :
             <div className='awards-page-container'>
                 <div className='awards-page-table-container'>
-                    <div style={{display: "flex", justifyContent: "space-between", alignItems: "flex-end"}}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
                         <h3>Contract Awards Summary</h3>
-                        <button onClick={onExportCSV}>Export CSV</button></div>
+                        <button onClick={onExportCSV}>Export CSV</button>
+                    </div>
                     <table id="awards-table" className='awards-summary-table'>
                         <thead>
                             <tr>
                                 <th>Location</th>
-                                <MonthsForTableHead k="1"/>
+                                <MonthsForTableHead k="1" />
                                 <th>Cumalitive Totals</th>
                                 <th colSpan="3">
                                     <div className='cumulative-totals-container'>
@@ -164,9 +165,9 @@ const AwardsSummary = () => {
                             </tr>
                             {
                                 locations.map((location, index) => {
-                                   if( location === "Special Projects" || location === "M&E") {
-                                    return <AwardsSummarySpecialsRow targetsData={awardsData.targets} filteredTotals={generateFilteredTotals(location)} cumalitiveTotal={generateCumalitiveTotals(location)} locationRef={location} key={index} />
-                                   }
+                                    if (location === "Special Projects" || location === "M&E") {
+                                        return <AwardsSummarySpecialsRow targetsData={awardsData.targets} filteredTotals={generateFilteredTotals(location)} cumalitiveTotal={generateCumalitiveTotals(location)} locationRef={location} key={index} />
+                                    }
                                 })
                             }
                             <tr className='bold-cells'>
@@ -186,43 +187,43 @@ const AwardsSummary = () => {
                 {
                     authenticatedUser.role === ROLES.CA01 &&
                     <>
-                    <div className='awards-page-table-container'>
-                    <h3>Company Performance</h3>
-                    <table id="awards-table">
-                        <thead>
-                            <tr>
-                                <th>Month</th>
-                                <MonthsForTableHead k="2"/>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Plus/Minus</td>
-                                <AwardsSummaryMonthlyPerformanceRow monthlyCoreTotals={awardsData.ukAndSpecialCoreTotals} monthlyTargetTotal={awardsData.ukAndSpecialTargetTotal} />
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                        <div className='awards-page-table-container'>
+                            <h3>Company Performance</h3>
+                            <table id="awards-table">
+                                <thead>
+                                    <tr>
+                                        <th>Month</th>
+                                        <MonthsForTableHead k="2" />
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Plus/Minus</td>
+                                        <AwardsSummaryMonthlyPerformanceRow monthlyCoreTotals={awardsData.ukAndSpecialCoreTotals} monthlyTargetTotal={awardsData.ukAndSpecialTargetTotal} />
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
 
-                <div className='awards-page-table-container'>
-                    <table id="awards-table">
-                        <thead>
-                            <tr>
-                                <th>Cumalitive</th>
-                                <MonthsForTableHead k="3"/>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Plus/Minus</td>
-                                <AwardsSummaryCumalitivePerformanceRow monthlyCoreTotals={awardsData.ukAndSpecialCoreTotals} monthlyTargetTotal={awardsData.ukAndSpecialTargetTotal} />
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                        <div className='awards-page-table-container'>
+                            <table id="awards-table">
+                                <thead>
+                                    <tr>
+                                        <th>Cumalitive</th>
+                                        <MonthsForTableHead k="3" />
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Plus/Minus</td>
+                                        <AwardsSummaryCumalitivePerformanceRow monthlyCoreTotals={awardsData.ukAndSpecialCoreTotals} monthlyTargetTotal={awardsData.ukAndSpecialTargetTotal} />
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </>
                 }
-               
+
             </div>
     )
 }

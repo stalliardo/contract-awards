@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { addTender, getTenders } from './tenderThunk';
-import { generateCumalitiveTenderTotals, generateSpecialCumalitiveTotals, generateTargetAcheivedPercentage, generateTargetAmountToDate, generateUKTenendersCumaltiveTotal, generateUkCoreTenderTotals } from '../../../utils/financialTotals';
+import { generateCompanyPerformanceCumalitiveTotals, generateCumalitiveTenderTotals, generateSpecialCumalitiveTotals, generateTargetAcheivedPercentage, generateTargetAmountToDate, generateUKTenendersCumaltiveTotal, generateUkCoreTenderTotals } from '../../../utils/financialTotals';
 
 const initialState = {
   data: [],
@@ -8,7 +8,7 @@ const initialState = {
   error: null,
   cumalitiveTotals: [],
   ukCumalitiveTotal: "",
-  ukCoreTotals: [], // ie, the total for each month
+  ukCoreTotals: [],
   specialCumalitiveTotals: "",
   exportData: null
 };
@@ -30,12 +30,10 @@ export const tenderSlice = createSlice({
     generateExportData: (state, action) => {
       const locations = action.payload.locations;
       const targets = action.payload.targets;
-      let eData = { coreTotals: [], ukCoreTotalsRow: {}, specialTotals: [], totals: {} };
-
+      let eData = { coreTotals: [], ukCoreTotalsRow: {}, specialTotals: [], totals: {}, monthlyPerformaceRow: {}, cumalitivePerformanceRow: {} };
 
       locations.forEach((location) => {
         if (location.name !== "M&E" && location.name !== "Special Projects") {
-
           const dataItem = state.data.find(item => item.location === location.name);
           const cumalativeTotal = state.cumalitiveTotals.find(item => item.location === location.name);
           const target = parseInt(targets.find(target => target.location === location.name)?.targetValue) || 0;
@@ -48,7 +46,6 @@ export const tenderSlice = createSlice({
           }
 
           eData.coreTotals.push({ location: location.name, items: [...dataItem.items], cumalitiveTotal: cumalativeTotal.sum, monthTarget: target, yearlyTarget, targetToDate, targetAcheived });
-
         }
       })
 
@@ -96,16 +93,21 @@ export const tenderSlice = createSlice({
         targetAcheived: ukAndSpecialTargetAcheived 
       };
       
-      
-      
-      // console.log('ukCoreTotalItems = ', ukCoreTotalItems);
-      // state.ukCoreTotals.all.forEach((total, i) => {
-      //   const monthlyTotalsSum = (total.sum + state.ukCoreTotals.specials[i].specialsTotal);
-   
-      //    monthlyTotals.push({sum: monthlyTotalsSum})
-      //  });
+      const monthlyPerformaceItems = state.ukCoreTotals.all.map((total, i) => {
+        return total.sum - ukAndSpecialTargetTotal;    
+      })
 
-      //  console.log('monthy tos = ', monthlyTotals);
+      eData.monthlyPerformaceRow = { 
+        location: " ", 
+        items: monthlyPerformaceItems, 
+      };
+
+      const cumalitivePerformanceRow = generateCompanyPerformanceCumalitiveTotals(state.ukCoreTotals.all, ukAndSpecialTargetTotal).map(item => item.sum);
+
+      eData.cumalitivePerformanceRow = { 
+        location: " ", 
+        items: cumalitivePerformanceRow, 
+      };
 
       state.exportData = eData;
     },

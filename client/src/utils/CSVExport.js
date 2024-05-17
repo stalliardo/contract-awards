@@ -2,8 +2,8 @@ import { generateFinancialYearMonths, getMonthsInFinancialOrder } from "./DateUt
 import { generateTargetAcheivedPercentage, generateTargetAmountToDate } from "./financialTotals";
 import { addSlashToYearString } from "./stringUtils";
 
+// Create and trigger download
 export const downloadCSVFile = (csvString, fileName) => {
-    // Create and trigger download
     const csvFile = new Blob([csvString], { type: 'text/csv' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(csvFile);
@@ -147,7 +147,14 @@ export const generateCSVForTenders = (data, selectedFinancialYear) => {
     const totalItems = data.totals.items.map(item => item.sum);
     csvRows.push([data.totals.location, ...totalItems, data.totals.cumalitiveTotal, data.totals.monthTarget, data.totals.yearlyTarget, data.totals.targetToDate, data.totals.targetAcheived].join(','))
 
+    csvRows.push("");
+    csvRows.push("Company Performance Monthly");
+    csvRows.push([" ", ...data.monthlyPerformaceRow.items].join(","));
+
+    csvRows.push("");
+    csvRows.push("Company Performance Cumalitive");
+    csvRows.push([" ", ...data.cumalitivePerformanceRow.items].join(","));
+
     const csvString = csvRows.join('\n');
-    console.log('string = ', csvString);
-    // downloadCSVFile(csvString, "tenders-submitted");
+    downloadCSVFile(csvString, "tenders-submitted");
 }

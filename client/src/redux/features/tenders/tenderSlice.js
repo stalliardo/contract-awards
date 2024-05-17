@@ -30,7 +30,7 @@ export const tenderSlice = createSlice({
     generateExportData: (state, action) => {
       const locations = action.payload.locations;
       const targets = action.payload.targets;
-      let eData = { coreTotals: [], ukCoreTotalsRow: {}, specialTotals: [] };
+      let eData = { coreTotals: [], ukCoreTotalsRow: {}, specialTotals: [], totals: {} };
 
 
       locations.forEach((location) => {
@@ -77,7 +77,35 @@ export const tenderSlice = createSlice({
         }
 
         eData.specialTotals.push({ location: location, items: [...dataItem.items], cumalitiveTotal: cumalativeTotal.sum, monthTarget: target, yearlyTarget, targetToDate, targetAcheived });
-      })
+      });
+
+      // Totals:
+      const ukAndSpecialCumalitiveTotal = state.ukCumalitiveTotal + state.specialCumalitiveTotals;
+      const ukAndSpecialTargetTotal = targets.reduce((prev, current) => parseInt(prev) + parseInt(current.targetValue), 0);
+      const ukAndSpecialTargetYearlyTotal = ukAndSpecialTargetTotal * 12;
+      const ukAndSpecialTargetToDate = Math.round(generateTargetAmountToDate(ukAndSpecialTargetYearlyTotal, ukAndSpecialCumalitiveTotal));
+      const ukAndSpecialTargetAcheived = generateTargetAcheivedPercentage(ukAndSpecialTargetYearlyTotal, ukAndSpecialCumalitiveTotal);
+
+      eData.totals = { 
+        location: "Total", 
+        items: state.ukCoreTotals.all, 
+        cumalitiveTotal: ukAndSpecialCumalitiveTotal, 
+        monthTarget: targets.reduce((prev, current) => parseInt(prev) + parseInt(current.targetValue), 0), 
+        yearlyTarget: ukcoreTotalYearlyTarget, 
+        targetToDate: ukAndSpecialTargetToDate, 
+        targetAcheived: ukAndSpecialTargetAcheived 
+      };
+      
+      
+      
+      // console.log('ukCoreTotalItems = ', ukCoreTotalItems);
+      // state.ukCoreTotals.all.forEach((total, i) => {
+      //   const monthlyTotalsSum = (total.sum + state.ukCoreTotals.specials[i].specialsTotal);
+   
+      //    monthlyTotals.push({sum: monthlyTotalsSum})
+      //  });
+
+      //  console.log('monthy tos = ', monthlyTotals);
 
       state.exportData = eData;
     },

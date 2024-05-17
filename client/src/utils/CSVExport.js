@@ -126,8 +126,14 @@ export const generateCSVForTenders = (data, selectedFinancialYear) => {
             return monthsInFinancialOrder.indexOf(a.month) - monthsInFinancialOrder.indexOf(b.month);
         });
 
+        let targetAcheived = generateTargetAcheivedPercentage(item.yearlyTarget, item.cumalitiveTotal);
+
+        if (isNaN(targetAcheived)) {
+            targetAcheived = 0;
+        }
+
         const coreValueRow = formattedItems.map(item => item.value);
-        csvRows.push([item.location, ...coreValueRow, item.cumalitiveTotal, item.monthTarget, item.yearlyTarget, item.targetToDate, item.targetAcheived].join(','))
+        csvRows.push([item.location, ...coreValueRow, item.cumalitiveTotal, item.monthTarget, item.yearlyTarget, item.targetToDate, targetAcheived].join(','))
     })
 
     const ukCoreTotals = data.ukCoreTotalsRow.items.uk.map(item => item.ukCoreTotal);
@@ -140,8 +146,14 @@ export const generateCSVForTenders = (data, selectedFinancialYear) => {
             return monthsInFinancialOrder.indexOf(a.month) - monthsInFinancialOrder.indexOf(b.month);
         });
 
+        let targetAcheived = generateTargetAcheivedPercentage(item.yearlyTarget, item.cumalitiveTotal);
+
+        if (isNaN(targetAcheived)) {
+            targetAcheived = 0;
+        }
+
         const coreValueRow = formattedItems.map(item => item.value);
-        csvRows.push([item.location, ...coreValueRow, item.cumalitiveTotal, item.monthTarget, item.yearlyTarget, item.targetToDate, item.targetAcheived].join(','))
+        csvRows.push([item.location, ...coreValueRow, item.cumalitiveTotal, item.monthTarget, item.yearlyTarget, item.targetToDate, targetAcheived].join(','))
     });
 
     const totalItems = data.totals.items.map(item => item.sum);

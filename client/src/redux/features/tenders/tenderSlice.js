@@ -67,13 +67,8 @@ export const tenderSlice = createSlice({
         const target = parseInt(targets.find(target => target.location === location)?.targetValue) || 0;
         const yearlyTarget = target * 12;
         const targetToDate = Math.round(generateTargetAmountToDate(yearlyTarget, cumalativeTotal));
-        let targetAcheived = generateTargetAcheivedPercentage(yearlyTarget, cumalativeTotal);
 
-        if (isNaN(targetAcheived)) {
-          targetAcheived = 0;
-        }
-
-        eData.specialTotals.push({ location: location, items: [...dataItem.items], cumalitiveTotal: cumalativeTotal.sum, monthTarget: target, yearlyTarget, targetToDate, targetAcheived });
+        eData.specialTotals.push({ location: location, items: [...dataItem.items], cumalitiveTotal: cumalativeTotal.sum, monthTarget: target, yearlyTarget, targetToDate });
       });
 
       // Totals:

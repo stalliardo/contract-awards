@@ -60,7 +60,10 @@ const TendersSubmittedTable = ({ data }) => {
             <div className='awards-page-table-container'>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
                     <h3>Tenders Submitted Summary</h3>
-                    <button onClick={onExportCSV}>Export CSV</button>
+                    {
+                        authenticatedUser.role === ROLES.CA01 &&
+                        <button onClick={onExportCSV}>Export CSV</button>
+                    }
                 </div>
                 <table id="awards-table" className='awards-summary-table'>
                     <thead>

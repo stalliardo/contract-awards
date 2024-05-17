@@ -178,7 +178,7 @@ export const generateTargetAcheivedPercentage = (annualAmount, cumalitiveTotal) 
     if (targetAchieved < 1 && targetAchieved > 0) {
         return Math.trunc(targetAchieved);
     }
-   
+
     return Math.trunc(targetAchieved);
 }
 

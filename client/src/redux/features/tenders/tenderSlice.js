@@ -30,21 +30,53 @@ export const tenderSlice = createSlice({
     generateExportData: (state, action) => {
       const locations = action.payload.locations;
       const targets = action.payload.targets;
-      const eData = [];
+      let eData = { coreTotals: [], ukCoreTotalsRow: {}, specialTotals: [] };
+
 
       locations.forEach((location) => {
-        const dataItem = state.data.find(item => item.location === location.name);
-        const cumalativeTotal = state.cumalitiveTotals.find(item => item.location === location.name);
-        const target = parseInt(targets.find(target => target.location === location.name)?.targetValue) || 0;
+        if (location.name !== "M&E" && location.name !== "Special Projects") {
+
+          const dataItem = state.data.find(item => item.location === location.name);
+          const cumalativeTotal = state.cumalitiveTotals.find(item => item.location === location.name);
+          const target = parseInt(targets.find(target => target.location === location.name)?.targetValue) || 0;
+          const yearlyTarget = target * 12;
+          const targetToDate = Math.round(generateTargetAmountToDate(yearlyTarget, cumalativeTotal));
+          let targetAcheived = generateTargetAcheivedPercentage(yearlyTarget, cumalativeTotal);
+
+          if (isNaN(targetAcheived)) {
+            targetAcheived = 0;
+          }
+
+          eData.coreTotals.push({ location: location.name, items: [...dataItem.items], cumalitiveTotal: cumalativeTotal.sum, monthTarget: target, yearlyTarget, targetToDate, targetAcheived });
+
+        }
+      })
+
+      // eData.push({ location: "UK Core Total"});
+      const ukCoreTotalItems = state.ukCoreTotals;
+
+      const ukCoreTotalTarget = targets.filter(item => item.location !== "Special Projects" && item.location !== "M&E").reduce((prev, current) => parseInt(prev) + parseInt(current.targetValue), 0);
+      const ukcoreTotalYearlyTarget = ukCoreTotalTarget * 12;
+      const ukCoreTotalTargetToDate = Math.round(generateTargetAmountToDate(ukcoreTotalYearlyTarget, state.ukCumalitiveTotal));
+      const targetAcheived = generateTargetAcheivedPercentage(ukcoreTotalYearlyTarget, state.ukCumalitiveTotal);
+
+      eData.ukCoreTotalsRow = { location: "UK Core Total", items: ukCoreTotalItems, cumalitiveTotal: state.ukCumalitiveTotal, monthTarget: ukCoreTotalTarget, yearlyTarget: ukcoreTotalYearlyTarget, targetToDate: ukCoreTotalTargetToDate, targetAcheived: targetAcheived };
+
+      const specialLocations = ["M&E", "Special Projects"];
+
+      specialLocations.forEach((location) => {
+        const dataItem = state.data.find(item => item.location === location);
+        const cumalativeTotal = state.cumalitiveTotals.find(item => item.location === location);
+        const target = parseInt(targets.find(target => target.location === location)?.targetValue) || 0;
         const yearlyTarget = target * 12;
         const targetToDate = Math.round(generateTargetAmountToDate(yearlyTarget, cumalativeTotal));
         let targetAcheived = generateTargetAcheivedPercentage(yearlyTarget, cumalativeTotal);
 
-        if(isNaN(targetAcheived)) {
+        if (isNaN(targetAcheived)) {
           targetAcheived = 0;
         }
 
-        eData.push({location: location.name, items: [...dataItem.items], cumalitiveTotal: cumalativeTotal.sum, monthTarget: target, yearlyTarget, targetToDate, targetAcheived});
+        eData.specialTotals.push({ location: location, items: [...dataItem.items], cumalitiveTotal: cumalativeTotal.sum, monthTarget: target, yearlyTarget, targetToDate, targetAcheived });
       })
 
       state.exportData = eData;

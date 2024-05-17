@@ -123,8 +123,7 @@ export const generateCSVForTenders = (data, selectedFinancialYear) => {
     csvRows.push(headers.join(","));
 
 
-    data.forEach((item) => {
-        console.log('item passed in = ', item);
+    data.coreTotals.forEach((item) => {
         const formattedItems = [...item.items];
 
         formattedItems.sort((a, b) => {
@@ -135,6 +134,20 @@ export const generateCSVForTenders = (data, selectedFinancialYear) => {
         csvRows.push([item.location, ...coreValueRow, item.cumalitiveTotal, item.monthTarget, item.yearlyTarget, item.targetToDate, item.targetAcheived].join(','))
     })
 
+    const ukCoreTotals = data.ukCoreTotalsRow.items.uk.map(item => item.ukCoreTotal);
+    csvRows.push([data.ukCoreTotalsRow.location, ...ukCoreTotals, data.ukCoreTotalsRow.cumalitiveTotal, data.ukCoreTotalsRow.monthTarget, data.ukCoreTotalsRow.yearlyTarget, data.ukCoreTotalsRow.targetToDate, data.ukCoreTotalsRow.targetAcheived].join(','))
+
+    data.specialTotals.forEach((item) => {
+        console.log('item passed in = ', item);
+        const formattedItems = [...item.items];
+
+        formattedItems.sort((a, b) => {
+            return monthsInFinancialOrder.indexOf(a.month) - monthsInFinancialOrder.indexOf(b.month);
+        });
+
+        const coreValueRow = formattedItems.map(item => item.value);
+        csvRows.push([item.location, ...coreValueRow, item.cumalitiveTotal, item.monthTarget, item.yearlyTarget, item.targetToDate, item.targetAcheived].join(','))
+    })
 
 
     const csvString = csvRows.join('\n');

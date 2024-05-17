@@ -13,8 +13,11 @@ import AwardsSummaryCumalitivePerformanceRow from './AwardsSummaryCumalitivePerf
 import { generateFinancialYearMonths } from '../../../utils/DateUtils';
 import { useNavigate } from 'react-router-dom';
 import { addSlashToYearString, removeSlashFromyearString } from '../../../utils/stringUtils';
-import { clearExportData, generateExportData } from '../../../redux/features/awards/awardsSlice';
+import { clearExportData, generateExportData, setCoreTotals } from '../../../redux/features/awards/awardsSlice';
 import { exportToCSV, generateCSVString } from '../../../utils/CSVExport';
+import SelectMenu from '../../selectMenu/SelectMenu';
+
+const filterOptions = [{ value: "All" }, { value: "London" }, { value: "North" }, { value: "South" }];
 
 const AwardsSummary = () => {
     const dispatch = useDispatch();
@@ -22,8 +25,10 @@ const AwardsSummary = () => {
     const authenticatedUser = useSelector(state => state.users.authenticatedUser);
     const selectedFinancialYear = useSelector(state => state.users.selectedFinancialYear);
     const awardsData = useSelector((state) => state.awards);
+    const usersData = useSelector((state) => state.users.data);
     const isLoading = useSelector((state) => state.awards.loading);
     const [locations, setLocations] = useState(authenticatedUser.locations ? [...authenticatedUser.locations].sort() : []);
+    const [selectedLocations, setSelectedLocations] = useState([]);
     const originalLocations = useSelector((state) => state.location.data);
     const specialLocations = useSelector((state) => state.awards.specialLocations);
     const navigate = useNavigate();
@@ -59,7 +64,22 @@ const AwardsSummary = () => {
                 }
             }
         }
-    }, []);
+    }, [locations]);
+
+    useEffect(() => {
+        // if(selectedLocations.length > 0) {
+        //     dispatch(fetchData({ locationData: selectedLocations, authenticatedUser, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear) })).finally(() => {
+        //         console.log('fetch called');
+        //         const formattedLocations = selectedLocations.map(item => item.name);
+        //         setLocations(formattedLocations);
+        //         setTimeout(() => {
+        //             setSpinnerComplete(true);
+        //         }, 500);
+        //     })
+    
+        // }
+        console.log('called');
+    }, [selectedLocations])
 
     const generateFilteredTotals = (location) => {
         const totals = awardsData.coreTotals.filter((totals) => totals.location === location)
@@ -96,7 +116,23 @@ const AwardsSummary = () => {
             }
             dispatch(clearExportData());
         }
-    }, [awardsData.exportData])
+    }, [awardsData.exportData]);
+
+    const onFilterSelected = ({ value }) => {
+
+        const user = usersData.find(user => user.name === value);
+
+        console.log('locations = ', locations);
+
+        if(user && user.locations.length > 0) {
+           console.log('user.locationms = ', user.locations);
+           setLocations(user.locations);
+            const formattedLocations = user.locations.map(location => {return {name: location}});
+            dispatch(setCoreTotals({locations: formattedLocations}))
+
+            // setSelectedLocations(formattedLocations);
+        }
+    }
 
     return (
         !showUI ?
@@ -114,7 +150,16 @@ const AwardsSummary = () => {
                     <table id="awards-table" className='awards-summary-table'>
                         <thead>
                             <tr>
-                                <th>Location</th>
+                                <th>
+                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                        <div>
+                                            Location
+                                        </div>
+                                        <div style={{width: "50%"}}>
+                                            <SelectMenu placeholder={filterOptions[0].value} menuItems={filterOptions} handleItemSelection={onFilterSelected} styles={{color: "black"}}/>
+                                        </div>
+                                    </div>
+                                </th>
                                 <MonthsForTableHead k="1" />
                                 <th>Cumalitive Totals</th>
                                 <th colSpan="3">

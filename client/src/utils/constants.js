@@ -29,3 +29,5 @@ export const ROLES = {
     CA02: "CA02",
     CA03: "CA03",
 }
+
+// export const REGIONS = ["London", "All", "South"]

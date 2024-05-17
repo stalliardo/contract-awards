@@ -37,29 +37,29 @@ export const awardsSlice = createSlice({
     updateTargets: (state, action) => {
       const { category } = action.payload;
 
-      if(category === "contract-awards") {
+      if (category === "contract-awards") {
         const targetIndex = state.targets.findIndex(target => target._id === action.payload._id);
 
         if (targetIndex > -1) {
-        const updatedArray = [...state.targets];
-        updatedArray[targetIndex] = action.payload;
+          const updatedArray = [...state.targets];
+          updatedArray[targetIndex] = action.payload;
 
-        state.targets = updatedArray;
-      } else {
-        state.targets.push(action.payload);
-      }
+          state.targets = updatedArray;
+        } else {
+          state.targets.push(action.payload);
+        }
 
-      } else if( category === "tenders-submitted") {
+      } else if (category === "tenders-submitted") {
         const targetIndex = state.tendersSubmittedTargets.findIndex(target => target._id === action.payload._id);
 
         if (targetIndex > -1) {
-        const updatedArray = [...state.tendersSubmittedTargets];
-        updatedArray[targetIndex] = action.payload;
+          const updatedArray = [...state.tendersSubmittedTargets];
+          updatedArray[targetIndex] = action.payload;
 
-        state.tendersSubmittedTargets = updatedArray;
-      } else {
-        state.tendersSubmittedTargets.push(action.payload);
-      }
+          state.tendersSubmittedTargets = updatedArray;
+        } else {
+          state.tendersSubmittedTargets.push(action.payload);
+        }
       }
 
       const generatedUkTargetTotal = generateUKTargetTotals(state.targets);
@@ -75,32 +75,32 @@ export const awardsSlice = createSlice({
 
       const exportData = {
         locations,
-        nonSpecialRows: {coreTotals: [], cumalitiveTotals: [], targets: []},
-        specialRows: {coreTotals: [], cumalitiveTotals: [], targets: []},
-        ukCoreTotalRow: {coreTotals: state.ukCoreTotals, cumalativeTotals: 0, targets: state.ukTargetTotal},
-        totalsRow: {coreTotals: state.ukAndSpecialCoreTotals, cumalativeTotals: 0, targets: state.ukAndSpecialTargetTotal},
+        nonSpecialRows: { coreTotals: [], cumalitiveTotals: [], targets: [] },
+        specialRows: { coreTotals: [], cumalitiveTotals: [], targets: [] },
+        ukCoreTotalRow: { coreTotals: state.ukCoreTotals, cumalativeTotals: 0, targets: state.ukTargetTotal },
+        totalsRow: { coreTotals: state.ukAndSpecialCoreTotals, cumalativeTotals: 0, targets: state.ukAndSpecialTargetTotal },
         companyPerformanceMothlyRow: state.ukAndSpecialCoreTotals.map((total) => total.sum - state.ukAndSpecialTargetTotal),
         companyPerformanceCumalitiveRow: generateCompanyPerformanceCumalitiveTotals(state.ukAndSpecialCoreTotals, state.ukAndSpecialTargetTotal).map((item) => item.sum)
       }
 
       const cTotals = state.coreTotals; // TODO changeto none mutations
-      const targets =  state.targets;
+      const targets = state.targets;
 
       const cumalativeTotals = [];
       const targetsArray = [];
 
       locations.forEach((location) => {
-        const cumalitiveTotalObject = {location: location.name, cumalitiveTotal: 0};
-        const targetObject = {location: location.name, monthTarget: 0, toDate: 0}
+        const cumalitiveTotalObject = { location: location.name, cumalitiveTotal: 0 };
+        const targetObject = { location: location.name, monthTarget: 0, toDate: 0 }
 
         const filteredLocations = cTotals.filter((item) => item.location === location.name);
-        
+
         filteredLocations.forEach((item) => {
           cumalitiveTotalObject.cumalitiveTotal += item.sum;
         })
 
         targets.forEach((target) => {
-          if(target.location === location.name && target.category === "contract-awards"){
+          if (target.location === location.name && target.category === "contract-awards") {
             targetObject.monthTarget = target.targetValue
           }
         })
@@ -122,7 +122,7 @@ export const awardsSlice = createSlice({
       const nonSpecialCumalitiveTotals = cumalativeTotals.filter((item) => item.location !== "M&E" && item.location !== "Special Projects");
       const nonSpecialTargets = targetsArray.filter((item) => item.location !== "M&E" && item.location !== "Special Projects");
       const nonSpecials = cTotals.filter(item => item.location !== "M&E" && item.location !== "Special Projects");
-      
+
       const specialsCumalitiveTotals = cumalativeTotals.filter((item) => item.location === "M&E" || item.location === "Special Projects");
       const specialTargets = targetsArray.filter((item) => item.location === "M&E" || item.location === "Special Projects");
       const specials = cTotals.filter(item => item.location === "M&E" || item.location === "Special Projects");
@@ -130,11 +130,11 @@ export const awardsSlice = createSlice({
       exportData.nonSpecialRows.coreTotals.push(...nonSpecials);
       exportData.nonSpecialRows.cumalitiveTotals.push(...nonSpecialCumalitiveTotals);
       exportData.nonSpecialRows.targets.push(...nonSpecialTargets);
-      
+
       exportData.specialRows.coreTotals.push(...specials);
       exportData.specialRows.cumalitiveTotals.push(...specialsCumalitiveTotals);
       exportData.specialRows.targets.push(...specialTargets); // <- todo
-      
+
       exportData.ukCoreTotalRow.cumalativeTotals = ukCoreTotalsSum;
       exportData.totalsRow.cumalativeTotals = ukAndSpecialCoreTotalsSum;
 
@@ -143,6 +143,35 @@ export const awardsSlice = createSlice({
 
     clearExportData: (state, action) => {
       state.exportData = null;
+    },
+
+    setCoreTotals: (state, action) => {
+
+
+      // 1 - loop the passed in locations ie london and basingstoke
+      // 2 - extract the totals from the 
+      const locations = action.payload.locations;
+
+
+      locations.forEach((location) => {
+        const data = state.coreTotals.filter(item => item.location === location.name);
+        const generatedData = [];
+
+
+        // hmmmmm, not happy with this below
+        // const dataObject = {month, sum}
+        // if(data){
+        //   // loop the data and tally up the values for each month
+        //   dataObject.month = data.month,
+        //   dataObject.sum += data.sum
+        // }
+      })
+
+      
+
+
+
+
     }
   },
 
@@ -261,6 +290,6 @@ export const awardsSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setLoading, getData, resetState, updateTargets, generateExportData, clearExportData } = awardsSlice.actions;
+export const { setLoading, getData, resetState, updateTargets, generateExportData, clearExportData, setCoreTotals } = awardsSlice.actions;
 
 export default awardsSlice.reducer;

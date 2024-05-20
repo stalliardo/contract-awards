@@ -13,8 +13,8 @@ import AwardsSummaryCumalitivePerformanceRow from './AwardsSummaryCumalitivePerf
 import { generateFinancialYearMonths } from '../../../utils/DateUtils';
 import { useNavigate } from 'react-router-dom';
 import { addSlashToYearString, removeSlashFromyearString } from '../../../utils/stringUtils';
-import { clearExportData, generateExportData, setCoreTotals } from '../../../redux/features/awards/awardsSlice';
-import { exportToCSV, generateCSVString } from '../../../utils/CSVExport';
+import { clearExportData, generateExportData } from '../../../redux/features/awards/awardsSlice';
+import { generateCSVString } from '../../../utils/CSVExport';
 import SelectMenu from '../../selectMenu/SelectMenu';
 
 const filterOptions = [{ value: "All" }, { value: "London" }, { value: "North" }, { value: "South" }];
@@ -110,31 +110,16 @@ const AwardsSummary = () => {
 
         const user = usersData.find(user => user.name === value);
 
-        // if (value !== "All" && user && user.locations.length > 0) {
-        //     setLocations(user.locations);
-        //     const formattedLocations = user.locations.map(location => { return { name: location } });
-        //     dispatch(setCoreTotals({ locations: formattedLocations }))
-
-        //     // setSelectedLocations(formattedLocations);
-        // }
-
         if (value !== "All" && user && user.locations.length > 0) {
-            console.log('! all called');
             setLocations(user.locations);
-            // const formattedLocations = user.locations.map(location => { return { name: location } });
             dispatch(fetchData({ locationData: originalLocations, authenticatedUser: {locations: user.locations}, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear) })).finally(() => {
                 setTimeout(() => {
                     setSpinnerComplete(true);
                 }, 500);
             })
-
-
-            // setSelectedLocations(formattedLocations);
         }
 
         if (value === "All") {
-            console.log('bottom if called');
-            const formattedLocations = authenticatedUser.locations.map(location => { return { name: location } });
             setLocations(authenticatedUser.locations);
             dispatch(fetchData({ locationData: originalLocations, authenticatedUser, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear) })).finally(() => {
                 setTimeout(() => {

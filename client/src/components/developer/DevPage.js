@@ -118,8 +118,6 @@ const DevPage = () => {
                     clickHandler={onUpdateADUsers}
                 />
             </div>
-
-            <button onClick={generateTenders}>generate data</button>
         </div>
     )
 }

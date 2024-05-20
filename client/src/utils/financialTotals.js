@@ -149,6 +149,7 @@ export const generateSpecialCumalitiveTotals = (data) => {
 }
 
 export const generateUKTargetTotals = (data) => {
+    console.log('data for tarets = ', data);
     const filteredData = data.filter((item) => item.location !== "Special Projects" && item.location !== "M&E");
 
     return filteredData.reduce((total, target) => total + parseInt(target.targetValue), 0);

@@ -184,8 +184,13 @@ export const awardsSlice = createSlice({
 
       const generatedCoreTotals = generateCoreTotalsData(action.payload.awardsData, authenticatedUser);
       const generatedUKCoreTotals = generateUkCoreTotals(generatedCoreTotals);
+      
+      const filteredTargets = []
+      authenticatedUser.locations.forEach((location) => {
+        const targets = action.payload.targetsData.filter((target) => target.category === TARGET_CATEGORIES.CONTRACT_AWARDS && target.location === location);
+        filteredTargets.push(...targets)
+      })
 
-      const filteredTargets = action.payload.targetsData.filter((target) => target.category === TARGET_CATEGORIES.CONTRACT_AWARDS);
       const filteredTendersSumittedTargets = action.payload.targetsData.filter((target) => target.category === TARGET_CATEGORIES.TENDERS_SUBMITTED);
       const formattedLocations = action.payload.locationsData.map((location) => location.name);
 

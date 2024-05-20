@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { addData, deleteItem, editItem, fetchData } from './awardsThunks';
 import { generateCoreTotalsData, generateUKTargetTotals, generateUkCoreTotals, generateSpecialTargetTotals, generateCompanyPerformanceCumalitiveTotals } from '../../../utils/financialTotals';
 import { TARGET_CATEGORIES } from '../../../utils/constants';
+import { getMonthsInFinancialOrder } from '../../../utils/DateUtils';
 
 const initialState = {
   data: [],
@@ -146,32 +147,19 @@ export const awardsSlice = createSlice({
     },
 
     setCoreTotals: (state, action) => {
-
-
-      // 1 - loop the passed in locations ie london and basingstoke
-      // 2 - extract the totals from the 
       const locations = action.payload.locations;
-
+      
+      const data = [];
 
       locations.forEach((location) => {
-        const data = state.coreTotals.filter(item => item.location === location.name);
-        const generatedData = [];
+        const foundData = state.coreTotals.filter(item => item.location === location.name);
+        data.push(...foundData);
+      });
 
+      const generatedUKCoreTotals = generateUkCoreTotals(data);
 
-        // hmmmmm, not happy with this below
-        // const dataObject = {month, sum}
-        // if(data){
-        //   // loop the data and tally up the values for each month
-        //   dataObject.month = data.month,
-        //   dataObject.sum += data.sum
-        // }
-      })
-
-      
-
-
-
-
+      state.ukCoreTotals = generatedUKCoreTotals.uk;
+      state.specialCoreTotals = generatedUKCoreTotals.specials;
     }
   },
 

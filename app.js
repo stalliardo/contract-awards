@@ -77,11 +77,11 @@ app.get("/api", (req, res) => {
 })
 
 // re-enable below to run the built application
-// app.use(express.static(path.join(__dirname, 'client/build')));
-// app.get("*", (req, res) => {
-//     console.log('star route called');
-//     res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
-// })
+app.use(express.static(path.join(__dirname, 'client/build')));
+app.get("*", (req, res) => {
+    console.log('star route called');
+    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+})
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);

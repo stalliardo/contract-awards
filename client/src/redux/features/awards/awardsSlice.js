@@ -150,16 +150,25 @@ export const awardsSlice = createSlice({
       const locations = action.payload.locations;
       
       const data = [];
+      const filteredTargets = [];
 
       locations.forEach((location) => {
         const foundData = state.coreTotals.filter(item => item.location === location.name);
+        const targets = state.targets.filter(target => target.location === location.name);
+
         data.push(...foundData);
+        filteredTargets.push(...targets);
       });
 
       const generatedUKCoreTotals = generateUkCoreTotals(data);
+      
+
+      const generatedUkTargetTotal = generateUKTargetTotals(filteredTargets);
+
 
       state.ukCoreTotals = generatedUKCoreTotals.uk;
       state.specialCoreTotals = generatedUKCoreTotals.specials;
+      state.ukTargetTotal = generatedUkTargetTotal;
     }
   },
 

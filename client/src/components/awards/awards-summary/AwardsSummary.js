@@ -29,6 +29,8 @@ const AwardsSummary = () => {
     const isLoading = useSelector((state) => state.awards.loading);
     const [locations, setLocations] = useState(authenticatedUser.locations ? [...authenticatedUser.locations].sort() : []);
     const [selectedLocations, setSelectedLocations] = useState([]);
+    const [selectedLocation, setSelectedLocation] = useState(filterOptions[0].value);
+     
     const originalLocations = useSelector((state) => state.location.data);
     const specialLocations = useSelector((state) => state.awards.specialLocations);
     const navigate = useNavigate();
@@ -65,21 +67,6 @@ const AwardsSummary = () => {
             }
         }
     }, [locations]);
-
-    useEffect(() => {
-        // if(selectedLocations.length > 0) {
-        //     dispatch(fetchData({ locationData: selectedLocations, authenticatedUser, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear) })).finally(() => {
-        //         console.log('fetch called');
-        //         const formattedLocations = selectedLocations.map(item => item.name);
-        //         setLocations(formattedLocations);
-        //         setTimeout(() => {
-        //             setSpinnerComplete(true);
-        //         }, 500);
-        //     })
-    
-        // }
-        console.log('called');
-    }, [selectedLocations])
 
     const generateFilteredTotals = (location) => {
         const totals = awardsData.coreTotals.filter((totals) => totals.location === location)
@@ -119,18 +106,41 @@ const AwardsSummary = () => {
     }, [awardsData.exportData]);
 
     const onFilterSelected = ({ value }) => {
+        setSelectedLocation(value);
 
         const user = usersData.find(user => user.name === value);
 
-        console.log('locations = ', locations);
+        // if (value !== "All" && user && user.locations.length > 0) {
+        //     setLocations(user.locations);
+        //     const formattedLocations = user.locations.map(location => { return { name: location } });
+        //     dispatch(setCoreTotals({ locations: formattedLocations }))
 
-        if(user && user.locations.length > 0) {
-           console.log('user.locationms = ', user.locations);
-           setLocations(user.locations);
-            const formattedLocations = user.locations.map(location => {return {name: location}});
-            dispatch(setCoreTotals({locations: formattedLocations}))
+        //     // setSelectedLocations(formattedLocations);
+        // }
+
+        if (value !== "All" && user && user.locations.length > 0) {
+            console.log('! all called');
+            setLocations(user.locations);
+            // const formattedLocations = user.locations.map(location => { return { name: location } });
+            dispatch(fetchData({ locationData: originalLocations, authenticatedUser: {locations: user.locations}, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear) })).finally(() => {
+                setTimeout(() => {
+                    setSpinnerComplete(true);
+                }, 500);
+            })
+
 
             // setSelectedLocations(formattedLocations);
+        }
+
+        if (value === "All") {
+            console.log('bottom if called');
+            const formattedLocations = authenticatedUser.locations.map(location => { return { name: location } });
+            setLocations(authenticatedUser.locations);
+            dispatch(fetchData({ locationData: originalLocations, authenticatedUser, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear) })).finally(() => {
+                setTimeout(() => {
+                    setSpinnerComplete(true);
+                }, 500);
+            })
         }
     }
 
@@ -155,8 +165,8 @@ const AwardsSummary = () => {
                                         <div>
                                             Location
                                         </div>
-                                        <div style={{width: "50%"}}>
-                                            <SelectMenu placeholder={filterOptions[0].value} menuItems={filterOptions} handleItemSelection={onFilterSelected} styles={{color: "black"}}/>
+                                        <div style={{ width: "50%" }}>
+                                            <SelectMenu placeholder={selectedLocation} menuItems={filterOptions} handleItemSelection={onFilterSelected} styles={{ color: "black" }} />
                                         </div>
                                     </div>
                                 </th>
@@ -218,15 +228,18 @@ const AwardsSummary = () => {
                                     }
                                 })
                             }
-                            <tr className='bold-cells'>
-                                <td>Total</td>
-                                <AwardsSummaryTotalsRow
-                                    ukCoreTotals={awardsData.ukCoreTotals}
-                                    specialCoreTotals={awardsData.specialCoreTotals}
-                                    cumalativeTotals={cumalitiveTotalsSum}
-                                    ukAndSpecialTargetTotal={awardsData.ukAndSpecialTargetTotal}
-                                />
-                            </tr>
+                            {
+                                selectedLocation === "All" &&
+                                <tr className='bold-cells'>
+                                    <td>Total</td>
+                                    <AwardsSummaryTotalsRow
+                                        ukCoreTotals={awardsData.ukCoreTotals}
+                                        specialCoreTotals={awardsData.specialCoreTotals}
+                                        cumalativeTotals={cumalitiveTotalsSum}
+                                        ukAndSpecialTargetTotal={awardsData.ukAndSpecialTargetTotal}
+                                    />
+                                </tr>
+                            }
                         </tbody>
                     </table>
                     <p>T A = Percentage of Target Achieved</p>

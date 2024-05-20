@@ -48,14 +48,9 @@ export const generateUkCoreTotals = (data) => {
         let ukCoreTotal = 0;
         let specialsTotal = 0;
 
-        console.log('data passed in  = ', data);
-
         data.forEach((item) => {
-            console.log('monthg = ', month);
             if (item.month === month) {
-                console.log('item = ', item);
                 if (item.location !== "Special Projects" && item.location !== "M&E") {
-                    console.log('item inner = ', item);
                     ukCoreTotal += item.sum;
                 } else {
                     specialsTotal += item.sum;

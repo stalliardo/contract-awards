@@ -90,7 +90,7 @@ const AwardsSummary = () => {
 
     useEffect(() => {
         if (awardsData.exportData) {
-            const confirmation = window.confirm("Are you sure you want to generate CSV data for the awards summary?");
+            const confirmation = window.confirm("Are you sure you want to export CSV data for the awards summary?");
             if (confirmation) {
                 generateCSVString(awardsData.exportData, selectedFinancialYear);
             }

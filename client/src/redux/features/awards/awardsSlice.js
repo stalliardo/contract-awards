@@ -159,14 +159,17 @@ export const awardsSlice = createSlice({
       const generatedCoreTotals = generateCoreTotalsData(action.payload.awardsData, authenticatedUser);
       const generatedUKCoreTotals = generateUkCoreTotals(generatedCoreTotals);
 
-      const filteredTargets = action.payload.targetsData.filter((target) => target.category === TARGET_CATEGORIES.CONTRACT_AWARDS);
-      const filteredTendersSumittedTargets = action.payload.targetsData.filter((target) => target.category === TARGET_CATEGORIES.TENDERS_SUBMITTED);
+      const userVisibleTargets = action.payload.targetsData.filter(item => authenticatedUser.locations.some(item2 => item2 === item.location));
+
+      const filteredTargets = userVisibleTargets.filter((target) => target.category === TARGET_CATEGORIES.CONTRACT_AWARDS);
+
+      const filteredTendersSumittedTargets = userVisibleTargets.filter((target) => target.category === TARGET_CATEGORIES.TENDERS_SUBMITTED);
       const formattedLocations = action.payload.locationsData.map((location) => location.name);
 
       const filteredSpecialLocations = action.payload.locationsData.filter((location) => location.name === "M&E" || location.name === "Special Projects")
       const formattedSpecialTotals = filteredSpecialLocations.map((item) => item.name);
 
-      const generatedUkTargetTotal = generateUKTargetTotals(filteredTargets);
+      const generatedUkTargetTotal = generateUKTargetTotals(filteredTargets, authenticatedUser);
       const generatedSpecialTargetTotals = generateSpecialTargetTotals(filteredTargets);
 
       state.targets = filteredTargets;

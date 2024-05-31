@@ -147,7 +147,7 @@ const AwardsSummary = () => {
                                     return null;
                                 })
                             }
-                            <tr className='bold-cells'>
+                            <tr className='bold-cells' style={{borderTop: "2px solid black"}}>
                                 <td>UK Core Total</td>
                                 {
                                     awardsData.ukCoreTotals.map((data, index) => {
@@ -173,7 +173,7 @@ const AwardsSummary = () => {
                                     }
                                 })
                             }
-                            <tr className='bold-cells'>
+                            <tr className='bold-cells' style={{borderTop: "2px solid black"}}>
                                 <td>Total</td>
                                 <AwardsSummaryTotalsRow
                                     ukCoreTotals={awardsData.ukCoreTotals}

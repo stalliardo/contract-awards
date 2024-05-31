@@ -13,7 +13,7 @@ const TendersSubmittedUkCoreTotalsRow = () => {
     const targetPercentageAcheivedColour = parseFloat(targetPercentageAcheived) >= 100 ? COLOURS.GREEN : COLOURS.RED;
 
     return (
-        <tr className='bold-cells'>
+        <tr className='bold-cells' style={{borderTop: "2px solid black"}}>
             <td>UK Core Total</td>
             {
                 tenders.ukCoreTotals.uk.map((total, i) => {

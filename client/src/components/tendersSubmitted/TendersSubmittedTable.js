@@ -114,7 +114,7 @@ const TendersSubmittedTable = ({ data }) => {
                             })
                         }
 
-                        <tr className='bold-cells'>
+                        <tr className='bold-cells' style={{borderTop: "2px solid black"}}>
                             <td>Total</td>
                             <TendersSummaryTotalsRow
                                 ukCoreTotals={tenders.ukCoreTotals.uk}

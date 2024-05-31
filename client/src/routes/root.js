@@ -68,7 +68,7 @@ const Root = () => {
       </div>
     )
   } else {
-    return <div className='spinner-container'><Spinner classes="page"/></div>
+    return <div className='spinner-container' style={{marginTop: "200px"}}><Spinner classes="page"/></div>
   }
 }
 

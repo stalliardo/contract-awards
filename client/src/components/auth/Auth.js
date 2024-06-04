@@ -56,10 +56,10 @@ const Auth = () => {
   return (
     <div className='auth-container'>
         <h1>Authentication</h1>
-        <p>Please log in with your wingate credentials using the first.last format.</p>
+        <p>Please log in with your wingate credentials.</p>
 
         <form className='auth-form-container' onSubmit={login}>
-          <input type='text' name="username" placeholder='John.Smith' onChange={handleChange}/> 
+          <input type='text' name="username" placeholder='John.Smith or JohnS' onChange={handleChange}/> 
           <input type='password' name="password" placeholder='Password' onChange={handleChange}/> 
           <button disabled={logInButtonDisabled}>Log In</button>
           {errorText ? <p id='error-text'>{errorText}</p> : null}

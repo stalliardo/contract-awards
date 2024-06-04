@@ -11,8 +11,14 @@ const fetchUsers = createAsyncThunk(
             const locations = await axios.get("/api/location/get-locations");
 
             if (users && locations) {
-                const name = extractFirstAndLastName(fullName);
-                const foundUser = users.data.find(user => user?.name.toLowerCase() === name.toLowerCase());
+                let name = extractFirstAndLastName(fullName);
+                let foundUser = users.data.find(user => user?.name.toLowerCase() === name.toLowerCase());
+
+                if(!foundUser) {
+                    name = name.split(" ")[0];
+
+                    foundUser = users.data.find(user => user?.samAccountName === name);
+                }
 
                 if (foundUser.role === ROLES.CA01 && foundUser.locations.length < locations.data.length) {
                     console.log('length discrepancy called');

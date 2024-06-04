@@ -21,6 +21,7 @@ exports.updateADUsers = async (req, res) => {
         
         for (let i = 0; i < groupNames.length; i++) {
             const usersData = await AD.getUsersForGroup(groupNames[i]);
+
             if(usersData.length > 0){
                 usersDataFromAD.push({ groupName: groupNames[i], items: usersData })
             }
@@ -53,6 +54,7 @@ exports.updateADUsers = async (req, res) => {
                         itemToAdd.firstName = item.givenName,
                         itemToAdd.lastName = item.sn,
                         itemToAdd.fullName = item.displayName
+                        itemToAdd.samAccountName = item.sAMAccountName
                         
                         formattedObject.items.push(itemToAdd);
                     });
@@ -86,13 +88,13 @@ exports.updateADUsers = async (req, res) => {
             for(let i = 0; i < formattedData.length; i++){
                 for(let x = 0; x < formattedData[i].items.length; x++) {
 
-                    console.log('formattedData[i].items = ', formattedData[i].items[x]);
                     if(formattedData[i].items[x].operation === "Add") {
                         console.log('Add operation called');
                         const newRole = formattedData[i].groupName;
                         const fullName = formattedData[i].items[x].fullName;
+                        const samAccountName = formattedData[i].items[x].samAccountName;
 
-                        const newUser = new Users({name: fullName, role: newRole});
+                        const newUser = new Users({name: fullName, role: newRole, samAccountName });
                         await newUser.save();
                     }
 

@@ -13,6 +13,8 @@ import AwardsSummaryCumalitivePerformanceRow from './AwardsSummaryCumalitivePerf
 import { generateFinancialYearMonths } from '../../../utils/DateUtils';
 import { useNavigate } from 'react-router-dom';
 import { addSlashToYearString, removeSlashFromyearString } from '../../../utils/stringUtils';
+import { clearExportData, generateExportData } from '../../../redux/features/awards/awardsSlice';
+import { exportToCSV, generateCSVString } from '../../../utils/CSVExport';
 
 const AwardsSummary = () => {
     const dispatch = useDispatch();
@@ -29,18 +31,18 @@ const AwardsSummary = () => {
     const [spinnerComplete, setSpinnerComplete] = useState(false);
     const showUI = !isLoading && spinnerComplete;
 
-    const MonthsForTableHead = ({k}) => {
+    const MonthsForTableHead = ({ k }) => {
         const months = generateFinancialYearMonths(addSlashToYearString(selectedFinancialYear));
-        
+
         const cells = months.map((month, i) => {
             return <th key={`${k} ${i}`}>{month}</th>
         })
-        
+
         return cells
     }
 
     useEffect(() => {
-        if(!authenticatedUser._id) {
+        if (!authenticatedUser._id) {
             navigate("/");
         } else {
             if (awardsData.coreTotals.length > 0) {
@@ -48,20 +50,20 @@ const AwardsSummary = () => {
                     setSpinnerComplete(true); // to fix the flash, added a delay
                 }, 500);
             } else {
-               if(authenticatedUser){
-                dispatch(fetchData({locationData: originalLocations, authenticatedUser, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear)})).finally(() => {
-                    setTimeout(() => {
-                        setSpinnerComplete(true);
-                    }, 500);
-                })
-               }
+                if (authenticatedUser) {
+                    dispatch(fetchData({ locationData: originalLocations, authenticatedUser, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear) })).finally(() => {
+                        setTimeout(() => {
+                            setSpinnerComplete(true);
+                        }, 500);
+                    })
+                }
             }
         }
     }, []);
 
     const generateFilteredTotals = (location) => {
         const totals = awardsData.coreTotals.filter((totals) => totals.location === location)
-        if(totals.length === 0) {
+        if (totals.length === 0) {
             console.log('zero detected');
             return null;
         }
@@ -72,7 +74,7 @@ const AwardsSummary = () => {
     const generateCumalitiveTotals = (location) => {
         const filteredTotals = generateFilteredTotals(location);
 
-        if(filteredTotals === null) {
+        if (filteredTotals === null) {
             return null;
         }
 
@@ -82,18 +84,38 @@ const AwardsSummary = () => {
         return sum;
     }
 
+    const onExportCSV = () => {
+        dispatch(generateExportData(originalLocations));
+    }
+
+    useEffect(() => {
+        if (awardsData.exportData) {
+            const confirmation = window.confirm("Are you sure you want to export CSV data for the awards summary?");
+            if (confirmation) {
+                generateCSVString(awardsData.exportData, selectedFinancialYear);
+            }
+            dispatch(clearExportData());
+        }
+    }, [awardsData.exportData])
+
     return (
         !showUI ?
             <div className='spinner-container-page'><Spinner classes="page" text="Generating Summary Table...." /></div>
             :
             <div className='awards-page-container'>
                 <div className='awards-page-table-container'>
-                    <h3>Contract Awards Summary</h3>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
+                        <h3>Contract Awards Summary</h3>
+                        {
+                            authenticatedUser.role === ROLES.CA01 &&
+                            <button onClick={onExportCSV}>Export CSV</button>
+                        }
+                    </div>
                     <table id="awards-table" className='awards-summary-table'>
                         <thead>
                             <tr>
                                 <th>Location</th>
-                                <MonthsForTableHead k="1"/>
+                                <MonthsForTableHead k="1" />
                                 <th>Cumalitive Totals</th>
                                 <th colSpan="3">
                                     <div className='cumulative-totals-container'>
@@ -125,7 +147,7 @@ const AwardsSummary = () => {
                                     return null;
                                 })
                             }
-                            <tr className='bold-cells'>
+                            <tr className='bold-cells' style={{borderTop: "2px solid black"}}>
                                 <td>UK Core Total</td>
                                 {
                                     awardsData.ukCoreTotals.map((data, index) => {
@@ -146,12 +168,12 @@ const AwardsSummary = () => {
                             </tr>
                             {
                                 locations.map((location, index) => {
-                                   if( location === "Special Projects" || location === "M&E") {
-                                    return <AwardsSummarySpecialsRow targetsData={awardsData.targets} filteredTotals={generateFilteredTotals(location)} cumalitiveTotal={generateCumalitiveTotals(location)} locationRef={location} key={index} />
-                                   }
+                                    if (location === "Special Projects" || location === "M&E") {
+                                        return <AwardsSummarySpecialsRow targetsData={awardsData.targets} filteredTotals={generateFilteredTotals(location)} cumalitiveTotal={generateCumalitiveTotals(location)} locationRef={location} key={index} />
+                                    }
                                 })
                             }
-                            <tr className='bold-cells'>
+                            <tr className='bold-cells' style={{borderTop: "2px solid black"}}>
                                 <td>Total</td>
                                 <AwardsSummaryTotalsRow
                                     ukCoreTotals={awardsData.ukCoreTotals}
@@ -168,43 +190,43 @@ const AwardsSummary = () => {
                 {
                     authenticatedUser.role === ROLES.CA01 &&
                     <>
-                    <div className='awards-page-table-container'>
-                    <h3>Company Performance</h3>
-                    <table id="awards-table">
-                        <thead>
-                            <tr>
-                                <th>Month</th>
-                                <MonthsForTableHead k="2"/>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Plus/Minus</td>
-                                <AwardsSummaryMonthlyPerformanceRow monthlyCoreTotals={awardsData.ukAndSpecialCoreTotals} monthlyTargetTotal={awardsData.ukAndSpecialTargetTotal} />
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                        <div className='awards-page-table-container'>
+                            <h3>Company Performance</h3>
+                            <table id="awards-table">
+                                <thead>
+                                    <tr>
+                                        <th>Month</th>
+                                        <MonthsForTableHead k="2" />
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Plus/Minus</td>
+                                        <AwardsSummaryMonthlyPerformanceRow monthlyCoreTotals={awardsData.ukAndSpecialCoreTotals} monthlyTargetTotal={awardsData.ukAndSpecialTargetTotal} />
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
 
-                <div className='awards-page-table-container'>
-                    <table id="awards-table">
-                        <thead>
-                            <tr>
-                                <th>Cumalitive</th>
-                                <MonthsForTableHead k="3"/>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Plus/Minus</td>
-                                <AwardsSummaryCumalitivePerformanceRow monthlyCoreTotals={awardsData.ukAndSpecialCoreTotals} monthlyTargetTotal={awardsData.ukAndSpecialTargetTotal} />
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                        <div className='awards-page-table-container'>
+                            <table id="awards-table">
+                                <thead>
+                                    <tr>
+                                        <th>Cumalitive</th>
+                                        <MonthsForTableHead k="3" />
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Plus/Minus</td>
+                                        <AwardsSummaryCumalitivePerformanceRow monthlyCoreTotals={awardsData.ukAndSpecialCoreTotals} monthlyTargetTotal={awardsData.ukAndSpecialTargetTotal} />
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </>
                 }
-               
+
             </div>
     )
 }

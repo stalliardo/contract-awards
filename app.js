@@ -57,6 +57,7 @@ app.post("/login", (req, res) => {
 
     ad.authenticate(username, password, function (err, auth) {
         if (err) {
+            console.log('err = ', err);
             return res.status(401).json({ error: "Invalid Credentials" })
         }
 

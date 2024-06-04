@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import './tenders-submitted.css';
 
 import { generateFinancialYearMonths } from '../../utils/DateUtils';
@@ -13,6 +13,8 @@ import TendersSummaryMontlyPerformanceRow from './TendersSummaryMontlyPerformanc
 import TenderSummaryCumalitivePerformanceRow from './TenderSummaryCumalitivePerformanceRow';
 import { ROLES } from '../../utils/constants';
 import { addSlashToYearString } from '../../utils/stringUtils';
+import { clearExportData, generateExportData } from '../../redux/features/tenders/tenderSlice';
+import { generateCSVForTenders } from '../../utils/CSVExport';
 
 const TendersSubmittedTable = ({ data }) => {
     const originalLocations = useSelector(state => state.location.data);
@@ -23,24 +25,46 @@ const TendersSubmittedTable = ({ data }) => {
     const tenders = useSelector(state => state.tender);
     const awards = useSelector(state => state.awards);
 
+    const dispatch = useDispatch();
+
     const extractedDataForRow = (location) => {
         return data.find((item) => item.location === location);
     }
 
-    const MonthsForTableHead = ({k}) => {
+    const MonthsForTableHead = ({ k }) => {
         const months = generateFinancialYearMonths(addSlashToYearString(selectedFinancialYear));
-        
+
         const cells = months.map((month, i) => {
             return <th key={`${k} ${i}`}>{month}</th>
         })
-        
+
         return cells
     }
+
+    const onExportCSV = () => {
+        dispatch(generateExportData({locations: originalLocations, targets: awards.tendersSubmittedTargets}));
+    }
+
+    useEffect(() => {
+        if (tenders.exportData) {
+            const confirmation = window.confirm("Are you sure you want to export CSV data for the tenders summary?");
+            if (confirmation) {
+                generateCSVForTenders(tenders.exportData, selectedFinancialYear);
+            }
+            dispatch(clearExportData());
+        }
+    }, [tenders.exportData])
 
     return (
         <div className='awards-page-container'>
             <div className='awards-page-table-container'>
-                <h3>Tenders Submitted Summary</h3>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
+                    <h3>Tenders Submitted Summary</h3>
+                    {
+                        authenticatedUser.role === ROLES.CA01 &&
+                        <button onClick={onExportCSV}>Export CSV</button>
+                    }
+                </div>
                 <table id="awards-table" className='awards-summary-table'>
                     <thead>
                         <tr>
@@ -90,7 +114,7 @@ const TendersSubmittedTable = ({ data }) => {
                             })
                         }
 
-                        <tr className='bold-cells'>
+                        <tr className='bold-cells' style={{borderTop: "2px solid black"}}>
                             <td>Total</td>
                             <TendersSummaryTotalsRow
                                 ukCoreTotals={tenders.ukCoreTotals.uk}

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { addTender, getTenders } from './tenderThunk';
-import { generateCumalitiveTenderTotals, generateSpecialCumalitiveTotals, generateUKTenendersCumaltiveTotal, generateUkCoreTenderTotals } from '../../../utils/financialTotals';
+import { generateCompanyPerformanceCumalitiveTotals, generateCumalitiveTenderTotals, generateSpecialCumalitiveTotals, generateTargetAcheivedPercentage, generateTargetAmountToDate, generateUKTenendersCumaltiveTotal, generateUkCoreTenderTotals } from '../../../utils/financialTotals';
 
 const initialState = {
   data: [],
@@ -8,8 +8,9 @@ const initialState = {
   error: null,
   cumalitiveTotals: [],
   ukCumalitiveTotal: "",
-  ukCoreTotals: [], // ie, the total for each month
+  ukCoreTotals: [],
   specialCumalitiveTotals: "",
+  exportData: null
 };
 
 export const tenderSlice = createSlice({
@@ -25,6 +26,89 @@ export const tenderSlice = createSlice({
     },
     resetTenderState: () => {
       return initialState;
+    },
+    generateExportData: (state, action) => {
+      const locations = action.payload.locations;
+      const targets = action.payload.targets;
+      let eData = { coreTotals: [], ukCoreTotalsRow: {}, specialTotals: [], totals: {}, monthlyPerformaceRow: {}, cumalitivePerformanceRow: {} };
+
+      locations.forEach((location) => {
+        if (location.name !== "M&E" && location.name !== "Special Projects") {
+          const dataItem = state.data.find(item => item.location === location.name);
+          const cumalativeTotal = state.cumalitiveTotals.find(item => item.location === location.name);
+          const target = parseInt(targets.find(target => target.location === location.name)?.targetValue) || 0;
+          const yearlyTarget = target * 12;
+          const targetToDate = Math.round(generateTargetAmountToDate(yearlyTarget, cumalativeTotal));
+          let targetAcheived = generateTargetAcheivedPercentage(yearlyTarget, cumalativeTotal);
+
+          if (isNaN(targetAcheived)) {
+            targetAcheived = 0;
+          }
+
+          eData.coreTotals.push({ location: location.name, items: [...dataItem.items], cumalitiveTotal: cumalativeTotal.sum, monthTarget: target, yearlyTarget, targetToDate, targetAcheived });
+        }
+      })
+
+      // eData.push({ location: "UK Core Total"});
+      const ukCoreTotalItems = state.ukCoreTotals;
+
+      const ukCoreTotalTarget = targets.filter(item => item.location !== "Special Projects" && item.location !== "M&E").reduce((prev, current) => parseInt(prev) + parseInt(current.targetValue), 0);
+      const ukcoreTotalYearlyTarget = ukCoreTotalTarget * 12;
+      const ukCoreTotalTargetToDate = Math.round(generateTargetAmountToDate(ukcoreTotalYearlyTarget, state.ukCumalitiveTotal));
+      const targetAcheived = generateTargetAcheivedPercentage(ukcoreTotalYearlyTarget, state.ukCumalitiveTotal);
+
+      eData.ukCoreTotalsRow = { location: "UK Core Total", items: ukCoreTotalItems, cumalitiveTotal: state.ukCumalitiveTotal, monthTarget: ukCoreTotalTarget, yearlyTarget: ukcoreTotalYearlyTarget, targetToDate: ukCoreTotalTargetToDate, targetAcheived: targetAcheived };
+
+      const specialLocations = ["M&E", "Special Projects"];
+
+      specialLocations.forEach((location) => {
+        const dataItem = state.data.find(item => item.location === location);
+        const cumalativeTotal = state.cumalitiveTotals.find(item => item.location === location);
+        const target = parseInt(targets.find(target => target.location === location)?.targetValue) || 0;
+        const yearlyTarget = target * 12;
+        const targetToDate = Math.round(generateTargetAmountToDate(yearlyTarget, cumalativeTotal));
+
+        eData.specialTotals.push({ location: location, items: [...dataItem.items], cumalitiveTotal: cumalativeTotal.sum, monthTarget: target, yearlyTarget, targetToDate });
+      });
+
+      // Totals:
+      const ukAndSpecialCumalitiveTotal = state.ukCumalitiveTotal + state.specialCumalitiveTotals;
+      const ukAndSpecialTargetTotal = targets.reduce((prev, current) => parseInt(prev) + parseInt(current.targetValue), 0);
+      const ukAndSpecialTargetYearlyTotal = ukAndSpecialTargetTotal * 12;
+      const ukAndSpecialTargetToDate = Math.round(generateTargetAmountToDate(ukAndSpecialTargetYearlyTotal, ukAndSpecialCumalitiveTotal));
+      const ukAndSpecialTargetAcheived = generateTargetAcheivedPercentage(ukAndSpecialTargetYearlyTotal, ukAndSpecialCumalitiveTotal);
+
+      eData.totals = { 
+        location: "Total", 
+        items: state.ukCoreTotals.all, 
+        cumalitiveTotal: ukAndSpecialCumalitiveTotal, 
+        monthTarget: targets.reduce((prev, current) => parseInt(prev) + parseInt(current.targetValue), 0), 
+        yearlyTarget: ukcoreTotalYearlyTarget, 
+        targetToDate: ukAndSpecialTargetToDate, 
+        targetAcheived: ukAndSpecialTargetAcheived 
+      };
+      
+      const monthlyPerformaceItems = state.ukCoreTotals.all.map((total, i) => {
+        return total.sum - ukAndSpecialTargetTotal;    
+      })
+
+      eData.monthlyPerformaceRow = { 
+        location: " ", 
+        items: monthlyPerformaceItems, 
+      };
+
+      const cumalitivePerformanceRow = generateCompanyPerformanceCumalitiveTotals(state.ukCoreTotals.all, ukAndSpecialTargetTotal).map(item => item.sum);
+
+      eData.cumalitivePerformanceRow = { 
+        location: " ", 
+        items: cumalitivePerformanceRow, 
+      };
+
+      state.exportData = eData;
+    },
+
+    clearExportData: (state, action) => {
+      state.exportData = null;
     }
   },
 
@@ -77,7 +161,7 @@ export const tenderSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setLoading, buildData, setAuthenticatedUser, resetTenderState } = tenderSlice.actions;
+export const { setLoading, buildData, setAuthenticatedUser, resetTenderState, generateExportData, clearExportData } = tenderSlice.actions;
 
 export default tenderSlice.reducer;
 

@@ -5,7 +5,7 @@ const getConfig = () => {
     return {
         url: `ldap://${process.env.DOMAIN_IP}:389`, // TODO see if i can use the secure LDAPS
         baseDN: 'dc=DAZCORP,dc=COM',
-        username: 'administrator@DAZCORP.COM',
+        username: 'ldap.test@DAZCORP.COM',
         password: process.env.DOMAIN_PASSWORD
     }
 }

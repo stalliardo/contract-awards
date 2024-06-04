@@ -52,10 +52,8 @@ app.post("/login", (req, res) => {
     const password = req.body.password;
     const token = jwt.generateJWT(username);
     
-    console.log('username = ', username);
     // Dev mode auth below
     // return res.json({message: "Authetication Successful", token});
-
 
     ad.authenticate(username, password, function (err, auth) {
         if (err) {

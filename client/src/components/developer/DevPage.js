@@ -57,7 +57,7 @@ const DevPage = () => {
     useEffect(() => {
         const token = getTokenFromStorage();
         if(!token) {
-            navigate("/auth");        
+            // navigate("/auth");        
         }
     }, [])
 

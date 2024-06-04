@@ -39,8 +39,8 @@ app.use("/api", tenderRoutes);
 
 const ADConfig = {
     url: `ldap://${process.env.DOMAIN_IP}:389`, // TODO see if i can use the secure LDAPS
-    baseDN: 'dc=DAZCORP,dc=COM',
-    username: 'administrator@DAZCORP.COM',
+    baseDN: 'dc=wingate,dc=local',
+    username: 'ca.admin@wingate.local',
     password: process.env.DOMAIN_PASSWORD
 } 
 
@@ -48,12 +48,14 @@ var ad = new ActiveDirectory(ADConfig);
 
 
 app.post("/login", (req, res) => {
-    const username = `${req.body.username}@DAZCORP.COM`;
+    const username = `${req.body.username}@wingate.local`;
     const password = req.body.password;
     const token = jwt.generateJWT(username);
     
+    console.log('username = ', username);
     // Dev mode auth below
     // return res.json({message: "Authetication Successful", token});
+
 
     ad.authenticate(username, password, function (err, auth) {
         if (err) {

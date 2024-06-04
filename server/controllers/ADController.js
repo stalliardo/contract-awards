@@ -4,23 +4,26 @@ const Users = require("../models/User");
 const getConfig = () => {
     return {
         url: `ldap://${process.env.DOMAIN_IP}:389`, // TODO see if i can use the secure LDAPS
-        baseDN: 'dc=DAZCORP,dc=COM',
-        username: 'administrator@DAZCORP.COM',
+        baseDN: 'dc=wingate,dc=local',
+        username: 'ca.admin@wingate.local',
         password: process.env.DOMAIN_PASSWORD
     }
 }
 
 exports.updateADUsers = async (req, res) => {
-    console.log('\nupdateADUsersCalled');
+    console.log('\nupdateADUsersCalled = = = ');
     try {
         const ADConfig = getConfig();
         const AD = new ActiveDirectory(ADConfig);
+
         const groupNames = ["CA01", "CA02", "CA03"];
         const usersDataFromAD = [];
-
+        
         for (let i = 0; i < groupNames.length; i++) {
             const usersData = await AD.getUsersForGroup(groupNames[i]);
-            usersDataFromAD.push({ groupName: groupNames[i], items: usersData })
+            if(usersData.length > 0){
+                usersDataFromAD.push({ groupName: groupNames[i], items: usersData })
+            }
         }
 
         const formattedData = [];
@@ -72,7 +75,6 @@ exports.updateADUsers = async (req, res) => {
         if(mongoUsers.length >= usersDataFromAD.length) {
             for(let i = 0; i < mongoUsers.length; i++) {
                 const staleUser = !extractedUserNames.includes(mongoUsers[i].name);
-
                 if(staleUser){
                     console.log('Deleting stale user: ', mongoUsers[i].name);
                     await Users.findByIdAndDelete(mongoUsers[i]._id);

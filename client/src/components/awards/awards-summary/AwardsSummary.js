@@ -15,6 +15,9 @@ import { useNavigate } from 'react-router-dom';
 import { addSlashToYearString, removeSlashFromyearString } from '../../../utils/stringUtils';
 import { clearExportData, generateExportData } from '../../../redux/features/awards/awardsSlice';
 import { exportToCSV, generateCSVString } from '../../../utils/CSVExport';
+import SelectMenu from '../../selectMenu/SelectMenu';
+
+const filterOptions = [{ value: "All" }, { value: "London" }, { value: "North" }, { value: "South" }];
 
 const AwardsSummary = () => {
     const dispatch = useDispatch();
@@ -22,10 +25,16 @@ const AwardsSummary = () => {
     const authenticatedUser = useSelector(state => state.users.authenticatedUser);
     const selectedFinancialYear = useSelector(state => state.users.selectedFinancialYear);
     const awardsData = useSelector((state) => state.awards);
+    const usersData = useSelector((state) => state.users.data);
+
     const isLoading = useSelector((state) => state.awards.loading);
     const [locations, setLocations] = useState(authenticatedUser.locations ? [...authenticatedUser.locations].sort() : []);
     const originalLocations = useSelector((state) => state.location.data);
     const specialLocations = useSelector((state) => state.awards.specialLocations);
+
+    const [selectedLocations, setSelectedLocations] = useState([]);
+    const [selectedLocation, setSelectedLocation] = useState(filterOptions[0].value);
+
     const navigate = useNavigate();
 
     const [spinnerComplete, setSpinnerComplete] = useState(false);
@@ -98,6 +107,30 @@ const AwardsSummary = () => {
         }
     }, [awardsData.exportData])
 
+    const onFilterSelected = ({ value }) => {
+        setSelectedLocation(value);
+
+        const user = usersData.find(user => user.name === value);
+
+        if (value !== "All" && user && user.locations.length > 0) {
+            setLocations(user.locations);
+            dispatch(fetchData({ locationData: originalLocations, authenticatedUser: {locations: user.locations}, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear) })).finally(() => {
+                setTimeout(() => {
+                    setSpinnerComplete(true);
+                }, 500);
+            })
+        }
+
+        if (value === "All") {
+            setLocations(authenticatedUser.locations);
+            dispatch(fetchData({ locationData: originalLocations, authenticatedUser, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear) })).finally(() => {
+                setTimeout(() => {
+                    setSpinnerComplete(true);
+                }, 500);
+            })
+        }
+    }
+
     return (
         !showUI ?
             <div className='spinner-container-page'><Spinner classes="page" text="Generating Summary Table...." /></div>
@@ -114,7 +147,16 @@ const AwardsSummary = () => {
                     <table id="awards-table" className='awards-summary-table'>
                         <thead>
                             <tr>
-                                <th>Location</th>
+                            <th>
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                <div>
+                                    Location
+                                </div>
+                                <div style={{ width: "50%" }}>
+                                    <SelectMenu placeholder={selectedLocation} menuItems={filterOptions} handleItemSelection={onFilterSelected} styles={{ color: "black" }} />
+                                </div>
+                            </div>
+                        </th>
                                 <MonthsForTableHead k="1" />
                                 <th>Cumalitive Totals</th>
                                 <th colSpan="3">

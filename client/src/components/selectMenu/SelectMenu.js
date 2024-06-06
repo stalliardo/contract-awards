@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import './select-menu.css';
 
-const MenuItem = ({ value, handleClick }) => {
-  return <div className="item" onClick={handleClick}>{value}</div>
+const MenuItem = ({ value, handleClick, styles }) => {
+  return <div style={styles} className="item" onClick={handleClick}>{value}</div>
 }
 
-const SelectMenu = ({ value, label, name, handleItemSelection, menuItems, placeholder, allSettingPlaceholder = true }) => {
+const SelectMenu = ({ value, label, name, handleItemSelection, menuItems, placeholder, allSettingPlaceholder = true, styles }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [defaultValue, setDefaultValue] = useState(placeholder);
 
@@ -36,7 +36,7 @@ const SelectMenu = ({ value, label, name, handleItemSelection, menuItems, placeh
       <div className={`select-menu-dropdown-container ${isOpen ? "open" : ""}`}>
         {
           menuItems.map((item, index) => {
-            if(item.value !== defaultValue) return <MenuItem  value={item.value} key={index} handleClick={() => handleMenuItemSelected(item)}/>
+            if(item.value !== defaultValue) return <MenuItem styles={styles}  value={item.value} key={index} handleClick={() => handleMenuItemSelected(item)}/>
           })
         }
       </div>

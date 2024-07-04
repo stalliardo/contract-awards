@@ -8,7 +8,7 @@ import AwardsSummarySpecialsRow from './AwardsSummarySpecialsRow';
 import { generateTargetAcheivedPercentage, generateTargetAmountToDate } from '../../../utils/financialTotals';
 import AwardsSummaryTotalsRow from './AwardsSummaryTotalsRow';
 import AwardsSummaryMonthlyPerformanceRow from './AwardsSummaryMonthlyPerformanceRow';
-import { COLOURS, ROLES } from '../../../utils/constants';
+import { COLOURS, ROLES, extractADFriendlyRegionalName } from '../../../utils/constants';
 import AwardsSummaryCumalitivePerformanceRow from './AwardsSummaryCumalitivePerformanceRow';
 import { generateFinancialYearMonths } from '../../../utils/DateUtils';
 import { useNavigate } from 'react-router-dom';
@@ -36,6 +36,7 @@ const AwardsSummary = () => {
 
     const isLoading = useSelector((state) => state.awards.loading);
     const [locations, setLocations] = useState(authenticatedUser.locations ? [...authenticatedUser.locations].sort() : []);
+    // const [locations, setLocations] = useState(authenticatedUser.locations ? [...authenticatedUser.locations] : []);
     const originalLocations = useSelector((state) => state.location.data);
     const specialLocations = useSelector((state) => state.awards.specialLocations);
 
@@ -116,25 +117,29 @@ const AwardsSummary = () => {
     const onFilterSelected = ({ value }) => {
         setSelectedLocation(value);
 
+        const extractedRegion = extractADFriendlyRegionalName(value);
+
+        // Use the names defined in the constants file and add those to the directory as users ie, London, Southern, MAndE, etc
+
         const user = usersData.find(user => user.name === value);
 
-        if (value !== "All" && user && user.locations.length > 0) {
-            setLocations(user.locations);
-            dispatch(fetchData({ locationData: originalLocations, authenticatedUser: {locations: user.locations}, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear) })).finally(() => {
-                setTimeout(() => {
-                    setSpinnerComplete(true);
-                }, 500);
-            })
-        }
+        // if (value !== "All" && user && user.locations.length > 0) {
+        //     setLocations(user.locations);
+        //     dispatch(fetchData({ locationData: originalLocations, authenticatedUser: {locations: user.locations}, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear) })).finally(() => {
+        //         setTimeout(() => {
+        //             setSpinnerComplete(true);
+        //         }, 500);
+        //     })
+        // }
 
-        if (value === "All") {
-            setLocations(authenticatedUser.locations);
-            dispatch(fetchData({ locationData: originalLocations, authenticatedUser, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear) })).finally(() => {
-                setTimeout(() => {
-                    setSpinnerComplete(true);
-                }, 500);
-            })
-        }
+        // if (value === "All") {
+        //     setLocations(authenticatedUser.locations);
+        //     dispatch(fetchData({ locationData: originalLocations, authenticatedUser, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear) })).finally(() => {
+        //         setTimeout(() => {
+        //             setSpinnerComplete(true);
+        //         }, 500);
+        //     })
+        // }
     }
 
     return (

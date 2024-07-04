@@ -32,20 +32,17 @@ export const ROLES = {
 
 export const REGIONS = {
     All: "All",
-    London: "London",
-    Northern: "Northern",
-    Southern: "Southern",
-    SpecialsBirminghamAndGlasgow: "Special Projects, Birmingham & Glasgow",
-    MAndE: "M&E"
+    london: "London",
+    northern: "Northern",
+    southern: "Southern",
+    specialsBirminghamAndGlasgow: "Special Projects, Birmingham & Glasgow",
+    mAndE: "M&E"
 }
 
 export const extractADFriendlyRegionalName = (region) => {
-
     console.log('region = ', region);
  
     const itemIndex = Object.values(REGIONS).findIndex(item => item === region);
 
-    return Object.keys(REGIONS).map(r => r)[itemIndex];
-    
-
+    return `${Object.keys(REGIONS).map(r => r)[itemIndex]} region`;
 }

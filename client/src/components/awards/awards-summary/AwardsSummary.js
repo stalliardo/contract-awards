@@ -121,25 +121,28 @@ const AwardsSummary = () => {
 
         // Use the names defined in the constants file and add those to the directory as users ie, London, Southern, MAndE, etc
 
-        const user = usersData.find(user => user.name === value);
+        // TODO -> Will need to append a .regional to the value above before calling userData.find
 
-        // if (value !== "All" && user && user.locations.length > 0) {
-        //     setLocations(user.locations);
-        //     dispatch(fetchData({ locationData: originalLocations, authenticatedUser: {locations: user.locations}, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear) })).finally(() => {
-        //         setTimeout(() => {
-        //             setSpinnerComplete(true);
-        //         }, 500);
-        //     })
-        // }
+        // const user = usersData.find(user => user.name === value);
+        const user = usersData.find(user => user.name === extractedRegion);
 
-        // if (value === "All") {
-        //     setLocations(authenticatedUser.locations);
-        //     dispatch(fetchData({ locationData: originalLocations, authenticatedUser, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear) })).finally(() => {
-        //         setTimeout(() => {
-        //             setSpinnerComplete(true);
-        //         }, 500);
-        //     })
-        // }
+        if (value !== "All" && user && user.locations.length > 0) {
+            setLocations(user.locations);
+            dispatch(fetchData({ locationData: originalLocations, authenticatedUser: {locations: user.locations}, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear) })).finally(() => {
+                setTimeout(() => {
+                    setSpinnerComplete(true);
+                }, 500);
+            })
+        }
+
+        if (value === "All") {
+            setLocations(authenticatedUser.locations);
+            dispatch(fetchData({ locationData: originalLocations, authenticatedUser, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear) })).finally(() => {
+                setTimeout(() => {
+                    setSpinnerComplete(true);
+                }, 500);
+            })
+        }
     }
 
     return (
@@ -158,7 +161,7 @@ const AwardsSummary = () => {
                     <table id="awards-table" className='awards-summary-table'>
                         <thead>
                             <tr>
-                            <th>
+                            <th style={{maxWidth: "150px"}}>
                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                 <div>
                                     Location

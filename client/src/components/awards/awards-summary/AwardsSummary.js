@@ -159,7 +159,7 @@ const AwardsSummary = () => {
                                     Location
                                 </div>
                                 <div style={{ width: "50%" }}>
-                                    <SelectMenu placeholder={selectedLocation} menuItems={filterOptions} handleItemSelection={onFilterSelected} styles={{ color: "black" }} />
+                                    <SelectMenu placeholder={selectedLocation} dropDownContainerStyles={{width: "260px"}} menuItems={filterOptions} handleItemSelection={onFilterSelected} styles={{ color: "black" }} />
                                 </div>
                             </div>
                         </th>

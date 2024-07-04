@@ -5,7 +5,7 @@ const MenuItem = ({ value, handleClick, styles }) => {
   return <div style={styles} className="item" onClick={handleClick}>{value}</div>
 }
 
-const SelectMenu = ({ value, label, name, handleItemSelection, menuItems, placeholder, allSettingPlaceholder = true, styles }) => {
+const SelectMenu = ({ value, label, name, handleItemSelection, menuItems, placeholder, allSettingPlaceholder = true, styles, dropDownContainerStyles }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [defaultValue, setDefaultValue] = useState(placeholder);
 
@@ -33,7 +33,7 @@ const SelectMenu = ({ value, label, name, handleItemSelection, menuItems, placeh
         <p>{defaultValue}</p>
         <p><i className={`arrow down`}></i></p>
       </div>
-      <div className={`select-menu-dropdown-container ${isOpen ? "open" : ""}`}>
+      <div className={`select-menu-dropdown-container ${isOpen ? "open" : ""}`} style={dropDownContainerStyles}>
         {
           menuItems.map((item, index) => {
             if(item.value !== defaultValue) return <MenuItem styles={styles}  value={item.value} key={index} handleClick={() => handleMenuItemSelected(item)}/>

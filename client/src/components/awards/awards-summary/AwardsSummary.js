@@ -17,7 +17,14 @@ import { clearExportData, generateExportData } from '../../../redux/features/awa
 import { exportToCSV, generateCSVString } from '../../../utils/CSVExport';
 import SelectMenu from '../../selectMenu/SelectMenu';
 
-const filterOptions = [{ value: "All" }, { value: "London" }, { value: "North" }, { value: "South" }];
+const filterOptions = [
+    { value: "All" }, 
+    { value: "London" }, 
+    { value: "Northern" }, 
+    { value: "Southern" }, 
+    { value: "Special Projects, Birmingham & Glasgow" }, 
+    { value: "M&E" }
+];
 
 const AwardsSummary = () => {
     const dispatch = useDispatch();
@@ -73,7 +80,6 @@ const AwardsSummary = () => {
     const generateFilteredTotals = (location) => {
         const totals = awardsData.coreTotals.filter((totals) => totals.location === location)
         if (totals.length === 0) {
-            console.log('zero detected');
             return null;
         }
 

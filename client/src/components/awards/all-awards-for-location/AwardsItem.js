@@ -1,17 +1,15 @@
 import React from 'react'
 import AwardsTableRow from '../table/AwardsTableRow'
+import { getCoreTotal } from '../../../utils/financialTotals';
 
 const AwardsItem = ({awardItem}) => {
 
     console.log('item passed in = ', awardItem);
-    const coreSum = 1000
+    const coreSum = getCoreTotal(awardItem.items)
 
     return (
         <div className='awards-table-container'>
-
-
             <div className='awards-page-table-container'>
-               
                 {
                     awardItem.items.length ?
                         <table id="awards-table" className='awards-form-table'>

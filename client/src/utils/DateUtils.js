@@ -10,35 +10,6 @@ const monthsInOrder = [
     'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
 ];
 
-// export const generateFinancialYearMonths = () => {
-//     // needs to be based on the selected year TODO
-
-//     const monthsForTable = [];
-//     const currentMonth = new Date().getMonth() + 1; // Get the current month (1-indexed)
-//     const currentYear = new Date().getFullYear();
-//     let startMonth = 10; // October
-//     let startYear = currentYear;
-
-//     // If the current month is before October, start from October of the previous year
-//     if (currentMonth < startMonth) {
-//         startYear--;
-//     }
-
-//     const monthNames = [
-//         'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-//         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-//     ];
-
-//     for (let i = 0; i < 12; i++) {
-//         const month = (startMonth + i - 1) % 12; // Adjust month index to start from October
-//         const year = startYear + Math.floor((startMonth + i - 1) / 12); // Adjust year accordingly
-//         const formattedMonth = `${monthNames[month]}-${String(year).slice(-2)}`;
-//         monthsForTable.push(formattedMonth);
-//     }
-
-//     return monthsForTable;
-// }
-
 export const generateFinancialYearMonths = (financialYear) => {
   // Split the financial year into the start and end years
   const [startYearPart, endYearPart] = financialYear.split('/');

@@ -27,6 +27,7 @@ const AwardsTable = ({ locations }) => {
     const [showAddRow, setShowAddRow] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [location, setLocation] = useState(locations[0]);
+    const [allSelected, setAllSelected] = useState(false);
 
     const [dateOptions, setDateOptions] = useState([])
     const [month, setMonth] = useState(currentMonth);
@@ -43,7 +44,7 @@ const AwardsTable = ({ locations }) => {
 
     useEffect(() => {
         if (locationParam && monthParam) {
-            if(locationParam === "MandE") locationParam = "M&E";
+            if (locationParam === "MandE") locationParam = "M&E";
 
             setLocation(capitalizeFirstLetter(locationParam));
             setMonth(capitalizeFirstLetter(monthParam));
@@ -56,11 +57,29 @@ const AwardsTable = ({ locations }) => {
         }
 
         let encodedLocation = encodeURIComponent(location);
-        let url = `/api/awards-diary/location?location=${encodedLocation}&financialYear=${user.selectedFinancialYear}`
+        let url = `/api/awards-diary/location?location=${encodedLocation}&financialYear=${user.selectedFinancialYear}`;
+
+        console.log('url = ', url);
 
         axios.get(url).then((response) => {
-            const filteredLocationData = response.data.find((item) => item.month === month);
-            setFilteredData(filteredLocationData);
+            let filteredLocationData = [];
+
+            if (month === "All") {
+
+                // filteredLocationData = response.data;
+
+                setAllSelected(true);
+
+
+                // filteredLocationData = response.data.find((item) => item.month === "March");
+            } else {
+                setAllSelected(false);
+
+                console.log('else callled');
+                filteredLocationData = response.data.find((item) => item.month === month);
+                setFilteredData(filteredLocationData);
+            }
+
         }).catch((error) => {
             console.log('Error getting filterd data. Error: ', error);
         }).finally(() => {
@@ -122,10 +141,10 @@ const AwardsTable = ({ locations }) => {
     }
 
     const onMonthSelected = ({ value }) => {
+        console.log('on month seected = ', extractMonthFromString(value));
         setMonth(extractMonthFromString(value));
     }
 
-    console.log('date options - ', dateOptions);
     return (
         <div className='awards-table-container'>
             <div className='awards-table-container-select-menus'>
@@ -136,13 +155,13 @@ const AwardsTable = ({ locations }) => {
                     <SelectMenu placeholder={month} menuItems={dateOptions} handleItemSelection={onMonthSelected} />
                 </div>
             </div>
-            <div className='awards-page-table-container'>
-                <div className='awards-page-title-and-button' style={{marginBottom: "20px", alignItems: "center", height: "40px"}}>
-                    {/* <h3>{location} {filteredData.month}-{filteredData.year}</h3> */}
+            {
+                !allSelected ? 
+                <div className='awards-page-table-container'>
+                <div className='awards-page-title-and-button' style={{ marginBottom: "20px", alignItems: "center", height: "40px" }}>
                     <div></div>
-
                     {filteredData.items.length ?
-                      isCurrentFinancialYear &&  
+                        isCurrentFinancialYear &&
                         <button onClick={() => setShowAddRow(true)}>
                             Add Row
                         </button>
@@ -167,7 +186,7 @@ const AwardsTable = ({ locations }) => {
                                 {
                                     filteredData.items && filteredData.items.length ?
                                         filteredData.items.map((data) => (
-                                            <AwardsTableRow data={data} key={data._id} onItemDeleted={itemDeleted} onItemEdited={onItemEdited} location={location} month={month} isCurrentFinancialYear={isCurrentFinancialYear}/>
+                                            <AwardsTableRow data={data} key={data._id} onItemDeleted={itemDeleted} onItemEdited={onItemEdited} location={location} month={month} isCurrentFinancialYear={isCurrentFinancialYear} />
                                         ))
                                         : null
                                 }
@@ -193,7 +212,16 @@ const AwardsTable = ({ locations }) => {
                         </div>
                 }
             </div>
+            : <div>All selected</div>
+            }
         </div>
     )
 }
 export default AwardsTable;
+
+// TODOs for displaying all items
+
+// 1 - remove the add row button
+// 2 - have a new component that can display all the detaisl based off of an array
+// 3 - Remove the ability to edit the row when this view all section is enabled
+

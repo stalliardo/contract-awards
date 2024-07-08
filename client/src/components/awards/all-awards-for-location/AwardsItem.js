@@ -23,14 +23,14 @@ const AwardsItem = ({awardItem}) => {
                                     <th>Contractor</th>
                                     <th>Region</th>
                                     <th>Core</th>
-                                    <th colSpan="2" style={{ textAlign: "center" }}>Actions</th>
+                                    {/* <th colSpan="2" style={{ textAlign: "center" }}>Actions</th> */}
                                 </tr>
                             </thead>
                             <tbody>
                                 {
                                     awardItem.items && awardItem.items.length ?
                                         awardItem.items.map((data) => (
-                                            <AwardsTableRow data={data} key={data._id}   />
+                                            <AwardsTableRow data={data} key={data._id} actionsRequired={false}/>
                                         ))
                                         : null
                                 }
@@ -42,8 +42,7 @@ const AwardsItem = ({awardItem}) => {
                                     <td></td>
                                     <td></td>
                                     <td className='last-cell'>Total: £{coreSum.toLocaleString()}</td>
-                                    <td></td>
-                                    <td></td>
+                                    
                                 </tr>
                             </tbody>
                         </table>

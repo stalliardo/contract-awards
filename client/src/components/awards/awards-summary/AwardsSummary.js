@@ -14,7 +14,7 @@ import { generateFinancialYearMonths } from '../../../utils/DateUtils';
 import { useNavigate } from 'react-router-dom';
 import { addSlashToYearString, removeSlashFromyearString } from '../../../utils/stringUtils';
 import { clearExportData, generateExportData } from '../../../redux/features/awards/awardsSlice';
-import { exportToCSV, generateCSVString } from '../../../utils/CSVExport';
+import { generateCSVString } from '../../../utils/CSVExport';
 import SelectMenu from '../../selectMenu/SelectMenu';
 
 const filterOptions = [
@@ -36,14 +36,11 @@ const AwardsSummary = () => {
 
     const isLoading = useSelector((state) => state.awards.loading);
 
-
     const [locations, setLocations] = useState(authenticatedUser.locations ? [...authenticatedUser.locations] : []);
     const sortedLocations = useMemo(() => sortLocations(locations));
 
     const originalLocations = useSelector((state) => state.location.data);
-    const specialLocations = useSelector((state) => state.awards.specialLocations);
 
-    const [selectedLocations, setSelectedLocations] = useState([]);
     const [selectedLocation, setSelectedLocation] = useState(filterOptions[0].value);
 
     const navigate = useNavigate();
@@ -58,7 +55,7 @@ const AwardsSummary = () => {
             return <th key={`${k} ${i}`}>{month}</th>
         })
 
-        return cells
+        return cells;
     }
 
     useEffect(() => {
@@ -117,20 +114,10 @@ const AwardsSummary = () => {
         }
     }, [awardsData.exportData])
 
-    // useEffect(() => {
-    //     setLocations(sortLocations(locations))
-    // }, [locations])
-
     const onFilterSelected = ({ value }) => {
         setSelectedLocation(value);
 
         const extractedRegion = extractADFriendlyRegionalName(value);
-
-        // Use the names defined in the constants file and add those to the directory as users ie, London, Southern, MAndE, etc
-
-        // TODO -> Will need to append a .regional to the value above before calling userData.find
-
-        // const user = usersData.find(user => user.name === value);
         const user = usersData.find(user => user.name === extractedRegion);
 
         if (value !== "All" && user && user.locations.length > 0) {

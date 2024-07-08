@@ -58,13 +58,21 @@ export const LOCATIONS_IN_COMPANY_ORDER = [
     "Leeds",
     "Manchester",
     "Newcastle",
-    "AWE"
+    "AWE",
+    "Special Projects",
+    "M&E"
 ];
 
 export const sortLocations = (unSortedLocations) => {
-    const sortedLocations = unSortedLocations.sort((a, b) => {
-        return LOCATIONS_IN_COMPANY_ORDER.indexOf(a) - LOCATIONS_IN_COMPANY_ORDER.indexOf(b);
-    })
+    let sortedLocations = [];
+
+    if(unSortedLocations.length === 13) {
+        sortedLocations = [...unSortedLocations].sort((a, b) => {
+            return LOCATIONS_IN_COMPANY_ORDER.indexOf(a) - LOCATIONS_IN_COMPANY_ORDER.indexOf(b);
+        })
+    } else {
+        sortedLocations = unSortedLocations
+    }
 
     return sortedLocations;
 }

@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import './awardsTable.css';
 import '../../awards/awards.css';
+import AllAwardsForLocation from '../all-awards-for-location/AllAwardsForLocation';
 
 function capitalizeFirstLetter(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -24,6 +25,7 @@ const AwardsTable = ({ locations }) => {
 
     const currentMonth = getCurrentMonth();
     const [filteredData, setFilteredData] = useState({ items: [] });
+    const [allAwardsData, setAllAwardsData] = useState()
     const [showAddRow, setShowAddRow] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [location, setLocation] = useState(locations[0]);
@@ -59,23 +61,16 @@ const AwardsTable = ({ locations }) => {
         let encodedLocation = encodeURIComponent(location);
         let url = `/api/awards-diary/location?location=${encodedLocation}&financialYear=${user.selectedFinancialYear}`;
 
-        console.log('url = ', url);
-
         axios.get(url).then((response) => {
             let filteredLocationData = [];
 
             if (month === "All") {
-
-                // filteredLocationData = response.data;
-
                 setAllSelected(true);
 
-
-                // filteredLocationData = response.data.find((item) => item.month === "March");
+                setAllAwardsData(response.data);
             } else {
                 setAllSelected(false);
 
-                console.log('else callled');
                 filteredLocationData = response.data.find((item) => item.month === month);
                 setFilteredData(filteredLocationData);
             }
@@ -212,7 +207,7 @@ const AwardsTable = ({ locations }) => {
                         </div>
                 }
             </div>
-            : <div>All selected</div>
+            : <div><AllAwardsForLocation data={allAwardsData}/></div>
             }
         </div>
     )

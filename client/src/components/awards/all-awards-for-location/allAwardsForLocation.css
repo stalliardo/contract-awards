@@ -1,0 +1,8 @@
+.all-awards-container {
+    position: absolute;
+    margin-top: 50px;
+
+    border: 1px solid red;
+    width: 100%;
+    
+}

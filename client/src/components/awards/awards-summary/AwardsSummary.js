@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchData } from '../../../redux/features/awards/awardsThunks';
 import Spinner from '../../spinner/Spinner';
@@ -8,13 +8,23 @@ import AwardsSummarySpecialsRow from './AwardsSummarySpecialsRow';
 import { generateTargetAcheivedPercentage, generateTargetAmountToDate } from '../../../utils/financialTotals';
 import AwardsSummaryTotalsRow from './AwardsSummaryTotalsRow';
 import AwardsSummaryMonthlyPerformanceRow from './AwardsSummaryMonthlyPerformanceRow';
-import { COLOURS, ROLES } from '../../../utils/constants';
+import { COLOURS, ROLES, extractADFriendlyRegionalName, sortLocations } from '../../../utils/constants';
 import AwardsSummaryCumalitivePerformanceRow from './AwardsSummaryCumalitivePerformanceRow';
 import { generateFinancialYearMonths } from '../../../utils/DateUtils';
 import { useNavigate } from 'react-router-dom';
 import { addSlashToYearString, removeSlashFromyearString } from '../../../utils/stringUtils';
 import { clearExportData, generateExportData } from '../../../redux/features/awards/awardsSlice';
-import { exportToCSV, generateCSVString } from '../../../utils/CSVExport';
+import { generateCSVString } from '../../../utils/CSVExport';
+import SelectMenu from '../../selectMenu/SelectMenu';
+
+const filterOptions = [
+    { value: "All" }, 
+    { value: "London" }, 
+    { value: "Northern" }, 
+    { value: "Southern" }, 
+    { value: "Special Projects, Birmingham & Glasgow" }, 
+    { value: "M&E" }
+];
 
 const AwardsSummary = () => {
     const dispatch = useDispatch();
@@ -22,10 +32,17 @@ const AwardsSummary = () => {
     const authenticatedUser = useSelector(state => state.users.authenticatedUser);
     const selectedFinancialYear = useSelector(state => state.users.selectedFinancialYear);
     const awardsData = useSelector((state) => state.awards);
+    const usersData = useSelector((state) => state.users.data);
+
     const isLoading = useSelector((state) => state.awards.loading);
-    const [locations, setLocations] = useState(authenticatedUser.locations ? [...authenticatedUser.locations].sort() : []);
+
+    const [locations, setLocations] = useState(authenticatedUser.locations ? [...authenticatedUser.locations] : []);
+    const sortedLocations = useMemo(() => sortLocations(locations));
+
     const originalLocations = useSelector((state) => state.location.data);
-    const specialLocations = useSelector((state) => state.awards.specialLocations);
+
+    const [selectedLocation, setSelectedLocation] = useState(filterOptions[0].value);
+
     const navigate = useNavigate();
 
     const [spinnerComplete, setSpinnerComplete] = useState(false);
@@ -38,7 +55,7 @@ const AwardsSummary = () => {
             return <th key={`${k} ${i}`}>{month}</th>
         })
 
-        return cells
+        return cells;
     }
 
     useEffect(() => {
@@ -64,7 +81,6 @@ const AwardsSummary = () => {
     const generateFilteredTotals = (location) => {
         const totals = awardsData.coreTotals.filter((totals) => totals.location === location)
         if (totals.length === 0) {
-            console.log('zero detected');
             return null;
         }
 
@@ -98,6 +114,31 @@ const AwardsSummary = () => {
         }
     }, [awardsData.exportData])
 
+    const onFilterSelected = ({ value }) => {
+        setSelectedLocation(value);
+
+        const extractedRegion = extractADFriendlyRegionalName(value);
+        const user = usersData.find(user => user.name === extractedRegion);
+
+        if (value !== "All" && user && user.locations.length > 0) {
+            setLocations(user.locations);
+            dispatch(fetchData({ locationData: originalLocations, authenticatedUser: {locations: user.locations}, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear) })).finally(() => {
+                setTimeout(() => {
+                    setSpinnerComplete(true);
+                }, 500);
+            })
+        }
+
+        if (value === "All") {
+            setLocations(authenticatedUser.locations);
+            dispatch(fetchData({ locationData: originalLocations, authenticatedUser, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear) })).finally(() => {
+                setTimeout(() => {
+                    setSpinnerComplete(true);
+                }, 500);
+            })
+        }
+    }
+
     return (
         !showUI ?
             <div className='spinner-container-page'><Spinner classes="page" text="Generating Summary Table...." /></div>
@@ -114,7 +155,16 @@ const AwardsSummary = () => {
                     <table id="awards-table" className='awards-summary-table'>
                         <thead>
                             <tr>
-                                <th>Location</th>
+                            <th style={{maxWidth: "150px"}}>
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                <div>
+                                    Location
+                                </div>
+                                <div style={{ width: "50%" }}>
+                                    <SelectMenu placeholder={selectedLocation} dropDownContainerStyles={{width: "260px"}} menuItems={filterOptions} handleItemSelection={onFilterSelected} styles={{ color: "black" }} />
+                                </div>
+                            </div>
+                        </th>
                                 <MonthsForTableHead k="1" />
                                 <th>Cumalitive Totals</th>
                                 <th colSpan="3">
@@ -140,7 +190,7 @@ const AwardsSummary = () => {
                         </thead>
                         <tbody>
                             {
-                                locations.map((location, index) => {
+                                sortedLocations.map((location, index) => {
                                     if (location !== "M&E" && location !== "Special Projects" && generateFilteredTotals(location)) {
                                         return <AwardsSummaryCoreTotalsRow targetsData={awardsData.targets} filteredTotals={generateFilteredTotals(location)} cumalitiveTotal={generateCumalitiveTotals(location)} locationRef={location} key={index} />
                                     }
@@ -167,7 +217,7 @@ const AwardsSummary = () => {
                                 </td>
                             </tr>
                             {
-                                locations.map((location, index) => {
+                                sortedLocations.map((location, index) => {
                                     if (location === "Special Projects" || location === "M&E") {
                                         return <AwardsSummarySpecialsRow targetsData={awardsData.targets} filteredTotals={generateFilteredTotals(location)} cumalitiveTotal={generateCumalitiveTotals(location)} locationRef={location} key={index} />
                                     }

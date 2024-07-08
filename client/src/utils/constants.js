@@ -40,8 +40,6 @@ export const REGIONS = {
 }
 
 export const extractADFriendlyRegionalName = (region) => {
-    console.log('region = ', region);
- 
     const itemIndex = Object.values(REGIONS).findIndex(item => item === region);
 
     return `${Object.keys(REGIONS).map(r => r)[itemIndex]} region`;

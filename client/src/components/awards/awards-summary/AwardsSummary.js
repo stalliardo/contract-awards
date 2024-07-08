@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchData } from '../../../redux/features/awards/awardsThunks';
 import Spinner from '../../spinner/Spinner';
@@ -8,7 +8,7 @@ import AwardsSummarySpecialsRow from './AwardsSummarySpecialsRow';
 import { generateTargetAcheivedPercentage, generateTargetAmountToDate } from '../../../utils/financialTotals';
 import AwardsSummaryTotalsRow from './AwardsSummaryTotalsRow';
 import AwardsSummaryMonthlyPerformanceRow from './AwardsSummaryMonthlyPerformanceRow';
-import { COLOURS, ROLES, extractADFriendlyRegionalName } from '../../../utils/constants';
+import { COLOURS, ROLES, extractADFriendlyRegionalName, sortLocations } from '../../../utils/constants';
 import AwardsSummaryCumalitivePerformanceRow from './AwardsSummaryCumalitivePerformanceRow';
 import { generateFinancialYearMonths } from '../../../utils/DateUtils';
 import { useNavigate } from 'react-router-dom';
@@ -35,8 +35,11 @@ const AwardsSummary = () => {
     const usersData = useSelector((state) => state.users.data);
 
     const isLoading = useSelector((state) => state.awards.loading);
-    const [locations, setLocations] = useState(authenticatedUser.locations ? [...authenticatedUser.locations].sort() : []);
-    // const [locations, setLocations] = useState(authenticatedUser.locations ? [...authenticatedUser.locations] : []);
+
+
+    const [locations, setLocations] = useState(authenticatedUser.locations ? [...authenticatedUser.locations] : []);
+    const sortedLocations = useMemo(() => sortLocations(locations));
+
     const originalLocations = useSelector((state) => state.location.data);
     const specialLocations = useSelector((state) => state.awards.specialLocations);
 
@@ -113,6 +116,10 @@ const AwardsSummary = () => {
             dispatch(clearExportData());
         }
     }, [awardsData.exportData])
+
+    // useEffect(() => {
+    //     setLocations(sortLocations(locations))
+    // }, [locations])
 
     const onFilterSelected = ({ value }) => {
         setSelectedLocation(value);
@@ -196,7 +203,7 @@ const AwardsSummary = () => {
                         </thead>
                         <tbody>
                             {
-                                locations.map((location, index) => {
+                                sortedLocations.map((location, index) => {
                                     if (location !== "M&E" && location !== "Special Projects" && generateFilteredTotals(location)) {
                                         return <AwardsSummaryCoreTotalsRow targetsData={awardsData.targets} filteredTotals={generateFilteredTotals(location)} cumalitiveTotal={generateCumalitiveTotals(location)} locationRef={location} key={index} />
                                     }
@@ -223,7 +230,7 @@ const AwardsSummary = () => {
                                 </td>
                             </tr>
                             {
-                                locations.map((location, index) => {
+                                sortedLocations.map((location, index) => {
                                     if (location === "Special Projects" || location === "M&E") {
                                         return <AwardsSummarySpecialsRow targetsData={awardsData.targets} filteredTotals={generateFilteredTotals(location)} cumalitiveTotal={generateCumalitiveTotals(location)} locationRef={location} key={index} />
                                     }

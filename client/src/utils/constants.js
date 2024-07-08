@@ -36,7 +36,7 @@ export const REGIONS = {
     northern: "Northern",
     southern: "Southern",
     specialsBirminghamAndGlasgow: "Special Projects, Birmingham & Glasgow",
-    mAndE: "M&E"
+    mAndE: "M&E"    
 }
 
 export const extractADFriendlyRegionalName = (region) => {
@@ -45,4 +45,26 @@ export const extractADFriendlyRegionalName = (region) => {
     const itemIndex = Object.values(REGIONS).findIndex(item => item === region);
 
     return `${Object.keys(REGIONS).map(r => r)[itemIndex]} region`;
+}
+
+export const LOCATIONS_IN_COMPANY_ORDER = [
+    "Avonmouth",
+    "Basingstoke",
+    "Feltham",
+    "Eastern",
+    "Birmingham",
+    "Glasgow",
+    "London",
+    "Leeds",
+    "Manchester",
+    "Newcastle",
+    "AWE"
+];
+
+export const sortLocations = (unSortedLocations) => {
+    const sortedLocations = unSortedLocations.sort((a, b) => {
+        return LOCATIONS_IN_COMPANY_ORDER.indexOf(a) - LOCATIONS_IN_COMPANY_ORDER.indexOf(b);
+    })
+
+    return sortedLocations;
 }

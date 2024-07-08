@@ -125,6 +125,7 @@ const AwardsTable = ({ locations }) => {
         setMonth(extractMonthFromString(value));
     }
 
+    console.log('date options - ', dateOptions);
     return (
         <div className='awards-table-container'>
             <div className='awards-table-container-select-menus'>

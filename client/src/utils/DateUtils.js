@@ -1,5 +1,9 @@
+const monthsInFinancialOrderWithAllOption = [
+    'All', 'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September'
+];
+
 const monthsInFinancialOrder = [
-    'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September'
+  'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September'
 ];
 
 const monthsInOrder = [
@@ -84,7 +88,8 @@ export const generateDateOptionsForSelectMenu = (financialYearFromDiary) => {
     //the firts part of the year will always be an odd number so can use that to determine which part of theyear was passed in
     const isYearEven = parseInt(financialYearFromDiary) % 2 === 0; // if year is even its the second part of the year
 
-    return monthsInFinancialOrder.map((month) => {
+
+    return monthsInFinancialOrderWithAllOption.map((month) => {
 
         // crazy conditional string below is to generate a dynamic year string needs testing
         monthString = counter < 3 ? `${month}-${isYearEven ? (parseInt(financialYearFromDiary) - 1) : financialYearFromDiary}` : `${month}-${isYearEven ? financialYearFromDiary : (parseInt(financialYearFromDiary) + 1)}`;

@@ -3,13 +3,11 @@ import './allAwardsForLocation.css'
 import AwardsItem from './AwardsItem';
 
 const AllAwardsForLocation = ({data}) => {
-
-  console.log('data = ', data);
   return (
     <div className='all-awards-container'>
         {
-          data.map((award) => {
-            return <AwardsItem awardItem={award}/>
+          data.map((award, index) => {
+            return <AwardsItem awardItem={award} key={index * 15}/>
           })
         }
 

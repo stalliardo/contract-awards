@@ -160,8 +160,6 @@ export const sortDataInFinancialMonthOrder = (data) => {
     monthOrder[month] = index;
   });
 
-  console.log('month order = ', monthOrder);
-
   const sortedData = data.sort((a, b) => {
     return monthOrder[a.month] - monthOrder[b.month];
   });

@@ -64,13 +64,9 @@ const AwardsTable = ({ locations }) => {
         axios.get(url).then((response) => {
             let filteredLocationData = [];
 
-            console.log('response = ', response.data);
-
             if (month === "All") {
                 setAllSelected(true);
-
-                // TODO: either sort here or in the allawardsforlocation comp
-                sortDataInFinancialMonthOrder(response.data)
+                sortDataInFinancialMonthOrder(response.data);
                 setAllAwardsData(response.data);
             } else {
                 setAllSelected(false);
@@ -78,7 +74,6 @@ const AwardsTable = ({ locations }) => {
                 filteredLocationData = response.data.find((item) => item.month === month);
                 setFilteredData(filteredLocationData);
             }
-
         }).catch((error) => {
             console.log('Error getting filterd data. Error: ', error);
         }).finally(() => {
@@ -140,7 +135,6 @@ const AwardsTable = ({ locations }) => {
     }
 
     const onMonthSelected = ({ value }) => {
-        console.log('on month seected = ', extractMonthFromString(value));
         setMonth(extractMonthFromString(value));
     }
 

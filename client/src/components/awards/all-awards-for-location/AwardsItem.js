@@ -5,11 +5,9 @@ import { getCoreTotal } from '../../../utils/financialTotals';
 const AwardsItem = ({awardItem}) => {
     const coreSum = getCoreTotal(awardItem.items);
 
-    console.log('awards item passed in = ', awardItem);
-
     return (
         <div className='awards-table-container'>
-            <h1>Month: {awardItem.month}</h1>
+            <h3>{awardItem.month}</h3>
             <div className='awards-page-table-container'>
                 {
                     awardItem.items.length ?
@@ -32,7 +30,6 @@ const AwardsItem = ({awardItem}) => {
                                         ))
                                         : null
                                 }
-                               
                                 <tr className='last-row'>
                                     <td></td>
                                     <td></td>
@@ -44,13 +41,12 @@ const AwardsItem = ({awardItem}) => {
                             </tbody>
                         </table>
                         : <div className='awards-table-no-data-container'>
-                            Nothing found TODO
+                            <p>No awards data found</p>
                         </div>
                 }
             </div>
-
         </div>
     )
 }
 
-export default AwardsItem
+export default AwardsItem;

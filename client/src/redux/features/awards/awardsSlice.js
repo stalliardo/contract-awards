@@ -119,13 +119,13 @@ export const awardsSlice = createSlice({
         ukAndSpecialCoreTotalsSum += total.sum;
       })
 
-      const nonSpecialCumalitiveTotals = cumalativeTotals.filter((item) => item.location !== "M&E" && item.location !== "Special Projects");
-      const nonSpecialTargets = targetsArray.filter((item) => item.location !== "M&E" && item.location !== "Special Projects");
-      const nonSpecials = cTotals.filter(item => item.location !== "M&E" && item.location !== "Special Projects");
+      const nonSpecialCumalitiveTotals = cumalativeTotals.filter((item) => item.location !== "M&E" && item.location !== "Europe");
+      const nonSpecialTargets = targetsArray.filter((item) => item.location !== "M&E" && item.location !== "Europe");
+      const nonSpecials = cTotals.filter(item => item.location !== "M&E" && item.location !== "Europe");
       
-      const specialsCumalitiveTotals = cumalativeTotals.filter((item) => item.location === "M&E" || item.location === "Special Projects");
-      const specialTargets = targetsArray.filter((item) => item.location === "M&E" || item.location === "Special Projects");
-      const specials = cTotals.filter(item => item.location === "M&E" || item.location === "Special Projects");
+      const specialsCumalitiveTotals = cumalativeTotals.filter((item) => item.location === "M&E" || item.location === "Europe");
+      const specialTargets = targetsArray.filter((item) => item.location === "M&E" || item.location === "Europe");
+      const specials = cTotals.filter(item => item.location === "M&E" || item.location === "Europe");
 
       exportData.nonSpecialRows.coreTotals.push(...nonSpecials);
       exportData.nonSpecialRows.cumalitiveTotals.push(...nonSpecialCumalitiveTotals);
@@ -166,7 +166,7 @@ export const awardsSlice = createSlice({
       const filteredTendersSumittedTargets = userVisibleTargets.filter((target) => target.category === TARGET_CATEGORIES.TENDERS_SUBMITTED);
       const formattedLocations = action.payload.locationsData.map((location) => location.name);
 
-      const filteredSpecialLocations = action.payload.locationsData.filter((location) => location.name === "M&E" || location.name === "Special Projects")
+      const filteredSpecialLocations = action.payload.locationsData.filter((location) => location.name === "M&E" || location.name === "Europe")
       const formattedSpecialTotals = filteredSpecialLocations.map((item) => item.name);
 
       const generatedUkTargetTotal = generateUKTargetTotals(filteredTargets, authenticatedUser);

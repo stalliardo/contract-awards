@@ -22,7 +22,7 @@ const filterOptions = [
     { value: "London" }, 
     { value: "Northern" }, 
     { value: "Southern" }, 
-    { value: "Special Projects, Birmingham & Glasgow" }, 
+    { value: "Europe, Birmingham & Glasgow" }, 
     { value: "M&E" }
 ];
 
@@ -191,7 +191,7 @@ const AwardsSummary = () => {
                         <tbody>
                             {
                                 sortedLocations.map((location, index) => {
-                                    if (location !== "M&E" && location !== "Special Projects" && generateFilteredTotals(location)) {
+                                    if (location !== "M&E" && location !== "Europe" && generateFilteredTotals(location)) {
                                         return <AwardsSummaryCoreTotalsRow targetsData={awardsData.targets} filteredTotals={generateFilteredTotals(location)} cumalitiveTotal={generateCumalitiveTotals(location)} locationRef={location} key={index} />
                                     }
                                     return null;
@@ -218,7 +218,7 @@ const AwardsSummary = () => {
                             </tr>
                             {
                                 sortedLocations.map((location, index) => {
-                                    if (location === "Special Projects" || location === "M&E") {
+                                    if (location === "Europe" || location === "M&E") {
                                         return <AwardsSummarySpecialsRow targetsData={awardsData.targets} filteredTotals={generateFilteredTotals(location)} cumalitiveTotal={generateCumalitiveTotals(location)} locationRef={location} key={index} />
                                     }
                                 })

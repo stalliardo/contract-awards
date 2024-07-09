@@ -10,7 +10,7 @@ export const LOCATIONS = {
     LONDON: "London",
     MANCHESTER: "Manchester",
     NEWCASTLE: "Newcastle",
-    SPECIAL_PROJECTS: "Special Projects",
+    EUROPE: "Europe",
     M_AND_E: "M&E"
 }
 
@@ -35,7 +35,7 @@ export const REGIONS = {
     london: "London",
     northern: "Northern",
     southern: "Southern",
-    specialsBirminghamAndGlasgow: "Special Projects, Birmingham & Glasgow",
+    specialsBirminghamAndGlasgow: "Europe, Birmingham & Glasgow",
     mAndE: "M&E"    
 }
 
@@ -57,7 +57,7 @@ export const LOCATIONS_IN_COMPANY_ORDER = [
     "Manchester",
     "Newcastle",
     "AWE",
-    "Special Projects",
+    "Europe",
     "M&E"
 ];
 

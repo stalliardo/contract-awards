@@ -5,6 +5,11 @@
     .spinner-container {
         margin: auto;
     }
+
+    h3 {
+        margin-bottom: 0;
+        margin-top: 30px;
+    }
 }
 
 .awards-table-container-select-menus {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import AwardsTableRow from './AwardsTableRow';
-import { extractMonthFromString, generateDateOptionsForSelectMenu, getCurrentMonth } from '../../../utils/DateUtils';
+import { extractMonthFromString, generateDateOptionsForSelectMenu, getCurrentMonth, sortDataInFinancialMonthOrder } from '../../../utils/DateUtils';
 import { generateLocationOptionsForSelectMenu } from '../../../utils/locationUtils';
 import axios from 'axios';
 import AwardsTableAddRow from './AwardsTableAddRow';
@@ -64,9 +64,13 @@ const AwardsTable = ({ locations }) => {
         axios.get(url).then((response) => {
             let filteredLocationData = [];
 
+            console.log('response = ', response.data);
+
             if (month === "All") {
                 setAllSelected(true);
 
+                // TODO: either sort here or in the allawardsforlocation comp
+                sortDataInFinancialMonthOrder(response.data)
                 setAllAwardsData(response.data);
             } else {
                 setAllSelected(false);

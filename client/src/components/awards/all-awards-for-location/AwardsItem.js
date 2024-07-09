@@ -3,12 +3,13 @@ import AwardsTableRow from '../table/AwardsTableRow'
 import { getCoreTotal } from '../../../utils/financialTotals';
 
 const AwardsItem = ({awardItem}) => {
+    const coreSum = getCoreTotal(awardItem.items);
 
-    console.log('item passed in = ', awardItem);
-    const coreSum = getCoreTotal(awardItem.items)
+    console.log('awards item passed in = ', awardItem);
 
     return (
         <div className='awards-table-container'>
+            <h1>Month: {awardItem.month}</h1>
             <div className='awards-page-table-container'>
                 {
                     awardItem.items.length ?
@@ -21,7 +22,6 @@ const AwardsItem = ({awardItem}) => {
                                     <th>Contractor</th>
                                     <th>Region</th>
                                     <th>Core</th>
-                                    {/* <th colSpan="2" style={{ textAlign: "center" }}>Actions</th> */}
                                 </tr>
                             </thead>
                             <tbody>
@@ -40,12 +40,11 @@ const AwardsItem = ({awardItem}) => {
                                     <td></td>
                                     <td></td>
                                     <td className='last-cell'>Total: £{coreSum.toLocaleString()}</td>
-                                    
                                 </tr>
                             </tbody>
                         </table>
                         : <div className='awards-table-no-data-container'>
-                            Nothing found
+                            Nothing found TODO
                         </div>
                 }
             </div>

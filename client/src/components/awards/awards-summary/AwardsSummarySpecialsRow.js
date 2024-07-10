@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 const monthsInFinancialOrder = getMonthsInFinancialOrder();
 
 const AwardsSummarySpecialsRow = ({ coreTotals, targetsData, cumalitiveTotal, locationRef, filteredTotals }) => {
+    console.log('filtered totals = ', filteredTotals);
     const navigate = useNavigate();
     const isCurrentFinancialYear = useSelector(state => state.users.isCurrentFinancialYear);
 

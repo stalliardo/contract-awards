@@ -37,7 +37,7 @@ const AwardsSummary = () => {
     const isLoading = useSelector((state) => state.awards.loading);
 
     const [locations, setLocations] = useState(authenticatedUser.locations ? [...authenticatedUser.locations] : []);
-    const sortedLocations = useMemo(() => sortLocations(locations));
+    const sortedLocations = useMemo(() => sortLocations(locations), [locations]);
 
     const originalLocations = useSelector((state) => state.location.data);
 
@@ -62,11 +62,12 @@ const AwardsSummary = () => {
         if (!authenticatedUser._id) {
             navigate("/");
         } else {
-            if (awardsData.coreTotals.length > 0) {
-                setTimeout(() => {
-                    setSpinnerComplete(true); // to fix the flash, added a delay
-                }, 500);
-            } else {
+            // if (awardsData.coreTotals.length > 0) {
+            //     setTimeout(() => {
+            //         setSpinnerComplete(true); // to fix the flash, added a delay
+            //     }, 500);
+            // } else {
+                console.log('%cElse not ebing called as there coreTotals', 'color:red');
                 if (authenticatedUser) {
                     dispatch(fetchData({ locationData: originalLocations, authenticatedUser, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear) })).finally(() => {
                         setTimeout(() => {
@@ -74,7 +75,7 @@ const AwardsSummary = () => {
                         }, 500);
                     })
                 }
-            }
+            // }
         }
     }, []);
 
@@ -291,3 +292,6 @@ export default AwardsSummary;
 
 // When to display total rows
 // Only show the UK Core total row when all is selected?
+// .find error is due to a page transition will not reload the old data so either:
+    // A - set the selected location in state so this can be used to reload the slected data or...
+    // When navigating back to page reload all data by default

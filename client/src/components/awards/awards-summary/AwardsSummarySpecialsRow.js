@@ -12,9 +12,6 @@ const AwardsSummarySpecialsRow = ({ coreTotals, targetsData, cumalitiveTotal, lo
     const isCurrentFinancialYear = useSelector(state => state.users.isCurrentFinancialYear);
 
     const handleTotalClicked = (month, total) => {
-
-        console.log('locationRef = ', locationRef);
-
         if(locationRef === "M&E") locationRef = "MandE";
         
         if(isCurrentFinancialYear){

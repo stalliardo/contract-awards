@@ -42,7 +42,6 @@ export const generateCSVString = (data, selectedFinancialYear) => {
     })
 
     const ukCoreTotalRow = data.ukCoreTotalRow.coreTotals;
-    console.log('ukCoreTotalRow = ', ukCoreTotalRow);
 
     // Create a mutable copy of the array as it is frozen
     let mutableUkCoreTotalRow = [...ukCoreTotalRow];

@@ -82,7 +82,6 @@ exports.getAllAwards = async (req, res) => {
 };
 
 exports.getAllAwardsDiary = async (req, res) => {
-  console.log('CALLED');
   try {
     const awardsDiaryEntries = await AwardsDiary.find();
     res.send(awardsDiaryEntries);

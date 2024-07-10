@@ -162,7 +162,7 @@ const AwardsSummary = () => {
                                             Location
                                         </div>
                                         {
-                                            authenticatedUser.role === ROLES.CA02 || authenticatedUser.role === ROLES.CA03 ?
+                                            authenticatedUser.role === ROLES.CA01 || authenticatedUser.role === ROLES.CA02 ?
                                                 <div style={{ width: "50%" }}>
                                                     <SelectMenu placeholder={selectedLocation} dropDownContainerStyles={{ width: "260px" }} menuItems={filterOptions} handleItemSelection={onFilterSelected} styles={{ color: "black" }} />
                                                 </div>
@@ -292,15 +292,3 @@ const AwardsSummary = () => {
     )
 }
 export default AwardsSummary;
-
-// Regional filtering permissions
-// What are the regions:
-// 1 - Southern
-// 2 - London
-// 3 - Northern
-// 4 - specials
-// 5 - M&E
-
-// Who can see / filter what?
-// Could this be as easy as only level 1(region directors) and above can filter by region?
-// ^ why? Because any user that has the locations for a given region

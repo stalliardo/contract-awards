@@ -67,13 +67,13 @@ const AwardsSummary = () => {
             //         setSpinnerComplete(true); // to fix the flash, added a delay
             //     }, 500);
             // } else {
-                if (authenticatedUser) {
-                    dispatch(fetchData({ locationData: originalLocations, authenticatedUser, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear) })).finally(() => {
-                        setTimeout(() => {
-                            setSpinnerComplete(true);
-                        }, 500);
-                    })
-                }
+            if (authenticatedUser) {
+                dispatch(fetchData({ locationData: originalLocations, authenticatedUser, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear) })).finally(() => {
+                    setTimeout(() => {
+                        setSpinnerComplete(true);
+                    }, 500);
+                })
+            }
             // }
         }
     }, []);
@@ -161,9 +161,14 @@ const AwardsSummary = () => {
                                         <div>
                                             Location
                                         </div>
-                                        <div style={{ width: "50%" }}>
-                                            <SelectMenu placeholder={selectedLocation} dropDownContainerStyles={{ width: "260px" }} menuItems={filterOptions} handleItemSelection={onFilterSelected} styles={{ color: "black" }} />
-                                        </div>
+                                        {
+                                            authenticatedUser.role === ROLES.CA01 || authenticatedUser.role === ROLES.CA02 ?
+                                                <div style={{ width: "50%" }}>
+                                                    <SelectMenu placeholder={selectedLocation} dropDownContainerStyles={{ width: "260px" }} menuItems={filterOptions} handleItemSelection={onFilterSelected} styles={{ color: "black" }} />
+                                                </div>
+                                                :
+                                                null
+                                        }
                                     </div>
                                 </th>
                                 <MonthsForTableHead k="1" />

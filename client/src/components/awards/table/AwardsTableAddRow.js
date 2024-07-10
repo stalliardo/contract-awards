@@ -36,7 +36,6 @@ const AwardsTableAddRow = ({ awardsTableId, location, month, onItemAdded, onCanc
 
         } else { // Edit
             dispatch(editItem({data, month, location, previousCoreValue: dataFromEdit.core})).unwrap().then((response) => {
-                console.log('response from unwrap = ', response);
                 onItemAdded(response);
             }).catch((error) => {
                 console.log('Error adding item: ', error);

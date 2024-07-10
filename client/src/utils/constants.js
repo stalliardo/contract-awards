@@ -35,7 +35,7 @@ export const REGIONS = {
     London: "London",
     Northern: "Northern",
     Southern: "Southern",
-    ebg: "Europe, Birmingham & Glasgow",
+    Special: "Europe, Birmingham & Glasgow",
     "M&E": "M&E"    
 }
 

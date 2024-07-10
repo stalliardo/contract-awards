@@ -21,7 +21,7 @@ export const generateCSVString = (data, selectedFinancialYear) => {
     csvRows.push(headers.join(","));
 
     data.locations.forEach((location, index) => {
-        if (location.name !== "M&E" && location.name !== "Special Projects") {
+        if (location.name !== "M&E" && location.name !== "Europe") {
             const rowItems = data.nonSpecialRows.coreTotals.filter((item) => item.location === location.name);
 
             // sort the data so it always comes back in the correct financial order  

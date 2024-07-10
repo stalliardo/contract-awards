@@ -96,7 +96,7 @@ const TendersSubmittedTable = ({ data }) => {
 
                         {
                             locations.map((location, index) => {
-                                if (location !== "M&E" && location !== "Special Projects" && extractedDataForRow(location)) {
+                                if (location !== "M&E" && location !== "Europe" && extractedDataForRow(location)) {
                                     // return <AwardsSummaryCoreTotalsRow targetsData={awardsData.targets} filteredTotals={generateFilteredTotals(location)} cumalitiveTotal={generateCumalitiveTotals(location)} locationRef={location} key={index} />
                                     return <TendersSubmittedRow key={index} data={extractedDataForRow(location)} />
                                 }
@@ -107,7 +107,7 @@ const TendersSubmittedTable = ({ data }) => {
 
                         {
                             locations.map((location, index) => {
-                                if (location === "M&E" || location === "Special Projects") {
+                                if (location === "M&E" || location === "Europe") {
                                     return <TendersSpecialsRow key={index} data={extractedDataForRow(location)} />
                                 }
                                 return null;

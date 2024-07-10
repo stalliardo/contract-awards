@@ -287,10 +287,3 @@ const AwardsSummary = () => {
     )
 }
 export default AwardsSummary;
-
-
-// When to display total rows
-// Only show the UK Core total row when all is selected?
-// .find error is due to a page transition will not reload the old data so either:
-    // A - set the selected location in state so this can be used to reload the slected data or...
-    // When navigating back to page reload all data by default

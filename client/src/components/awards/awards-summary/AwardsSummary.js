@@ -287,3 +287,15 @@ const AwardsSummary = () => {
     )
 }
 export default AwardsSummary;
+
+// Regional filtering permissions
+    // What are the regions:
+        // 1 - Southern
+        // 2 - London
+        // 3 - Northern
+        // 4 - specials
+        // 5 - M&E
+
+    // Who can see / filter what?
+    // Could this be as easy as only level 1(region directors) and above can filter by region?
+    // ^ why? Because any user that has the locations for a given region

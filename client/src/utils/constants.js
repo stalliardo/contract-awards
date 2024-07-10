@@ -42,7 +42,7 @@ export const REGIONS = {
 export const extractADFriendlyRegionalName = (region) => {
     const itemIndex = Object.values(REGIONS).findIndex(item => item === region);
 
-    return `${Object.keys(REGIONS).map(r => r)[itemIndex]} region`;
+    return `${Object.keys(REGIONS).map(r => r)[itemIndex]} Region`;
 }
 
 export const LOCATIONS_IN_COMPANY_ORDER = [

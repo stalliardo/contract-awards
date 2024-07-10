@@ -18,11 +18,11 @@ import { generateCSVString } from '../../../utils/CSVExport';
 import SelectMenu from '../../selectMenu/SelectMenu';
 
 const filterOptions = [
-    { value: "All" }, 
-    { value: "London" }, 
-    { value: "Northern" }, 
-    { value: "Southern" }, 
-    { value: "Europe, Birmingham & Glasgow" }, 
+    { value: "All" },
+    { value: "London" },
+    { value: "Northern" },
+    { value: "Southern" },
+    { value: "Europe, Birmingham & Glasgow" },
     { value: "M&E" }
 ];
 
@@ -114,6 +114,7 @@ const AwardsSummary = () => {
         }
     }, [awardsData.exportData])
 
+
     const onFilterSelected = ({ value }) => {
         setSelectedLocation(value);
 
@@ -122,7 +123,7 @@ const AwardsSummary = () => {
 
         if (value !== "All" && user && user.locations.length > 0) {
             setLocations(user.locations);
-            dispatch(fetchData({ locationData: originalLocations, authenticatedUser: {locations: user.locations}, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear) })).finally(() => {
+            dispatch(fetchData({ locationData: originalLocations, authenticatedUser: { locations: user.locations }, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear) })).finally(() => {
                 setTimeout(() => {
                     setSpinnerComplete(true);
                 }, 500);
@@ -155,16 +156,16 @@ const AwardsSummary = () => {
                     <table id="awards-table" className='awards-summary-table'>
                         <thead>
                             <tr>
-                            <th style={{maxWidth: "150px"}}>
-                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                <div>
-                                    Location
-                                </div>
-                                <div style={{ width: "50%" }}>
-                                    <SelectMenu placeholder={selectedLocation} dropDownContainerStyles={{width: "260px"}} menuItems={filterOptions} handleItemSelection={onFilterSelected} styles={{ color: "black" }} />
-                                </div>
-                            </div>
-                        </th>
+                                <th style={{ maxWidth: "150px" }}>
+                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                        <div>
+                                            Location
+                                        </div>
+                                        <div style={{ width: "50%" }}>
+                                            <SelectMenu placeholder={selectedLocation} dropDownContainerStyles={{ width: "260px" }} menuItems={filterOptions} handleItemSelection={onFilterSelected} styles={{ color: "black" }} />
+                                        </div>
+                                    </div>
+                                </th>
                                 <MonthsForTableHead k="1" />
                                 <th>Cumalitive Totals</th>
                                 <th colSpan="3">
@@ -197,25 +198,30 @@ const AwardsSummary = () => {
                                     return null;
                                 })
                             }
-                            <tr className='bold-cells' style={{borderTop: "2px solid black"}}>
-                                <td>UK Core Total</td>
-                                {
-                                    awardsData.ukCoreTotals.map((data, index) => {
-                                        return <AwardsSummaryUKCoreTotalsRow data={data} key={index} ukTargetTotal={awardsData.ukTargetTotal} />
-                                    })
-                                }
-                                <td>£{cumalitiveTotalsSum.toLocaleString()}</td>
-                                <td>
-                                    £{awardsData.ukTargetTotal.toLocaleString()}
-                                </td>
-                                <td>
-                                    £{(awardsData.ukTargetTotal * 12).toLocaleString()}
-                                </td>
-                                <td>£{generateTargetAmountToDate((awardsData.ukTargetTotal * 12), cumalitiveTotalsSum).toLocaleString()}</td>
-                                <td style={{ color: generateTargetAcheivedPercentage(awardsData.ukTargetTotal * 12, cumalitiveTotalsSum) >= 100 ? COLOURS.GREEN : COLOURS.RED }}>
-                                    {generateTargetAcheivedPercentage(awardsData.ukTargetTotal * 12, cumalitiveTotalsSum)}%
-                                </td>
-                            </tr>
+                            {
+                                selectedLocation === "All" ?
+                                    <tr className='bold-cells' style={{ borderTop: "2px solid black" }}>
+                                        <td>UK Core Total</td>
+                                        {
+                                            awardsData.ukCoreTotals.map((data, index) => {
+                                                return <AwardsSummaryUKCoreTotalsRow data={data} key={index} ukTargetTotal={awardsData.ukTargetTotal} />
+                                            })
+                                        }
+                                        <td>£{cumalitiveTotalsSum.toLocaleString()}</td>
+                                        <td>
+                                            £{awardsData.ukTargetTotal.toLocaleString()}
+                                        </td>
+                                        <td>
+                                            £{(awardsData.ukTargetTotal * 12).toLocaleString()}
+                                        </td>
+                                        <td>£{generateTargetAmountToDate((awardsData.ukTargetTotal * 12), cumalitiveTotalsSum).toLocaleString()}</td>
+                                        <td style={{ color: generateTargetAcheivedPercentage(awardsData.ukTargetTotal * 12, cumalitiveTotalsSum) >= 100 ? COLOURS.GREEN : COLOURS.RED }}>
+                                            {generateTargetAcheivedPercentage(awardsData.ukTargetTotal * 12, cumalitiveTotalsSum)}%
+                                        </td>
+                                    </tr>
+                                    :
+                                    null
+                            }
                             {
                                 sortedLocations.map((location, index) => {
                                     if (location === "Europe" || location === "M&E") {
@@ -223,7 +229,7 @@ const AwardsSummary = () => {
                                     }
                                 })
                             }
-                            <tr className='bold-cells' style={{borderTop: "2px solid black"}}>
+                            <tr className='bold-cells' style={{ borderTop: "2px solid black" }}>
                                 <td>Total</td>
                                 <AwardsSummaryTotalsRow
                                     ukCoreTotals={awardsData.ukCoreTotals}
@@ -281,3 +287,7 @@ const AwardsSummary = () => {
     )
 }
 export default AwardsSummary;
+
+
+// When to display total rows
+// Only show the UK Core total row when all is selected?

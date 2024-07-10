@@ -67,7 +67,6 @@ const AwardsSummary = () => {
             //         setSpinnerComplete(true); // to fix the flash, added a delay
             //     }, 500);
             // } else {
-                console.log('%cElse not ebing called as there coreTotals', 'color:red');
                 if (authenticatedUser) {
                     dispatch(fetchData({ locationData: originalLocations, authenticatedUser, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear) })).finally(() => {
                         setTimeout(() => {

@@ -32,11 +32,11 @@ export const ROLES = {
 
 export const REGIONS = {
     All: "All",
-    london: "London",
-    northern: "Northern",
-    southern: "Southern",
+    London: "London",
+    Northern: "Northern",
+    Southern: "Southern",
     ebg: "Europe, Birmingham & Glasgow",
-    mAndE: "M&E"    
+    "M&E": "M&E"    
 }
 
 export const extractADFriendlyRegionalName = (region) => {

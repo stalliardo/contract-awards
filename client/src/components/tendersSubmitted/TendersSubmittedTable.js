@@ -21,7 +21,6 @@ const TendersSubmittedTable = ({ data }) => {
     const authenticatedUser = useSelector(state => state.users.authenticatedUser);
     // const [locations, setLocations] = useState([...authenticatedUser.locations].sort());
 
-
     const [locations, setLocations] = useState([...authenticatedUser.locations]);
     const sortedLocations = useMemo(() => sortLocations(locations), [locations]);
 

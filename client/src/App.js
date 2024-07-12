@@ -43,7 +43,7 @@ const router = createBrowserRouter([
       {
         path: "/site-admin",
         element: <DevPage />
-      }
+      },
     ]
   },
 ]);

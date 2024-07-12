@@ -33,7 +33,7 @@ export const tenderSlice = createSlice({
       let eData = { coreTotals: [], ukCoreTotalsRow: {}, specialTotals: [], totals: {}, monthlyPerformaceRow: {}, cumalitivePerformanceRow: {} };
 
       locations.forEach((location) => {
-        if (location.name !== "M&E" && location.name !== "Special Projects") {
+        if (location.name !== "M&E" && location.name !== "Europe") {
           const dataItem = state.data.find(item => item.location === location.name);
           const cumalativeTotal = state.cumalitiveTotals.find(item => item.location === location.name);
           const target = parseInt(targets.find(target => target.location === location.name)?.targetValue) || 0;
@@ -52,14 +52,14 @@ export const tenderSlice = createSlice({
       // eData.push({ location: "UK Core Total"});
       const ukCoreTotalItems = state.ukCoreTotals;
 
-      const ukCoreTotalTarget = targets.filter(item => item.location !== "Special Projects" && item.location !== "M&E").reduce((prev, current) => parseInt(prev) + parseInt(current.targetValue), 0);
+      const ukCoreTotalTarget = targets.filter(item => item.location !== "Europe" && item.location !== "M&E").reduce((prev, current) => parseInt(prev) + parseInt(current.targetValue), 0);
       const ukcoreTotalYearlyTarget = ukCoreTotalTarget * 12;
       const ukCoreTotalTargetToDate = Math.round(generateTargetAmountToDate(ukcoreTotalYearlyTarget, state.ukCumalitiveTotal));
       const targetAcheived = generateTargetAcheivedPercentage(ukcoreTotalYearlyTarget, state.ukCumalitiveTotal);
 
       eData.ukCoreTotalsRow = { location: "UK Core Total", items: ukCoreTotalItems, cumalitiveTotal: state.ukCumalitiveTotal, monthTarget: ukCoreTotalTarget, yearlyTarget: ukcoreTotalYearlyTarget, targetToDate: ukCoreTotalTargetToDate, targetAcheived: targetAcheived };
 
-      const specialLocations = ["M&E", "Special Projects"];
+      const specialLocations = ["M&E", "Europe"];
 
       specialLocations.forEach((location) => {
         const dataItem = state.data.find(item => item.location === location);

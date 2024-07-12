@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import AwardsTableRow from './AwardsTableRow';
-import { extractMonthFromString, generateDateOptionsForSelectMenu, getCurrentMonth } from '../../../utils/DateUtils';
+import { extractMonthFromString, generateDateOptionsForSelectMenu, getCurrentMonth, sortDataInFinancialMonthOrder } from '../../../utils/DateUtils';
 import { generateLocationOptionsForSelectMenu } from '../../../utils/locationUtils';
 import axios from 'axios';
 import AwardsTableAddRow from './AwardsTableAddRow';
@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import './awardsTable.css';
 import '../../awards/awards.css';
+import AllAwardsForLocation from '../all-awards-for-location/AllAwardsForLocation';
 
 function capitalizeFirstLetter(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -24,9 +25,11 @@ const AwardsTable = ({ locations }) => {
 
     const currentMonth = getCurrentMonth();
     const [filteredData, setFilteredData] = useState({ items: [] });
+    const [allAwardsData, setAllAwardsData] = useState()
     const [showAddRow, setShowAddRow] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [location, setLocation] = useState(locations[0]);
+    const [allSelected, setAllSelected] = useState(false);
 
     const [dateOptions, setDateOptions] = useState([])
     const [month, setMonth] = useState(currentMonth);
@@ -43,7 +46,7 @@ const AwardsTable = ({ locations }) => {
 
     useEffect(() => {
         if (locationParam && monthParam) {
-            if(locationParam === "MandE") locationParam = "M&E";
+            if (locationParam === "MandE") locationParam = "M&E";
 
             setLocation(capitalizeFirstLetter(locationParam));
             setMonth(capitalizeFirstLetter(monthParam));
@@ -56,11 +59,21 @@ const AwardsTable = ({ locations }) => {
         }
 
         let encodedLocation = encodeURIComponent(location);
-        let url = `/api/awards-diary/location?location=${encodedLocation}&financialYear=${user.selectedFinancialYear}`
+        let url = `/api/awards-diary/location?location=${encodedLocation}&financialYear=${user.selectedFinancialYear}`;
 
         axios.get(url).then((response) => {
-            const filteredLocationData = response.data.find((item) => item.month === month);
-            setFilteredData(filteredLocationData);
+            let filteredLocationData = [];
+
+            if (month === "All") {
+                setAllSelected(true);
+                sortDataInFinancialMonthOrder(response.data);
+                setAllAwardsData(response.data);
+            } else {
+                setAllSelected(false);
+
+                filteredLocationData = response.data.find((item) => item.month === month);
+                setFilteredData(filteredLocationData);
+            }
         }).catch((error) => {
             console.log('Error getting filterd data. Error: ', error);
         }).finally(() => {
@@ -135,13 +148,13 @@ const AwardsTable = ({ locations }) => {
                     <SelectMenu placeholder={month} menuItems={dateOptions} handleItemSelection={onMonthSelected} />
                 </div>
             </div>
-            <div className='awards-page-table-container'>
-                <div className='awards-page-title-and-button' style={{marginBottom: "20px", alignItems: "center", height: "40px"}}>
-                    {/* <h3>{location} {filteredData.month}-{filteredData.year}</h3> */}
+            {
+                !allSelected ? 
+                <div className='awards-page-table-container'>
+                <div className='awards-page-title-and-button' style={{ marginBottom: "20px", alignItems: "center", height: "40px" }}>
                     <div></div>
-
                     {filteredData.items.length ?
-                      isCurrentFinancialYear &&  
+                        isCurrentFinancialYear &&
                         <button onClick={() => setShowAddRow(true)}>
                             Add Row
                         </button>
@@ -166,7 +179,7 @@ const AwardsTable = ({ locations }) => {
                                 {
                                     filteredData.items && filteredData.items.length ?
                                         filteredData.items.map((data) => (
-                                            <AwardsTableRow data={data} key={data._id} onItemDeleted={itemDeleted} onItemEdited={onItemEdited} location={location} month={month} isCurrentFinancialYear={isCurrentFinancialYear}/>
+                                            <AwardsTableRow data={data} key={data._id} onItemDeleted={itemDeleted} onItemEdited={onItemEdited} location={location} month={month} isCurrentFinancialYear={isCurrentFinancialYear} />
                                         ))
                                         : null
                                 }
@@ -192,7 +205,16 @@ const AwardsTable = ({ locations }) => {
                         </div>
                 }
             </div>
+            : <div><AllAwardsForLocation data={allAwardsData}/></div>
+            }
         </div>
     )
 }
 export default AwardsTable;
+
+// TODOs for displaying all items
+
+// 1 - remove the add row button
+// 2 - have a new component that can display all the detaisl based off of an array
+// 3 - Remove the ability to edit the row when this view all section is enabled
+

@@ -18,11 +18,11 @@ import { generateCSVString } from '../../../utils/CSVExport';
 import SelectMenu from '../../selectMenu/SelectMenu';
 
 const filterOptions = [
-    { value: "All" }, 
-    { value: "London" }, 
-    { value: "Northern" }, 
-    { value: "Southern" }, 
-    { value: "Special Projects, Birmingham & Glasgow" }, 
+    { value: "All" },
+    { value: "London" },
+    { value: "Northern" },
+    { value: "Southern" },
+    { value: "Europe, Birmingham & Glasgow" },
     { value: "M&E" }
 ];
 
@@ -37,7 +37,7 @@ const AwardsSummary = () => {
     const isLoading = useSelector((state) => state.awards.loading);
 
     const [locations, setLocations] = useState(authenticatedUser.locations ? [...authenticatedUser.locations] : []);
-    const sortedLocations = useMemo(() => sortLocations(locations));
+    const sortedLocations = useMemo(() => sortLocations(locations), [locations]);
 
     const originalLocations = useSelector((state) => state.location.data);
 
@@ -62,19 +62,19 @@ const AwardsSummary = () => {
         if (!authenticatedUser._id) {
             navigate("/");
         } else {
-            if (awardsData.coreTotals.length > 0) {
-                setTimeout(() => {
-                    setSpinnerComplete(true); // to fix the flash, added a delay
-                }, 500);
-            } else {
-                if (authenticatedUser) {
-                    dispatch(fetchData({ locationData: originalLocations, authenticatedUser, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear) })).finally(() => {
-                        setTimeout(() => {
-                            setSpinnerComplete(true);
-                        }, 500);
-                    })
-                }
+            // if (awardsData.coreTotals.length > 0) {
+            //     setTimeout(() => {
+            //         setSpinnerComplete(true); // to fix the flash, added a delay
+            //     }, 500);
+            // } else {
+            if (authenticatedUser) {
+                dispatch(fetchData({ locationData: originalLocations, authenticatedUser, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear) })).finally(() => {
+                    setTimeout(() => {
+                        setSpinnerComplete(true);
+                    }, 500);
+                })
             }
+            // }
         }
     }, []);
 
@@ -114,6 +114,7 @@ const AwardsSummary = () => {
         }
     }, [awardsData.exportData])
 
+
     const onFilterSelected = ({ value }) => {
         setSelectedLocation(value);
 
@@ -122,7 +123,7 @@ const AwardsSummary = () => {
 
         if (value !== "All" && user && user.locations.length > 0) {
             setLocations(user.locations);
-            dispatch(fetchData({ locationData: originalLocations, authenticatedUser: {locations: user.locations}, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear) })).finally(() => {
+            dispatch(fetchData({ locationData: originalLocations, authenticatedUser: { locations: user.locations }, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear) })).finally(() => {
                 setTimeout(() => {
                     setSpinnerComplete(true);
                 }, 500);
@@ -155,16 +156,21 @@ const AwardsSummary = () => {
                     <table id="awards-table" className='awards-summary-table'>
                         <thead>
                             <tr>
-                            <th style={{maxWidth: "150px"}}>
-                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                <div>
-                                    Location
-                                </div>
-                                <div style={{ width: "50%" }}>
-                                    <SelectMenu placeholder={selectedLocation} dropDownContainerStyles={{width: "260px"}} menuItems={filterOptions} handleItemSelection={onFilterSelected} styles={{ color: "black" }} />
-                                </div>
-                            </div>
-                        </th>
+                                <th style={{ maxWidth: "150px" }}>
+                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                        <div>
+                                            Location
+                                        </div>
+                                        {
+                                            authenticatedUser.role === ROLES.CA01 || authenticatedUser.role === ROLES.CA02 ?
+                                                <div style={{ width: "50%" }}>
+                                                    <SelectMenu placeholder={selectedLocation} dropDownContainerStyles={{ width: "260px" }} menuItems={filterOptions} handleItemSelection={onFilterSelected} styles={{ color: "black" }} />
+                                                </div>
+                                                :
+                                                null
+                                        }
+                                    </div>
+                                </th>
                                 <MonthsForTableHead k="1" />
                                 <th>Cumalitive Totals</th>
                                 <th colSpan="3">
@@ -191,39 +197,44 @@ const AwardsSummary = () => {
                         <tbody>
                             {
                                 sortedLocations.map((location, index) => {
-                                    if (location !== "M&E" && location !== "Special Projects" && generateFilteredTotals(location)) {
+                                    if (location !== "M&E" && location !== "Europe" && generateFilteredTotals(location)) {
                                         return <AwardsSummaryCoreTotalsRow targetsData={awardsData.targets} filteredTotals={generateFilteredTotals(location)} cumalitiveTotal={generateCumalitiveTotals(location)} locationRef={location} key={index} />
                                     }
                                     return null;
                                 })
                             }
-                            <tr className='bold-cells' style={{borderTop: "2px solid black"}}>
-                                <td>UK Core Total</td>
-                                {
-                                    awardsData.ukCoreTotals.map((data, index) => {
-                                        return <AwardsSummaryUKCoreTotalsRow data={data} key={index} ukTargetTotal={awardsData.ukTargetTotal} />
-                                    })
-                                }
-                                <td>£{cumalitiveTotalsSum.toLocaleString()}</td>
-                                <td>
-                                    £{awardsData.ukTargetTotal.toLocaleString()}
-                                </td>
-                                <td>
-                                    £{(awardsData.ukTargetTotal * 12).toLocaleString()}
-                                </td>
-                                <td>£{generateTargetAmountToDate((awardsData.ukTargetTotal * 12), cumalitiveTotalsSum).toLocaleString()}</td>
-                                <td style={{ color: generateTargetAcheivedPercentage(awardsData.ukTargetTotal * 12, cumalitiveTotalsSum) >= 100 ? COLOURS.GREEN : COLOURS.RED }}>
-                                    {generateTargetAcheivedPercentage(awardsData.ukTargetTotal * 12, cumalitiveTotalsSum)}%
-                                </td>
-                            </tr>
+                            {
+                                selectedLocation === "All" ?
+                                    <tr className='bold-cells' style={{ borderTop: "2px solid black" }}>
+                                        <td>UK Core Total</td>
+                                        {
+                                            awardsData.ukCoreTotals.map((data, index) => {
+                                                return <AwardsSummaryUKCoreTotalsRow data={data} key={index} ukTargetTotal={awardsData.ukTargetTotal} />
+                                            })
+                                        }
+                                        <td>£{cumalitiveTotalsSum.toLocaleString()}</td>
+                                        <td>
+                                            £{awardsData.ukTargetTotal.toLocaleString()}
+                                        </td>
+                                        <td>
+                                            £{(awardsData.ukTargetTotal * 12).toLocaleString()}
+                                        </td>
+                                        <td>£{generateTargetAmountToDate((awardsData.ukTargetTotal * 12), cumalitiveTotalsSum).toLocaleString()}</td>
+                                        <td style={{ color: generateTargetAcheivedPercentage(awardsData.ukTargetTotal * 12, cumalitiveTotalsSum) >= 100 ? COLOURS.GREEN : COLOURS.RED }}>
+                                            {generateTargetAcheivedPercentage(awardsData.ukTargetTotal * 12, cumalitiveTotalsSum)}%
+                                        </td>
+                                    </tr>
+                                    :
+                                    null
+                            }
                             {
                                 sortedLocations.map((location, index) => {
-                                    if (location === "Special Projects" || location === "M&E") {
+                                    if (location === "Europe" || location === "M&E") {
                                         return <AwardsSummarySpecialsRow targetsData={awardsData.targets} filteredTotals={generateFilteredTotals(location)} cumalitiveTotal={generateCumalitiveTotals(location)} locationRef={location} key={index} />
                                     }
                                 })
                             }
-                            <tr className='bold-cells' style={{borderTop: "2px solid black"}}>
+                            <tr className='bold-cells' style={{ borderTop: "2px solid black" }}>
                                 <td>Total</td>
                                 <AwardsSummaryTotalsRow
                                     ukCoreTotals={awardsData.ukCoreTotals}

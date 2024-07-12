@@ -4,7 +4,7 @@ import AwardsTableAddRow from './AwardsTableAddRow';
 import { useDispatch } from 'react-redux';
 import { deleteItem } from '../../../redux/features/awards/awardsThunks';
 
-const AwardsTableRow = ({ data, onItemDeleted, onItemEdited, location, month, isCurrentFinancialYear }) => {
+const AwardsTableRow = ({ data, onItemDeleted, onItemEdited, location, month, isCurrentFinancialYear, actionsRequired = true }) => {
     const [isEditing, setIsEditing] = useState(false);
     const dispatch = useDispatch();
 
@@ -12,7 +12,7 @@ const AwardsTableRow = ({ data, onItemDeleted, onItemEdited, location, month, is
         const confirmation = window.confirm("Are you sure you want to delete this item?");
 
         if (confirmation) {
-            await dispatch(deleteItem({data, location, month, value: data.core}));
+            await dispatch(deleteItem({ data, location, month, value: data.core }));
             onItemDeleted(data._id);
         }
     }
@@ -39,18 +39,27 @@ const AwardsTableRow = ({ data, onItemDeleted, onItemEdited, location, month, is
                 <td>£{(parseInt(data.core)).toLocaleString()}</td>
 
                 {
-                    isCurrentFinancialYear ?
-
+                    actionsRequired ?
                         <>
-                            <td className='table-actions-cell'>
-                                <button className='table-actions-cell' onClick={onEditClicked}>Edit</button>
-                            </td>
-                            <td className='table-actions-cell'>
-                                <button className='table-actions-cell red' onClick={onDeleteClicked}>Delete</button>
-                            </td>
+                            {
+                                isCurrentFinancialYear ?
+
+                                <>
+                                    <td className='table-actions-cell'>
+                                        <button className='table-actions-cell' onClick={onEditClicked}>Edit</button>
+                                    </td>
+                                    <td className='table-actions-cell'>
+                                        <button className='table-actions-cell red' onClick={onDeleteClicked}>Delete</button>
+                                    </td>
+                                </>
+                                :
+                                <div id='awards-table-row-readonly'>Read Only</div>
+                            }
                         </>
-                        :
-                        <div id='awards-table-row-readonly'>Read Only</div>
+                        : null
+                    
+                       
+                    
                 }
             </tr>
         )

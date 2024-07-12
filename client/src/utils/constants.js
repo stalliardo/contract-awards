@@ -10,7 +10,7 @@ export const LOCATIONS = {
     LONDON: "London",
     MANCHESTER: "Manchester",
     NEWCASTLE: "Newcastle",
-    SPECIAL_PROJECTS: "Special Projects",
+    EUROPE: "Europe",
     M_AND_E: "M&E"
 }
 
@@ -32,19 +32,17 @@ export const ROLES = {
 
 export const REGIONS = {
     All: "All",
-    london: "London",
-    northern: "Northern",
-    southern: "Southern",
-    specialsBirminghamAndGlasgow: "Special Projects, Birmingham & Glasgow",
-    mAndE: "M&E"    
+    London: "London",
+    Northern: "Northern",
+    Southern: "Southern",
+    Special: "Europe, Birmingham & Glasgow",
+    "M&E": "M&E"    
 }
 
 export const extractADFriendlyRegionalName = (region) => {
-    console.log('region = ', region);
- 
     const itemIndex = Object.values(REGIONS).findIndex(item => item === region);
 
-    return `${Object.keys(REGIONS).map(r => r)[itemIndex]} region`;
+    return `${Object.keys(REGIONS).map(r => r)[itemIndex]} Region`;
 }
 
 export const LOCATIONS_IN_COMPANY_ORDER = [
@@ -59,7 +57,7 @@ export const LOCATIONS_IN_COMPANY_ORDER = [
     "Manchester",
     "Newcastle",
     "AWE",
-    "Special Projects",
+    "Europe",
     "M&E"
 ];
 

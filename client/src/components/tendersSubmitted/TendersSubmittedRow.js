@@ -10,8 +10,6 @@ const TendersSubmittedRow = ({ data }) => {
     const cumalitiveTotal = tenders.cumalitiveTotals.find(total => total.location === data.location).sum;
 
     const extractedTendersTargets = () => {
-
-        // console.log('targets for tender submitted = ', targets);
         const foundTarget = targets.find(target => target.location === data.location);
 
         if(foundTarget){

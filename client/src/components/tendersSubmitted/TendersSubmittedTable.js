@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 import './tenders-submitted.css';
@@ -11,7 +11,7 @@ import TendersSpecialsRow from './TendersSpecialsRow';
 import TendersSummaryTotalsRow from './TendersSummaryTotalsRow';
 import TendersSummaryMontlyPerformanceRow from './TendersSummaryMontlyPerformanceRow';
 import TenderSummaryCumalitivePerformanceRow from './TenderSummaryCumalitivePerformanceRow';
-import { ROLES } from '../../utils/constants';
+import { ROLES, sortLocations } from '../../utils/constants';
 import { addSlashToYearString } from '../../utils/stringUtils';
 import { clearExportData, generateExportData } from '../../redux/features/tenders/tenderSlice';
 import { generateCSVForTenders } from '../../utils/CSVExport';
@@ -19,7 +19,11 @@ import { generateCSVForTenders } from '../../utils/CSVExport';
 const TendersSubmittedTable = ({ data }) => {
     const originalLocations = useSelector(state => state.location.data);
     const authenticatedUser = useSelector(state => state.users.authenticatedUser);
-    const [locations, setLocations] = useState([...authenticatedUser.locations].sort());
+    // const [locations, setLocations] = useState([...authenticatedUser.locations].sort());
+
+    const [locations, setLocations] = useState([...authenticatedUser.locations]);
+    const sortedLocations = useMemo(() => sortLocations(locations), [locations]);
+
     const selectedFinancialYear = useSelector(state => state.users.selectedFinancialYear);
 
     const tenders = useSelector(state => state.tender);
@@ -93,10 +97,9 @@ const TendersSubmittedTable = ({ data }) => {
                         </tr>
                     </thead>
                     <tbody>
-
                         {
-                            locations.map((location, index) => {
-                                if (location !== "M&E" && location !== "Special Projects" && extractedDataForRow(location)) {
+                            sortedLocations.map((location, index) => {
+                                if (location !== "M&E" && location !== "Europe" && extractedDataForRow(location)) {
                                     // return <AwardsSummaryCoreTotalsRow targetsData={awardsData.targets} filteredTotals={generateFilteredTotals(location)} cumalitiveTotal={generateCumalitiveTotals(location)} locationRef={location} key={index} />
                                     return <TendersSubmittedRow key={index} data={extractedDataForRow(location)} />
                                 }
@@ -106,8 +109,8 @@ const TendersSubmittedTable = ({ data }) => {
                         <TendersSubmittedUkCoreTotalsRow />
 
                         {
-                            locations.map((location, index) => {
-                                if (location === "M&E" || location === "Special Projects") {
+                            sortedLocations.map((location, index) => {
+                                if (location === "M&E" || location === "Europe") {
                                     return <TendersSpecialsRow key={index} data={extractedDataForRow(location)} />
                                 }
                                 return null;

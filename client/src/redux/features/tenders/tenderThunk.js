@@ -17,7 +17,6 @@ const getTenders = createAsyncThunk(
 const addTender = createAsyncThunk(
     'tender/put',
     async (data, {rejectWithValue}) => {
-        console.log('data = ', data);
         try {
             await axios.put(`/api/tenders`, data.data);
             return data;

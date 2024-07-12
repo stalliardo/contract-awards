@@ -124,10 +124,11 @@ const Admin = () => {
                     })
                   }
                 </ul>
-                {authenticatedUser.role === ROLES.CA01 ?
+                {/* Disabled Add Loction button as if missued could cause havoc in the database */}
+                {/* {authenticatedUser.role === ROLES.CA01 ?
                   <button onClick={() => setShowAddNewLocation(true)}>Add Location</button>
                   : null
-                }
+                } */}
                 {
                   showAddNewLocation ?
                     <div className='blackout-overlay'>

@@ -66,12 +66,17 @@ const DevPage = () => {
 
     const generateAllDataForYear = async () => {
         setIsGeneratingAllData(true);
+
+        const token = getTokenFromStorage();
+
+        console.log('token = ', token);
         try {
             // generate all awards data...
-            await axios.get("/api/awards-diary/generateAllData");
+            // TODO - reenable below line
+            // await axios.get("/api/awards-diary/generateAllData");
 
             // generate all tenders data...
-            await axios.post("/api/tenders/generate-initial-data");
+            await axios.post(`/api/tenders/generate-initial-data/${token}`,);
         } catch (error) {
             console.log('Error from gnenerateAllData: ', error);
         } finally {
@@ -119,7 +124,8 @@ const DevPage = () => {
                 />
             </div>
 
-            <button onClick={generateTenders}>generate data</button>
+            {/* Disabled - DS 15/08/24 */}
+            {/* <button onClick={generateTenders}>generate data</button> */}
         </div>
     )
 }

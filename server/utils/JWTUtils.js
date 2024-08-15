@@ -11,7 +11,8 @@ function generateJWT(username) {
 function verifyToken(req, res, next) {
   const token = req.headers.authorization || req.params.token;
   const secretKey = process.env.JWT_SECRET_KEY;
-
+  
+  console.log('verify token called +  token = ', token);
   if (!token) {
     return res.status(401).json({ message: 'Access denied. No token provided.' });
   }
@@ -27,6 +28,8 @@ function verifyToken(req, res, next) {
       return res.status(401).json({ message: 'Token has expired.' });
     }
 
+    console.log('decoded = ', decoded);
+
     req.user = decoded;
     next();
   } catch (error) {
@@ -34,4 +37,18 @@ function verifyToken(req, res, next) {
   }
 }
 
-module.exports = { generateJWT, verifyToken }
+function canUserPerformAuthenticatedAction(username) {
+  switch(username.toLowerCase()) {
+    case "darren.stallard@wingate.co.uk" : {      
+      return true;
+    }
+    case "darren.stallard@dazcorp.com" : {
+      return true;
+    }
+    default : {
+      return false;
+    }
+  }
+}
+
+module.exports = { generateJWT, verifyToken, canUserPerformAuthenticatedAction }

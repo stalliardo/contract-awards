@@ -124,6 +124,7 @@ exports.createAwardsDiariesForYear = async (req, res) => {
   return createAwardsDiariesForYearParentFunction(req, res)
 }
 
+// TODO This function needs to have authenticated middleware to prevent missuse
 exports.generateAllDataForYear = async (req, res) => {
   const locationAddedPromises = [];
 

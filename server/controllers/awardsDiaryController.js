@@ -1,6 +1,7 @@
 const AwardsDiary = require('../models/AwardsDiary');
 const Location = require('../models/Location');
 const { getFinancialYearString } = require('../utils/DateUtils');
+const { canUserPerformAuthenticatedAction } = require('../utils/JWTUtils');
 const { generateTenderDataForLocation } = require('./tendersController');
 
 const months = [
@@ -124,9 +125,13 @@ exports.createAwardsDiariesForYear = async (req, res) => {
   return createAwardsDiariesForYearParentFunction(req, res)
 }
 
-// TODO This function needs to have authenticated middleware to prevent missuse
 exports.generateAllDataForYear = async (req, res) => {
-  const locationAddedPromises = [];
+  const { user } = req;
+
+  const isActionPermitted = canUserPerformAuthenticatedAction(user.username);
+
+  if(isActionPermitted) {
+   const locationAddedPromises = [];
 
   // get the real locations stored in the db
   const locations = await Location.find().exec();
@@ -150,6 +155,10 @@ exports.generateAllDataForYear = async (req, res) => {
     console.log('Error while calling promise.all from generateAllData: E : ', error);
     res.status(500).send(error);
   }
+  } else {
+    return res.status(400).json({ error: "This user is not allowed to call this function" })
+  }
+  
 }
 
 // Used when a director adds locations. Adds default data to the database

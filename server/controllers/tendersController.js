@@ -68,7 +68,6 @@ exports.generateDataForNewLocation = async (req, res) => {
   }
 }
 
-// TODO This function needs to have authenticated middleware to prevent missuse
 exports.generateInitialData = async (req, res) => {
   try {
     const { user } = req;

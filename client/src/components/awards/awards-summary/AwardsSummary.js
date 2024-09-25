@@ -243,6 +243,25 @@ const AwardsSummary = () => {
                                     ukAndSpecialTargetTotal={awardsData.ukAndSpecialTargetTotal}
                                 />
                             </tr>
+
+                            {
+                                authenticatedUser.role === ROLES.CA01 &&
+                                <>
+                                    <tr style={{background: "white", color: "black", border: "none"}}><td><h3>Company Performance</h3></td></tr>
+                                    <tr></tr>
+                                    
+
+                                    <tr>
+                                        <AwardsSummaryMonthlyPerformanceRow monthlyCoreTotals={awardsData.ukAndSpecialCoreTotals} monthlyTargetTotal={awardsData.ukAndSpecialTargetTotal} />
+                                    </tr>
+
+
+                                    <tr>
+                                        <AwardsSummaryCumalitivePerformanceRow monthlyCoreTotals={awardsData.ukAndSpecialCoreTotals} monthlyTargetTotal={awardsData.ukAndSpecialTargetTotal} />
+                                    </tr>
+                                </>
+                            }
+
                         </tbody>
                     </table>
                     <p>T A = Percentage of Target Achieved</p>

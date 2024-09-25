@@ -243,51 +243,28 @@ const AwardsSummary = () => {
                                     ukAndSpecialTargetTotal={awardsData.ukAndSpecialTargetTotal}
                                 />
                             </tr>
-                        </tbody>
-                    </table>
-                    <p>T A = Percentage of Target Achieved</p>
-                </div>
 
-                {
-                    authenticatedUser.role === ROLES.CA01 &&
-                    <>
-                        <div className='awards-page-table-container'>
-                            <h3>Company Performance</h3>
-                            <table id="awards-table">
-                                <thead>
+                            {
+                                authenticatedUser.role === ROLES.CA01 &&
+                                <>
+                                    <tr style={{background: "white", color: "black", border: "none"}}><td style={{border: "none"}}><h3 style={{margin: "10px 0px 0px -10px"}}>Company Performance</h3></td></tr>
+                                    <tr></tr>
+                                    
+
                                     <tr>
-                                        <th>Month</th>
-                                        <MonthsForTableHead k="2" />
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Plus/Minus</td>
                                         <AwardsSummaryMonthlyPerformanceRow monthlyCoreTotals={awardsData.ukAndSpecialCoreTotals} monthlyTargetTotal={awardsData.ukAndSpecialTargetTotal} />
                                     </tr>
-                                </tbody>
-                            </table>
-                        </div>
 
-                        <div className='awards-page-table-container'>
-                            <table id="awards-table">
-                                <thead>
+
                                     <tr>
-                                        <th>Cumalitive</th>
-                                        <MonthsForTableHead k="3" />
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Plus/Minus</td>
                                         <AwardsSummaryCumalitivePerformanceRow monthlyCoreTotals={awardsData.ukAndSpecialCoreTotals} monthlyTargetTotal={awardsData.ukAndSpecialTargetTotal} />
                                     </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </>
-                }
+                                </>
+                            }
 
+                        </tbody>
+                    </table>
+                </div>
             </div>
     )
 }

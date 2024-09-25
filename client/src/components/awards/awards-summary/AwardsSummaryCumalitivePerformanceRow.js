@@ -30,7 +30,7 @@ const AwardsSummaryCumalitivePerformanceRow = ({monthlyCoreTotals, monthlyTarget
   const totals = generateTotals(monthlyCoreTotals, monthlyTargetTotal);
 
   const originalTotals = [...totals];
-  
+
   // Place a cell with the value Month at the start of the array
   originalTotals.unshift("Cumalitive");
 
@@ -40,7 +40,7 @@ const AwardsSummaryCumalitivePerformanceRow = ({monthlyCoreTotals, monthlyTarget
       £{(total.sum).toLocaleString()}
       </td>
     } else {
-      return <td>{total}</td>
+      return <td key={i}>{total}</td>
     }
   })
 }

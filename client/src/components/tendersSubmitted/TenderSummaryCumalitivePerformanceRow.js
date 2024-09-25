@@ -30,10 +30,19 @@ const generateTotals = (monthlyCoreTotals, monthlyTargetTotal) => {
 const TenderSummaryCumalitivePerformanceRow = ({monthlyCoreTotals, monthlyTargetTotal}) => {
     const totals = generateTotals(monthlyCoreTotals, monthlyTargetTotal);
 
-    return totals.map((total, i) => {
-      return <td key={i} style={{color: parseInt(total.sum) > 0 ? COLOURS.GREEN : COLOURS.RED}}>
+    const originalTotals = [...totals];
+
+    // Place a cell with the value Month at the start of the array
+    originalTotals.unshift("Cumalitive");
+
+    return originalTotals.map((total, i) => {
+      if(total !== "Cumalitive") {
+        return <td key={i} style={{color: parseInt(total.sum) > 0 ? COLOURS.GREEN : COLOURS.RED}}>
         £{(total.sum).toLocaleString()}
         </td>
+      } else {
+        return <td key={i}>{total}</td>
+      }
     })
 }
 

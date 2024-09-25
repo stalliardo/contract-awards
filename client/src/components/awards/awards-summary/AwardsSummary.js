@@ -8,7 +8,7 @@ import AwardsSummarySpecialsRow from './AwardsSummarySpecialsRow';
 import { generateTargetAcheivedPercentage, generateTargetAmountToDate } from '../../../utils/financialTotals';
 import AwardsSummaryTotalsRow from './AwardsSummaryTotalsRow';
 import AwardsSummaryMonthlyPerformanceRow from './AwardsSummaryMonthlyPerformanceRow';
-import { COLOURS, ROLES, extractADFriendlyRegionalName, sortLocations } from '../../../utils/constants';
+import { COLOURS, ROLES, extractADFriendlyRegionalName, sortLocations, sortLocationsObject } from '../../../utils/constants';
 import AwardsSummaryCumalitivePerformanceRow from './AwardsSummaryCumalitivePerformanceRow';
 import { generateFinancialYearMonths } from '../../../utils/DateUtils';
 import { useNavigate } from 'react-router-dom';
@@ -101,7 +101,7 @@ const AwardsSummary = () => {
     }
 
     const onExportCSV = () => {
-        dispatch(generateExportData(originalLocations));
+        dispatch(generateExportData(sortLocationsObject(originalLocations)));
     }
 
     useEffect(() => {

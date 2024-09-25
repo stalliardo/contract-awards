@@ -11,7 +11,7 @@ import TendersSpecialsRow from './TendersSpecialsRow';
 import TendersSummaryTotalsRow from './TendersSummaryTotalsRow';
 import TendersSummaryMontlyPerformanceRow from './TendersSummaryMontlyPerformanceRow';
 import TenderSummaryCumalitivePerformanceRow from './TenderSummaryCumalitivePerformanceRow';
-import { ROLES, sortLocations } from '../../utils/constants';
+import { ROLES, sortLocations, sortLocationsObject } from '../../utils/constants';
 import { addSlashToYearString } from '../../utils/stringUtils';
 import { clearExportData, generateExportData } from '../../redux/features/tenders/tenderSlice';
 import { generateCSVForTenders } from '../../utils/CSVExport';
@@ -46,7 +46,7 @@ const TendersSubmittedTable = ({ data }) => {
     }
 
     const onExportCSV = () => {
-        dispatch(generateExportData({locations: originalLocations, targets: awards.tendersSubmittedTargets}));
+        dispatch(generateExportData({locations: sortLocationsObject(originalLocations), targets: awards.tendersSubmittedTargets}));
     }
 
     useEffect(() => {

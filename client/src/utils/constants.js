@@ -78,8 +78,6 @@ export const sortLocations = (unSortedLocations) => {
 export const sortLocationsObject = (unSortedLocations) => {
     let sortedLocations = [];
 
-    console.log('unsorted = ', unSortedLocations);
-
     // if(unSortedLocations.length === 13) {
         sortedLocations = [...unSortedLocations].sort((a, b) => {
             return LOCATIONS_IN_COMPANY_ORDER.indexOf(a.name) - LOCATIONS_IN_COMPANY_ORDER.indexOf(b.name);

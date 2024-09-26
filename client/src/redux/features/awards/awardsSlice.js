@@ -72,18 +72,7 @@ export const awardsSlice = createSlice({
 
     generateExportData: (state, action) => {
       const locations = action.payload;
-
-      console.log('locations = ', locations);
-
-      // Bind the ip to the location
-
       const sortedLocations = sortLocationsObject(locations);
-
-      console.log('sortedlocations = ', sortedLocations);
-
-      // const formattedLocations = locations.map(location => {
-      //   loca
-      // })
 
       const exportData = {
         locations,

@@ -19,14 +19,21 @@ export const generateLocationOptionsForSelectMenu = (locations) => {
 export const filterOutVoidLocationsForYear = (financialYear, locations) => {
     const yearAndLocationMatrix = {
         2324: {
-            voidLocations: ["AWE"]
+            voidLocations: []
         },
+        
         2425: {
-            voidLocations: ["Basingstoke"]
+            voidLocations: ["AWE"]
         }
     }
 
-    const voidLocations = yearAndLocationMatrix[financialYear].voidLocations || [];
-
+    const voidLocations = yearAndLocationMatrix[financialYear]?.voidLocations || [];
     return locations.filter(location => !voidLocations.includes(location));
+
+    // if(voidLocations.length > 0) {
+    //     console.log('top called');
+    // } else {
+    //     console.log('bottom called + locations = ', locations);
+    //     return locations
+    // }
 }

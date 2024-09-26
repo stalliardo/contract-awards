@@ -2,13 +2,20 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios';
 import { extractFirstAndLastName } from '../../../utils/stringUtils';
 import { ROLES } from '../../../utils/constants';
+import { getFinancialYearString } from '../../../utils/DateUtils';
 
 const fetchUsers = createAsyncThunk(
     'users/fetchUsers',
     async (fullName) => {
         try {
+            // **NEW** Passing the yearstring to the locations api is now required to handle removed locations from year to year.
+            const yearstring = getFinancialYearString();
+
+            console.log('ys from users tyhubk = ', yearstring);
             const users = await axios.get("/api/users");
-            const locations = await axios.get("/api/location/get-locations");
+            const locations = await axios.get(`/api/location/get-locations/${yearstring}`);
+
+            console.log('locations from fetch = ', locations);
 
             if (users && locations) {
                 let name = extractFirstAndLastName(fullName);
@@ -21,6 +28,7 @@ const fetchUsers = createAsyncThunk(
                 }
 
                 if (foundUser.role === ROLES.CA01 && foundUser.locations.length < locations.data.length) {
+                    console.log('Called');
                     const updatedUser = await axios.put(`/api/users/${foundUser._id}/locations`);
 
                     if(updatedUser) {

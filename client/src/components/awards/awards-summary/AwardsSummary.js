@@ -10,12 +10,13 @@ import AwardsSummaryTotalsRow from './AwardsSummaryTotalsRow';
 import AwardsSummaryMonthlyPerformanceRow from './AwardsSummaryMonthlyPerformanceRow';
 import { COLOURS, ROLES, extractADFriendlyRegionalName, sortLocations, sortLocationsObject } from '../../../utils/constants';
 import AwardsSummaryCumalitivePerformanceRow from './AwardsSummaryCumalitivePerformanceRow';
-import { generateFinancialYearMonths } from '../../../utils/DateUtils';
+import { generateFinancialYearMonths, getFinancialYearString } from '../../../utils/DateUtils';
 import { useNavigate } from 'react-router-dom';
 import { addSlashToYearString, removeSlashFromyearString } from '../../../utils/stringUtils';
 import { clearExportData, generateExportData } from '../../../redux/features/awards/awardsSlice';
 import { generateCSVString } from '../../../utils/CSVExport';
 import SelectMenu from '../../selectMenu/SelectMenu';
+import { filterOutVoidLocationsForYear } from '../../../utils/locationUtils';
 
 const filterOptions = [
     { value: "All" },
@@ -36,7 +37,9 @@ const AwardsSummary = () => {
 
     const isLoading = useSelector((state) => state.awards.loading);
 
-    const [locations, setLocations] = useState(authenticatedUser.locations ? [...authenticatedUser.locations] : []);
+    const [locations, setLocations] = useState(authenticatedUser.locations ? filterOutVoidLocationsForYear(getFinancialYearString(), authenticatedUser.locations) : []);
+
+
     const sortedLocations = useMemo(() => sortLocations(locations), [locations]);
 
     const originalLocations = useSelector((state) => state.location.data);

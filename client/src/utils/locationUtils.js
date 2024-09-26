@@ -15,3 +15,18 @@ export const generateLocationOptionsForSelectMenu = (locations) => {
         return { value: location }
     });
 }
+
+export const filterOutVoidLocationsForYear = (financialYear, locations) => {
+    const yearAndLocationMatrix = {
+        2324: {
+            voidLocations: ["AWE"]
+        },
+        2425: {
+            voidLocations: ["Basingstoke"]
+        }
+    }
+
+    const voidLocations = yearAndLocationMatrix[financialYear].voidLocations || [];
+
+    return locations.filter(location => !voidLocations.includes(location));
+}

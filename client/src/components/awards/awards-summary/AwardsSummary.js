@@ -39,7 +39,6 @@ const AwardsSummary = () => {
 
     const [locations, setLocations] = useState(authenticatedUser.locations ? filterOutVoidLocationsForYear(getFinancialYearString(), authenticatedUser.locations) : []);
 
-
     const sortedLocations = useMemo(() => sortLocations(locations), [locations]);
 
     const originalLocations = useSelector((state) => state.location.data);

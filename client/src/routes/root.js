@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Spinner from '../components/spinner/Spinner';
 import { setLocationsInSlice } from '../redux/features/locations/locationSlice';
+import { filterOutVoidLocationsForYear } from '../utils/locationUtils';
+import { getFinancialYearString } from '../utils/DateUtils';
 
 const Root = () => {
   const [locations, setLocations] = useState([]);
@@ -43,7 +45,7 @@ const Root = () => {
       })
     } else if (token && users.authenticatedUser._id) {
       if (users.authenticatedUser.locations.length) {
-        const sortedLocations = [...users.authenticatedUser.locations].sort();
+        const sortedLocations = filterOutVoidLocationsForYear(getFinancialYearString(), users.authenticatedUser.locations).sort();
         setLocations(sortedLocations);
       } else {
         console.log('no locations');

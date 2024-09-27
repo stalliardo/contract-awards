@@ -20,8 +20,6 @@ export const generateCSVString = (data, selectedFinancialYear) => {
 
     csvRows.push(headers.join(","));
 
-    console.log('data.locations = ', data.locations);
-
     data.locations.forEach((location, index) => {
         if (location.name !== "M&E" && location.name !== "Europe") {
             const rowItems = data.nonSpecialRows.coreTotals.filter((item) => item.location === location.name);

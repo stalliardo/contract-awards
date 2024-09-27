@@ -14,9 +14,6 @@ export const generateCoreTotalsData = (data, authenticatedUser) => {
     const summaryTableData = [];
     const filteredData = [];
 
-
-    console.log('authed user locations = ', authenticatedUser.locations);
-
     if (authenticatedUser.locations) {
         authenticatedUser.locations.forEach((location) => {
             filteredData.push(...data.filter(d => d.location === location));

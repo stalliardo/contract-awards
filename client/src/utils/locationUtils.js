@@ -29,11 +29,4 @@ export const filterOutVoidLocationsForYear = (financialYear, locations) => {
 
     const voidLocations = yearAndLocationMatrix[financialYear]?.voidLocations || [];
     return locations.filter(location => !voidLocations.includes(location));
-
-    // if(voidLocations.length > 0) {
-    //     console.log('top called');
-    // } else {
-    //     console.log('bottom called + locations = ', locations);
-    //     return locations
-    // }
 }

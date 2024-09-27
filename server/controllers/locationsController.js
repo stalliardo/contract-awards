@@ -14,7 +14,6 @@ exports.addLocation = async (req, res) => {
 }
 
 exports.getAllLocations = async (req, res) => {
-
   // Handle locations that are no longer required.
   // Will still need to load the location data that was used in a previopus year.
 
@@ -30,17 +29,7 @@ exports.getAllLocations = async (req, res) => {
 
   const { financialYear } = req.params;
   
-  console.log('financtrl year = ', financialYear);
-
-  
-
   const voidLocations = getVoidLocationsForYear(financialYear);
-
-  console.log('void locs = ', voidLocations);
-
-  // Where will the above need to be used?
-    // A - Whenever the locations are obtained, so this function
-    // B - Whenever initial data is generated, but i think that calls this function anyway
 
   try {
     // Find all Locations records

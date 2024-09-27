@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios';
+import { getFinancialYearString } from '../../../utils/DateUtils';
 
 const fetchData = createAsyncThunk(
     'awards/fetchData',
@@ -7,11 +8,13 @@ const fetchData = createAsyncThunk(
         try {
             const awards = await axios.get(`/api/awards-diary/getAllAwards/?year=${selectedFinancialYear}`);
             const targets = await axios.get(`/api/targets/?year=${selectedFinancialYear}`);
+            const yearString = getFinancialYearString();
 
             if(locationData.length) {
                 return {targetsData: targets.data, awardsData: awards.data, locationsData: locationData, authenticatedUser};
             } else {
-                const locations = await axios.get("/api/location/get-locations");
+                const locations = await axios.get(`/api/location/get-locations/${yearString}`);
+
                 return {targetsData: targets.data, awardsData: awards.data, locationsData: locations.data, authenticatedUser};
             }
         } catch (error) {

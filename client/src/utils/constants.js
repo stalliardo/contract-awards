@@ -64,13 +64,13 @@ export const LOCATIONS_IN_COMPANY_ORDER = [
 export const sortLocations = (unSortedLocations) => {
     let sortedLocations = [];
 
-    if(unSortedLocations.length === 13) {
+    // if(unSortedLocations.length === 13) {
         sortedLocations = [...unSortedLocations].sort((a, b) => {
             return LOCATIONS_IN_COMPANY_ORDER.indexOf(a) - LOCATIONS_IN_COMPANY_ORDER.indexOf(b);
         })
-    } else {
-        sortedLocations = unSortedLocations
-    }
+    // } else {
+        // sortedLocations = unSortedLocations
+    // }
 
     return sortedLocations;
 }
@@ -78,13 +78,13 @@ export const sortLocations = (unSortedLocations) => {
 export const sortLocationsObject = (unSortedLocations) => {
     let sortedLocations = [];
 
-    if(unSortedLocations.length === 13) {
+    // if(unSortedLocations.length === 13) {
         sortedLocations = [...unSortedLocations].sort((a, b) => {
             return LOCATIONS_IN_COMPANY_ORDER.indexOf(a.name) - LOCATIONS_IN_COMPANY_ORDER.indexOf(b.name);
         })
-    } else {
-        sortedLocations = unSortedLocations
-    }
+    // } else {
+        // sortedLocations = unSortedLocations
+    // }
 
     return sortedLocations;
 }

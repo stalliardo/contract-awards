@@ -2,7 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 import { fetchUsers, addLocationToUser, removeLocationFromUser, addAllLocationsToUser, addProvidedLocationsToUser
  } from '../users/usersThunk';
 import { extractFirstAndLastName, removeSlashFromyearString } from '../../../utils/stringUtils';
-import { generateFinancialYearOptions, getCurrentFinancialYear } from '../../../utils/DateUtils';
+import { generateFinancialYearOptions, getCurrentFinancialYear, getFinancialYearString } from '../../../utils/DateUtils';
+import { filterOutVoidLocationsForYear } from '../../../utils/locationUtils';
 
 const initialState = {
   data: [],
@@ -49,6 +50,11 @@ export const usersSlice = createSlice({
     });
     builder.addCase(fetchUsers.fulfilled, (state, action) => {
       const {users, updatedUser} = action.payload;
+
+      const {locations} = updatedUser;
+      
+      // filter locations here if possible as the single source of truth
+      updatedUser.locations = filterOutVoidLocationsForYear(getFinancialYearString(), locations);
 
       state.authenticatedUser = updatedUser;
       state.data = users;

@@ -50,7 +50,6 @@ const Navbar = () => {
       if (hasSelectedCurrentFinancialYear) {
         onProceed();
       } else {
-        console.log('else called');
         setShowWarningModal(true);
       }
     }

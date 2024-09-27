@@ -3,7 +3,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import './tenders-submitted.css';
 
-import { generateFinancialYearMonths } from '../../utils/DateUtils';
+import { generateFinancialYearMonths, getFinancialYearString } from '../../utils/DateUtils';
 import TendersSubmittedRow from './TendersSubmittedRow';
 
 import TendersSubmittedUkCoreTotalsRow from './TendersSubmittedUkCoreTotalsRow';
@@ -15,6 +15,7 @@ import { ROLES, sortLocations, sortLocationsObject } from '../../utils/constants
 import { addSlashToYearString } from '../../utils/stringUtils';
 import { clearExportData, generateExportData } from '../../redux/features/tenders/tenderSlice';
 import { generateCSVForTenders } from '../../utils/CSVExport';
+import { filterOutVoidLocationsForYear } from '../../utils/locationUtils';
 
 const TendersSubmittedTable = ({ data }) => {
     const originalLocations = useSelector(state => state.location.data);

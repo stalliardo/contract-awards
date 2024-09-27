@@ -22,7 +22,7 @@ const TendersSubmittedTable = ({ data }) => {
     const authenticatedUser = useSelector(state => state.users.authenticatedUser);
     // const [locations, setLocations] = useState([...authenticatedUser.locations].sort());
 
-    const [locations, setLocations] = useState([...filterOutVoidLocationsForYear(getFinancialYearString(), authenticatedUser.locations)]);
+    const [locations, setLocations] = useState([...authenticatedUser.locations]);
     const sortedLocations = useMemo(() => sortLocations(locations), [locations]);
 
     const selectedFinancialYear = useSelector(state => state.users.selectedFinancialYear);

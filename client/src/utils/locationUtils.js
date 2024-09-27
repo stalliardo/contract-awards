@@ -19,7 +19,7 @@ export const generateLocationOptionsForSelectMenu = (locations) => {
 export const filterOutVoidLocationsForYear = (financialYear, locations) => {
     const yearAndLocationMatrix = {
         2324: {
-            voidLocations: []
+            voidLocations: ["AWE"]
         },
         
         2425: {

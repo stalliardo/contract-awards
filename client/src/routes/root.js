@@ -45,7 +45,7 @@ const Root = () => {
       })
     } else if (token && users.authenticatedUser._id) {
       if (users.authenticatedUser.locations.length) {
-        const sortedLocations = filterOutVoidLocationsForYear(getFinancialYearString(), users.authenticatedUser.locations).sort();
+        const sortedLocations = users.authenticatedUser.locations.sort();
         setLocations(sortedLocations);
       } else {
         console.log('no locations');

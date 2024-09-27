@@ -37,7 +37,7 @@ const AwardsSummary = () => {
 
     const isLoading = useSelector((state) => state.awards.loading);
 
-    const [locations, setLocations] = useState(authenticatedUser.locations ? filterOutVoidLocationsForYear(getFinancialYearString(), authenticatedUser.locations) : []);
+    const [locations, setLocations] = useState(authenticatedUser.locations ? authenticatedUser.locations : []);
 
     const sortedLocations = useMemo(() => sortLocations(locations), [locations]);
 

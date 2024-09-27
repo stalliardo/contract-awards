@@ -10,10 +10,14 @@ const fetchData = createAsyncThunk(
             const targets = await axios.get(`/api/targets/?year=${selectedFinancialYear}`);
             const yearString = getFinancialYearString();
 
+            console.log('loactions from fetchData 1 = ', locationData);
+
             if(locationData.length) {
                 return {targetsData: targets.data, awardsData: awards.data, locationsData: locationData, authenticatedUser};
             } else {
                 const locations = await axios.get(`/api/location/get-locations/${yearString}`);
+
+                console.log('locations from fetchData = ', locations);
                 return {targetsData: targets.data, awardsData: awards.data, locationsData: locations.data, authenticatedUser};
             }
         } catch (error) {

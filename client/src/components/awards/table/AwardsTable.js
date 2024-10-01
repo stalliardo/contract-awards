@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import './awardsTable.css';
 import '../../awards/awards.css';
 import AllAwardsForLocation from '../all-awards-for-location/AllAwardsForLocation';
+import { ROLES } from '../../../utils/constants';
 
 function capitalizeFirstLetter(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -199,10 +200,13 @@ const AwardsTable = ({ locations }) => {
                                 </tr>
                             </tbody>
                         </table>
-                        : <div className='awards-table-no-data-container'>
+                        : isCurrentFinancialYear || user.authenticatedUser.role === ROLES.CA01 ? 
+                        <div className='awards-table-no-data-container'>
                             <h3>No awards found for {location}-{month}. Enter one below.</h3>
                             <FirstAwardsEntry awardsTableId={filteredData._id} location={filteredData.location} onItemAdded={itemAdded} month={month} />
                         </div>
+                        : null
+
                 }
             </div>
             : <div><AllAwardsForLocation data={allAwardsData}/></div>

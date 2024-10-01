@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
 import EditTenderValueModal from './EditTenderValueModal';
-import { COLOURS } from '../../utils/constants';
+import { COLOURS, ROLES } from '../../utils/constants';
 import { useSelector } from 'react-redux';
 
 const TendersSubmittedCell = ({ item }) => {
     const [showModal, setShowModal] = useState(false);
 
     const isCurrentFinancialYear = useSelector(state => state.users.isCurrentFinancialYear);
+    const authenticatedUser = useSelector(state => state.users.authenticatedUser);
 
     const onCloseModal = () => {
         setShowModal(false);
     }
 
     const onCellClicked = () => {
-        if(isCurrentFinancialYear) setShowModal(true);
+        if(isCurrentFinancialYear || authenticatedUser.role === ROLES.CA01) setShowModal(true);
     }
 
     const color = item.value >= item.montlyTarget ? COLOURS.GREEN : COLOURS.RED;

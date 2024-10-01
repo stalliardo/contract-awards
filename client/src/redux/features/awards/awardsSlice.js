@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { addData, deleteItem, editItem, fetchData } from './awardsThunks';
 import { generateCoreTotalsData, generateUKTargetTotals, generateUkCoreTotals, generateSpecialTargetTotals, generateCompanyPerformanceCumalitiveTotals } from '../../../utils/financialTotals';
-import { TARGET_CATEGORIES } from '../../../utils/constants';
+import { sortLocations, sortLocationsObject, TARGET_CATEGORIES } from '../../../utils/constants';
 
 const initialState = {
   data: [],
@@ -72,6 +72,7 @@ export const awardsSlice = createSlice({
 
     generateExportData: (state, action) => {
       const locations = action.payload;
+      const sortedLocations = sortLocationsObject(locations);
 
       const exportData = {
         locations,

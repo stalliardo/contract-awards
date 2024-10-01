@@ -110,11 +110,7 @@ export const getCurrentFinancialYear = () => {
   }
 }
 
-// Function to generate a list of financial year strings
-// export const generateFinancialYearOptions = (baseYear = '23/24') => {
-
-
-export const generateFinancialYearOptions = (baseYear = '22/23') => {
+export const generateFinancialYearOptions = (baseYear = '23/24') => {
   const currentFinancialYear = getCurrentFinancialYear();
 
   const startYear = parseInt(currentFinancialYear.slice(0, 2), 10);

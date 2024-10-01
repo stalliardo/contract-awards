@@ -37,6 +37,7 @@ app.use("/api", targetRoutes);
 app.use("/api", authenticationRoutes);
 app.use("/api", tenderRoutes);
 
+// Production Config
 // const ADConfig = {
 //     url: `ldap://${process.env.DOMAIN_IP}:389`, // TODO see if i can use the secure LDAPS
 //     baseDN: 'dc=wingate,dc=local',
@@ -44,6 +45,7 @@ app.use("/api", tenderRoutes);
 //     password: process.env.DOMAIN_PASSWORD
 // } 
 
+// Develop Config
 const ADConfig = {
     url: `ldap://${process.env.DOMAIN_IP}:389`, // TODO see if i can use the secure LDAPS
     baseDN: 'dc=DAZCORP,dc=COM',
@@ -55,7 +57,10 @@ var ad = new ActiveDirectory(ADConfig);
 
 
 app.post("/login", (req, res) => {
+    // Production username
     // const username = `${req.body.username}@wingate.local`;
+
+    // Develop username
     const username = `${req.body.username}@DAZCORP.com`;
     const password = req.body.password;
     const token = jwt.generateJWT(username);

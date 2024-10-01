@@ -34,9 +34,14 @@ export const usersSlice = createSlice({
     },
 
     setSelectedFinancialYear: (state, action) => {
-
       state.selectedFinancialYear = action.payload;
       state.isCurrentFinancialYear = removeSlashFromyearString(getCurrentFinancialYear()) === action.payload;
+    },
+
+    setAuthenticatedUsersLocations: (state, action) => {
+      const formattedLocations = action.payload.locations.map((location) => location.name);
+
+      state.authenticatedUser.locations = filterOutVoidLocationsForYear(action.payload.selectedYear, formattedLocations)
     },
 
     logout: (state) => {
@@ -52,6 +57,8 @@ export const usersSlice = createSlice({
       const {users, updatedUser} = action.payload;
 
       const {locations} = updatedUser;
+
+      console.log('u locs = ', locations);
       
       // filter locations here if possible as the single source of truth
       updatedUser.locations = filterOutVoidLocationsForYear(getFinancialYearString(), locations);
@@ -139,6 +146,6 @@ export const usersSlice = createSlice({
   }
 })
 
-export const { setLoading, setSignedInUsersFullName, clearAuthenticatedUserData, logout, setSelectedFinancialYear } = usersSlice.actions;
+export const { setLoading, setSignedInUsersFullName, clearAuthenticatedUserData, logout, setSelectedFinancialYear, setAuthenticatedUsersLocations } = usersSlice.actions;
 
 export default usersSlice.reducer;

@@ -17,9 +17,10 @@ export const generateLocationOptionsForSelectMenu = (locations) => {
 }
 
 export const filterOutVoidLocationsForYear = (financialYear, locations) => {
+    console.log('locations in fucn = ', locations);
     const yearAndLocationMatrix = {
         2324: {
-            voidLocations: ["AWE"]
+            voidLocations: [""]
         },
         
         2425: {
@@ -28,5 +29,10 @@ export const filterOutVoidLocationsForYear = (financialYear, locations) => {
     }
 
     const voidLocations = yearAndLocationMatrix[financialYear]?.voidLocations || [];
+
+    console.log('after function ', locations.filter(location => !voidLocations.includes(location)));
+
+    // Problem is this function isnt getting called after the financial yearhas been changed
+
     return locations.filter(location => !voidLocations.includes(location));
 }

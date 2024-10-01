@@ -1,10 +1,13 @@
 exports.getVoidLocationsForYear = (financialYear) => {
     const yearAndLocationMatrix = {
         2324: {
-            voidLocations: ["AWE"]
+            voidLocations: [""]
         },
         2425: {
-            voidLocations: ["Basingstoke"]
+            voidLocations: ["AWE"]
+        },
+        2526: { // TODO check this is valid for this financial year
+            voidLocations: ["AWE"]
         }
     }
 

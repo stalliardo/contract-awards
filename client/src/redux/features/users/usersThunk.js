@@ -13,8 +13,6 @@ const fetchUsers = createAsyncThunk(
             const users = await axios.get("/api/users");
             const locations = await axios.get(`/api/location/get-locations/${yearstring}`);
 
-            console.log('locations = ', locations);
-
             if (users && locations) {
                 let name = extractFirstAndLastName(fullName);
                 let foundUser = users.data.find(user => user?.name.toLowerCase() === name.toLowerCase());

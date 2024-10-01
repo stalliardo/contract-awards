@@ -58,7 +58,7 @@ export const usersSlice = createSlice({
 
       const {locations} = updatedUser;
 
-      console.log('u locs = ', locations);
+      console.log('getFinancialYearString() = ', getFinancialYearString());
       
       // filter locations here if possible as the single source of truth
       updatedUser.locations = filterOutVoidLocationsForYear(getFinancialYearString(), locations);

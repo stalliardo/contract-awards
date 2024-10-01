@@ -30,13 +30,9 @@ const Navbar = () => {
   const selectedFinancialYear = useSelector(state => state.users.selectedFinancialYear);
   const originalLocations = useSelector(state => state.location.data);
 
-  console.log('o locs = ', originalLocations);
-
   const [selectedYear, setselectedYear] = useState("");
   const [hasSelectedCurrentFinancialYear, setHasSelectedCurrentFinancialYear] = useState(false);
   const [showWarningModal, setShowWarningModal] = useState(false);
-
-
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -51,19 +47,20 @@ const Navbar = () => {
   }
 
   useEffect(() => {
-    if(selectedYear){
+    if (selectedYear) {
       if (hasSelectedCurrentFinancialYear) {
         onProceed();
       } else {
         setShowWarningModal(true);
       }
+
+      dispatch(setAuthenticatedUsersLocations({ locations: originalLocations, selectedYear: removeSlashFromyearString(selectedYear.value) }));
     }
   }, [selectedYear]);
 
   const onFinancialYearSelected = (year) => {
     setHasSelectedCurrentFinancialYear(getCurrentFinancialYear() === year.value);
 
-    dispatch(setAuthenticatedUsersLocations({locations: originalLocations, selectedFinancialYear}));
     setselectedYear(year);
   }
 

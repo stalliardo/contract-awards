@@ -38,7 +38,7 @@ exports.getAllLocations = async (req, res) => {
 
     const filtertedLocations = locations.filter(location => !voidLocations.includes(location.name));
 
-    res.status(201).send(filtertedLocations);
+    res.status(201).send(locations);
   } catch (error) {
     res.status(400);
     console.log('Error getting locations: ', error);

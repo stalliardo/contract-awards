@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './navbar.css';
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import { logout, setSelectedFinancialYear } from '../../redux/features/users/usersSlice';
+import { logout, setAuthenticatedUsersLocations, setSelectedFinancialYear } from '../../redux/features/users/usersSlice';
 import { ROLES } from '../../utils/constants';
 import SelectMenu from '../selectMenu/SelectMenu';
 import { generateFinancialYearOptions, getCurrentFinancialYear, getFinancialYearString } from '../../utils/DateUtils';
@@ -28,6 +28,7 @@ const Navbar = () => {
   const auth = useSelector(state => state.auth);
   const authenticatedUser = useSelector(state => state.users.authenticatedUser);
   const selectedFinancialYear = useSelector(state => state.users.selectedFinancialYear);
+  const originalLocations = useSelector(state => state.location.data);
 
   const [selectedYear, setselectedYear] = useState("");
   const [hasSelectedCurrentFinancialYear, setHasSelectedCurrentFinancialYear] = useState(false);
@@ -46,17 +47,20 @@ const Navbar = () => {
   }
 
   useEffect(() => {
-    if(selectedYear){
+    if (selectedYear) {
       if (hasSelectedCurrentFinancialYear) {
         onProceed();
       } else {
         setShowWarningModal(true);
       }
+
+      dispatch(setAuthenticatedUsersLocations({ locations: originalLocations, selectedYear: removeSlashFromyearString(selectedYear.value) }));
     }
   }, [selectedYear]);
 
   const onFinancialYearSelected = (year) => {
     setHasSelectedCurrentFinancialYear(getCurrentFinancialYear() === year.value);
+
     setselectedYear(year);
   }
 

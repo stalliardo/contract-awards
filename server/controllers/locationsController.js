@@ -28,7 +28,6 @@ exports.getAllLocations = async (req, res) => {
   // 3 - Create a year and location matrix that checks the selectedFinacialYear and loads the appropriate locations based off of that.
 
   const { financialYear } = req.params;
-  
   const voidLocations = getVoidLocationsForYear(financialYear);
 
   try {
@@ -39,7 +38,7 @@ exports.getAllLocations = async (req, res) => {
 
     const filtertedLocations = locations.filter(location => !voidLocations.includes(location.name));
 
-    res.status(201).send(filtertedLocations);
+    res.status(201).send(locations);
   } catch (error) {
     res.status(400);
     console.log('Error getting locations: ', error);

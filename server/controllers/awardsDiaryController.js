@@ -135,8 +135,14 @@ exports.generateAllDataForYear = async (req, res) => {
 
   // get the real locations stored in the db
   const locations = await Location.find().exec();
-  const currentFinancialYear = getFinancialYear();
-  const financialYearString = getFinancialYearString();
+  const currentFinancialYear = getFinancialYear(); // = 2023
+  const financialYearString = getFinancialYearString(); // = 2324
+
+  // const currentFinancialYear = 2022 // = 2023
+  // const financialYearString = 2223; // = 2324
+
+  console.log('current year = ', currentFinancialYear);
+  console.log('finajncial year string = ', financialYearString);
 
 
   if (!locations || locations.length === 0) {

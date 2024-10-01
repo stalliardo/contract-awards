@@ -112,7 +112,9 @@ export const getCurrentFinancialYear = () => {
 
 // Function to generate a list of financial year strings
 // export const generateFinancialYearOptions = (baseYear = '23/24') => {
-export const generateFinancialYearOptions = (baseYear = '23/24') => {
+
+
+export const generateFinancialYearOptions = (baseYear = '22/23') => {
   const currentFinancialYear = getCurrentFinancialYear();
 
   const startYear = parseInt(currentFinancialYear.slice(0, 2), 10);
@@ -134,7 +136,7 @@ export const generateFinancialYearOptions = (baseYear = '23/24') => {
   return financialYears//.reverse(); // Optional: Reverse to display in chronological order
 }
 
-export const getFinancialYearString = () => { // returns the year streing as 2324
+export const getFinancialYearString = () => { // returns the year string as 2324
   const now = new Date();
   const currentYear = now.getFullYear();
   const currentMonth = now.getMonth(); // 0 for January, 11 for December

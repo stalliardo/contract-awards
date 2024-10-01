@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import AwardsTableAddRow from './AwardsTableAddRow';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { deleteItem } from '../../../redux/features/awards/awardsThunks';
+import { ROLES } from '../../../utils/constants';
 
 const AwardsTableRow = ({ data, onItemDeleted, onItemEdited, location, month, isCurrentFinancialYear, actionsRequired = true }) => {
     const [isEditing, setIsEditing] = useState(false);
+    const authenticatedUser = useSelector(state => state.users.authenticatedUser);
+
     const dispatch = useDispatch();
 
     const onDeleteClicked = async () => {
@@ -42,7 +45,7 @@ const AwardsTableRow = ({ data, onItemDeleted, onItemEdited, location, month, is
                     actionsRequired ?
                         <>
                             {
-                                isCurrentFinancialYear ?
+                                isCurrentFinancialYear || authenticatedUser.role === ROLES.CA01 ?
 
                                 <>
                                     <td className='table-actions-cell'>
@@ -53,7 +56,7 @@ const AwardsTableRow = ({ data, onItemDeleted, onItemEdited, location, month, is
                                     </td>
                                 </>
                                 :
-                                <div id='awards-table-row-readonly'>Read Only</div>
+                                <td id='awards-table-row-readonly'>Read Only</td>
                             }
                         </>
                         : null

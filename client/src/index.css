@@ -97,7 +97,8 @@ code {
 
 .awards-form-table td:nth-child(7),
 td:nth-child(8) {
-  width: 8%;
+  /*Removed due to sizing issues. DS 15/08/24*/
+  /* width: 8%; */
 }
 
 .arrow {

@@ -40,6 +40,17 @@
             text-align: left;
         }
 
+        .dev-notification-p { 
+            color: green;
+            text-align: center;
+            margin-top: 10px;
+            font-weight: 600;
+
+            &.error {
+                color: red
+            }
+        }
+
        .dev-button-container {
         width: 50%;
         margin: auto;

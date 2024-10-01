@@ -1,6 +1,7 @@
 const Tender = require("../models/Tenders");
 const Location = require("../models/Location");
 const { getFinancialYearString } = require("../utils/DateUtils");
+const { canUserPerformAuthenticatedAction } = require("../utils/JWTUtils");
 
 
 const months = [
@@ -69,30 +70,39 @@ exports.generateDataForNewLocation = async (req, res) => {
 
 exports.generateInitialData = async (req, res) => {
   try {
-    const locations = await Location.find().exec();
-    const promises = [];
+    const { user } = req;
 
-    if (!locations || locations.length === 0) {
-      return res.status(404).json({ message: "No locations found" })
-    }
+    const actionPermitted = canUserPerformAuthenticatedAction(user.username);
 
-    const financialYearString = getFinancialYearString();
+    if (actionPermitted) {
+      const locations = await Location.find().exec();
+      const promises = [];
 
-    locations.forEach((location) => {
-      const data = { location: location.name, financialYear: financialYearString, items: [] };
+      if (!locations || locations.length === 0) {
+        return res.status(404).json({ message: "No locations found" })
+      }
 
-      months.forEach((month) => {
-        data.items.push({ month, value: 0 })
+      const financialYearString = getFinancialYearString();
+
+      locations.forEach((location) => {
+        const data = { location: location.name, financialYear: financialYearString, items: [] };
+
+        months.forEach((month) => {
+          data.items.push({ month, value: 0 })
+        })
+
+        const newTender = new Tender(data);
+
+        promises.push(newTender.save());
       })
 
-      const newTender = new Tender(data);
+      await Promise.all(promises).then(() => {
+        res.status(201).json({ message: "All tenders added successfully" });
+      })
 
-      promises.push(newTender.save());
-    })
-
-    await Promise.all(promises).then(() => {
-      res.status(201).json({ message: "All tenders added successfully" });
-    })
+    } else {
+      return res.status(400).json({ error: "This user is not allowed to call this function" })
+    }
   } catch (error) {
     res.status(500).json({ message: "There was an error generating tenders data.", error })
   }

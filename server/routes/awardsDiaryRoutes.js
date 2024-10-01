@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const awardsDiaryController = require('../controllers/awardsDiaryController');
 const awardsDiaryItemController = require('../controllers/awardsDiaryItemController');
+const { verifyToken } = require('../utils/JWTUtils');
 
 // POST request to create a new awards diary entry
 router.post('/awards-diary', awardsDiaryController.createAwardsDiary);
@@ -17,6 +18,6 @@ router.get('/awards-diary/getAllAwards', awardsDiaryController.getAllAwards);
 
 // below need locking down TODO
 router.post('/awards-diary/add-year', awardsDiaryController.createAwardsDiariesForYear);
-router.get("/awards-diary/generateAllData", awardsDiaryController.generateAllDataForYear);
+router.get("/awards-diary/generateAllData/:token", verifyToken, awardsDiaryController.generateAllDataForYear);
 
 module.exports = router;

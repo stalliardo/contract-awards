@@ -8,7 +8,7 @@ import AwardsSummarySpecialsRow from './AwardsSummarySpecialsRow';
 import { generateTargetAcheivedPercentage, generateTargetAmountToDate } from '../../../utils/financialTotals';
 import AwardsSummaryTotalsRow from './AwardsSummaryTotalsRow';
 import AwardsSummaryMonthlyPerformanceRow from './AwardsSummaryMonthlyPerformanceRow';
-import { COLOURS, ROLES, extractADFriendlyRegionalName, sortLocations } from '../../../utils/constants';
+import { COLOURS, ROLES, extractADFriendlyRegionalName, sortLocations, sortLocationsObject } from '../../../utils/constants';
 import AwardsSummaryCumalitivePerformanceRow from './AwardsSummaryCumalitivePerformanceRow';
 import { generateFinancialYearMonths } from '../../../utils/DateUtils';
 import { useNavigate } from 'react-router-dom';
@@ -36,7 +36,8 @@ const AwardsSummary = () => {
 
     const isLoading = useSelector((state) => state.awards.loading);
 
-    const [locations, setLocations] = useState(authenticatedUser.locations ? [...authenticatedUser.locations] : []);
+    const [locations, setLocations] = useState(authenticatedUser.locations ? authenticatedUser.locations : []);
+
     const sortedLocations = useMemo(() => sortLocations(locations), [locations]);
 
     const originalLocations = useSelector((state) => state.location.data);
@@ -101,7 +102,7 @@ const AwardsSummary = () => {
     }
 
     const onExportCSV = () => {
-        dispatch(generateExportData(originalLocations));
+        dispatch(generateExportData(sortLocationsObject(originalLocations)));
     }
 
     useEffect(() => {
@@ -243,51 +244,28 @@ const AwardsSummary = () => {
                                     ukAndSpecialTargetTotal={awardsData.ukAndSpecialTargetTotal}
                                 />
                             </tr>
-                        </tbody>
-                    </table>
-                    <p>T A = Percentage of Target Achieved</p>
-                </div>
 
-                {
-                    authenticatedUser.role === ROLES.CA01 &&
-                    <>
-                        <div className='awards-page-table-container'>
-                            <h3>Company Performance</h3>
-                            <table id="awards-table">
-                                <thead>
+                            {
+                                authenticatedUser.role === ROLES.CA01 &&
+                                <>
+                                    <tr style={{background: "white", color: "black", border: "none"}}><td style={{border: "none"}}><h3 style={{margin: "10px 0px 0px -10px"}}>Company Performance</h3></td></tr>
+                                    <tr></tr>
+                                    
+
                                     <tr>
-                                        <th>Month</th>
-                                        <MonthsForTableHead k="2" />
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Plus/Minus</td>
                                         <AwardsSummaryMonthlyPerformanceRow monthlyCoreTotals={awardsData.ukAndSpecialCoreTotals} monthlyTargetTotal={awardsData.ukAndSpecialTargetTotal} />
                                     </tr>
-                                </tbody>
-                            </table>
-                        </div>
 
-                        <div className='awards-page-table-container'>
-                            <table id="awards-table">
-                                <thead>
+
                                     <tr>
-                                        <th>Cumalitive</th>
-                                        <MonthsForTableHead k="3" />
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Plus/Minus</td>
                                         <AwardsSummaryCumalitivePerformanceRow monthlyCoreTotals={awardsData.ukAndSpecialCoreTotals} monthlyTargetTotal={awardsData.ukAndSpecialTargetTotal} />
                                     </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </>
-                }
+                                </>
+                            }
 
+                        </tbody>
+                    </table>
+                </div>
             </div>
     )
 }

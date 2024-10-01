@@ -23,7 +23,7 @@ const confirmationcallback = (text) => {
     return confirmation;
 }
 
-const DevFunctionCard = ({ title, description, buttonText, clickHandler, isLoading, loadingText, requiresConfirmation = true }) => {
+const DevFunctionCard = ({ title, description, buttonText, clickHandler, isLoading, loadingText, requiresConfirmation = true, notificationText }) => {
     const handleClick = () => {
         if (requiresConfirmation) {
             if (confirmationcallback(`Are you sure you want to call the "${buttonText}" function?`)) {
@@ -43,6 +43,7 @@ const DevFunctionCard = ({ title, description, buttonText, clickHandler, isLoadi
                         <p>{description}</p>
                         <div className='dev-button-container'>
                             <button onClick={handleClick}>{buttonText}</button>
+                            <p className={`dev-notification-p ${notificationText === "Error" ? "error" : ""}`}>{notificationText}</p>
                         </div>
                     </>
             }
@@ -63,17 +64,26 @@ const DevPage = () => {
 
     const [isGeneratingAllData, setIsGeneratingAllData] = useState(false);
     const [isUpdatingUsers, setIsUpdatingUsers] = useState(false);
+    const [generateAllNotification, setGenerateAllNotification] = useState("");
 
     const generateAllDataForYear = async () => {
         setIsGeneratingAllData(true);
+
+        const token = getTokenFromStorage();
+
         try {
             // generate all awards data...
-            await axios.get("/api/awards-diary/generateAllData");
-
+            await axios.get(`/api/awards-diary/generateAllData/${token}`);
+            
             // generate all tenders data...
-            await axios.post("/api/tenders/generate-initial-data");
+            await axios.post(`/api/tenders/generate-initial-data/${token}`);
+
+            setGenerateAllNotification("Success");
+
+
         } catch (error) {
             console.log('Error from gnenerateAllData: ', error);
+            setGenerateAllNotification("Success");
         } finally {
             setTimeout(() => {
                 setIsGeneratingAllData(false);
@@ -109,6 +119,7 @@ const DevPage = () => {
                     buttonText={functionCardData[0].buttonText}
                     clickHandler={generateAllDataForYear}
                     isLoading={isGeneratingAllData}
+                    notificationText={generateAllNotification}
                 />
                 <DevFunctionCard
                     title={functionCardData[1].title}
@@ -119,7 +130,8 @@ const DevPage = () => {
                 />
             </div>
 
-            <button onClick={generateTenders}>generate data</button>
+            {/* Disabled - DS 15/08/24 */}
+            {/* <button onClick={generateTenders}>generate data</button> */}
         </div>
     )
 }

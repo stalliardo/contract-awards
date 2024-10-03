@@ -220,9 +220,9 @@ const AwardsSummary = () => {
                                         <td>
                                             £{(awardsData.ukTargetTotal * 12).toLocaleString()}
                                         </td>
-                                        <td>£{generateTargetAmountToDate((awardsData.ukTargetTotal * 12), cumalitiveTotalsSum).toLocaleString()}</td>
-                                        <td style={{ color: generateTargetAcheivedPercentage(awardsData.ukTargetTotal * 12, cumalitiveTotalsSum) >= 100 ? COLOURS.GREEN : COLOURS.RED }}>
-                                            {generateTargetAcheivedPercentage(awardsData.ukTargetTotal * 12, cumalitiveTotalsSum)}%
+                                        <td>£{generateTargetAmountToDate((awardsData.ukTargetTotal * 12), addSlashToYearString(selectedFinancialYear)).toLocaleString()}</td>
+                                        <td style={{ color: generateTargetAcheivedPercentage(awardsData.ukTargetTotal * 12, cumalitiveTotalsSum, addSlashToYearString(selectedFinancialYear)) >= 100 ? COLOURS.GREEN : COLOURS.RED }}>
+                                            {generateTargetAcheivedPercentage(awardsData.ukTargetTotal * 12, cumalitiveTotalsSum, addSlashToYearString(selectedFinancialYear))}%
                                         </td>
                                     </tr>
                                     :
@@ -242,6 +242,7 @@ const AwardsSummary = () => {
                                     specialCoreTotals={awardsData.specialCoreTotals}
                                     cumalativeTotals={cumalitiveTotalsSum}
                                     ukAndSpecialTargetTotal={awardsData.ukAndSpecialTargetTotal}
+                                    selectedFinancialYear={selectedFinancialYear}
                                 />
                             </tr>
 

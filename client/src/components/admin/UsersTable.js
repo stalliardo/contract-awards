@@ -33,7 +33,6 @@ const UsersTable = ({ availableLocations }) => {
                 break;
             }
             case ROLES.CA03: {
-                console.log('03 called');
                 break;
             }
         }

@@ -15,12 +15,10 @@ import { ROLES, sortLocations, sortLocationsObject } from '../../utils/constants
 import { addSlashToYearString } from '../../utils/stringUtils';
 import { clearExportData, generateExportData } from '../../redux/features/tenders/tenderSlice';
 import { generateCSVForTenders } from '../../utils/CSVExport';
-import { filterOutVoidLocationsForYear } from '../../utils/locationUtils';
 
 const TendersSubmittedTable = ({ data }) => {
     const originalLocations = useSelector(state => state.location.data);
     const authenticatedUser = useSelector(state => state.users.authenticatedUser);
-    // const [locations, setLocations] = useState([...authenticatedUser.locations].sort());
 
     const [locations, setLocations] = useState([...authenticatedUser.locations]);
     const sortedLocations = useMemo(() => sortLocations(locations), [locations]);
@@ -47,7 +45,7 @@ const TendersSubmittedTable = ({ data }) => {
     }
 
     const onExportCSV = () => {
-        dispatch(generateExportData({locations: sortLocationsObject(originalLocations), targets: awards.tendersSubmittedTargets}));
+        dispatch(generateExportData({locations: sortLocationsObject(originalLocations), targets: awards.tendersSubmittedTargets, selectedFinancialYear}));
     }
 
     useEffect(() => {
@@ -112,7 +110,7 @@ const TendersSubmittedTable = ({ data }) => {
                         {
                             sortedLocations.map((location, index) => {
                                 if (location === "M&E" || location === "Europe") {
-                                    return <TendersSpecialsRow key={index} data={extractedDataForRow(location)} />
+                                    return <TendersSpecialsRow key={index} data={extractedDataForRow(location)} selectedFinancialYear={selectedFinancialYear} />
                                 }
                                 return null;
                             })

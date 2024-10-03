@@ -23,7 +23,6 @@ const TendersSubmitted = () => {
       if(authenticatedUser.locations){
         dispatch(getTenders({authenticatedUser, selectedFinancialYear})).then(() => {
           if(!awards.targets.length) {
-            console.log('fetch called');
             dispatch(fetchData({locationData: originalLocations, authenticatedUser, selectedFinancialYear: removeSlashFromyearString(selectedFinancialYear)}));
           }
         })

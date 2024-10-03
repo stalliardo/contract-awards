@@ -4,12 +4,14 @@ import { generateTargetAcheivedPercentage, generateTargetAmountToDate } from '..
 import { COLOURS } from '../../../utils/constants';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { addSlashToYearString } from '../../../utils/stringUtils';
 
 const monthsInFinancialOrder = getMonthsInFinancialOrder();
 
 const AwardsSummaryCoreTotalsRow = ({ targetsData, cumalitiveTotal, locationRef, filteredTotals }) => {
     const navigate = useNavigate();
     const isCurrentFinancialYear = useSelector(state => state.users.isCurrentFinancialYear);
+    const selectedFinancialYear = useSelector(state => state.users.selectedFinancialYear);
 
     const handleTotalClicked = (month, total) => {
         if(isCurrentFinancialYear){
@@ -32,7 +34,7 @@ const AwardsSummaryCoreTotalsRow = ({ targetsData, cumalitiveTotal, locationRef,
         return 0;
     }
 
-    const targetPercentageAcheived = generateTargetAcheivedPercentage(formattedTargetValue() * 12, cumalitiveTotal);
+    const targetPercentageAcheived = generateTargetAcheivedPercentage(formattedTargetValue() * 12, cumalitiveTotal, addSlashToYearString(selectedFinancialYear));
     const targetPercentageAcheivedColour = parseFloat(targetPercentageAcheived) >= 100 ? COLOURS.GREEN : COLOURS.RED;
 
     return (
@@ -61,7 +63,7 @@ const AwardsSummaryCoreTotalsRow = ({ targetsData, cumalitiveTotal, locationRef,
                 £{(formattedTargetValue() * 12).toLocaleString()}
             </td>
             {/* New Target amount to date column */}
-            <td>£{Math.round(generateTargetAmountToDate(formattedTargetValue() * 12, cumalitiveTotal)).toLocaleString()}</td>
+            <td>£{Math.round(generateTargetAmountToDate(formattedTargetValue() * 12,  addSlashToYearString(selectedFinancialYear))).toLocaleString()}</td>
 
             {/* // TODO below value */}
             <td style={{color: targetPercentageAcheivedColour}}>{targetPercentageAcheived}%</td>

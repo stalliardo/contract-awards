@@ -3,8 +3,9 @@ import { useSelector } from 'react-redux'
 import { generateTargetAcheivedPercentage, generateTargetAmountToDate } from '../../utils/financialTotals';
 import TendersSubmittedCell from './TendersSubmittedCell';
 import { COLOURS } from '../../utils/constants';
+import { addSlashToYearString } from '../../utils/stringUtils';
 
-const TendersSpecialsRow = ({ data }) => {
+const TendersSpecialsRow = ({ data, selectedFinancialYear }) => {
     const tenders = useSelector(state => state.tender);
     const targets = useSelector(state => state.awards.tendersSubmittedTargets);
     const cumalitiveTotal = tenders.cumalitiveTotals.find(total => total.location === data.location).sum;
@@ -18,7 +19,7 @@ const TendersSpecialsRow = ({ data }) => {
         return "0";
     }
 
-    const targetPercentageAcheived = generateTargetAcheivedPercentage(parseInt(extractedTendersTargets()) * 12, cumalitiveTotal);
+    const targetPercentageAcheived = generateTargetAcheivedPercentage(parseInt(extractedTendersTargets()) * 12, cumalitiveTotal, addSlashToYearString(selectedFinancialYear));
     const targetPercentageAcheivedColour = parseFloat(targetPercentageAcheived) >= 100 ? COLOURS.GREEN : COLOURS.RED;
 
     return (
@@ -40,7 +41,7 @@ const TendersSpecialsRow = ({ data }) => {
             <td>£{(extractedTendersTargets() * 12).toLocaleString()}</td>
 
             {/* Target to Data Column*/}
-            <td>£{generateTargetAmountToDate((extractedTendersTargets()  * 12), cumalitiveTotal).toLocaleString()}</td>
+            <td>£{generateTargetAmountToDate((extractedTendersTargets()  * 12), addSlashToYearString(selectedFinancialYear)).toLocaleString()}</td>
 
             {/* Target Acheived Column */}
             <td style={{color: targetPercentageAcheivedColour}}>{targetPercentageAcheived}%</td>

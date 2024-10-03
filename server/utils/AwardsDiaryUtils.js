@@ -23,7 +23,6 @@ const tables = [];
 // TODO
 // Below works just needs testing and rewriting to actually save data to the table
 function generateTableForYear() {
-    console.log('generating tables');
     const year = 2024; // Start year of the financial year
     const endYear = 2025; // End year of the financial year
     let counter = 0;

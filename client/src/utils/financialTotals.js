@@ -160,26 +160,28 @@ export const generateSpecialTargetTotals = (data) => {
     return filteredData.reduce((total, target) => total + parseInt(target.targetValue), 0);
 }
 
-export const generateTargetAmountToDate = (annualAmount) => {
+export const generateTargetAmountToDate = (annualAmount, financialYear) => {
     if (annualAmount === 0) return 0;
-    const daysSinceOct01 = getDaysSinceOct01();
+
+    const daysSinceOct01 = getDaysSinceOct01(financialYear);
+
     const dailyAmount = annualAmount / 365;
     const targetAmountTodate = dailyAmount * daysSinceOct01;
 
-    return Math.trunc(targetAmountTodate);
+    return Math.round(targetAmountTodate);
 }
 
-export const generateTargetAcheivedPercentage = (annualAmount, cumalitiveTotal) => {
+export const generateTargetAcheivedPercentage = (annualAmount, cumalitiveTotal, financialYear) => {
     if (annualAmount === 0) return 0;
 
-    const targetToDate = generateTargetAmountToDate(annualAmount, cumalitiveTotal);
+    const targetToDate = generateTargetAmountToDate(annualAmount, financialYear);
     const targetAchieved = 100 / targetToDate * cumalitiveTotal;
 
     if (targetAchieved < 1 && targetAchieved > 0) {
-        return Math.trunc(targetAchieved);
+        return Math.round(targetAchieved);
     }
 
-    return Math.trunc(targetAchieved);
+    return Math.round(targetAchieved);
 }
 
 export const generateCompanyPerformanceCumalitiveTotals = (monthlyCoreTotals, monthlyTargetTotal) => {

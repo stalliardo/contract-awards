@@ -33,8 +33,8 @@ export const generateCSVString = (data, selectedFinancialYear) => {
             const cumalativeTotalsSingle = data.nonSpecialRows.cumalitiveTotals[index]?.cumalitiveTotal;
             const monthTarget = parseInt(data.nonSpecialRows.targets.find((item) => item.location === location.name)?.monthTarget);
             const yearlyTarget = monthTarget * 12;
-            const targetAmountTodate = Math.round(generateTargetAmountToDate(yearlyTarget, cumalativeTotalsSingle));
-            const targetPercentageAcheived = generateTargetAcheivedPercentage(yearlyTarget, cumalativeTotalsSingle);
+            const targetAmountTodate = Math.round(generateTargetAmountToDate(yearlyTarget, addSlashToYearString(selectedFinancialYear)));
+            const targetPercentageAcheived = generateTargetAcheivedPercentage(yearlyTarget, cumalativeTotalsSingle, addSlashToYearString(selectedFinancialYear));
             const items = [location.name, ...rowSums, cumalativeTotalsSingle, monthTarget, yearlyTarget, targetAmountTodate, targetPercentageAcheived];
 
             csvRows.push(items.join(","));
@@ -55,8 +55,8 @@ export const generateCSVString = (data, selectedFinancialYear) => {
     const ukCoreTotalCumalitive = data.ukCoreTotalRow.cumalativeTotals;
     const ukCoreTotalTarget = data.ukCoreTotalRow.targets;
     const ukCoreTotalYearlyTarget = ukCoreTotalTarget * 12;
-    const ukCoreTargetAmountTodate = Math.round(generateTargetAmountToDate(ukCoreTotalYearlyTarget, ukCoreTotalCumalitive));
-    const ukCoreTargetPercentageAcheived = generateTargetAcheivedPercentage(ukCoreTotalYearlyTarget, ukCoreTotalCumalitive);
+    const ukCoreTargetAmountTodate = Math.round(generateTargetAmountToDate(ukCoreTotalYearlyTarget, addSlashToYearString(selectedFinancialYear)));
+    const ukCoreTargetPercentageAcheived = generateTargetAcheivedPercentage(ukCoreTotalYearlyTarget, ukCoreTotalCumalitive, addSlashToYearString(selectedFinancialYear));
 
     csvRows.push(["UK Core Total", ...ukCoreTotals, data.ukCoreTotalRow.cumalativeTotals, ukCoreTotalTarget, ukCoreTotalYearlyTarget, ukCoreTargetAmountTodate, ukCoreTargetPercentageAcheived])
 
@@ -66,8 +66,8 @@ export const generateCSVString = (data, selectedFinancialYear) => {
         const cumalativeTotalsSingle = data.specialRows.cumalitiveTotals[index]?.cumalitiveTotal;
         const monthTarget = parseInt(data.specialRows.targets.find((item) => item.location === location)?.monthTarget);
         const yearlyTarget = monthTarget * 12;
-        const targetAmountTodate = Math.round(generateTargetAmountToDate(yearlyTarget, cumalativeTotalsSingle))
-        const targetPercentageAcheived = generateTargetAcheivedPercentage(yearlyTarget, cumalativeTotalsSingle);
+        const targetAmountTodate = Math.round(generateTargetAmountToDate(yearlyTarget, addSlashToYearString(selectedFinancialYear)))
+        const targetPercentageAcheived = generateTargetAcheivedPercentage(yearlyTarget, cumalativeTotalsSingle, addSlashToYearString(selectedFinancialYear));
 
         // sort the data so it always comes back in the correct financial order  
         rowItems.sort((a, b) => {
@@ -93,8 +93,8 @@ export const generateCSVString = (data, selectedFinancialYear) => {
     const totalCumalitive = data.totalsRow.cumalativeTotals;
     const totalTarget = data.totalsRow.targets;
     const totalYearlyTarget = totalTarget * 12;
-    const targetAmountTodate = Math.round(generateTargetAmountToDate(totalYearlyTarget, totalCumalitive))
-    const targetPercentageAcheived = generateTargetAcheivedPercentage(totalYearlyTarget, totalCumalitive);
+    const targetAmountTodate = Math.round(generateTargetAmountToDate(totalYearlyTarget, addSlashToYearString(selectedFinancialYear)))
+    const targetPercentageAcheived = generateTargetAcheivedPercentage(totalYearlyTarget, totalCumalitive, addSlashToYearString(selectedFinancialYear));
 
     csvRows.push(["Total", ...Totals, totalCumalitive, totalTarget, totalYearlyTarget, targetAmountTodate, targetPercentageAcheived])
 
@@ -125,7 +125,7 @@ export const generateCSVForTenders = (data, selectedFinancialYear) => {
             return monthsInFinancialOrder.indexOf(a.month) - monthsInFinancialOrder.indexOf(b.month);
         });
 
-        let targetAcheived = generateTargetAcheivedPercentage(item.yearlyTarget, item.cumalitiveTotal);
+        let targetAcheived = generateTargetAcheivedPercentage(item.yearlyTarget, item.cumalitiveTotal, addSlashToYearString(selectedFinancialYear));
 
         if (isNaN(targetAcheived)) {
             targetAcheived = 0;
@@ -145,7 +145,7 @@ export const generateCSVForTenders = (data, selectedFinancialYear) => {
             return monthsInFinancialOrder.indexOf(a.month) - monthsInFinancialOrder.indexOf(b.month);
         });
 
-        let targetAcheived = generateTargetAcheivedPercentage(item.yearlyTarget, item.cumalitiveTotal);
+        let targetAcheived = generateTargetAcheivedPercentage(item.yearlyTarget, item.cumalitiveTotal, addSlashToYearString(selectedFinancialYear));
 
         if (isNaN(targetAcheived)) {
             targetAcheived = 0;

@@ -33,16 +33,12 @@ export const tenderSlice = createSlice({
       const targets = action.payload.targets;
       const selectedFinancialYear = action.payload.selectedFinancialYear;
 
-      console.log('sfy = ', selectedFinancialYear);
-
       let eData = { coreTotals: [], ukCoreTotalsRow: {}, specialTotals: [], totals: {}, monthlyPerformaceRow: {}, cumalitivePerformanceRow: {} };
 
       locations.forEach((location) => {
-        console.log('lcoation = ', location);
         if (location.name !== "M&E" && location.name !== "Europe") {
           const dataItem = state.data.find(item => item.location === location.name);
           const cumalativeTotal = state.cumalitiveTotals.find(item => item.location === location.name);
-          console.log('cuma total = ', cumalativeTotal);
           const target = parseInt(targets.find(target => target.location === location.name)?.targetValue) || 0;
           const yearlyTarget = target * 12;
           const targetToDate = Math.round(generateTargetAmountToDate(yearlyTarget, addSlashToYearString(selectedFinancialYear)));

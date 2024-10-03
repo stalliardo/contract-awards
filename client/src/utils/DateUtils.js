@@ -1,3 +1,5 @@
+import { removeSlashFromyearString } from "./stringUtils";
+
 const monthsInFinancialOrderWithAllOption = [
   'All', 'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September'
 ];
@@ -75,21 +77,31 @@ export const extractMonthFromString = (monthYearString) => {
   return monthYearString.split("-")[0];
 }
 
-export const getDaysSinceOct01 = () => {
+export const getDaysSinceOct01 = (financialYear) => {
   const today = new Date();
 
-  // Get October 1st of the previous year
-  const octoberFirstLastYear = new Date(today.getFullYear() - 1, 9, 1); // Months are 0-based, so 9 is October
+  // Check if the financial year is the current financial year
+  const isCurrentFinancialYear = getCurrentFinancialYear() === financialYear;
 
-  // Calculate the difference in milliseconds between today and October 1st of last year
-  const timeDifference = today.getTime() - octoberFirstLastYear.getTime();
+  if (!isCurrentFinancialYear) {
+    // Return 365 if it's not the current financial year
+    return 365;
+  }
+
+  // Parse the start year of the financial year. E.g., "23/24" => startYear = 2023
+  const startYear = parseInt("20" + financialYear.slice(0, 2));
+
+  // Set October 1st of the start year
+  let octoberFirst = new Date(startYear, 9, 1); // October is month 9 (0-based index)
+
+  // Calculate the difference in milliseconds between today and October 1st
+  const timeDifference = today.getTime() - octoberFirst.getTime();
 
   // Convert milliseconds to days
   const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
 
   return daysDifference;
-
-}
+};
 
 // Function to get the current financial year in the format "23/24"
 export const getCurrentFinancialYear = () => {

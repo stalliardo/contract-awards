@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { addTender, getTenders } from './tenderThunk';
 import { generateCompanyPerformanceCumalitiveTotals, generateCumalitiveTenderTotals, generateSpecialCumalitiveTotals, generateTargetAcheivedPercentage, generateTargetAmountToDate, generateUKTenendersCumaltiveTotal, generateUkCoreTenderTotals } from '../../../utils/financialTotals';
+import { addSlashToYearString } from '../../../utils/stringUtils';
 
 const initialState = {
   data: [],
@@ -30,22 +31,28 @@ export const tenderSlice = createSlice({
     generateExportData: (state, action) => {
       const locations = action.payload.locations;
       const targets = action.payload.targets;
+      const selectedFinancialYear = action.payload.selectedFinancialYear;
+
+      console.log('sfy = ', selectedFinancialYear);
+
       let eData = { coreTotals: [], ukCoreTotalsRow: {}, specialTotals: [], totals: {}, monthlyPerformaceRow: {}, cumalitivePerformanceRow: {} };
 
       locations.forEach((location) => {
+        console.log('lcoation = ', location);
         if (location.name !== "M&E" && location.name !== "Europe") {
           const dataItem = state.data.find(item => item.location === location.name);
           const cumalativeTotal = state.cumalitiveTotals.find(item => item.location === location.name);
+          console.log('cuma total = ', cumalativeTotal);
           const target = parseInt(targets.find(target => target.location === location.name)?.targetValue) || 0;
           const yearlyTarget = target * 12;
-          const targetToDate = Math.round(generateTargetAmountToDate(yearlyTarget, cumalativeTotal));
-          let targetAcheived = generateTargetAcheivedPercentage(yearlyTarget, cumalativeTotal);
+          const targetToDate = Math.round(generateTargetAmountToDate(yearlyTarget, addSlashToYearString(selectedFinancialYear)));
+          let targetAcheived = generateTargetAcheivedPercentage(yearlyTarget, cumalativeTotal, addSlashToYearString(selectedFinancialYear));
 
           if (isNaN(targetAcheived)) {
             targetAcheived = 0;
           }
 
-          eData.coreTotals.push({ location: location.name, items: [...dataItem.items], cumalitiveTotal: cumalativeTotal.sum, monthTarget: target, yearlyTarget, targetToDate, targetAcheived });
+          eData.coreTotals.push({ location: location.name, items: [...dataItem.items], cumalitiveTotal: cumalativeTotal?.sum, monthTarget: target, yearlyTarget, targetToDate, targetAcheived });
         }
       })
 
@@ -54,8 +61,8 @@ export const tenderSlice = createSlice({
 
       const ukCoreTotalTarget = targets.filter(item => item.location !== "Europe" && item.location !== "M&E").reduce((prev, current) => parseInt(prev) + parseInt(current.targetValue), 0);
       const ukcoreTotalYearlyTarget = ukCoreTotalTarget * 12;
-      const ukCoreTotalTargetToDate = Math.round(generateTargetAmountToDate(ukcoreTotalYearlyTarget, state.ukCumalitiveTotal));
-      const targetAcheived = generateTargetAcheivedPercentage(ukcoreTotalYearlyTarget, state.ukCumalitiveTotal);
+      const ukCoreTotalTargetToDate = Math.round(generateTargetAmountToDate(ukcoreTotalYearlyTarget, addSlashToYearString(selectedFinancialYear)));
+      const targetAcheived = generateTargetAcheivedPercentage(ukcoreTotalYearlyTarget, state.ukCumalitiveTotal, addSlashToYearString(selectedFinancialYear));
 
       eData.ukCoreTotalsRow = { location: "UK Core Total", items: ukCoreTotalItems, cumalitiveTotal: state.ukCumalitiveTotal, monthTarget: ukCoreTotalTarget, yearlyTarget: ukcoreTotalYearlyTarget, targetToDate: ukCoreTotalTargetToDate, targetAcheived: targetAcheived };
 
@@ -66,7 +73,7 @@ export const tenderSlice = createSlice({
         const cumalativeTotal = state.cumalitiveTotals.find(item => item.location === location);
         const target = parseInt(targets.find(target => target.location === location)?.targetValue) || 0;
         const yearlyTarget = target * 12;
-        const targetToDate = Math.round(generateTargetAmountToDate(yearlyTarget, cumalativeTotal));
+        const targetToDate = Math.round(generateTargetAmountToDate(yearlyTarget, addSlashToYearString(selectedFinancialYear)));
 
         eData.specialTotals.push({ location: location, items: [...dataItem.items], cumalitiveTotal: cumalativeTotal.sum, monthTarget: target, yearlyTarget, targetToDate });
       });
@@ -75,8 +82,8 @@ export const tenderSlice = createSlice({
       const ukAndSpecialCumalitiveTotal = state.ukCumalitiveTotal + state.specialCumalitiveTotals;
       const ukAndSpecialTargetTotal = targets.reduce((prev, current) => parseInt(prev) + parseInt(current.targetValue), 0);
       const ukAndSpecialTargetYearlyTotal = ukAndSpecialTargetTotal * 12;
-      const ukAndSpecialTargetToDate = Math.round(generateTargetAmountToDate(ukAndSpecialTargetYearlyTotal, ukAndSpecialCumalitiveTotal));
-      const ukAndSpecialTargetAcheived = generateTargetAcheivedPercentage(ukAndSpecialTargetYearlyTotal, ukAndSpecialCumalitiveTotal);
+      const ukAndSpecialTargetToDate = Math.round(generateTargetAmountToDate(ukAndSpecialTargetYearlyTotal, addSlashToYearString(selectedFinancialYear)));
+      const ukAndSpecialTargetAcheived = generateTargetAcheivedPercentage(ukAndSpecialTargetYearlyTotal, ukAndSpecialCumalitiveTotal, addSlashToYearString(selectedFinancialYear));
 
       eData.totals = { 
         location: "Total", 

@@ -45,7 +45,7 @@ const TendersSubmittedTable = ({ data }) => {
     }
 
     const onExportCSV = () => {
-        dispatch(generateExportData({locations: sortLocationsObject(originalLocations), targets: awards.tendersSubmittedTargets}));
+        dispatch(generateExportData({locations: sortLocationsObject(originalLocations), targets: awards.tendersSubmittedTargets, selectedFinancialYear}));
     }
 
     useEffect(() => {
